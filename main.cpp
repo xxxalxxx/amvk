@@ -7,29 +7,22 @@
 #include <glm/mat4x4.hpp>
 
 #include <iostream>
+#include "macro.h"
+#include "task_manager.h"
+#include "engine.h"
 
 int main() {
-    glfwInit();
 
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Vulkan window", nullptr, nullptr);
+	Engine engine;
+	engine.init();
+	
+	Window& window = engine.getWindow();
+	InputManager& inputManager = window.getInputManager();
+//	VulkanManager& vulkanManager = engine.getVulkanManager();
 
-    uint32_t extensionCount = 0;
-    vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+	while (window.isOpen()) {
+		inputManager.pollEvents();
+	}
 
-    std::cout << extensionCount << " extensions supported" << std::endl;
-
-   // glm::mat4 matrix;
-  //  glm::vec4 vec;
-  //  auto test = matrix * vec;
-
-    while(!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
-    }
-
-    glfwDestroyWindow(window);
-
-    glfwTerminate();
-
-    return 0;
+	return 0;
 }
