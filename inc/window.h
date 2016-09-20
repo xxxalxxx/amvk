@@ -1,7 +1,7 @@
 #ifndef AMVK_WINDOW_H
 #define AMVK_WINDOW_H
 
-#include "vulkan/vulkan.h"
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <exception>
 #include <stdexcept>
@@ -14,8 +14,10 @@
 
 class Engine;
 
+
 class Window {
 	friend class Engine;
+
 public:
 	Window();
 	Window(unsigned w, unsigned h);
@@ -26,6 +28,7 @@ public:
 	void setDimens(unsigned w, unsigned h);
 	void setWidth(unsigned w);
 	void setHeight(unsigned h);
+	void setWindowSizeCallback(GLFWwindowsizefun f);
 	
 	unsigned getWidth() const;
 	unsigned getHeight() const;

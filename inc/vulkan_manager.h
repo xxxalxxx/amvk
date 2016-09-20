@@ -2,42 +2,131 @@
 #define AMVK_VULKAN_MANAGER_H
 
 #include "vulkan/vulkan.h"
+#include <limits>
+#include <cstring>
 #include <vector>
 #include <string>
 #include <stdio.h>
 #include <unordered_set>
+#include <cstddef>
+#include "glm/glm.hpp"
+
 #include "macro.h"
 #include "window.h"
 #include "device_queue_indices.h"
+#include "file_manager.h"
 
 class VulkanManager { 
 	friend class Engine;
+	struct SwapChainDesc;
 public:
-	VulkanManager();
+	VulkanManager(const Window& window);
 	virtual ~VulkanManager();
 	void init();
 	void createVkInstance();
 	void createVkSurface(GLFWwindow& glfwWindow);
 	void enableDebug();
 	void createPhysicalDevice();
+	void createLogicalDevice();
+	void createSwapChain(const Window& window);
+	void createImageViews();
+	void createRenderPass();
+	void createPipeline();
+	void createFramebuffers();
+	void createCommandPool();
+	void createCommandBuffers();
+	void createSemaphores();
+	
+	void draw();
+	
+	void waitIdle();
+	void recreateSwapChain();
 
-	void outDeviceQueueFamilyIndices(const VkPhysicalDevice& physicalDevice, DeviceQueueIndicies& deviceQueueIndicies); 
-	void outDeviceExtensionsSupport(const VkPhysicalDevice& physicalDevice, bool& extenstionsSupported); 
+	const VkDevice& getVkDevice() const;
 
+	uint32_t getMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags& flags);
+	void createBuffer(VkBuffer& buffer, 
+					  VkDeviceSize size, 
+					  VkDeviceMemory& memory,  
+					  VkBufferUsageFlags usage,
+					  VkMemoryPropertyFlags prop);
+
+	void copyBuffer(VkBuffer src, VkBuffer dst, VkDeviceSize size);
+	
 	std::vector<VkExtensionProperties> getVkExtensionProperties();
 	std::vector<std::string> getVkExtensionPropertyNames(std::vector<VkExtensionProperties>& extensionProperties);
 	std::vector<const char*> getExtensionNames();
+	
 	static const char* sGetVkResultString(int result);
 	static const char* sGetVkResultString(VkResult result);
+
 private:
+	DeviceQueueIndicies getDeviceQueueFamilyIndices(const VkPhysicalDevice& physicalDevice);
+	bool deviceExtensionsSupported(const VkPhysicalDevice& physicalDevice); 
+	
+	SwapChainDesc getSwapChainDesc(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface);
+	VkExtent2D getExtent(VkSurfaceCapabilitiesKHR& surfaceCapabilities, const Window& window);
+	VkPresentModeKHR getPresentMode(const std::vector<VkPresentModeKHR>& presentModes);
+	VkSurfaceFormatKHR getSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surfaceFormats);
+	
+	void createShaderModule(const std::vector<char>& shaderSpvCode, VkShaderModule& shaderModule);
+
 	VkInstance mVkInstance;
 	VkSurfaceKHR mVkSurface;
 	VkPhysicalDevice mVkPhysicalDevice;	
-	
+	VkDevice mVkDevice;
 	DeviceQueueIndicies mDeviceQueueIndices;
+	VkQueue mGraphicsQueue, mSupportedQueue;
+
+	struct SwapChainDesc {
+		VkSurfaceCapabilitiesKHR mSurfaceCapabilities;
+		std::vector<VkSurfaceFormatKHR> mSurfaceFormats;
+		std::vector<VkPresentModeKHR> mPresentModes;
+	};
+
+	SwapChainDesc mSwapChainDesc;
+	VkSwapchainKHR mVkSwapChain;
+	std::vector<VkImage> mSwapChainImages;
+	std::vector<VkImageView> mSwapChainImageViews;
+	std::vector<VkFramebuffer> mSwapChainFramebuffers;
+	VkFormat mSwapChainImageFormat;
+	VkExtent2D mSwapChainExtent;
+
+	VkRenderPass mVkRenderPass;
+	VkPipelineLayout mVkPipelineLayout;
+	VkPipeline mVkPipeline;
+
+	VkCommandPool mVkCommandPool;
+	std::vector<VkCommandBuffer> mVkCommandBuffers;
+
+	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;
+	VkDebugReportCallbackEXT msgCallback; 
+
+	VkShaderModule vertShaderModule;
+	VkShaderModule fragShaderModule;
 	
-	static const std::vector<const char*> deviceExtensions;
-	static const std::vector<const char*> validationLayers;
+	const Window& mWindow;
+	
+	static constexpr const char* SHADER_ENTRY_NAME = "main";
+	static const std::vector<const char*> sDeviceExtensions;
+	static const std::vector<const char*> sValidationLayers;
+
+
+	struct Vertex {
+		glm::vec2 pos;
+		glm::vec3 color;
+	};
+
+
+	void createVertexBuffer();
+	void createIndexBuffer();
+
+	VkVertexInputBindingDescription getBindingDesc();
+	std::array<VkVertexInputAttributeDescription, 2> getAttrDesc();
+
+	VkBuffer vertexBuffer, indexBuffer;
+	VkDeviceMemory vertexBufferMem, indexBufferMem;
+
 };
 
 

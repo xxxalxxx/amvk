@@ -2,12 +2,12 @@
 
 #define AMVK_MACROS_H
 
-#define AMVK_DBG
-
 #include <iostream>
 #include <exception>
 #include <string>
 #include "vulkan/vulkan.h"
+
+//#define AMVK_DBG
 
 #define NS(ns, name) ns ## _ ## name
 #define LOG(x) do { std::cout << x << std::endl; } while(0)

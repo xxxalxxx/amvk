@@ -23,11 +23,14 @@ Window::~Window()
 	glfwTerminate();
 }
 
+
+
 void Window::initWindow(Engine& engine)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+	
 	mGlfwWindow = glfwCreateWindow(mWidth, mHeight, "Learning Vulkan", nullptr, nullptr);
 
 	if (!mGlfwWindow) {
@@ -41,6 +44,12 @@ void Window::initWindow(Engine& engine)
 	mInputManager.init();
 	glfwSetWindowUserPointer(mGlfwWindow, (void*) &engine);
 }
+
+void Window::setWindowSizeCallback(GLFWwindowsizefun f) 
+{
+	glfwSetWindowSizeCallback(mGlfwWindow, f);
+}
+
 
 
 void Window::calcAspect() 

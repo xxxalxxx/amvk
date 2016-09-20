@@ -6,7 +6,7 @@ SRC_DIR := src
 OBJ_DIR := obj
 
 TARGET=$(BIN_DIR)/myengine
-SRCS=main.cpp task_manager.cpp window.cpp engine.cpp input_manager.cpp vulkan_manager.cpp device_queue_indices.cpp
+SRCS=main.cpp task_manager.cpp window.cpp engine.cpp input_manager.cpp vulkan_manager.cpp device_queue_indices.cpp file_manager.cpp
 OBJS=$(patsubst %.cpp,$(OBJ_DIR)/%.o, $(SRCS))
 VPATH=inc:src:lib
 

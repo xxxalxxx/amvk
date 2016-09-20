@@ -7,7 +7,25 @@ DeviceQueueIndicies::DeviceQueueIndicies():
 	mTransferIndex(INDEX_UNSET),
 	mNumIndicesFound(0)
 {
+	mDeviceQueueIndiciesArr[INDEX_GRAPHICS] = &mGraphicsIndex;
+	mDeviceQueueIndiciesArr[INDEX_SUPPORTED] = &mSupportedIndex;
+	mDeviceQueueIndiciesArr[INDEX_COMPUTE] = &mComputeIndex;
+	mDeviceQueueIndiciesArr[INDEX_TRANSFER] = &mTransferIndex;
+}
 
+DeviceQueueIndicies::~DeviceQueueIndicies()
+{
+
+}
+
+int& DeviceQueueIndicies::operator[](int i) 
+{
+	return *mDeviceQueueIndiciesArr[i];
+}
+
+int DeviceQueueIndicies::operator[](int i) const 
+{
+	return *mDeviceQueueIndiciesArr[i];
 }
 
 void DeviceQueueIndicies::unset() 
@@ -18,7 +36,7 @@ void DeviceQueueIndicies::unset()
 bool DeviceQueueIndicies::allIndicesSet() 
 {
 	LOG("ALL INDICES SET");
-	return mNumIndicesFound == NUM_INDICES;
+	return mNumIndicesFound == NUM_DEVICE_QUEUE_INDICES;
 }
 
 bool DeviceQueueIndicies::graphicsIndexSet() 
@@ -41,13 +59,35 @@ bool DeviceQueueIndicies::transferIndexSet()
 	return mTransferIndex != INDEX_UNSET;
 }
 
+int DeviceQueueIndicies::getGraphicsQueueIndex()
+{
+	return mGraphicsIndex;
+}
+
+int DeviceQueueIndicies::getSupportedQueueIndex()
+{
+	return mSupportedIndex;
+}
+
+int DeviceQueueIndicies::getComputeQueueIndex()
+{
+	return mComputeIndex;
+}
+
+int DeviceQueueIndicies::getTransfersQueueIndex()
+{
+	return mTransferIndex;
+}
+
 void DeviceQueueIndicies::setGraphicsIndex(int index) 
 {
+	LOG("GRAPHICS INDEX SET TO " << index);
 	setIndex(mGraphicsIndex, index);
 }
 
 void DeviceQueueIndicies::setSupportedIndex(int index)
 {
+	LOG("SUPPORTED IDNEX SET TO " << index);
 	setIndex(mSupportedIndex, index);
 }
 

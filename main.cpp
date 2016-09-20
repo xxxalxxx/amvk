@@ -18,11 +18,12 @@ int main() {
 	
 	Window& window = engine.getWindow();
 	InputManager& inputManager = window.getInputManager();
-//	VulkanManager& vulkanManager = engine.getVulkanManager();
+	VulkanManager& vulkanManager = engine.getVulkanManager();
 
 	while (window.isOpen()) {
 		inputManager.pollEvents();
+		vulkanManager.draw();
 	}
-
+	vulkanManager.waitIdle();
 	return 0;
 }
