@@ -22,6 +22,7 @@ int main() {
 
 	while (window.isOpen()) {
 		inputManager.pollEvents();
+		vulkanManager.updateUniformBuffer();
 		vulkanManager.draw();
 	}
 	vulkanManager.waitIdle();

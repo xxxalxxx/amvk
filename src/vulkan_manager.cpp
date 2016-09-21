@@ -81,8 +81,12 @@ VulkanManager::VulkanManager(const Window& window):
 	mWindow(window),
 	vertexBuffer(VK_NULL_HANDLE),
 	indexBuffer(VK_NULL_HANDLE),
+	uniformBuffer(VK_NULL_HANDLE),
+	uniformStagingBuffer(VK_NULL_HANDLE),
 	vertexBufferMem(VK_NULL_HANDLE),
-	indexBufferMem(VK_NULL_HANDLE)
+	indexBufferMem(VK_NULL_HANDLE),
+	uniformBufferMem(VK_NULL_HANDLE),
+	uniformStagingBufferMem(VK_NULL_HANDLE)
 {
 
 }
@@ -518,6 +522,10 @@ void VulkanManager::createRenderPass()
 
 void VulkanManager::createPipeline()
 {
+	createDescriptorSetLayout();
+
+
+
 	FileManager& fileManager = FileManager::getInstance();
 	auto vertShaderSrc = fileManager.readShader("shader.vert.spv");
 	auto fragShaderSrc = fileManager.readShader("shader.frag.spv");
@@ -584,7 +592,7 @@ void VulkanManager::createPipeline()
 	rasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
 	rasterizationState.lineWidth = 1.0f;
 	rasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
-	rasterizationState.frontFace = VK_FRONT_FACE_CLOCKWISE;
+	rasterizationState.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 	rasterizationState.depthBiasEnable = VK_FALSE;
 
 	VkPipelineMultisampleStateCreateInfo multisampleState = {};
@@ -610,9 +618,11 @@ void VulkanManager::createPipeline()
 	blendState.blendConstants[2] = 0.0f;
 	blendState.blendConstants[3] = 0.0f;
 
+	VkDescriptorSetLayout setLayouts[] = { mVkDescriptorSetLayout };
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 0;
+	pipelineLayoutInfo.setLayoutCount = 1;
+	pipelineLayoutInfo.pSetLayouts = setLayouts;
 	pipelineLayoutInfo.pushConstantRangeCount = 0;
 
 	VK_CHECK_RESULT(vkCreatePipelineLayout(mVkDevice, &pipelineLayoutInfo, nullptr, &mVkPipelineLayout));
@@ -679,6 +689,9 @@ void VulkanManager::createCommandBuffers()
 {
 	createVertexBuffer();
 	createIndexBuffer();
+	createUniformBuffer();
+	createDescriptorPool();
+	createDescriptorSet();
 
 	if (!mVkCommandBuffers.empty())
 		vkFreeCommandBuffers(mVkDevice, mVkCommandPool, mVkCommandBuffers.size(), mVkCommandBuffers.data());
@@ -693,8 +706,7 @@ void VulkanManager::createCommandBuffers()
 	
 	VK_CHECK_RESULT(vkAllocateCommandBuffers(mVkDevice, &allocInfo, mVkCommandBuffers.data()));
 
-
-		LOG("COMMAND POOL ALLOCATED");
+	LOG("COMMAND POOL ALLOCATED");
 
 	for (size_t i = 0; i < mVkCommandBuffers.size(); ++i) {
 		VkCommandBufferBeginInfo beginInfo = {};
@@ -721,6 +733,7 @@ void VulkanManager::createCommandBuffers()
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(mVkCommandBuffers[i], 0, 1, vertBuf, offsets);
 		vkCmdBindIndexBuffer(mVkCommandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+		vkCmdBindDescriptorSets(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mVkPipelineLayout, 0, 1, &mVkDescriptorSet, 0, nullptr);
 		vkCmdDrawIndexed(mVkCommandBuffers[i], 6, 1, 0, 0, 0);
 
 		vkCmdEndRenderPass(mVkCommandBuffers[i]);
@@ -894,12 +907,11 @@ void VulkanManager::createVertexBuffer()
 {
 
 	const std::vector<Vertex> vertices = {
-		    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-			    {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-				    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-					    {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+		{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+		{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+		{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+		{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
 	};
-	LOG("1");
 
 	VkDeviceSize bufSize = sizeof(vertices[0]) * vertices.size();
 	VkBuffer stagingBuf;
@@ -909,14 +921,10 @@ void VulkanManager::createVertexBuffer()
 								stagingBufDeviceMem, 
 								VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
 								VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);	
-	LOG("2");
 	void* data;
 	vkMapMemory(mVkDevice, stagingBufDeviceMem, 0, bufSize, 0 , &data);
-	LOG("2_1");
 	memcpy(data, vertices.data(), (size_t) bufSize);
-	LOG("2_2");
 	vkUnmapMemory(mVkDevice, stagingBufDeviceMem);
-	LOG("3");
 	createBuffer(vertexBuffer, 
 								bufSize, 
 								vertexBufferMem, 
@@ -983,3 +991,104 @@ const VkDevice& VulkanManager::getVkDevice() const
 	return mVkDevice;
 }
 	
+
+void VulkanManager::createDescriptorSetLayout()
+{
+	VkDescriptorSetLayoutBinding descSetBinding = {};
+	descSetBinding.binding = 0;
+	descSetBinding.descriptorCount = 1;
+	descSetBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	descSetBinding.pImmutableSamplers = nullptr;
+	descSetBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+	VkDescriptorSetLayoutCreateInfo descSetLayoutInfo = {};
+	descSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	descSetLayoutInfo.bindingCount = 1;
+	descSetLayoutInfo.pBindings = &descSetBinding;
+
+	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(mVkDevice, &descSetLayoutInfo, nullptr, &mVkDescriptorSetLayout));
+	LOG("DESC LAYOUT CREATED");
+}
+
+void VulkanManager::createUniformBuffer()
+{
+	VkDeviceSize bufSize = sizeof(UBO);
+	createBuffer(uniformStagingBuffer, 
+				bufSize, 
+				uniformStagingBufferMem, 
+				VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
+				VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	
+	createBuffer(uniformBuffer, 
+				bufSize, 
+				uniformBufferMem, 
+				VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, 
+				VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	
+}
+
+void VulkanManager::createDescriptorSet() 
+{
+	VkDescriptorSetLayout layouts[] = { mVkDescriptorSetLayout };
+	VkDescriptorSetAllocateInfo allocInfo = {};
+	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	allocInfo.descriptorPool = mVkDescriptorPool;
+	allocInfo.descriptorSetCount = 1;
+	allocInfo.pSetLayouts = layouts;
+
+	VK_CHECK_RESULT(vkAllocateDescriptorSets(mVkDevice, &allocInfo, &mVkDescriptorSet));
+
+	VkDescriptorBufferInfo buffInfo = {};
+	buffInfo.buffer = uniformBuffer;
+	buffInfo.offset = 0;
+	buffInfo.range = sizeof(UBO);
+
+	VkWriteDescriptorSet writeSet = {};
+	writeSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	writeSet.dstSet = mVkDescriptorSet;
+	writeSet.dstBinding = 0;
+	writeSet.dstArrayElement = 0;
+	writeSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	writeSet.descriptorCount = 1;
+	writeSet.pBufferInfo = &buffInfo;
+
+	vkUpdateDescriptorSets(mVkDevice, 1, &writeSet, 0, nullptr);
+}
+
+void VulkanManager::createDescriptorPool()
+{
+	VkDescriptorPoolSize descPoolSize = {};
+	descPoolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	descPoolSize.descriptorCount = 1;
+
+	VkDescriptorPoolCreateInfo poolInfo = {};
+	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+	poolInfo.poolSizeCount = 1;
+	poolInfo.pPoolSizes = &descPoolSize;
+	poolInfo.maxSets = 1;
+
+	VK_CHECK_RESULT(vkCreateDescriptorPool(mVkDevice, &poolInfo, nullptr, &mVkDescriptorPool));
+}
+
+void VulkanManager::updateUniformBuffer()
+{
+    static auto startTime = std::chrono::high_resolution_clock::now();
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	float time = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count() / 1000.0f;
+
+	UBO ubo = {};
+	ubo.model = glm::rotate(glm::mat4(), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	ubo.proj = glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
+	ubo.proj[1][1] *= -1;
+	
+	void* data;
+	LOG("m1 w:" << mSwapChainExtent.width << " h:" << mSwapChainExtent.height);
+	vkMapMemory(mVkDevice, uniformStagingBufferMem, 0, sizeof(ubo), 0, &data);
+	LOG("m2");
+	memcpy(data, &ubo, sizeof(ubo));
+	LOG("m3");
+	vkUnmapMemory(mVkDevice, uniformStagingBufferMem);
+	LOG("m4");
+	copyBuffer(uniformStagingBuffer, uniformBuffer, sizeof(ubo));	
+}

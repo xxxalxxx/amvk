@@ -1,6 +1,8 @@
 #ifndef AMVK_VULKAN_MANAGER_H
 #define AMVK_VULKAN_MANAGER_H
 
+#define GLM_FORCE_RADIANS
+
 #include "vulkan/vulkan.h"
 #include <limits>
 #include <cstring>
@@ -9,12 +11,15 @@
 #include <stdio.h>
 #include <unordered_set>
 #include <cstddef>
-#include "glm/glm.hpp"
 
 #include "macro.h"
 #include "window.h"
 #include "device_queue_indices.h"
 #include "file_manager.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <chrono>
 
 class VulkanManager { 
 	friend class Engine;
@@ -37,6 +42,7 @@ public:
 	void createCommandBuffers();
 	void createSemaphores();
 	
+	void updateUniformBuffer();
 	void draw();
 	
 	void waitIdle();
@@ -117,6 +123,14 @@ private:
 		glm::vec3 color;
 	};
 
+	struct UBO {
+	    glm::mat4 model;
+		glm::mat4 view;
+		glm::mat4 proj;
+	};
+
+
+
 
 	void createVertexBuffer();
 	void createIndexBuffer();
@@ -124,9 +138,17 @@ private:
 	VkVertexInputBindingDescription getBindingDesc();
 	std::array<VkVertexInputAttributeDescription, 2> getAttrDesc();
 
-	VkBuffer vertexBuffer, indexBuffer;
-	VkDeviceMemory vertexBufferMem, indexBufferMem;
+	VkBuffer vertexBuffer, indexBuffer, uniformBuffer, uniformStagingBuffer;
+	VkDeviceMemory vertexBufferMem, indexBufferMem, uniformBufferMem, uniformStagingBufferMem;
+	
 
+	void createDescriptorSetLayout();
+	void createUniformBuffer();
+	void createDescriptorPool();
+	void createDescriptorSet();
+	VkDescriptorSetLayout mVkDescriptorSetLayout;
+	VkDescriptorPool mVkDescriptorPool;
+	VkDescriptorSet mVkDescriptorSet;
 };
 
 
