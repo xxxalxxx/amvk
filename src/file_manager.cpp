@@ -4,6 +4,7 @@ FileManager::FileManager()
 {
 	initBinPath();
 	mEngineRoot = mBinPath + ENGINE_RELATIVE_ROOT;
+	mResourceDir = mEngineRoot + RESOURCE_DIR;
 	mShaderDir = mEngineRoot + SHADER_DIR;
 	LOG("SHADER DIR:" << mShaderDir);
 }
@@ -12,6 +13,11 @@ FileManager& FileManager::getInstance()
 {
 	static FileManager fileManager;
 	return fileManager;
+}
+
+std::string FileManager::getResourcePath(std::string&& path) const 
+{
+	return mResourceDir + path;
 }
 
 

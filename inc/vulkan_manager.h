@@ -3,7 +3,7 @@
 
 #define GLM_FORCE_RADIANS
 
-#include "vulkan/vulkan.h"
+
 #include <limits>
 #include <cstring>
 #include <vector>
@@ -18,6 +18,8 @@
 #include "file_manager.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+
 
 #include <chrono>
 
@@ -121,6 +123,7 @@ private:
 	struct Vertex {
 		glm::vec2 pos;
 		glm::vec3 color;
+		glm::vec2 texCoord;
 	};
 
 	struct UBO {
@@ -129,6 +132,21 @@ private:
 		glm::mat4 proj;
 	};
 
+	void createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,
+			VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+	void transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
+	void copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height);
+	void createImageView(VkImage image, VkFormat format, VkImageView& imageView);
+	void createTextureImage();
+	void createTextureImageView();
+	void createTextureSampler();
+
+	VkCommandBuffer beginSingleTimeCommands();
+	void endSingleTimeCommands(VkCommandBuffer commandBuf);
+	VkImage mTextureImage;
+	VkDeviceMemory mTextureImageMem;
+	VkImageView mTextureImageView;
+	VkSampler mTextureSampler;
 
 
 
@@ -136,7 +154,7 @@ private:
 	void createIndexBuffer();
 
 	VkVertexInputBindingDescription getBindingDesc();
-	std::array<VkVertexInputAttributeDescription, 2> getAttrDesc();
+	std::array<VkVertexInputAttributeDescription, 3> getAttrDesc();
 
 	VkBuffer vertexBuffer, indexBuffer, uniformBuffer, uniformStagingBuffer;
 	VkDeviceMemory vertexBufferMem, indexBufferMem, uniformBufferMem, uniformStagingBufferMem;
@@ -146,6 +164,7 @@ private:
 	void createUniformBuffer();
 	void createDescriptorPool();
 	void createDescriptorSet();
+
 	VkDescriptorSetLayout mVkDescriptorSetLayout;
 	VkDescriptorPool mVkDescriptorPool;
 	VkDescriptorSet mVkDescriptorSet;

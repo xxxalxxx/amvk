@@ -26,15 +26,18 @@ public:
 	std::vector<char> readFile(const std::string& filename); 
 	std::vector<char> readShader(const std::string& shaderName);
 	std::string getFilePath(const std::string& filename);
+	std::string getResourcePath(std::string&& path) const;
 	FileManager(const FileManager& fileManager) = delete;
 	void operator=(const FileManager& fileManager) = delete;
 private:
 	FileManager();
 	void initBinPath();
 
-	std::string mBinPath, mEngineRoot, mShaderDir;
+	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;
 	static constexpr const char* ENGINE_RELATIVE_ROOT = "/../";
 	static constexpr const char* SHADER_DIR = "shader/spv/";
+	static constexpr const char* RESOURCE_DIR = "res/";
+
 
 };
 

@@ -78,6 +78,13 @@ BuiltInViewportIndex	lib/vulkan/spirv.hpp	/^    BuiltInViewportIndex = 10,$/;"	e
 BuiltInWorkDim	lib/vulkan/spirv.hpp	/^    BuiltInWorkDim = 30,$/;"	e	enum:spv::BuiltIn
 BuiltInWorkgroupId	lib/vulkan/spirv.hpp	/^    BuiltInWorkgroupId = 26,$/;"	e	enum:spv::BuiltIn
 BuiltInWorkgroupSize	lib/vulkan/spirv.hpp	/^    BuiltInWorkgroupSize = 25,$/;"	e	enum:spv::BuiltIn
+CASE	lib/stb/stb_image.h	1360;"	d
+CASE	lib/stb/stb_image.h	1378;"	d
+CASE	lib/stb/stb_image.h	4084;"	d
+CASE	lib/stb/stb_image.h	4097;"	d
+CASE	lib/stb/stb_image.h	4101;"	d
+CASE	lib/stb/stb_image.h	4114;"	d
+COMBO	lib/stb/stb_image.h	1359;"	d
 CURRENT_LOADER_ICD_INTERFACE_VERSION	lib/vulkan/vk_icd.h	31;"	d
 CXX	Makefile	/^CXX=g++$/;"	m
 CXXFLAGS	Makefile	/^CXXFLAGS=-Wall -Werror -std=c++14 -I. -Isrc -Iinc -Ilib$/;"	m
@@ -353,6 +360,7 @@ ExecutionModelMax	lib/vulkan/spirv.hpp	/^    ExecutionModelMax = 0x7fffffff,$/;"
 ExecutionModelTessellationControl	lib/vulkan/spirv.hpp	/^    ExecutionModelTessellationControl = 1,$/;"	e	enum:spv::ExecutionModel
 ExecutionModelTessellationEvaluation	lib/vulkan/spirv.hpp	/^    ExecutionModelTessellationEvaluation = 2,$/;"	e	enum:spv::ExecutionModel
 ExecutionModelVertex	lib/vulkan/spirv.hpp	/^    ExecutionModelVertex = 0,$/;"	e	enum:spv::ExecutionModel
+FAST_BITS	lib/stb/stb_image.h	1456;"	d
 FIRST_CONCRETE	lib/vulkan/libspirv.h	/^  FIRST_CONCRETE(SPV_OPERAND_TYPE_ID),$/;"	e	enum:spv_operand_type_t
 FIRST_CONCRETE	lib/vulkan/libspirv.h	161;"	d
 FIRST_CONCRETE	lib/vulkan/libspirv.h	94;"	d
@@ -413,7 +421,6 @@ FunctionParameterAttributeSext	lib/vulkan/spirv.hpp	/^    FunctionParameterAttri
 FunctionParameterAttributeSret	lib/vulkan/spirv.hpp	/^    FunctionParameterAttributeSret = 3,$/;"	e	enum:spv::FunctionParameterAttribute
 FunctionParameterAttributeZext	lib/vulkan/spirv.hpp	/^    FunctionParameterAttributeZext = 0,$/;"	e	enum:spv::FunctionParameterAttribute
 GLFW_INCLUDE_VULKAN	inc/window.h	4;"	d
-GLFW_INCLUDE_VULKAN	main.cpp	1;"	d	file:
 GLM_ALIGN	lib/glm/detail/setup.hpp	576;"	d
 GLM_ALIGN	lib/glm/detail/setup.hpp	588;"	d
 GLM_ALIGN	lib/glm/detail/setup.hpp	604;"	d
@@ -710,10 +717,8 @@ GLM_FORCE_CXX11	lib/glm/detail/setup.hpp	123;"	d
 GLM_FORCE_CXX98	lib/glm/detail/setup.hpp	125;"	d
 GLM_FORCE_CXX98	lib/glm/detail/setup.hpp	129;"	d
 GLM_FORCE_CXX98	lib/glm/detail/setup.hpp	132;"	d
-GLM_FORCE_DEPTH_ZERO_TO_ONE	main.cpp	5;"	d	file:
 GLM_FORCE_PURE	lib/glm/detail/setup.hpp	228;"	d
 GLM_FORCE_RADIANS	inc/vulkan_manager.h	4;"	d
-GLM_FORCE_RADIANS	main.cpp	4;"	d	file:
 GLM_FUNC_DECL	lib/glm/detail/setup.hpp	521;"	d
 GLM_FUNC_QUALIFIER	lib/glm/detail/setup.hpp	522;"	d
 GLM_HAS_ALIGNED_TYPE	lib/glm/detail/setup.hpp	660;"	d
@@ -1769,6 +1774,7 @@ QueueBindSparse	lib/vulkan/vk_layer.h	/^    PFN_vkQueueBindSparse QueueBindSpars
 QueuePresentKHR	lib/vulkan/vk_layer.h	/^    PFN_vkQueuePresentKHR QueuePresentKHR;$/;"	m	struct:VkLayerDispatchTable_
 QueueSubmit	lib/vulkan/vk_layer.h	/^    PFN_vkQueueSubmit QueueSubmit;$/;"	m	struct:VkLayerDispatchTable_
 QueueWaitIdle	lib/vulkan/vk_layer.h	/^    PFN_vkQueueWaitIdle QueueWaitIdle;$/;"	m	struct:VkLayerDispatchTable_
+RESOURCE_DIR	inc/file_manager.h	/^	static constexpr const char* RESOURCE_DIR = "res\/";$/;"	m	class:FileManager
 RM	Makefile	/^RM=rm -f$/;"	m
 ResetCommandBuffer	lib/vulkan/vk_layer.h	/^    PFN_vkResetCommandBuffer ResetCommandBuffer;$/;"	m	struct:VkLayerDispatchTable_
 ResetCommandPool	lib/vulkan/vk_layer.h	/^    PFN_vkResetCommandPool ResetCommandPool;$/;"	m	struct:VkLayerDispatchTable_
@@ -1879,6 +1885,62 @@ SPV_VERSION	lib/vulkan/spirv.hpp	49;"	d
 SPV_WARNING	lib/vulkan/libspirv.h	/^  SPV_WARNING = 3,$/;"	e	enum:spv_result_t
 SRCS	Makefile	/^SRCS=main.cpp task_manager.cpp window.cpp engine.cpp input_manager.cpp vulkan_manager.cpp device_queue_indices.cpp file_manager.cpp$/;"	m
 SRC_DIR	Makefile	/^SRC_DIR := src$/;"	m
+STBIDEF	lib/stb/stb_image.h	415;"	d
+STBIDEF	lib/stb/stb_image.h	417;"	d
+STBI_ASSERT	lib/stb/stb_image.h	580;"	d
+STBI_FREE	lib/stb/stb_image.h	638;"	d
+STBI_HAS_LROTL	lib/stb/stb_image.h	618;"	d
+STBI_INCLUDE_STB_IMAGE_H	lib/stb/stb_image.h	220;"	d
+STBI_MALLOC	lib/stb/stb_image.h	636;"	d
+STBI_NEON	lib/stb/stb_image.h	729;"	d
+STBI_NOTUSED	lib/stb/stb_image.h	612;"	d
+STBI_NOTUSED	lib/stb/stb_image.h	614;"	d
+STBI_NO_BMP	lib/stb/stb_image.h	538;"	d
+STBI_NO_GIF	lib/stb/stb_image.h	547;"	d
+STBI_NO_HDR	lib/stb/stb_image.h	550;"	d
+STBI_NO_JPEG	lib/stb/stb_image.h	532;"	d
+STBI_NO_PIC	lib/stb/stb_image.h	553;"	d
+STBI_NO_PNG	lib/stb/stb_image.h	535;"	d
+STBI_NO_PNM	lib/stb/stb_image.h	556;"	d
+STBI_NO_PSD	lib/stb/stb_image.h	541;"	d
+STBI_NO_SIMD	lib/stb/stb_image.h	658;"	d
+STBI_NO_SIMD	lib/stb/stb_image.h	673;"	d
+STBI_NO_TGA	lib/stb/stb_image.h	544;"	d
+STBI_NO_ZLIB	lib/stb/stb_image.h	561;"	d
+STBI_REALLOC	lib/stb/stb_image.h	637;"	d
+STBI_REALLOC_SIZED	lib/stb/stb_image.h	642;"	d
+STBI_SIMD_ALIGN	lib/stb/stb_image.h	703;"	d
+STBI_SIMD_ALIGN	lib/stb/stb_image.h	711;"	d
+STBI_SIMD_ALIGN	lib/stb/stb_image.h	735;"	d
+STBI_SIMD_ALIGN	lib/stb/stb_image.h	739;"	d
+STBI_SSE2	lib/stb/stb_image.h	677;"	d
+STBI_VERSION	lib/stb/stb_image.h	396;"	d
+STBI__BYTECAST	lib/stb/stb_image.h	1322;"	d
+STBI__F_avg	lib/stb/stb_image.h	/^   STBI__F_avg=3,$/;"	e	enum:__anon67
+STBI__F_avg_first	lib/stb/stb_image.h	/^   STBI__F_avg_first,$/;"	e	enum:__anon67
+STBI__F_none	lib/stb/stb_image.h	/^   STBI__F_none=0,$/;"	e	enum:__anon67
+STBI__F_paeth	lib/stb/stb_image.h	/^   STBI__F_paeth=4,$/;"	e	enum:__anon67
+STBI__F_paeth_first	lib/stb/stb_image.h	/^   STBI__F_paeth_first$/;"	e	enum:__anon67
+STBI__F_sub	lib/stb/stb_image.h	/^   STBI__F_sub=1,$/;"	e	enum:__anon67
+STBI__F_up	lib/stb/stb_image.h	/^   STBI__F_up=2,$/;"	e	enum:__anon67
+STBI__HDR_BUFLEN	lib/stb/stb_image.h	6089;"	d
+STBI__IDCT_1D	lib/stb/stb_image.h	1932;"	d
+STBI__MARKER_none	lib/stb/stb_image.h	2417;"	d
+STBI__PNG_TYPE	lib/stb/stb_image.h	4419;"	d
+STBI__RESTART	lib/stb/stb_image.h	2434;"	d
+STBI__SCAN_header	lib/stb/stb_image.h	/^   STBI__SCAN_header$/;"	e	enum:__anon58
+STBI__SCAN_load	lib/stb/stb_image.h	/^   STBI__SCAN_load=0,$/;"	e	enum:__anon58
+STBI__SCAN_type	lib/stb/stb_image.h	/^   STBI__SCAN_type,$/;"	e	enum:__anon58
+STBI__X64_TARGET	lib/stb/stb_image.h	647;"	d
+STBI__X86_TARGET	lib/stb/stb_image.h	649;"	d
+STBI__ZFAST_BITS	lib/stb/stb_image.h	3482;"	d
+STBI__ZFAST_MASK	lib/stb/stb_image.h	3483;"	d
+STBI_default	lib/stb/stb_image.h	/^   STBI_default = 0, \/\/ only used for req_comp$/;"	e	enum:__anon55
+STBI_grey	lib/stb/stb_image.h	/^   STBI_grey       = 1,$/;"	e	enum:__anon55
+STBI_grey_alpha	lib/stb/stb_image.h	/^   STBI_grey_alpha = 2,$/;"	e	enum:__anon55
+STBI_rgb	lib/stb/stb_image.h	/^   STBI_rgb        = 3,$/;"	e	enum:__anon55
+STBI_rgb_alpha	lib/stb/stb_image.h	/^   STBI_rgb_alpha  = 4$/;"	e	enum:__anon55
+STB_IMAGE_IMPLEMENTATION	src/vulkan_manager.cpp	3;"	d	file:
 STRINGIFY	inc/macro.h	15;"	d
 SamplerAddressingMode	lib/vulkan/spirv.hpp	/^enum SamplerAddressingMode {$/;"	g	namespace:spv
 SamplerAddressingModeClamp	lib/vulkan/spirv.hpp	/^    SamplerAddressingModeClamp = 2,$/;"	e	enum:spv::SamplerAddressingMode
@@ -2881,8 +2943,8 @@ VK_BUFFER_USAGE_TRANSFER_SRC_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_TRANS
 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT = 0x00000010,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT = 0x00000004,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_VERTEX_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT = 0x00000080,$/;"	e	enum:VkBufferUsageFlagBits
-VK_CALL_IPROC	inc/vulkan_manager.h	165;"	d
-VK_CHECK_RESULT	inc/vulkan_manager.h	155;"	d
+VK_CALL_IPROC	inc/vulkan_manager.h	184;"	d
+VK_CHECK_RESULT	inc/vulkan_manager.h	174;"	d
 VK_COLORSPACE_SRGB_NONLINEAR_KHR	lib/vulkan/vulkan.h	3178;"	d
 VK_COLOR_COMPONENT_A_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_A_BIT = 0x00000008,$/;"	e	enum:VkColorComponentFlagBits
 VK_COLOR_COMPONENT_B_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_B_BIT = 0x00000004,$/;"	e	enum:VkColorComponentFlagBits
@@ -4255,6 +4317,7 @@ Window	inc/window.h	/^class Window {$/;"	c
 Window	src/window.cpp	/^Window::Window():$/;"	f	class:Window
 Window	src/window.cpp	/^Window::Window(unsigned w, unsigned h): $/;"	f	class:Window
 WordCountShift	lib/vulkan/spirv.hpp	/^static const unsigned int WordCountShift = 16;$/;"	m	namespace:spv
+YCbCr_to_RGB_kernel	lib/stb/stb_image.h	/^   void (*YCbCr_to_RGB_kernel)(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step);$/;"	m	struct:__anon60
 _GLM_SWIZZLE2_2_MEMBERS	lib/glm/detail/_swizzle.hpp	300;"	d
 _GLM_SWIZZLE2_3_MEMBERS	lib/glm/detail/_swizzle.hpp	306;"	d
 _GLM_SWIZZLE2_4_MEMBERS	lib/glm/detail/_swizzle.hpp	316;"	d
@@ -4417,6 +4480,7 @@ aligned_vec4	lib/glm/gtc/type_aligned.hpp	/^	typedef aligned_lowp_vec4			aligned
 aligned_vec4	lib/glm/gtc/type_aligned.hpp	/^	typedef aligned_mediump_vec4		aligned_vec4;$/;"	t	namespace:glm
 alignment	lib/vulkan/vulkan.h	/^    VkDeviceSize    alignment;$/;"	m	struct:VkMemoryRequirements
 allIndicesSet	src/device_queue_indices.cpp	/^bool DeviceQueueIndicies::allIndicesSet() $/;"	f	class:DeviceQueueIndicies
+all_a	lib/stb/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon68
 allocationSize	lib/vulkan/vulkan.h	/^    VkDeviceSize       allocationSize;$/;"	m	struct:VkMemoryAllocateInfo
 alphaBlendOp	lib/vulkan/vulkan.h	/^    VkBlendOp                alphaBlendOp;$/;"	m	struct:VkPipelineColorBlendAttachmentState
 alphaMode	lib/vulkan/vk_icd.h	/^    VkDisplayPlaneAlphaFlagBitsKHR alphaMode;$/;"	m	struct:__anon50
@@ -4470,6 +4534,8 @@ basic_format_saver	lib/glm/gtx/io.hpp	/^		class basic_format_saver$/;"	c	namespa
 basic_state_saver	lib/glm/gtx/io.hpp	/^		class basic_state_saver {$/;"	c	namespace:glm::io
 begin	lib/glm/gtx/range.hpp	/^	inline typename genType::value_type * begin(genType& v)$/;"	f	namespace:glm
 begin	lib/glm/gtx/range.hpp	/^	inline typename genType::value_type const * begin(genType const & v)$/;"	f	class:glm::genType
+beginSingleTimeCommands	src/vulkan_manager.cpp	/^VkCommandBuffer VulkanManager::beginSingleTimeCommands()$/;"	f	class:VulkanManager
+bgindex	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon71
 bindCount	lib/vulkan/vulkan.h	/^    uint32_t                          bindCount;$/;"	m	struct:VkSparseImageMemoryBindInfo
 bindCount	lib/vulkan/vulkan.h	/^    uint32_t                     bindCount;$/;"	m	struct:VkSparseBufferMemoryBindInfo
 bindCount	lib/vulkan/vulkan.h	/^    uint32_t                     bindCount;$/;"	m	struct:VkSparseImageOpaqueMemoryBindInfo
@@ -4499,6 +4565,7 @@ bool_type	lib/glm/detail/type_vec2.hpp	/^		typedef tvec2<bool, P> bool_type;$/;"
 bool_type	lib/glm/detail/type_vec3.hpp	/^		typedef tvec3<bool, P> bool_type;$/;"	t	struct:glm::tvec3
 bool_type	lib/glm/detail/type_vec4.hpp	/^		typedef tvec4<bool, P> bool_type;$/;"	t	struct:glm::tvec4
 borderColor	lib/vulkan/vulkan.h	/^    VkBorderColor           borderColor;$/;"	m	struct:VkSamplerCreateInfo
+bpp	lib/stb/stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon68
 bss_	lib/glm/gtx/io.hpp	/^			basic_state_saver<CTy> const bss_;$/;"	m	class:glm::io::basic_format_saver
 buffer	lib/vulkan/vulkan.h	/^    VkBuffer                     buffer;$/;"	m	struct:VkSparseBufferMemoryBindInfo
 buffer	lib/vulkan/vulkan.h	/^    VkBuffer                   buffer;$/;"	m	struct:VkBufferViewCreateInfo
@@ -4511,6 +4578,8 @@ bufferImageGranularity	lib/vulkan/vulkan.h	/^    VkDeviceSize          bufferIma
 bufferImageHeight	lib/vulkan/vulkan.h	/^    uint32_t                    bufferImageHeight;$/;"	m	struct:VkBufferImageCopy
 bufferOffset	lib/vulkan/vulkan.h	/^    VkDeviceSize                bufferOffset;$/;"	m	struct:VkBufferImageCopy
 bufferRowLength	lib/vulkan/vulkan.h	/^    uint32_t                    bufferRowLength;$/;"	m	struct:VkBufferImageCopy
+buffer_start	lib/stb/stb_image.h	/^   stbi_uc buffer_start[128];$/;"	m	struct:__anon57
+buflen	lib/stb/stb_image.h	/^   int buflen;$/;"	m	struct:__anon57
 bvec1	lib/glm/gtc/vec1.hpp	/^	typedef highp_bvec1				bvec1;$/;"	t	namespace:glm
 bvec1	lib/glm/gtc/vec1.hpp	/^	typedef lowp_bvec1				bvec1;$/;"	t	namespace:glm
 bvec1	lib/glm/gtc/vec1.hpp	/^	typedef mediump_bvec1			bvec1;$/;"	t	namespace:glm
@@ -4537,14 +4606,23 @@ call	lib/glm/detail/_vectorize.hpp	/^		GLM_FUNC_QUALIFIER static tvec3<T, P> cal
 call	lib/glm/detail/_vectorize.hpp	/^		GLM_FUNC_QUALIFIER static tvec4<R, P> call(R (*Func) (T x), tvec4<T, P> const & v)$/;"	f	struct:glm::detail::functor1
 call	lib/glm/detail/_vectorize.hpp	/^		GLM_FUNC_QUALIFIER static tvec4<T, P> call(T (*Func) (T x, T y), tvec4<T, P> const & a, T b)$/;"	f	struct:glm::detail::functor2_vec_sca
 call	lib/glm/detail/_vectorize.hpp	/^		GLM_FUNC_QUALIFIER static tvec4<T, P> call(T (*Func) (T x, T y), tvec4<T, P> const & a, tvec4<T, P> const & b)$/;"	f	struct:glm::detail::functor2
+channel	lib/stb/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon69
 char_type	lib/glm/gtx/io.hpp	/^			typedef CTy char_type;$/;"	t	class:glm::io::format_punct
 char_type	lib/glm/gtx/io.hpp	/^			typedef typename state_type::char_type char_type;$/;"	t	class:glm::io::basic_state_saver
 clearValue	lib/vulkan/vulkan.h	/^    VkClearValue          clearValue;$/;"	m	struct:VkClearAttachment
 clearValueCount	lib/vulkan/vulkan.h	/^    uint32_t               clearValueCount;$/;"	m	struct:VkRenderPassBeginInfo
 clipped	lib/vulkan/vulkan.h	/^    VkBool32                         clipped;$/;"	m	struct:VkSwapchainCreateInfoKHR
+code	lib/stb/stb_image.h	/^   stbi__uint16 code[256];$/;"	m	struct:__anon59
 code	lib/vulkan/libspirv.h	/^  const uint32_t* code;$/;"	m	struct:spv_const_binary_t
 code	lib/vulkan/libspirv.h	/^  uint32_t* code;$/;"	m	struct:spv_binary_t
 codeSize	lib/vulkan/vulkan.h	/^    size_t                       codeSize;$/;"	m	struct:VkShaderModuleCreateInfo
+code_bits	lib/stb/stb_image.h	/^   int            code_bits;   \/\/ number of valid bits$/;"	m	struct:__anon60
+code_buffer	lib/stb/stb_image.h	/^   stbi__uint32   code_buffer; \/\/ jpeg entropy-coded buffer$/;"	m	struct:__anon60
+code_buffer	lib/stb/stb_image.h	/^   stbi__uint32 code_buffer;$/;"	m	struct:__anon64
+codes	lib/stb/stb_image.h	/^   stbi__gif_lzw codes[4096];$/;"	m	struct:__anon71
+coeff	lib/stb/stb_image.h	/^      short   *coeff;   \/\/ progressive only$/;"	m	struct:__anon60::__anon61
+coeff_h	lib/stb/stb_image.h	/^      int      coeff_w, coeff_h; \/\/ number of 8x8 coefficient blocks$/;"	m	struct:__anon60::__anon61
+coeff_w	lib/stb/stb_image.h	/^      int      coeff_w, coeff_h; \/\/ number of 8x8 coefficient blocks$/;"	m	struct:__anon60::__anon61
 col_type	lib/glm/detail/type_mat2x2.hpp	/^		typedef tvec2<T, P> col_type;$/;"	t	struct:glm::tmat2x2
 col_type	lib/glm/detail/type_mat2x3.hpp	/^		typedef tvec3<T, P> col_type;$/;"	t	struct:glm::tmat2x3
 col_type	lib/glm/detail/type_mat2x4.hpp	/^		typedef tvec4<T, P> col_type;$/;"	t	struct:glm::tmat2x4
@@ -4563,6 +4641,7 @@ colorAttachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                        c
 colorBlendOp	lib/vulkan/vulkan.h	/^    VkBlendOp                colorBlendOp;$/;"	m	struct:VkPipelineColorBlendAttachmentState
 colorSpace	lib/vulkan/vulkan.h	/^    VkColorSpaceKHR    colorSpace;$/;"	m	struct:VkSurfaceFormatKHR
 colorWriteMask	lib/vulkan/vulkan.h	/^    VkColorComponentFlags    colorWriteMask;$/;"	m	struct:VkPipelineColorBlendAttachmentState
+color_table	lib/stb/stb_image.h	/^   stbi_uc *color_table;$/;"	m	struct:__anon71
 cols	lib/glm/gtx/type_trait.hpp	/^			cols = 2,$/;"	e	enum:glm::type::__anon28
 cols	lib/glm/gtx/type_trait.hpp	/^			cols = 2,$/;"	e	enum:glm::type::__anon29
 cols	lib/glm/gtx/type_trait.hpp	/^			cols = 2,$/;"	e	enum:glm::type::__anon30
@@ -4616,6 +4695,7 @@ const_pointer_const	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> co
 const_reference	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const & const_reference;$/;"	t	struct:glm::detail::genType
 constantID	lib/vulkan/vulkan.h	/^    uint32_t    constantID;$/;"	m	struct:VkSpecializationMapEntry
 copyBuffer	src/vulkan_manager.cpp	/^void VulkanManager::copyBuffer(VkBuffer src, VkBuffer dst, VkDeviceSize size)$/;"	f	class:VulkanManager
+copyImage	src/vulkan_manager.cpp	/^void VulkanManager::copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height)$/;"	f	class:VulkanManager
 countof	lib/glm/detail/setup.hpp	/^		constexpr std::size_t countof(T const (&)[N])$/;"	f	namespace:glm
 createBuffer	src/vulkan_manager.cpp	/^void VulkanManager::createBuffer(VkBuffer& buffer, $/;"	f	class:VulkanManager
 createCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::createCommandBuffers()$/;"	f	class:VulkanManager
@@ -4624,6 +4704,8 @@ createDescriptorPool	src/vulkan_manager.cpp	/^void VulkanManager::createDescript
 createDescriptorSet	src/vulkan_manager.cpp	/^void VulkanManager::createDescriptorSet() $/;"	f	class:VulkanManager
 createDescriptorSetLayout	src/vulkan_manager.cpp	/^void VulkanManager::createDescriptorSetLayout()$/;"	f	class:VulkanManager
 createFramebuffers	src/vulkan_manager.cpp	/^void VulkanManager::createFramebuffers()$/;"	f	class:VulkanManager
+createImage	src/vulkan_manager.cpp	/^void VulkanManager::createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,$/;"	f	class:VulkanManager
+createImageView	src/vulkan_manager.cpp	/^void VulkanManager::createImageView(VkImage image, VkFormat format, VkImageView& imageView)$/;"	f	class:VulkanManager
 createImageViews	src/vulkan_manager.cpp	/^void VulkanManager::createImageViews() $/;"	f	class:VulkanManager
 createIndexBuffer	src/quad.cpp	/^void Quad::createIndexBuffer()$/;"	f	class:Quad
 createIndexBuffer	src/vulkan_manager.cpp	/^void VulkanManager::createIndexBuffer()$/;"	f	class:VulkanManager
@@ -4634,6 +4716,9 @@ createRenderPass	src/vulkan_manager.cpp	/^void VulkanManager::createRenderPass()
 createSemaphores	src/vulkan_manager.cpp	/^void VulkanManager::createSemaphores()$/;"	f	class:VulkanManager
 createShaderModule	src/vulkan_manager.cpp	/^void VulkanManager::createShaderModule(const std::vector<char>& shaderSpvCode, VkShaderModule& shaderModule)$/;"	f	class:VulkanManager
 createSwapChain	src/vulkan_manager.cpp	/^void VulkanManager::createSwapChain(const Window& window)$/;"	f	class:VulkanManager
+createTextureImage	src/vulkan_manager.cpp	/^void VulkanManager::createTextureImage()$/;"	f	class:VulkanManager
+createTextureImageView	src/vulkan_manager.cpp	/^void VulkanManager::createTextureImageView()$/;"	f	class:VulkanManager
+createTextureSampler	src/vulkan_manager.cpp	/^void VulkanManager::createTextureSampler()$/;"	f	class:VulkanManager
 createUniformBuffer	src/vulkan_manager.cpp	/^void VulkanManager::createUniformBuffer()$/;"	f	class:VulkanManager
 createVertexBuffer	src/quad.cpp	/^void Quad::createVertexBuffer() $/;"	f	class:Quad
 createVertexBuffer	src/vulkan_manager.cpp	/^void VulkanManager::createVertexBuffer() $/;"	f	class:VulkanManager
@@ -4642,6 +4727,8 @@ createVkSurface	src/vulkan_manager.cpp	/^void VulkanManager::createVkSurface(GLF
 ctor	lib/glm/detail/setup.hpp	/^	enum ctor{uninitialize};$/;"	g	namespace:glm
 ctor	lib/glm/detail/type_gentype.hpp	/^		enum ctor{null};$/;"	g	struct:glm::detail::genType
 cullMode	lib/vulkan/vulkan.h	/^    VkCullModeFlags                            cullMode;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo
+cur_x	lib/stb/stb_image.h	/^   int cur_x, cur_y;$/;"	m	struct:__anon71
+cur_y	lib/stb/stb_image.h	/^   int cur_x, cur_y;$/;"	m	struct:__anon71
 currentDisplay	lib/vulkan/vulkan.h	/^    VkDisplayKHR    currentDisplay;$/;"	m	struct:VkDisplayPlanePropertiesKHR
 currentExtent	lib/vulkan/vulkan.h	/^    VkExtent2D                       currentExtent;$/;"	m	struct:VkSurfaceCapabilitiesKHR
 currentStackIndex	lib/vulkan/vulkan.h	/^    uint32_t        currentStackIndex;$/;"	m	struct:VkDisplayPlanePropertiesKHR
@@ -4649,9 +4736,55 @@ currentTransform	lib/vulkan/vulkan.h	/^    VkSurfaceTransformFlagBitsKHR    curr
 data	lib/glm/detail/type_vec.hpp	/^			uint8 data[size];$/;"	m	struct:glm::detail::storage::type
 data	lib/glm/detail/type_vec4.hpp	/^				typename detail::storage<T, sizeof(T) * 4, detail::is_aligned<P>::value>::type data;$/;"	m	union:glm::tvec4::__anon1
 data	lib/glm/gtc/quaternion.hpp	/^				typename detail::storage<T, sizeof(T) * 4, detail::is_aligned<P>::value>::type data;$/;"	m	union:glm::tquat::__anon39
+data	lib/stb/stb_image.h	/^      stbi_uc *data;$/;"	m	struct:__anon60::__anon61
 dataSize	lib/vulkan/vulkan.h	/^    size_t                             dataSize;$/;"	m	struct:VkSpecializationInfo
 database	.ycm_extra_conf.py	/^  database = None$/;"	v
 database	.ycm_extra_conf.py	/^  database = ycm_core.CompilationDatabase( compilation_database_folder )$/;"	v
+dc_pred	lib/stb/stb_image.h	/^      int dc_pred;$/;"	m	struct:__anon60::__anon61
+dct_bfly32o	lib/stb/stb_image.h	2067;"	d
+dct_bfly32o	lib/stb/stb_image.h	2201;"	d
+dct_bfly32o	lib/stb/stb_image.h	2253;"	d
+dct_bfly32o	lib/stb/stb_image.h	2411;"	d
+dct_const	lib/stb/stb_image.h	2039;"	d
+dct_const	lib/stb/stb_image.h	2196;"	d
+dct_interleave16	lib/stb/stb_image.h	2084;"	d
+dct_interleave16	lib/stb/stb_image.h	2203;"	d
+dct_interleave8	lib/stb/stb_image.h	2078;"	d
+dct_interleave8	lib/stb/stb_image.h	2202;"	d
+dct_long_mac	lib/stb/stb_image.h	2234;"	d
+dct_long_mac	lib/stb/stb_image.h	2407;"	d
+dct_long_mul	lib/stb/stb_image.h	2230;"	d
+dct_long_mul	lib/stb/stb_image.h	2406;"	d
+dct_pass	lib/stb/stb_image.h	2089;"	d
+dct_pass	lib/stb/stb_image.h	2204;"	d
+dct_pass	lib/stb/stb_image.h	2261;"	d
+dct_pass	lib/stb/stb_image.h	2412;"	d
+dct_rot	lib/stb/stb_image.h	2043;"	d
+dct_rot	lib/stb/stb_image.h	2197;"	d
+dct_trn16	lib/stb/stb_image.h	2321;"	d
+dct_trn16	lib/stb/stb_image.h	2343;"	d
+dct_trn32	lib/stb/stb_image.h	2322;"	d
+dct_trn32	lib/stb/stb_image.h	2344;"	d
+dct_trn64	lib/stb/stb_image.h	2323;"	d
+dct_trn64	lib/stb/stb_image.h	2345;"	d
+dct_trn8_16	lib/stb/stb_image.h	2367;"	d
+dct_trn8_16	lib/stb/stb_image.h	2402;"	d
+dct_trn8_32	lib/stb/stb_image.h	2368;"	d
+dct_trn8_32	lib/stb/stb_image.h	2403;"	d
+dct_trn8_8	lib/stb/stb_image.h	2366;"	d
+dct_trn8_8	lib/stb/stb_image.h	2401;"	d
+dct_wadd	lib/stb/stb_image.h	2057;"	d
+dct_wadd	lib/stb/stb_image.h	2199;"	d
+dct_wadd	lib/stb/stb_image.h	2243;"	d
+dct_wadd	lib/stb/stb_image.h	2409;"	d
+dct_widen	lib/stb/stb_image.h	2052;"	d
+dct_widen	lib/stb/stb_image.h	2198;"	d
+dct_widen	lib/stb/stb_image.h	2238;"	d
+dct_widen	lib/stb/stb_image.h	2408;"	d
+dct_wsub	lib/stb/stb_image.h	2062;"	d
+dct_wsub	lib/stb/stb_image.h	2200;"	d
+dct_wsub	lib/stb/stb_image.h	2248;"	d
+dct_wsub	lib/stb/stb_image.h	2410;"	d
 ddualquat	lib/glm/gtx/dual_quaternion.hpp	/^	typedef highp_ddualquat			ddualquat;$/;"	t	namespace:glm
 ddualquat	lib/glm/gtx/dual_quaternion.hpp	/^	typedef lowp_ddualquat			ddualquat;$/;"	t	namespace:glm
 ddualquat	lib/glm/gtx/dual_quaternion.hpp	/^	typedef mediump_ddualquat		ddualquat;$/;"	t	namespace:glm
@@ -4659,11 +4792,14 @@ debugCallback	src/vulkan_manager.cpp	/^static VKAPI_ATTR VkBool32 VKAPI_CALL deb
 dedicatedAllocation	lib/vulkan/vulkan.h	/^    VkBool32           dedicatedAllocation;$/;"	m	struct:VkDedicatedAllocationBufferCreateInfoNV
 dedicatedAllocation	lib/vulkan/vulkan.h	/^    VkBool32           dedicatedAllocation;$/;"	m	struct:VkDedicatedAllocationImageCreateInfoNV
 defaultp	lib/glm/detail/precision.hpp	/^			defaultp = aligned_highp$/;"	e	enum:glm::precision
+delay	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon71
 delim_left	lib/glm/gtx/io.hpp	/^			char_type  delim_left;$/;"	m	class:glm::io::format_punct
 delim_right	lib/glm/gtx/io.hpp	/^			char_type  delim_right;$/;"	m	class:glm::io::format_punct
 delimeter	lib/glm/gtx/io.hpp	/^		struct delimeter$/;"	s	namespace:glm::io
+delta	lib/stb/stb_image.h	/^   int    delta[17];   \/\/ old 'firstsymbol' - old 'firstcode'$/;"	m	struct:__anon59
 dependencyCount	lib/vulkan/vulkan.h	/^    uint32_t                          dependencyCount;$/;"	m	struct:VkRenderPassCreateInfo
 dependencyFlags	lib/vulkan/vulkan.h	/^    VkDependencyFlags       dependencyFlags;$/;"	m	struct:VkSubpassDependency
+depth	lib/stb/stb_image.h	/^   int depth;$/;"	m	struct:__anon66
 depth	lib/vulkan/vulkan.h	/^    float       depth;$/;"	m	struct:VkClearDepthStencilValue
 depth	lib/vulkan/vulkan.h	/^    uint32_t    depth;$/;"	m	struct:VkExtent3D
 depthBiasClamp	lib/vulkan/vulkan.h	/^    VkBool32    depthBiasClamp;$/;"	m	struct:VkPhysicalDeviceFeatures
@@ -4681,6 +4817,7 @@ depthPitch	lib/vulkan/vulkan.h	/^    VkDeviceSize    depthPitch;$/;"	m	struct:Vk
 depthStencil	lib/vulkan/vulkan.h	/^    VkClearDepthStencilValue    depthStencil;$/;"	m	union:VkClearValue
 depthTestEnable	lib/vulkan/vulkan.h	/^    VkBool32                                  depthTestEnable;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo
 depthWriteEnable	lib/vulkan/vulkan.h	/^    VkBool32                                  depthWriteEnable;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo
+dequant	lib/stb/stb_image.h	/^   stbi_uc dequant[4][64];$/;"	m	struct:__anon60
 description	lib/vulkan/vulkan.h	/^    char        description[VK_MAX_DESCRIPTION_SIZE];$/;"	m	struct:VkLayerProperties
 descriptorCount	lib/vulkan/vulkan.h	/^    uint32_t                         descriptorCount;$/;"	m	struct:VkWriteDescriptorSet
 descriptorCount	lib/vulkan/vulkan.h	/^    uint32_t              descriptorCount;$/;"	m	struct:VkDescriptorSetLayoutBinding
@@ -4810,6 +4947,7 @@ dvec4	lib/glm/detail/type_vec.hpp	/^	typedef lowp_dvec4			dvec4;$/;"	t	namespace
 dvec4	lib/glm/detail/type_vec.hpp	/^	typedef mediump_dvec4		dvec4;$/;"	t	namespace:glm
 dword	lib/glm/gtx/raw_data.hpp	/^	typedef detail::uint32		dword;$/;"	t	namespace:glm
 dynamicStateCount	lib/vulkan/vulkan.h	/^    uint32_t                             dynamicStateCount;$/;"	m	struct:VkPipelineDynamicStateCreateInfo
+eflags	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon71
 elem	lib/glm/detail/_swizzle.hpp	/^		GLM_FUNC_QUALIFIER T const& elem(size_t i) const{ return (reinterpret_cast<const T*>(_buffer))[i]; }$/;"	f	struct:glm::detail::_swizzle_base0
 elem	lib/glm/detail/_swizzle.hpp	/^		GLM_FUNC_QUALIFIER T& elem(size_t i){ return (reinterpret_cast<T*>(_buffer))[i]; }$/;"	f	struct:glm::detail::_swizzle_base0
 enableDebug	src/vulkan_manager.cpp	/^void VulkanManager::enableDebug() $/;"	f	class:VulkanManager
@@ -4819,9 +4957,13 @@ enabledLayerCount	lib/vulkan/vulkan.h	/^    uint32_t                           e
 enabledLayerCount	lib/vulkan/vulkan.h	/^    uint32_t                    enabledLayerCount;$/;"	m	struct:VkInstanceCreateInfo
 end	lib/glm/gtx/range.hpp	/^	inline typename genType::value_type * end(genType& v)$/;"	f	namespace:glm
 end	lib/glm/gtx/range.hpp	/^	inline typename genType::value_type const * end(genType const & v)$/;"	f	class:glm::genType
+endSingleTimeCommands	src/vulkan_manager.cpp	/^void VulkanManager::endSingleTimeCommands(VkCommandBuffer cmdBuf)$/;"	f	class:VulkanManager
 engineVersion	lib/vulkan/vulkan.h	/^    uint32_t           engineVersion;$/;"	m	struct:VkApplicationInfo
+eob_run	lib/stb/stb_image.h	/^   int            eob_run;$/;"	m	struct:__anon60
+eof	lib/stb/stb_image.h	/^   int      (*eof)   (void *user);                       \/\/ returns nonzero if we are at end of file\/data$/;"	m	struct:__anon56
 error	lib/vulkan/libspirv.h	/^  char* error;$/;"	m	struct:spv_diagnostic_t
 execute	inc/task_manager.h	/^	void execute() {$/;"	f	class:MessageTask
+expanded	lib/stb/stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon66
 ext_inst_type	lib/vulkan/libspirv.h	/^  spv_ext_inst_type_t ext_inst_type;$/;"	m	struct:spv_parsed_instruction_t
 extensionName	lib/vulkan/vulkan.h	/^    char        extensionName[VK_MAX_EXTENSION_NAME_SIZE];$/;"	m	struct:VkExtensionProperties
 extent	lib/vulkan/vulkan.h	/^    VkExtent2D    extent;$/;"	m	struct:VkRect2D
@@ -4984,6 +5126,9 @@ fade	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER tvec3<T, P> fade(tvec3<T, P
 fade	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER tvec4<T, P> fade(tvec4<T, P> const & t)$/;"	f	namespace:glm::detail
 failOp	lib/vulkan/vulkan.h	/^    VkStencilOp    failOp;$/;"	m	struct:VkStencilOpState
 fast	lib/glm/detail/type_gentype.hpp	/^		fast,$/;"	e	enum:glm::profile
+fast	lib/stb/stb_image.h	/^   stbi__uint16 fast[1 << STBI__ZFAST_BITS];$/;"	m	struct:__anon63
+fast	lib/stb/stb_image.h	/^   stbi_uc  fast[1 << FAST_BITS];$/;"	m	struct:__anon59
+fast_ac	lib/stb/stb_image.h	/^   stbi__int16 fast_ac[4][1 << FAST_BITS];$/;"	m	struct:__anon60
 fdualquat	lib/glm/gtx/dual_quaternion.hpp	/^	typedef highp_fdualquat			fdualquat;$/;"	t	namespace:glm
 fdualquat	lib/glm/gtx/dual_quaternion.hpp	/^	typedef lowp_fdualquat			fdualquat;$/;"	t	namespace:glm
 fdualquat	lib/glm/gtx/dual_quaternion.hpp	/^	typedef mediump_fdualquat		fdualquat;$/;"	t	namespace:glm
@@ -4992,11 +5137,16 @@ fileManager	inc/file_manager.h	/^	void operator=(const FileManager& fileManager)
 fillModeNonSolid	lib/vulkan/vulkan.h	/^    VkBool32    fillModeNonSolid;$/;"	m	struct:VkPhysicalDeviceFeatures
 fill_	lib/glm/gtx/io.hpp	/^			char_type       fill_;$/;"	m	class:glm::io::basic_state_saver
 finalLayout	lib/vulkan/vulkan.h	/^    VkImageLayout                   finalLayout;$/;"	m	struct:VkAttachmentDescription
+first	lib/stb/stb_image.h	/^   stbi_uc first;$/;"	m	struct:__anon70
 firstIndex	lib/vulkan/vulkan.h	/^    uint32_t    firstIndex;$/;"	m	struct:VkDrawIndexedIndirectCommand
 firstInstance	lib/vulkan/vulkan.h	/^    uint32_t    firstInstance;$/;"	m	struct:VkDrawIndexedIndirectCommand
 firstInstance	lib/vulkan/vulkan.h	/^    uint32_t    firstInstance;$/;"	m	struct:VkDrawIndirectCommand
 firstVertex	lib/vulkan/vulkan.h	/^    uint32_t    firstVertex;$/;"	m	struct:VkDrawIndirectCommand
+first_row_filter	lib/stb/stb_image.h	/^static stbi_uc first_row_filter[5] =$/;"	v
+firstcode	lib/stb/stb_image.h	/^   stbi__uint16 firstcode[16];$/;"	m	struct:__anon63
+firstsymbol	lib/stb/stb_image.h	/^   stbi__uint16 firstsymbol[16];$/;"	m	struct:__anon63
 flags	.ycm_extra_conf.py	/^flags = [$/;"	v
+flags	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon71
 flags	lib/vulkan/vulkan.h	/^    VkAndroidSurfaceCreateFlagsKHR    flags;$/;"	m	struct:VkAndroidSurfaceCreateInfoKHR
 flags	lib/vulkan/vulkan.h	/^    VkAttachmentDescriptionFlags    flags;$/;"	m	struct:VkAttachmentDescription
 flags	lib/vulkan/vulkan.h	/^    VkBufferCreateFlags    flags;$/;"	m	struct:VkBufferCreateInfo
@@ -5051,6 +5201,8 @@ flags_type	lib/glm/gtx/io.hpp	/^			typedef ::std::ios_base::fmtflags      flags_
 float1	lib/glm/gtx/compatibility.hpp	/^	typedef float						float1;			\/\/!< \\brief single-precision floating-point vector with 1 component. (From GLM_GTX_compatibility extension)$/;"	t	namespace:glm
 float1x1	lib/glm/gtx/compatibility.hpp	/^	typedef float						float1x1;		\/\/!< \\brief single-precision floating-point matrix with 1 component. (From GLM_GTX_compatibility extension)$/;"	t	namespace:glm
 float2	lib/glm/gtx/compatibility.hpp	/^	typedef tvec2<float, highp>		float2;			\/\/!< \\brief single-precision floating-point vector with 2 components. (From GLM_GTX_compatibility extension)$/;"	t	namespace:glm
+float2fixed	lib/stb/stb_image.h	3072;"	d
+float2fixed	lib/stb/stb_image.h	3100;"	d
 float2x2	lib/glm/gtx/compatibility.hpp	/^	typedef tmat2x2<float, highp>		float2x2;		\/\/!< \\brief single-precision floating-point matrix with 2 x 2 components. (From GLM_GTX_compatibility extension)$/;"	t	namespace:glm
 float2x3	lib/glm/gtx/compatibility.hpp	/^	typedef tmat2x3<float, highp>		float2x3;		\/\/!< \\brief single-precision floating-point matrix with 2 x 3 components. (From GLM_GTX_compatibility extension)$/;"	t	namespace:glm
 float2x4	lib/glm/gtx/compatibility.hpp	/^	typedef tmat2x4<float, highp>		float2x4;		\/\/!< \\brief single-precision floating-point matrix with 2 x 4 components. (From GLM_GTX_compatibility extension)$/;"	t	namespace:glm
@@ -5203,7 +5355,7 @@ genType	lib/glm/detail/type_gentype.hpp	/^	struct genType$/;"	s	namespace:glm::d
 geometryShader	lib/vulkan/vulkan.h	/^    VkBool32    geometryShader;$/;"	m	struct:VkPhysicalDeviceFeatures
 getAspect	src/window.cpp	/^float Window::getAspect() const$/;"	f	class:Window
 getAttrDesc	src/quad.cpp	/^std::array<VkVertexInputAttributeDescription, 2> Quad::getAttrDesc() $/;"	f	class:Quad
-getAttrDesc	src/vulkan_manager.cpp	/^std::array<VkVertexInputAttributeDescription, 2> VulkanManager::getAttrDesc() $/;"	f	class:VulkanManager
+getAttrDesc	src/vulkan_manager.cpp	/^std::array<VkVertexInputAttributeDescription, 3> VulkanManager::getAttrDesc() $/;"	f	class:VulkanManager
 getBinPath	src/file_manager.cpp	/^std::string FileManager::getBinPath() $/;"	f	class:FileManager
 getBindingDesc	src/quad.cpp	/^VkVertexInputBindingDescription Quad::getBindingDesc()$/;"	f	class:Quad
 getBindingDesc	src/vulkan_manager.cpp	/^VkVertexInputBindingDescription VulkanManager::getBindingDesc()$/;"	f	class:VulkanManager
@@ -5220,6 +5372,7 @@ getInputManager	src/window.cpp	/^InputManager& Window::getInputManager()$/;"	f	c
 getInstance	src/file_manager.cpp	/^FileManager& FileManager::getInstance()$/;"	f	class:FileManager
 getMemoryType	src/vulkan_manager.cpp	/^uint32_t VulkanManager::getMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags& flags)$/;"	f	class:VulkanManager
 getPresentMode	src/vulkan_manager.cpp	/^VkPresentModeKHR VulkanManager::getPresentMode(const std::vector<VkPresentModeKHR>& presentModes) $/;"	f	class:VulkanManager
+getResourcePath	src/file_manager.cpp	/^std::string FileManager::getResourcePath(std::string&& path) const $/;"	f	class:FileManager
 getSupportedQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getSupportedQueueIndex()$/;"	f	class:DeviceQueueIndicies
 getSurfaceFormat	src/vulkan_manager.cpp	/^VkSurfaceFormatKHR VulkanManager::getSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surfaceFormats) $/;"	f	class:VulkanManager
 getSwapChainDesc	src/vulkan_manager.cpp	/^VulkanManager::SwapChainDesc VulkanManager::getSwapChainDesc(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface)$/;"	f	class:VulkanManager
@@ -5416,6 +5569,10 @@ globalAlpha	lib/vulkan/vulkan.h	/^    float                             globalAl
 graphicsIndexSet	src/device_queue_indices.cpp	/^bool DeviceQueueIndicies::graphicsIndexSet() $/;"	f	class:DeviceQueueIndicies
 gtx	lib/glm/gtx/number_precision.hpp	/^namespace gtx$/;"	n	namespace:glm
 gtx	lib/glm/gtx/optimum_pow.hpp	/^namespace gtx$/;"	n	namespace:glm
+h	lib/stb/stb_image.h	/^      int h,v;$/;"	m	struct:__anon60::__anon61
+h	lib/stb/stb_image.h	/^   int w,h;$/;"	m	struct:__anon71
+h2	lib/stb/stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon60::__anon61
+ha	lib/stb/stb_image.h	/^      int hd,ha;$/;"	m	struct:__anon60::__anon61
 hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::tdualquat<T,P> >$/;"	s	namespace:std
 hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::tmat2x2<T,P> >$/;"	s	namespace:std
 hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::tmat2x3<T,P> >$/;"	s	namespace:std
@@ -5431,6 +5588,7 @@ hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::tvec1<T,P> >$/;"	s	namespace:std
 hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::tvec2<T,P> >$/;"	s	namespace:std
 hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::tvec3<T,P> >$/;"	s	namespace:std
 hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::tvec4<T,P> >$/;"	s	namespace:std
+hd	lib/stb/stb_image.h	/^      int hd,ha;$/;"	m	struct:__anon60::__anon61
 hdata	lib/glm/detail/type_half.hpp	/^	typedef short hdata;$/;"	t	namespace:glm::detail
 heapIndex	lib/vulkan/vulkan.h	/^    uint32_t                 heapIndex;$/;"	m	struct:VkMemoryType
 height	lib/vulkan/vulkan.h	/^    float    height;$/;"	m	struct:VkViewport
@@ -5677,6 +5835,10 @@ highp_vec4	lib/glm/detail/type_vec.hpp	/^	typedef tvec4<float, highp>		highp_vec
 highp_vec4	lib/glm/fwd.hpp	/^	typedef tvec4<float, highp> highp_vec4;$/;"	t	namespace:glm
 hinstance	lib/vulkan/vk_icd.h	/^    HINSTANCE hinstance;$/;"	m	struct:__anon47
 hinstance	lib/vulkan/vulkan.h	/^    HINSTANCE                       hinstance;$/;"	m	struct:VkWin32SurfaceCreateInfoKHR
+hs	lib/stb/stb_image.h	/^   int hs,vs;   \/\/ expansion factor in each axis$/;"	m	struct:__anon62
+hsz	lib/stb/stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon68
+huff_ac	lib/stb/stb_image.h	/^   stbi__huffman huff_ac[4];$/;"	m	struct:__anon60
+huff_dc	lib/stb/stb_image.h	/^   stbi__huffman huff_dc[4];$/;"	m	struct:__anon60
 hwnd	lib/vulkan/vk_icd.h	/^    HWND hwnd;$/;"	m	struct:__anon47
 hwnd	lib/vulkan/vulkan.h	/^    HWND                            hwnd;$/;"	m	struct:VkWin32SurfaceCreateInfoKHR
 i16	lib/glm/fwd.hpp	/^	typedef detail::int16 i16;$/;"	t	namespace:glm
@@ -5752,6 +5914,9 @@ i8vec4	lib/glm/fwd.hpp	/^	typedef lowp_i8vec4				i8vec4;$/;"	t	namespace:glm
 i8vec4	lib/glm/fwd.hpp	/^	typedef mediump_i8vec4			i8vec4;	$/;"	t	namespace:glm
 i8vec4	lib/glm/gtc/type_precision.hpp	/^	typedef tvec4<i8, defaultp> i8vec4;$/;"	t	namespace:glm
 id	lib/glm/gtx/io.hpp	/^			static std::locale::id id;$/;"	m	class:glm::io::format_punct
+id	lib/stb/stb_image.h	/^      int id;$/;"	m	struct:__anon60::__anon61
+idata	lib/stb/stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon66
+idct_block_kernel	lib/stb/stb_image.h	/^   void (*idct_block_kernel)(stbi_uc *out, int out_stride, short data[64]);$/;"	m	struct:__anon60
 image	lib/vulkan/vulkan.h	/^    VkImage                           image;$/;"	m	struct:VkSparseImageMemoryBindInfo
 image	lib/vulkan/vulkan.h	/^    VkImage                      image;$/;"	m	struct:VkSparseImageOpaqueMemoryBindInfo
 image	lib/vulkan/vulkan.h	/^    VkImage                    image;$/;"	m	struct:VkImageMemoryBarrier
@@ -5815,6 +5980,21 @@ imat4x3	lib/glm/gtc/matrix_integer.hpp	/^	typedef mediump_imat4x3							imat4x3;
 imat4x4	lib/glm/gtc/matrix_integer.hpp	/^	typedef highp_imat4x4							imat4x4;$/;"	t	namespace:glm
 imat4x4	lib/glm/gtc/matrix_integer.hpp	/^	typedef lowp_imat4x4							imat4x4;$/;"	t	namespace:glm
 imat4x4	lib/glm/gtc/matrix_integer.hpp	/^	typedef mediump_imat4x4							imat4x4;$/;"	t	namespace:glm
+img_buffer	lib/stb/stb_image.h	/^   stbi_uc *img_buffer, *img_buffer_end;$/;"	m	struct:__anon57
+img_buffer_end	lib/stb/stb_image.h	/^   stbi_uc *img_buffer, *img_buffer_end;$/;"	m	struct:__anon57
+img_buffer_original	lib/stb/stb_image.h	/^   stbi_uc *img_buffer_original, *img_buffer_original_end;$/;"	m	struct:__anon57
+img_buffer_original_end	lib/stb/stb_image.h	/^   stbi_uc *img_buffer_original, *img_buffer_original_end;$/;"	m	struct:__anon57
+img_comp	lib/stb/stb_image.h	/^   } img_comp[4];$/;"	m	struct:__anon60	typeref:struct:__anon60::__anon61
+img_h_max	lib/stb/stb_image.h	/^   int img_h_max, img_v_max;$/;"	m	struct:__anon60
+img_mcu_h	lib/stb/stb_image.h	/^   int img_mcu_w, img_mcu_h;$/;"	m	struct:__anon60
+img_mcu_w	lib/stb/stb_image.h	/^   int img_mcu_w, img_mcu_h;$/;"	m	struct:__anon60
+img_mcu_x	lib/stb/stb_image.h	/^   int img_mcu_x, img_mcu_y;$/;"	m	struct:__anon60
+img_mcu_y	lib/stb/stb_image.h	/^   int img_mcu_x, img_mcu_y;$/;"	m	struct:__anon60
+img_n	lib/stb/stb_image.h	/^   int img_n, img_out_n;$/;"	m	struct:__anon57
+img_out_n	lib/stb/stb_image.h	/^   int img_n, img_out_n;$/;"	m	struct:__anon57
+img_v_max	lib/stb/stb_image.h	/^   int img_h_max, img_v_max;$/;"	m	struct:__anon60
+img_x	lib/stb/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__anon57
+img_y	lib/stb/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__anon57
 implementationVersion	lib/vulkan/vulkan.h	/^    uint32_t    implementationVersion;$/;"	m	struct:VkLayerProperties
 independentBlend	lib/vulkan/vulkan.h	/^    VkBool32    independentBlend;$/;"	m	struct:VkPhysicalDeviceFeatures
 index	lib/vulkan/libspirv.h	/^  size_t index;$/;"	m	struct:spv_position_t
@@ -5877,6 +6057,8 @@ int_t	lib/glm/detail/type_int.hpp	/^	typedef highp_int					int_t;$/;"	t	namespac
 int_t	lib/glm/detail/type_int.hpp	/^	typedef lowp_int					int_t;$/;"	t	namespace:glm
 int_t	lib/glm/detail/type_int.hpp	/^	typedef mediump_int					int_t;$/;"	t	namespace:glm
 io	lib/glm/gtx/io.hpp	/^	namespace io$/;"	n	namespace:glm
+io	lib/stb/stb_image.h	/^   stbi_io_callbacks io;$/;"	m	struct:__anon57
+io_user_data	lib/stb/stb_image.h	/^   void *io_user_data;$/;"	m	struct:__anon57
 isOpen	inc/window.h	/^	inline bool isOpen() { return !glfwWindowShouldClose(mGlfwWindow); }$/;"	f	class:Window
 isTextSource	lib/vulkan/libspirv.h	/^  bool isTextSource;$/;"	m	struct:spv_diagnostic_t
 is_aligned	lib/glm/detail/precision.hpp	/^		struct is_aligned<glm::aligned_highp>$/;"	s	namespace:glm::detail
@@ -5915,6 +6097,7 @@ layers	lib/vulkan/vulkan.h	/^    uint32_t                    layers;$/;"	m	struc
 layout	lib/vulkan/vulkan.h	/^    VkImageLayout    layout;$/;"	m	struct:VkAttachmentReference
 layout	lib/vulkan/vulkan.h	/^    VkPipelineLayout                                 layout;$/;"	m	struct:VkGraphicsPipelineCreateInfo
 layout	lib/vulkan/vulkan.h	/^    VkPipelineLayout                   layout;$/;"	m	struct:VkComputePipelineCreateInfo
+length	lib/stb/stb_image.h	/^   stbi__uint32 length;$/;"	m	struct:__anon65
 length	lib/vulkan/libspirv.h	/^  size_t length;$/;"	m	struct:spv_text_t
 length_t	lib/glm/detail/setup.hpp	/^		typedef size_t length_t;$/;"	t	namespace:glm
 length_type	lib/glm/detail/type_mat2x2.hpp	/^		typedef length_t length_type;$/;"	t	struct:glm::tmat2x2
@@ -5941,13 +6124,19 @@ lerp	lib/glm/gtx/compatibility.hpp	/^	template <typename T, precision P> GLM_FUN
 lerp	lib/glm/gtx/compatibility.hpp	/^	template <typename T> GLM_FUNC_QUALIFIER T lerp(T x, T y, T a){return mix(x, y, a);}																					\/\/!< \\brief Returns x * (1.0 - a) + y * a, i.e., the linear blend of x and y using the floating-point value a. The value for a is not restricted to the range [0, 1]. (From GLM_GTX_compatibility)$/;"	f	namespace:glm
 level	lib/vulkan/vulkan.h	/^    VkCommandBufferLevel    level;$/;"	m	struct:VkCommandBufferAllocateInfo
 levelCount	lib/vulkan/vulkan.h	/^    uint32_t              levelCount;$/;"	m	struct:VkImageSubresourceRange
+lflags	lib/stb/stb_image.h	/^   int lflags;$/;"	m	struct:__anon71
 limits	lib/vulkan/vulkan.h	/^    VkPhysicalDeviceLimits              limits;$/;"	m	struct:VkPhysicalDeviceProperties
 line	lib/vulkan/libspirv.h	/^  size_t line;$/;"	m	struct:spv_position_t
+line0	lib/stb/stb_image.h	/^   stbi_uc *line0,*line1;$/;"	m	struct:__anon62
+line1	lib/stb/stb_image.h	/^   stbi_uc *line0,*line1;$/;"	m	struct:__anon62
 lineWidth	lib/vulkan/vulkan.h	/^    float                                      lineWidth;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo
 lineWidthGranularity	lib/vulkan/vulkan.h	/^    float                 lineWidthGranularity;$/;"	m	struct:VkPhysicalDeviceLimits
 lineWidthRange	lib/vulkan/vulkan.h	/^    float                 lineWidthRange[2];$/;"	m	struct:VkPhysicalDeviceLimits
+line_size	lib/stb/stb_image.h	/^   int line_size;$/;"	m	struct:__anon71
 linearTilingFeatures	lib/vulkan/vulkan.h	/^    VkFormatFeatureFlags    linearTilingFeatures;$/;"	m	struct:VkFormatProperties
+linebuf	lib/stb/stb_image.h	/^      stbi_uc *linebuf;$/;"	m	struct:__anon60::__anon61
 loadOp	lib/vulkan/vulkan.h	/^    VkAttachmentLoadOp              loadOp;$/;"	m	struct:VkAttachmentDescription
+load_jpeg_image	lib/stb/stb_image.h	/^static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp, int req_comp)$/;"	f
 loaderData	lib/vulkan/vk_icd.h	/^    void *loaderData;$/;"	m	union:__anon42
 loaderMagic	lib/vulkan/vk_icd.h	/^    uintptr_t loaderMagic;$/;"	m	union:__anon42
 locale_	lib/glm/gtx/io.hpp	/^			locale_type     locale_;$/;"	m	class:glm::io::basic_state_saver
@@ -6195,15 +6384,16 @@ lowp_vec3	lib/glm/detail/type_vec.hpp	/^	typedef tvec3<float, lowp>		lowp_vec3;$
 lowp_vec3	lib/glm/fwd.hpp	/^	typedef tvec3<float, lowp> lowp_vec3;$/;"	t	namespace:glm
 lowp_vec4	lib/glm/detail/type_vec.hpp	/^	typedef tvec4<float, lowp>		lowp_vec4;$/;"	t	namespace:glm
 lowp_vec4	lib/glm/fwd.hpp	/^	typedef tvec4<float, lowp> lowp_vec4;$/;"	t	namespace:glm
+lpal	lib/stb/stb_image.h	/^   stbi_uc lpal[256][4];$/;"	m	struct:__anon71
 mAspect	inc/window.h	/^	float mAspect;$/;"	m	class:Window
-mBinPath	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir;$/;"	m	class:FileManager
+mBinPath	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;$/;"	m	class:FileManager
 mComputeIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
 mCondition	inc/task_manager.h	/^	std::condition_variable mCondition;$/;"	m	class:TaskManager
 mContinue	inc/task_manager.h	/^	std::atomic_bool mContinue;$/;"	m	class:TaskManager
 mDeviceQueueIndices	inc/vulkan_context.h	/^	DeviceQueueIndicies mDeviceQueueIndices;$/;"	m	class:VulkanContext
 mDeviceQueueIndices	inc/vulkan_manager.h	/^	DeviceQueueIndicies mDeviceQueueIndices;$/;"	m	class:VulkanManager
 mDeviceQueueIndiciesArr	inc/device_queue_indices.h	/^	int *mDeviceQueueIndiciesArr[NUM_DEVICE_QUEUE_INDICES];$/;"	m	class:DeviceQueueIndicies
-mEngineRoot	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir;$/;"	m	class:FileManager
+mEngineRoot	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;$/;"	m	class:FileManager
 mGlfwWindow	inc/input_manager.h	/^	GLFWwindow* mGlfwWindow;$/;"	m	class:InputManager
 mGlfwWindow	inc/window.h	/^	GLFWwindow* mGlfwWindow;$/;"	m	class:Window
 mGraphicsIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
@@ -6223,7 +6413,8 @@ mPresentModes	inc/vulkan_context.h	/^		std::vector<VkPresentModeKHR> mPresentMod
 mPresentModes	inc/vulkan_manager.h	/^		std::vector<VkPresentModeKHR> mPresentModes;$/;"	m	struct:VulkanManager::SwapChainDesc
 mRenderFinishedSemaphore	inc/vulkan_context.h	/^	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;$/;"	m	class:VulkanContext
 mRenderFinishedSemaphore	inc/vulkan_manager.h	/^	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;$/;"	m	class:VulkanManager
-mShaderDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir;$/;"	m	class:FileManager
+mResourceDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;$/;"	m	class:FileManager
+mShaderDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;$/;"	m	class:FileManager
 mSupportedIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
 mSupportedQueue	inc/vulkan_context.h	/^	VkQueue mGraphicsQueue, mSupportedQueue;$/;"	m	class:VulkanContext
 mSupportedQueue	inc/vulkan_manager.h	/^	VkQueue mGraphicsQueue, mSupportedQueue;$/;"	m	class:VulkanManager
@@ -6246,6 +6437,10 @@ mSwapChainImages	inc/vulkan_manager.h	/^	std::vector<VkImage> mSwapChainImages;$
 mTaskManager	inc/engine.h	/^	TaskManager mTaskManager;$/;"	m	class:Engine
 mTasks	inc/task_manager.h	/^	std::queue<Task*> mTasks;$/;"	m	class:TaskManager
 mTasksMutex	inc/task_manager.h	/^	std::mutex mTasksMutex;$/;"	m	class:TaskManager
+mTextureImage	inc/vulkan_manager.h	/^	VkImage mTextureImage;$/;"	m	class:VulkanManager
+mTextureImageMem	inc/vulkan_manager.h	/^	VkDeviceMemory mTextureImageMem;$/;"	m	class:VulkanManager
+mTextureImageView	inc/vulkan_manager.h	/^	VkImageView mTextureImageView;$/;"	m	class:VulkanManager
+mTextureSampler	inc/vulkan_manager.h	/^	VkSampler mTextureSampler;$/;"	m	class:VulkanManager
 mTransferIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
 mVertexBuffer	inc/quad.h	/^	VkBuffer mVertexBuffer, mIndexBuffer;$/;"	m	class:Quad
 mVkCommandBuffers	inc/vulkan_context.h	/^	std::vector<VkCommandBuffer> mVkCommandBuffers;$/;"	m	class:VulkanContext
@@ -6276,10 +6471,12 @@ mVulkanManager	inc/engine.h	/^	VulkanManager mVulkanManager;$/;"	m	class:Engine
 mWidth	inc/window.h	/^	unsigned mWidth, mHeight;$/;"	m	class:Window
 mWindow	inc/engine.h	/^	Window mWindow;$/;"	m	class:Engine
 mWindow	inc/vulkan_manager.h	/^	const Window& mWindow;$/;"	m	class:VulkanManager
+ma	lib/stb/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon68
 magFilter	lib/vulkan/vulkan.h	/^    VkFilter                magFilter;$/;"	m	struct:VkSamplerCreateInfo
 main	lib/glm/detail/dummy.cpp	/^int main()$/;"	f
 main	main.cpp	/^int main() {$/;"	f
 mapEntryCount	lib/vulkan/vulkan.h	/^    uint32_t                           mapEntryCount;$/;"	m	struct:VkSpecializationInfo
+marker	lib/stb/stb_image.h	/^   unsigned char  marker;      \/\/ marker seen while filling entropy buffer$/;"	m	struct:__anon60
 mat2	lib/glm/detail/type_mat.hpp	/^	typedef mat2x2					mat2;$/;"	t	namespace:glm
 mat2x2	lib/glm/detail/type_mat.hpp	/^	typedef highp_mat2x2			mat2x2;$/;"	t	namespace:glm
 mat2x2	lib/glm/detail/type_mat.hpp	/^	typedef lowp_mat2x2			mat2x2;$/;"	t	namespace:glm
@@ -6397,6 +6594,11 @@ maxVertexInputBindings	lib/vulkan/vulkan.h	/^    uint32_t              maxVertex
 maxVertexOutputComponents	lib/vulkan/vulkan.h	/^    uint32_t              maxVertexOutputComponents;$/;"	m	struct:VkPhysicalDeviceLimits
 maxViewportDimensions	lib/vulkan/vulkan.h	/^    uint32_t              maxViewportDimensions[2];$/;"	m	struct:VkPhysicalDeviceLimits
 maxViewports	lib/vulkan/vulkan.h	/^    uint32_t              maxViewports;$/;"	m	struct:VkPhysicalDeviceLimits
+max_x	lib/stb/stb_image.h	/^   int max_x, max_y;$/;"	m	struct:__anon71
+max_y	lib/stb/stb_image.h	/^   int max_x, max_y;$/;"	m	struct:__anon71
+maxcode	lib/stb/stb_image.h	/^   int maxcode[17];$/;"	m	struct:__anon63
+maxcode	lib/stb/stb_image.h	/^   unsigned int maxcode[18];$/;"	m	struct:__anon59
+mb	lib/stb/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon68
 mediump	lib/glm/detail/precision.hpp	/^		mediump = packed_mediump,$/;"	e	enum:glm::precision
 mediump_bvec1	lib/glm/gtc/vec1.hpp	/^	typedef mediump_bvec1_t			mediump_bvec1;$/;"	t	namespace:glm
 mediump_bvec1_t	lib/glm/detail/type_vec.hpp	/^	typedef tvec1<bool, mediump>	mediump_bvec1_t;$/;"	t	namespace:glm
@@ -6646,6 +6848,7 @@ memoryTypeBits	lib/vulkan/vulkan.h	/^    uint32_t        memoryTypeBits;$/;"	m	s
 memoryTypeCount	lib/vulkan/vulkan.h	/^    uint32_t        memoryTypeCount;$/;"	m	struct:VkPhysicalDeviceMemoryProperties
 memoryTypeIndex	lib/vulkan/vulkan.h	/^    uint32_t           memoryTypeIndex;$/;"	m	struct:VkMemoryAllocateInfo
 memoryTypes	lib/vulkan/vulkan.h	/^    VkMemoryType    memoryTypes[VK_MAX_MEMORY_TYPES];$/;"	m	struct:VkPhysicalDeviceMemoryProperties
+mg	lib/stb/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon68
 min	lib/glm/detail/_fixes.hpp	13;"	d
 minDepth	lib/vulkan/vulkan.h	/^    float    minDepth;$/;"	m	struct:VkViewport
 minDepthBounds	lib/vulkan/vulkan.h	/^    float                                     minDepthBounds;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo
@@ -6678,14 +6881,17 @@ mirSurface	lib/vulkan/vulkan.h	/^    MirSurface*                   mirSurface;$/
 mod289	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER T mod289(T const & x)$/;"	f	namespace:glm::detail
 model	inc/vulkan_manager.h	/^	    glm::mat4 model;$/;"	m	struct:VulkanManager::UBO
 module	lib/vulkan/vulkan.h	/^    VkShaderModule                      module;$/;"	m	struct:VkPipelineShaderStageCreateInfo
+mr	lib/stb/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon68
 msgCallback	inc/vulkan_manager.h	/^	VkDebugReportCallbackEXT msgCallback; $/;"	m	class:VulkanManager
 multiDrawIndirect	lib/vulkan/vulkan.h	/^    VkBool32    multiDrawIndirect;$/;"	m	struct:VkPhysicalDeviceFeatures
 multiViewport	lib/vulkan/vulkan.h	/^    VkBool32    multiViewport;$/;"	m	struct:VkPhysicalDeviceFeatures
 newLayout	lib/vulkan/vulkan.h	/^    VkImageLayout              newLayout;$/;"	m	struct:VkImageMemoryBarrier
 newline	lib/glm/gtx/io.hpp	/^			char_type  newline;$/;"	m	class:glm::io::format_punct
 nice	lib/glm/detail/type_gentype.hpp	/^		nice,$/;"	e	enum:glm::profile
+nomore	lib/stb/stb_image.h	/^   int            nomore;      \/\/ flag if we saw a marker so must stop$/;"	m	struct:__anon60
 nonCoherentAtomSize	lib/vulkan/vulkan.h	/^    VkDeviceSize          nonCoherentAtomSize;$/;"	m	struct:VkPhysicalDeviceLimits
 null	lib/glm/detail/type_gentype.hpp	/^		enum ctor{null};$/;"	e	enum:glm::detail::genType::ctor
+num_bits	lib/stb/stb_image.h	/^   int num_bits;$/;"	m	struct:__anon64
 num_operands	lib/vulkan/libspirv.h	/^  uint16_t num_operands;$/;"	m	struct:spv_parsed_instruction_t
 num_words	lib/vulkan/libspirv.h	/^  uint16_t num_words;$/;"	m	struct:spv_parsed_instruction_t
 num_words	lib/vulkan/libspirv.h	/^  uint16_t num_words;$/;"	m	struct:spv_parsed_operand_t
@@ -6697,6 +6903,7 @@ objectType	lib/vulkan/vulkan.h	/^    VkDebugReportObjectTypeEXT    objectType;$/
 objectType	lib/vulkan/vulkan.h	/^    VkDebugReportObjectTypeEXT    objectType;$/;"	m	struct:VkDebugMarkerObjectTagInfoEXT
 occlusionQueryEnable	lib/vulkan/vulkan.h	/^    VkBool32                         occlusionQueryEnable;$/;"	m	struct:VkCommandBufferInheritanceInfo
 occlusionQueryPrecise	lib/vulkan/vulkan.h	/^    VkBool32    occlusionQueryPrecise;$/;"	m	struct:VkPhysicalDeviceFeatures
+offset	lib/stb/stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon68
 offset	lib/vulkan/libspirv.h	/^  uint16_t offset;$/;"	m	struct:spv_parsed_operand_t
 offset	lib/vulkan/vulkan.h	/^    VkDeviceSize               offset;$/;"	m	struct:VkBufferViewCreateInfo
 offset	lib/vulkan/vulkan.h	/^    VkDeviceSize       offset;$/;"	m	struct:VkBufferMemoryBarrier
@@ -6710,6 +6917,7 @@ offset	lib/vulkan/vulkan.h	/^    uint32_t    offset;$/;"	m	struct:VkSpecializati
 offset	lib/vulkan/vulkan.h	/^    uint32_t    offset;$/;"	m	struct:VkVertexInputAttributeDescription
 oldLayout	lib/vulkan/vulkan.h	/^    VkImageLayout              oldLayout;$/;"	m	struct:VkImageMemoryBarrier
 oldSwapchain	lib/vulkan/vulkan.h	/^    VkSwapchainKHR                   oldSwapchain;$/;"	m	struct:VkSwapchainCreateInfoKHR
+old_out	lib/stb/stb_image.h	/^   stbi_uc *out, *old_out;             \/\/ output buffer (always 4 components)$/;"	m	struct:__anon71
 onWindowResized	src/engine.cpp	/^void onWindowResized(GLFWwindow* window, int width, int height) {$/;"	f
 opcode	lib/vulkan/libspirv.h	/^  uint16_t opcode;$/;"	m	struct:spv_parsed_instruction_t
 operands	lib/vulkan/libspirv.h	/^  const spv_parsed_operand_t* operands;$/;"	m	struct:spv_parsed_instruction_t
@@ -6742,7 +6950,10 @@ optimalBufferCopyRowPitchAlignment	lib/vulkan/vulkan.h	/^    VkDeviceSize       
 optimalTilingFeatures	lib/vulkan/vulkan.h	/^    VkFormatFeatureFlags    optimalTilingFeatures;$/;"	m	struct:VkFormatProperties
 order	lib/glm/gtx/io.hpp	/^			order_type order;$/;"	m	class:glm::io::format_punct
 order	lib/glm/gtx/io.hpp	/^		struct order$/;"	s	namespace:glm::io
+order	lib/stb/stb_image.h	/^   int scan_n, order[4];$/;"	m	struct:__anon60
 order_type	lib/glm/gtx/io.hpp	/^		enum order_type { column_major, row_major};$/;"	g	namespace:glm::io
+out	lib/stb/stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon66
+out	lib/stb/stb_image.h	/^   stbi_uc *out, *old_out;             \/\/ output buffer (always 4 components)$/;"	m	struct:__anon71
 outerProduct_trait	lib/glm/detail/func_matrix.hpp	/^	struct outerProduct_trait<T, P, tvec2, tvec2>$/;"	s	namespace:glm::detail
 outerProduct_trait	lib/glm/detail/func_matrix.hpp	/^	struct outerProduct_trait<T, P, tvec2, tvec3>$/;"	s	namespace:glm::detail
 outerProduct_trait	lib/glm/detail/func_matrix.hpp	/^	struct outerProduct_trait<T, P, tvec2, tvec4>$/;"	s	namespace:glm::detail
@@ -6921,9 +7132,11 @@ packed_mediump_dvec1	lib/glm/gtc/type_aligned.hpp	/^	typedef tvec1<double, packe
 packed_mediump_ivec1	lib/glm/gtc/type_aligned.hpp	/^	typedef tvec1<int, packed_mediump>		packed_mediump_ivec1;$/;"	t	namespace:glm
 packed_mediump_uvec1	lib/glm/gtc/type_aligned.hpp	/^	typedef tvec1<uint, packed_mediump>		packed_mediump_uvec1;$/;"	t	namespace:glm
 packed_mediump_vec1	lib/glm/gtc/type_aligned.hpp	/^	typedef tvec1<float, packed_mediump>	packed_mediump_vec1;$/;"	t	namespace:glm
+pal	lib/stb/stb_image.h	/^   stbi_uc  pal[256][4];$/;"	m	struct:__anon71
 param_type	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const & param_type;$/;"	t	struct:glm::detail::genType
 parameters	lib/vulkan/vulkan.h	/^    VkDisplayModeParametersKHR     parameters;$/;"	m	struct:VkDisplayModeCreateInfoKHR
 parameters	lib/vulkan/vulkan.h	/^    VkDisplayModeParametersKHR    parameters;$/;"	m	struct:VkDisplayModePropertiesKHR
+parse	lib/stb/stb_image.h	/^   int parse, step;$/;"	m	struct:__anon71
 part_type	lib/glm/gtx/dual_quaternion.hpp	/^		typedef glm::tquat<T, P> part_type;$/;"	t	struct:glm::tdualquat
 passOp	lib/vulkan/vulkan.h	/^    VkStencilOp    passOp;$/;"	m	struct:VkStencilOpState
 patchControlPoints	lib/vulkan/vulkan.h	/^    uint32_t                                  patchControlPoints;$/;"	m	struct:VkPipelineTessellationStateCreateInfo
@@ -6977,10 +7190,12 @@ precision	lib/glm/detail/precision.hpp	/^	enum precision$/;"	g	namespace:glm
 precision	lib/glm/gtx/io.hpp	/^			unsigned   precision;$/;"	m	class:glm::io::format_punct
 precision	lib/glm/gtx/io.hpp	/^		struct precision$/;"	s	namespace:glm::io
 precision_	lib/glm/gtx/io.hpp	/^			streamsize_type precision_;$/;"	m	class:glm::io::basic_state_saver
+prefix	lib/stb/stb_image.h	/^   stbi__int16 prefix;$/;"	m	struct:__anon70
 presentMode	lib/vulkan/vulkan.h	/^    VkPresentModeKHR                 presentMode;$/;"	m	struct:VkSwapchainCreateInfoKHR
 preserveAttachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                        preserveAttachmentCount;$/;"	m	struct:VkSubpassDescription
 primitiveRestartEnable	lib/vulkan/vulkan.h	/^    VkBool32                                   primitiveRestartEnable;$/;"	m	struct:VkPipelineInputAssemblyStateCreateInfo
 profile	lib/glm/detail/type_gentype.hpp	/^	enum profile$/;"	g	namespace:glm
+progressive	lib/stb/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon60
 proj	inc/vulkan_manager.h	/^		glm::mat4 proj;$/;"	m	struct:VulkanManager::UBO
 propertyFlags	lib/vulkan/vulkan.h	/^    VkMemoryPropertyFlags    propertyFlags;$/;"	m	struct:VkMemoryType
 pushConstantRangeCount	lib/vulkan/vulkan.h	/^    uint32_t                        pushConstantRangeCount;$/;"	m	struct:VkPipelineLayoutCreateInfo
@@ -7016,8 +7231,13 @@ range	lib/vulkan/vulkan.h	/^    VkDeviceSize    range;$/;"	m	struct:VkDescriptor
 rasterizationOrder	lib/vulkan/vulkan.h	/^    VkRasterizationOrderAMD    rasterizationOrder;$/;"	m	struct:VkPipelineRasterizationStateRasterizationOrderAMD
 rasterizationSamples	lib/vulkan/vulkan.h	/^    VkSampleCountFlagBits                    rasterizationSamples;$/;"	m	struct:VkPipelineMultisampleStateCreateInfo
 rasterizerDiscardEnable	lib/vulkan/vulkan.h	/^    VkBool32                                   rasterizerDiscardEnable;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo
+ratio	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon71
+raw_coeff	lib/stb/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon60::__anon61
+raw_data	lib/stb/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon60::__anon61
+read	lib/stb/stb_image.h	/^   int      (*read)  (void *user,char *data,int size);   \/\/ fill 'data' with 'size' bytes.  return number of bytes actually read$/;"	m	struct:__anon56
 readFile	src/file_manager.cpp	/^std::vector<char> FileManager::readFile(const std::string& filename) $/;"	f	class:FileManager
 readShader	src/file_manager.cpp	/^std::vector<char> FileManager::readShader(const std::string& shaderName)$/;"	f	class:FileManager
+read_from_callbacks	lib/stb/stb_image.h	/^   int read_from_callbacks;$/;"	m	struct:__anon57
 real	lib/glm/gtx/dual_quaternion.hpp	/^		glm::tquat<T, P> real, dual;$/;"	m	struct:glm::tdualquat
 recreateSwapChain	src/vulkan_manager.cpp	/^void VulkanManager::recreateSwapChain()$/;"	f	class:VulkanManager
 rect	lib/vulkan/vulkan.h	/^    VkRect2D    rect;$/;"	m	struct:VkClearRect
@@ -7029,13 +7249,19 @@ renderPass	lib/vulkan/vulkan.h	/^    VkRenderPass                               
 renderPass	lib/vulkan/vulkan.h	/^    VkRenderPass                     renderPass;$/;"	m	struct:VkCommandBufferInheritanceInfo
 renderPass	lib/vulkan/vulkan.h	/^    VkRenderPass                renderPass;$/;"	m	struct:VkFramebufferCreateInfo
 renderPass	lib/vulkan/vulkan.h	/^    VkRenderPass           renderPass;$/;"	m	struct:VkRenderPassBeginInfo
+resample	lib/stb/stb_image.h	/^   resample_row_func resample;$/;"	m	struct:__anon62
+resample_row_1	lib/stb/stb_image.h	/^static stbi_uc *resample_row_1(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)$/;"	f
+resample_row_func	lib/stb/stb_image.h	/^typedef stbi_uc *(*resample_row_func)(stbi_uc *out, stbi_uc *in0, stbi_uc *in1,$/;"	t
+resample_row_hv_2_kernel	lib/stb/stb_image.h	/^   stbi_uc *(*resample_row_hv_2_kernel)(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs);$/;"	m	struct:__anon60
 residencyAlignedMipSize	lib/vulkan/vulkan.h	/^    VkBool32    residencyAlignedMipSize;$/;"	m	struct:VkPhysicalDeviceSparseProperties
 residencyNonResidentStrict	lib/vulkan/vulkan.h	/^    VkBool32    residencyNonResidentStrict;$/;"	m	struct:VkPhysicalDeviceSparseProperties
 residencyStandard2DBlockShape	lib/vulkan/vulkan.h	/^    VkBool32    residencyStandard2DBlockShape;$/;"	m	struct:VkPhysicalDeviceSparseProperties
 residencyStandard2DMultisampleBlockShape	lib/vulkan/vulkan.h	/^    VkBool32    residencyStandard2DMultisampleBlockShape;$/;"	m	struct:VkPhysicalDeviceSparseProperties
 residencyStandard3DBlockShape	lib/vulkan/vulkan.h	/^    VkBool32    residencyStandard3DBlockShape;$/;"	m	struct:VkPhysicalDeviceSparseProperties
 resourceOffset	lib/vulkan/vulkan.h	/^    VkDeviceSize               resourceOffset;$/;"	m	struct:VkSparseMemoryBind
+restart_interval	lib/stb/stb_image.h	/^   int restart_interval, todo;$/;"	m	struct:__anon60
 result_id	lib/vulkan/libspirv.h	/^  uint32_t result_id;$/;"	m	struct:spv_parsed_instruction_t
+rgb	lib/stb/stb_image.h	/^   int            rgb;$/;"	m	struct:__anon60
 robustBufferAccess	lib/vulkan/vulkan.h	/^    VkBool32    robustBufferAccess;$/;"	m	struct:VkPhysicalDeviceFeatures
 rowPitch	lib/vulkan/vulkan.h	/^    VkDeviceSize    rowPitch;$/;"	m	struct:VkSubresourceLayout
 row_major	lib/glm/gtx/io.hpp	/^		enum order_type { column_major, row_major};$/;"	e	enum:glm::io::order_type
@@ -7066,6 +7292,8 @@ s	lib/glm/detail/type_vec3.hpp	/^				struct{ T s, t, p; };$/;"	m	struct:glm::tve
 s	lib/glm/detail/type_vec3.hpp	/^			union { T x, r, s; };$/;"	m	union:glm::tvec3::__anon21
 s	lib/glm/detail/type_vec4.hpp	/^				struct { T s, t, p, q; };$/;"	m	struct:glm::tvec4::__anon1::__anon4
 s	lib/glm/detail/type_vec4.hpp	/^			union { T x, r, s; };$/;"	m	union:glm::tvec4::__anon5
+s	lib/stb/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon60
+s	lib/stb/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon66
 sDeviceExtensions	inc/vulkan_manager.h	/^	static const std::vector<const char*> sDeviceExtensions;$/;"	m	class:VulkanManager
 sDeviceExtensions	src/vulkan_manager.cpp	/^const std::vector<const char*> VulkanManager::sDeviceExtensions = {$/;"	m	class:VulkanManager	file:
 sGetVkResultString	src/vulkan_manager.cpp	/^const char* VulkanManager::sGetVkResultString(VkResult result) {$/;"	f	class:VulkanManager
@@ -7155,6 +7383,7 @@ saturate	lib/glm/gtx/compatibility.hpp	/^	template <typename T, precision P> GLM
 saturate	lib/glm/gtx/compatibility.hpp	/^	template <typename T, precision P> GLM_FUNC_QUALIFIER tvec2<T, P> saturate(const tvec2<T, P>& x){return clamp(x, T(0), T(1));}					\/\/!< \\brief Returns clamp(x, 0, 1) for each component in x. (From GLM_GTX_compatibility)$/;"	f	namespace:glm
 saturate	lib/glm/gtx/compatibility.hpp	/^	template <typename T, precision P> GLM_FUNC_QUALIFIER tvec3<T, P> saturate(const tvec3<T, P>& x){return clamp(x, T(0), T(1));}					\/\/!< \\brief Returns clamp(x, 0, 1) for each component in x. (From GLM_GTX_compatibility)$/;"	f	namespace:glm
 saturate	lib/glm/gtx/compatibility.hpp	/^	template <typename T, precision P> GLM_FUNC_QUALIFIER tvec4<T, P> saturate(const tvec4<T, P>& x){return clamp(x, T(0), T(1));}					\/\/!< \\brief Returns clamp(x, 0, 1) for each component in x. (From GLM_GTX_compatibility)$/;"	f	namespace:glm
+scan_n	lib/stb/stb_image.h	/^   int scan_n, order[4];$/;"	m	struct:__anon60
 scissorCount	lib/vulkan/vulkan.h	/^    uint32_t                              scissorCount;$/;"	m	struct:VkPipelineViewportStateCreateInfo
 separator	lib/glm/gtx/io.hpp	/^			char_type  separator;$/;"	m	class:glm::io::format_punct
 setComputeIndex	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::setComputeIndex(int index) $/;"	f	class:DeviceQueueIndicies
@@ -7197,6 +7426,9 @@ signalSemaphoreCount	lib/vulkan/vulkan.h	/^    uint32_t                         
 signalSemaphoreCount	lib/vulkan/vulkan.h	/^    uint32_t                       signalSemaphoreCount;$/;"	m	struct:VkSubmitInfo
 simd	lib/glm/detail/type_gentype.hpp	/^		simd$/;"	e	enum:glm::profile
 sint	lib/glm/gtx/integer.hpp	/^	typedef signed int					sint;$/;"	t	namespace:glm
+size	lib/stb/stb_image.h	/^   stbi_uc  size[257];$/;"	m	struct:__anon59
+size	lib/stb/stb_image.h	/^   stbi_uc  size[288];$/;"	m	struct:__anon63
+size	lib/stb/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon69
 size	lib/vulkan/vulkan.h	/^    VkDeviceSize               size;$/;"	m	struct:VkSparseMemoryBind
 size	lib/vulkan/vulkan.h	/^    VkDeviceSize           size;$/;"	m	struct:VkBufferCreateInfo
 size	lib/vulkan/vulkan.h	/^    VkDeviceSize         size;$/;"	m	struct:VkMemoryHeap
@@ -7217,6 +7449,7 @@ size4	lib/glm/gtx/std_based_type.hpp	/^	typedef tvec4<std::size_t, defaultp>		si
 size4_t	lib/glm/gtx/std_based_type.hpp	/^	typedef tvec4<std::size_t, defaultp>		size4_t;$/;"	t	namespace:glm
 sizeType	lib/glm/detail/type_gentype.hpp	/^	typedef std::size_t sizeType;$/;"	t	namespace:glm
 size_type	lib/glm/detail/type_gentype.hpp	/^		typedef sizeType size_type;$/;"	t	struct:glm::detail::genType
+skip	lib/stb/stb_image.h	/^   void     (*skip)  (void *user,int n);                 \/\/ skip the next 'n' bytes, or 'unget' the last -n bytes if negative$/;"	m	struct:__anon56
 snprintf	lib/vulkan/vk_sdk_platform.h	39;"	d
 space	lib/glm/gtx/io.hpp	/^			char_type  space;$/;"	m	class:glm::io::format_punct
 sparseAddressSpaceSize	lib/vulkan/vulkan.h	/^    VkDeviceSize          sparseAddressSpaceSize;$/;"	m	struct:VkPhysicalDeviceLimits
@@ -7232,6 +7465,8 @@ sparseResidencyImage2D	lib/vulkan/vulkan.h	/^    VkBool32    sparseResidencyImag
 sparseResidencyImage3D	lib/vulkan/vulkan.h	/^    VkBool32    sparseResidencyImage3D;$/;"	m	struct:VkPhysicalDeviceFeatures
 specVersion	lib/vulkan/vulkan.h	/^    uint32_t    specVersion;$/;"	m	struct:VkExtensionProperties
 specVersion	lib/vulkan/vulkan.h	/^    uint32_t    specVersion;$/;"	m	struct:VkLayerProperties
+spec_end	lib/stb/stb_image.h	/^   int            spec_end;$/;"	m	struct:__anon60
+spec_start	lib/stb/stb_image.h	/^   int            spec_start;$/;"	m	struct:__anon60
 spirv_H	lib/vulkan/spirv.h	49;"	d
 spirv_HPP	lib/vulkan/spirv.hpp	43;"	d
 spv	lib/vulkan/spirv.hpp	/^namespace spv {$/;"	n
@@ -7300,14 +7535,256 @@ stageCount	lib/vulkan/vulkan.h	/^    uint32_t                                   
 stageFlags	lib/vulkan/vulkan.h	/^    VkShaderStageFlags    stageFlags;$/;"	m	struct:VkDescriptorSetLayoutBinding
 stageFlags	lib/vulkan/vulkan.h	/^    VkShaderStageFlags    stageFlags;$/;"	m	struct:VkPushConstantRange
 standardSampleLocations	lib/vulkan/vulkan.h	/^    VkBool32              standardSampleLocations;$/;"	m	struct:VkPhysicalDeviceLimits
+start_x	lib/stb/stb_image.h	/^   int start_x, start_y;$/;"	m	struct:__anon71
+start_y	lib/stb/stb_image.h	/^   int start_x, start_y;$/;"	m	struct:__anon71
 state_	lib/glm/gtx/io.hpp	/^			state_type&     state_;$/;"	m	class:glm::io::basic_state_saver
 state_saver	lib/glm/gtx/io.hpp	/^		typedef basic_state_saver<char>     state_saver;$/;"	t	namespace:glm::io
 state_type	lib/glm/gtx/io.hpp	/^			typedef ::std::basic_ios<CTy,CTr>      state_type;$/;"	t	class:glm::io::basic_state_saver
+stbi__DNL	lib/stb/stb_image.h	2793;"	d
+stbi__EOI	lib/stb/stb_image.h	2795;"	d
+stbi__SOF	lib/stb/stb_image.h	2796;"	d
+stbi__SOF_progressive	lib/stb/stb_image.h	2799;"	d
+stbi__SOI	lib/stb/stb_image.h	2794;"	d
+stbi__SOS	lib/stb/stb_image.h	2797;"	d
+stbi__YCbCr_to_RGB_row	lib/stb/stb_image.h	/^static void stbi__YCbCr_to_RGB_row(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step)$/;"	f
+stbi__YCbCr_to_RGB_simd	lib/stb/stb_image.h	/^static void stbi__YCbCr_to_RGB_simd(stbi_uc *out, stbi_uc const *y, stbi_uc const *pcb, stbi_uc const *pcr, int count, int step)$/;"	f
+stbi__at_eof	lib/stb/stb_image.h	/^stbi_inline static int stbi__at_eof(stbi__context *s)$/;"	f
+stbi__bit_reverse	lib/stb/stb_image.h	/^stbi_inline static int stbi__bit_reverse(int v, int bits)$/;"	f
+stbi__bitcount	lib/stb/stb_image.h	/^static int stbi__bitcount(unsigned int a)$/;"	f
+stbi__bitreverse16	lib/stb/stb_image.h	/^stbi_inline static int stbi__bitreverse16(int n)$/;"	f
+stbi__bmask	lib/stb/stb_image.h	/^static stbi__uint32 stbi__bmask[17]={0,1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,16383,32767,65535};$/;"	v
+stbi__bmp_data	lib/stb/stb_image.h	/^} stbi__bmp_data;$/;"	t	typeref:struct:__anon68
+stbi__bmp_info	lib/stb/stb_image.h	/^static int stbi__bmp_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__bmp_load	lib/stb/stb_image.h	/^static stbi_uc *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__bmp_parse_header	lib/stb/stb_image.h	/^static void *stbi__bmp_parse_header(stbi__context *s, stbi__bmp_data *info)$/;"	f
+stbi__bmp_test	lib/stb/stb_image.h	/^static int stbi__bmp_test(stbi__context *s)$/;"	f
+stbi__bmp_test_raw	lib/stb/stb_image.h	/^static int stbi__bmp_test_raw(stbi__context *s)$/;"	f
+stbi__build_fast_ac	lib/stb/stb_image.h	/^static void stbi__build_fast_ac(stbi__int16 *fast_ac, stbi__huffman *h)$/;"	f
+stbi__build_huffman	lib/stb/stb_image.h	/^static int stbi__build_huffman(stbi__huffman *h, int *count)$/;"	f
+stbi__check_png_header	lib/stb/stb_image.h	/^static int stbi__check_png_header(stbi__context *s)$/;"	f
+stbi__clamp	lib/stb/stb_image.h	/^stbi_inline static stbi_uc stbi__clamp(int x)$/;"	f
+stbi__cleanup_jpeg	lib/stb/stb_image.h	/^static void stbi__cleanup_jpeg(stbi__jpeg *j)$/;"	f
+stbi__compute_huffman_codes	lib/stb/stb_image.h	/^static int stbi__compute_huffman_codes(stbi__zbuf *a)$/;"	f
+stbi__compute_transparency	lib/stb/stb_image.h	/^static int stbi__compute_transparency(stbi__png *z, stbi_uc tc[3], int out_n)$/;"	f
+stbi__compute_transparency16	lib/stb/stb_image.h	/^static int stbi__compute_transparency16(stbi__png *z, stbi__uint16 tc[3], int out_n)$/;"	f
+stbi__compute_y	lib/stb/stb_image.h	/^static stbi_uc stbi__compute_y(int r, int g, int b)$/;"	f
+stbi__context	lib/stb/stb_image.h	/^} stbi__context;$/;"	t	typeref:struct:__anon57
+stbi__convert_format	lib/stb/stb_image.h	/^static unsigned char *stbi__convert_format(unsigned char *data, int img_n, int req_comp, unsigned int x, unsigned int y)$/;"	f
+stbi__copyval	lib/stb/stb_image.h	/^static void stbi__copyval(int channel,stbi_uc *dest,const stbi_uc *src)$/;"	f
+stbi__cpuid3	lib/stb/stb_image.h	/^static int stbi__cpuid3(void)$/;"	f
+stbi__create_png_image	lib/stb/stb_image.h	/^static int stbi__create_png_image(stbi__png *a, stbi_uc *image_data, stbi__uint32 image_data_len, int out_n, int depth, int color, int interlaced)$/;"	f
+stbi__create_png_image_raw	lib/stb/stb_image.h	/^static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 raw_len, int out_n, stbi__uint32 x, stbi__uint32 y, int depth, int color)$/;"	f
+stbi__de_iphone	lib/stb/stb_image.h	/^static void stbi__de_iphone(stbi__png *z)$/;"	f
+stbi__de_iphone_flag	lib/stb/stb_image.h	/^static int stbi__de_iphone_flag = 0;$/;"	v
+stbi__decode_jpeg_header	lib/stb/stb_image.h	/^static int stbi__decode_jpeg_header(stbi__jpeg *z, int scan)$/;"	f
+stbi__decode_jpeg_image	lib/stb/stb_image.h	/^static int stbi__decode_jpeg_image(stbi__jpeg *j)$/;"	f
+stbi__depth_scale_table	lib/stb/stb_image.h	/^static stbi_uc stbi__depth_scale_table[9] = { 0, 0xff, 0x55, 0, 0x11, 0,0,0, 0x01 };$/;"	v
+stbi__div16	lib/stb/stb_image.h	2915;"	d
+stbi__div4	lib/stb/stb_image.h	2866;"	d
+stbi__do_png	lib/stb/stb_image.h	/^static unsigned char *stbi__do_png(stbi__png *p, int *x, int *y, int *n, int req_comp)$/;"	f
+stbi__do_zlib	lib/stb/stb_image.h	/^static int stbi__do_zlib(stbi__zbuf *a, char *obuf, int olen, int exp, int parse_header)$/;"	f
+stbi__err	lib/stb/stb_image.h	/^static int stbi__err(const char *str)$/;"	f
+stbi__err	lib/stb/stb_image.h	908;"	d
+stbi__err	lib/stb/stb_image.h	910;"	d
+stbi__err	lib/stb/stb_image.h	912;"	d
+stbi__errpf	lib/stb/stb_image.h	915;"	d
+stbi__errpuc	lib/stb/stb_image.h	916;"	d
+stbi__expand_png_palette	lib/stb/stb_image.h	/^static int stbi__expand_png_palette(stbi__png *a, stbi_uc *palette, int len, int pal_img_n)$/;"	f
+stbi__extend_receive	lib/stb/stb_image.h	/^stbi_inline static int stbi__extend_receive(stbi__jpeg *j, int n)$/;"	f
+stbi__f2f	lib/stb/stb_image.h	1928;"	d
+stbi__fill_bits	lib/stb/stb_image.h	/^static void stbi__fill_bits(stbi__zbuf *z)$/;"	f
+stbi__fill_gif_background	lib/stb/stb_image.h	/^static void stbi__fill_gif_background(stbi__gif *g, int x0, int y0, int x1, int y1)$/;"	f
+stbi__float2int	lib/stb/stb_image.h	1405;"	d
+stbi__float_postprocess	lib/stb/stb_image.h	/^static void stbi__float_postprocess(float *result, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__fopen	lib/stb/stb_image.h	/^static FILE *stbi__fopen(char const *filename, char const *mode)$/;"	f
+stbi__fsh	lib/stb/stb_image.h	1929;"	d
+stbi__g_failure_reason	lib/stb/stb_image.h	/^static const char *stbi__g_failure_reason;$/;"	v
+stbi__get16be	lib/stb/stb_image.h	/^static int stbi__get16be(stbi__context *s)$/;"	f
+stbi__get16le	lib/stb/stb_image.h	/^static int stbi__get16le(stbi__context *s)$/;"	f
+stbi__get32be	lib/stb/stb_image.h	/^static stbi__uint32 stbi__get32be(stbi__context *s)$/;"	f
+stbi__get32le	lib/stb/stb_image.h	/^static stbi__uint32 stbi__get32le(stbi__context *s)$/;"	f
+stbi__get8	lib/stb/stb_image.h	/^stbi_inline static stbi_uc stbi__get8(stbi__context *s)$/;"	f
+stbi__get_chunk_header	lib/stb/stb_image.h	/^static stbi__pngchunk stbi__get_chunk_header(stbi__context *s)$/;"	f
+stbi__get_marker	lib/stb/stb_image.h	/^static stbi_uc stbi__get_marker(stbi__jpeg *j)$/;"	f
+stbi__getn	lib/stb/stb_image.h	/^static int stbi__getn(stbi__context *s, stbi_uc *buffer, int n)$/;"	f
+stbi__gif	lib/stb/stb_image.h	/^} stbi__gif;$/;"	t	typeref:struct:__anon71
+stbi__gif_header	lib/stb/stb_image.h	/^static int stbi__gif_header(stbi__context *s, stbi__gif *g, int *comp, int is_info)$/;"	f
+stbi__gif_info	lib/stb/stb_image.h	/^static int stbi__gif_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__gif_info_raw	lib/stb/stb_image.h	/^static int stbi__gif_info_raw(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__gif_load	lib/stb/stb_image.h	/^static stbi_uc *stbi__gif_load(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__gif_load_next	lib/stb/stb_image.h	/^static stbi_uc *stbi__gif_load_next(stbi__context *s, stbi__gif *g, int *comp, int req_comp)$/;"	f
+stbi__gif_lzw	lib/stb/stb_image.h	/^} stbi__gif_lzw;$/;"	t	typeref:struct:__anon70
+stbi__gif_parse_colortable	lib/stb/stb_image.h	/^static void stbi__gif_parse_colortable(stbi__context *s, stbi_uc pal[256][4], int num_entries, int transp)$/;"	f
+stbi__gif_test	lib/stb/stb_image.h	/^static int stbi__gif_test(stbi__context *s)$/;"	f
+stbi__gif_test_raw	lib/stb/stb_image.h	/^static int stbi__gif_test_raw(stbi__context *s)$/;"	f
+stbi__grow_buffer_unsafe	lib/stb/stb_image.h	/^static void stbi__grow_buffer_unsafe(stbi__jpeg *j)$/;"	f
+stbi__h2l_gamma_i	lib/stb/stb_image.h	/^static float stbi__h2l_gamma_i=1.0f\/2.2f, stbi__h2l_scale_i=1.0f;$/;"	v
+stbi__h2l_scale_i	lib/stb/stb_image.h	/^static float stbi__h2l_gamma_i=1.0f\/2.2f, stbi__h2l_scale_i=1.0f;$/;"	v
+stbi__hdr_convert	lib/stb/stb_image.h	/^static void stbi__hdr_convert(float *output, stbi_uc *input, int req_comp)$/;"	f
+stbi__hdr_gettoken	lib/stb/stb_image.h	/^static char *stbi__hdr_gettoken(stbi__context *z, char *buffer)$/;"	f
+stbi__hdr_info	lib/stb/stb_image.h	/^static int stbi__hdr_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__hdr_load	lib/stb/stb_image.h	/^static float *stbi__hdr_load(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__hdr_test	lib/stb/stb_image.h	/^static int stbi__hdr_test(stbi__context* s)$/;"	f
+stbi__hdr_test_core	lib/stb/stb_image.h	/^static int stbi__hdr_test_core(stbi__context *s)$/;"	f
+stbi__hdr_to_ldr	lib/stb/stb_image.h	/^static stbi_uc *stbi__hdr_to_ldr(float   *data, int x, int y, int comp)$/;"	f
+stbi__high_bit	lib/stb/stb_image.h	/^static int stbi__high_bit(unsigned int z)$/;"	f
+stbi__huffman	lib/stb/stb_image.h	/^} stbi__huffman;$/;"	t	typeref:struct:__anon59
+stbi__idct_block	lib/stb/stb_image.h	/^static void stbi__idct_block(stbi_uc *out, int out_stride, short data[64])$/;"	f
+stbi__idct_simd	lib/stb/stb_image.h	/^static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])$/;"	f
+stbi__info_main	lib/stb/stb_image.h	/^static int stbi__info_main(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__init_zdefaults	lib/stb/stb_image.h	/^static void stbi__init_zdefaults(void)$/;"	f
+stbi__int16	lib/stb/stb_image.h	/^typedef   signed short stbi__int16;$/;"	t
+stbi__int16	lib/stb/stb_image.h	/^typedef int16_t  stbi__int16;$/;"	t
+stbi__int32	lib/stb/stb_image.h	/^typedef   signed int   stbi__int32;$/;"	t
+stbi__int32	lib/stb/stb_image.h	/^typedef int32_t  stbi__int32;$/;"	t
+stbi__jbias	lib/stb/stb_image.h	/^static int const stbi__jbias[16] = {0,-1,-3,-7,-15,-31,-63,-127,-255,-511,-1023,-2047,-4095,-8191,-16383,-32767};$/;"	v
+stbi__jpeg	lib/stb/stb_image.h	/^} stbi__jpeg;$/;"	t	typeref:struct:__anon60
+stbi__jpeg_decode_block	lib/stb/stb_image.h	/^static int stbi__jpeg_decode_block(stbi__jpeg *j, short data[64], stbi__huffman *hdc, stbi__huffman *hac, stbi__int16 *fac, int b, stbi_uc *dequant)$/;"	f
+stbi__jpeg_decode_block_prog_ac	lib/stb/stb_image.h	/^static int stbi__jpeg_decode_block_prog_ac(stbi__jpeg *j, short data[64], stbi__huffman *hac, stbi__int16 *fac)$/;"	f
+stbi__jpeg_decode_block_prog_dc	lib/stb/stb_image.h	/^static int stbi__jpeg_decode_block_prog_dc(stbi__jpeg *j, short data[64], stbi__huffman *hdc, int b)$/;"	f
+stbi__jpeg_dequantize	lib/stb/stb_image.h	/^static void stbi__jpeg_dequantize(short *data, stbi_uc *dequant)$/;"	f
+stbi__jpeg_dezigzag	lib/stb/stb_image.h	/^static stbi_uc stbi__jpeg_dezigzag[64+15] =$/;"	v
+stbi__jpeg_finish	lib/stb/stb_image.h	/^static void stbi__jpeg_finish(stbi__jpeg *z)$/;"	f
+stbi__jpeg_get_bit	lib/stb/stb_image.h	/^stbi_inline static int stbi__jpeg_get_bit(stbi__jpeg *j)$/;"	f
+stbi__jpeg_get_bits	lib/stb/stb_image.h	/^stbi_inline static int stbi__jpeg_get_bits(stbi__jpeg *j, int n)$/;"	f
+stbi__jpeg_huff_decode	lib/stb/stb_image.h	/^stbi_inline static int stbi__jpeg_huff_decode(stbi__jpeg *j, stbi__huffman *h)$/;"	f
+stbi__jpeg_info	lib/stb/stb_image.h	/^static int stbi__jpeg_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__jpeg_info_raw	lib/stb/stb_image.h	/^static int stbi__jpeg_info_raw(stbi__jpeg *j, int *x, int *y, int *comp)$/;"	f
+stbi__jpeg_load	lib/stb/stb_image.h	/^static unsigned char *stbi__jpeg_load(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__jpeg_reset	lib/stb/stb_image.h	/^static void stbi__jpeg_reset(stbi__jpeg *j)$/;"	f
+stbi__jpeg_test	lib/stb/stb_image.h	/^static int stbi__jpeg_test(stbi__context *s)$/;"	f
+stbi__l2h_gamma	lib/stb/stb_image.h	/^static float stbi__l2h_gamma=2.2f, stbi__l2h_scale=1.0f;$/;"	v
+stbi__l2h_scale	lib/stb/stb_image.h	/^static float stbi__l2h_gamma=2.2f, stbi__l2h_scale=1.0f;$/;"	v
+stbi__ldr_to_hdr	lib/stb/stb_image.h	/^static float   *stbi__ldr_to_hdr(stbi_uc *data, int x, int y, int comp)$/;"	f
+stbi__load_flip	lib/stb/stb_image.h	/^static unsigned char *stbi__load_flip(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__load_main	lib/stb/stb_image.h	/^static unsigned char *stbi__load_main(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__loadf_main	lib/stb/stb_image.h	/^static float *stbi__loadf_main(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__malloc	lib/stb/stb_image.h	/^static void *stbi__malloc(size_t size)$/;"	f
+stbi__out_gif_code	lib/stb/stb_image.h	/^static void stbi__out_gif_code(stbi__gif *g, stbi__uint16 code)$/;"	f
+stbi__paeth	lib/stb/stb_image.h	/^static int stbi__paeth(int a, int b, int c)$/;"	f
+stbi__parse_entropy_coded_data	lib/stb/stb_image.h	/^static int stbi__parse_entropy_coded_data(stbi__jpeg *z)$/;"	f
+stbi__parse_huffman_block	lib/stb/stb_image.h	/^static int stbi__parse_huffman_block(stbi__zbuf *a)$/;"	f
+stbi__parse_png_file	lib/stb/stb_image.h	/^static int stbi__parse_png_file(stbi__png *z, int scan, int req_comp)$/;"	f
+stbi__parse_uncompressed_block	lib/stb/stb_image.h	/^static int stbi__parse_uncompressed_block(stbi__zbuf *a)$/;"	f
+stbi__parse_zlib	lib/stb/stb_image.h	/^static int stbi__parse_zlib(stbi__zbuf *a, int parse_header)$/;"	f
+stbi__parse_zlib_header	lib/stb/stb_image.h	/^static int stbi__parse_zlib_header(stbi__zbuf *a)$/;"	f
+stbi__pic_info	lib/stb/stb_image.h	/^static int stbi__pic_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__pic_is4	lib/stb/stb_image.h	/^static int stbi__pic_is4(stbi__context *s,const char *str)$/;"	f
+stbi__pic_load	lib/stb/stb_image.h	/^static stbi_uc *stbi__pic_load(stbi__context *s,int *px,int *py,int *comp,int req_comp)$/;"	f
+stbi__pic_load_core	lib/stb/stb_image.h	/^static stbi_uc *stbi__pic_load_core(stbi__context *s,int width,int height,int *comp, stbi_uc *result)$/;"	f
+stbi__pic_packet	lib/stb/stb_image.h	/^} stbi__pic_packet;$/;"	t	typeref:struct:__anon69
+stbi__pic_test	lib/stb/stb_image.h	/^static int stbi__pic_test(stbi__context *s)$/;"	f
+stbi__pic_test_core	lib/stb/stb_image.h	/^static int stbi__pic_test_core(stbi__context *s)$/;"	f
+stbi__png	lib/stb/stb_image.h	/^} stbi__png;$/;"	t	typeref:struct:__anon66
+stbi__png_info	lib/stb/stb_image.h	/^static int stbi__png_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__png_info_raw	lib/stb/stb_image.h	/^static int stbi__png_info_raw(stbi__png *p, int *x, int *y, int *comp)$/;"	f
+stbi__png_load	lib/stb/stb_image.h	/^static unsigned char *stbi__png_load(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__png_test	lib/stb/stb_image.h	/^static int stbi__png_test(stbi__context *s)$/;"	f
+stbi__pngchunk	lib/stb/stb_image.h	/^} stbi__pngchunk;$/;"	t	typeref:struct:__anon65
+stbi__pnm_getinteger	lib/stb/stb_image.h	/^static int      stbi__pnm_getinteger(stbi__context *s, char *c)$/;"	f
+stbi__pnm_info	lib/stb/stb_image.h	/^static int      stbi__pnm_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__pnm_isdigit	lib/stb/stb_image.h	/^static int      stbi__pnm_isdigit(char c)$/;"	f
+stbi__pnm_isspace	lib/stb/stb_image.h	/^static int      stbi__pnm_isspace(char c)$/;"	f
+stbi__pnm_load	lib/stb/stb_image.h	/^static stbi_uc *stbi__pnm_load(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__pnm_skip_whitespace	lib/stb/stb_image.h	/^static void     stbi__pnm_skip_whitespace(stbi__context *s, char *c)$/;"	f
+stbi__pnm_test	lib/stb/stb_image.h	/^static int      stbi__pnm_test(stbi__context *s)$/;"	f
+stbi__process_frame_header	lib/stb/stb_image.h	/^static int stbi__process_frame_header(stbi__jpeg *z, int scan)$/;"	f
+stbi__process_gif_raster	lib/stb/stb_image.h	/^static stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)$/;"	f
+stbi__process_marker	lib/stb/stb_image.h	/^static int stbi__process_marker(stbi__jpeg *z, int m)$/;"	f
+stbi__process_scan_header	lib/stb/stb_image.h	/^static int stbi__process_scan_header(stbi__jpeg *z)$/;"	f
+stbi__psd_info	lib/stb/stb_image.h	/^static int stbi__psd_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__psd_load	lib/stb/stb_image.h	/^static stbi_uc *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__psd_test	lib/stb/stb_image.h	/^static int stbi__psd_test(stbi__context *s)$/;"	f
+stbi__readval	lib/stb/stb_image.h	/^static stbi_uc *stbi__readval(stbi__context *s, int channel, stbi_uc *dest)$/;"	f
+stbi__reduce_png	lib/stb/stb_image.h	/^static int stbi__reduce_png(stbi__png *p)$/;"	f
+stbi__refill_buffer	lib/stb/stb_image.h	/^static void stbi__refill_buffer(stbi__context *s)$/;"	f
+stbi__resample	lib/stb/stb_image.h	/^} stbi__resample;$/;"	t	typeref:struct:__anon62
+stbi__resample_row_generic	lib/stb/stb_image.h	/^static stbi_uc *stbi__resample_row_generic(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)$/;"	f
+stbi__resample_row_h_2	lib/stb/stb_image.h	/^static stbi_uc*  stbi__resample_row_h_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)$/;"	f
+stbi__resample_row_hv_2	lib/stb/stb_image.h	/^static stbi_uc *stbi__resample_row_hv_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)$/;"	f
+stbi__resample_row_hv_2_simd	lib/stb/stb_image.h	/^static stbi_uc *stbi__resample_row_hv_2_simd(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)$/;"	f
+stbi__resample_row_v_2	lib/stb/stb_image.h	/^static stbi_uc* stbi__resample_row_v_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)$/;"	f
+stbi__rewind	lib/stb/stb_image.h	/^static void stbi__rewind(stbi__context *s)$/;"	f
+stbi__setup_jpeg	lib/stb/stb_image.h	/^static void stbi__setup_jpeg(stbi__jpeg *j)$/;"	f
+stbi__shiftsigned	lib/stb/stb_image.h	/^static int stbi__shiftsigned(int v, int shift, int bits)$/;"	f
+stbi__skip	lib/stb/stb_image.h	/^static void stbi__skip(stbi__context *s, int n)$/;"	f
+stbi__sse2_available	lib/stb/stb_image.h	/^static int stbi__sse2_available()$/;"	f
+stbi__start_callbacks	lib/stb/stb_image.h	/^static void stbi__start_callbacks(stbi__context *s, stbi_io_callbacks *c, void *user)$/;"	f
+stbi__start_file	lib/stb/stb_image.h	/^static void stbi__start_file(stbi__context *s, FILE *f)$/;"	f
+stbi__start_mem	lib/stb/stb_image.h	/^static void stbi__start_mem(stbi__context *s, stbi_uc const *buffer, int len)$/;"	f
+stbi__stdio_callbacks	lib/stb/stb_image.h	/^static stbi_io_callbacks stbi__stdio_callbacks =$/;"	v
+stbi__stdio_eof	lib/stb/stb_image.h	/^static int stbi__stdio_eof(void *user)$/;"	f
+stbi__stdio_read	lib/stb/stb_image.h	/^static int stbi__stdio_read(void *user, char *data, int size)$/;"	f
+stbi__stdio_skip	lib/stb/stb_image.h	/^static void stbi__stdio_skip(void *user, int n)$/;"	f
+stbi__tga_get_comp	lib/stb/stb_image.h	/^static int stbi__tga_get_comp(int bits_per_pixel, int is_grey, int* is_rgb16)$/;"	f
+stbi__tga_info	lib/stb/stb_image.h	/^static int stbi__tga_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f
+stbi__tga_load	lib/stb/stb_image.h	/^static stbi_uc *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi__tga_read_rgb16	lib/stb/stb_image.h	/^void stbi__tga_read_rgb16(stbi__context *s, stbi_uc* out)$/;"	f
+stbi__tga_test	lib/stb/stb_image.h	/^static int stbi__tga_test(stbi__context *s)$/;"	f
+stbi__uint16	lib/stb/stb_image.h	/^typedef uint16_t stbi__uint16;$/;"	t
+stbi__uint16	lib/stb/stb_image.h	/^typedef unsigned short stbi__uint16;$/;"	t
+stbi__uint32	lib/stb/stb_image.h	/^typedef uint32_t stbi__uint32;$/;"	t
+stbi__uint32	lib/stb/stb_image.h	/^typedef unsigned int   stbi__uint32;$/;"	t
+stbi__unpremultiply_on_load	lib/stb/stb_image.h	/^static int stbi__unpremultiply_on_load = 0;$/;"	v
+stbi__vertically_flip_on_load	lib/stb/stb_image.h	/^static int stbi__vertically_flip_on_load = 0;$/;"	v
+stbi__zbuf	lib/stb/stb_image.h	/^} stbi__zbuf;$/;"	t	typeref:struct:__anon64
+stbi__zbuild_huffman	lib/stb/stb_image.h	/^static int stbi__zbuild_huffman(stbi__zhuffman *z, stbi_uc *sizelist, int num)$/;"	f
+stbi__zdefault_distance	lib/stb/stb_image.h	/^static stbi_uc stbi__zdefault_length[288], stbi__zdefault_distance[32];$/;"	v
+stbi__zdefault_length	lib/stb/stb_image.h	/^static stbi_uc stbi__zdefault_length[288], stbi__zdefault_distance[32];$/;"	v
+stbi__zdist_base	lib/stb/stb_image.h	/^static int stbi__zdist_base[32] = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,$/;"	v
+stbi__zdist_extra	lib/stb/stb_image.h	/^static int stbi__zdist_extra[32] =$/;"	v
+stbi__zexpand	lib/stb/stb_image.h	/^static int stbi__zexpand(stbi__zbuf *z, char *zout, int n)  \/\/ need to make room for n bytes$/;"	f
+stbi__zget8	lib/stb/stb_image.h	/^stbi_inline static stbi_uc stbi__zget8(stbi__zbuf *z)$/;"	f
+stbi__zhuffman	lib/stb/stb_image.h	/^} stbi__zhuffman;$/;"	t	typeref:struct:__anon63
+stbi__zhuffman_decode	lib/stb/stb_image.h	/^stbi_inline static int stbi__zhuffman_decode(stbi__zbuf *a, stbi__zhuffman *z)$/;"	f
+stbi__zhuffman_decode_slowpath	lib/stb/stb_image.h	/^static int stbi__zhuffman_decode_slowpath(stbi__zbuf *a, stbi__zhuffman *z)$/;"	f
+stbi__zlength_base	lib/stb/stb_image.h	/^static int stbi__zlength_base[31] = {$/;"	v
+stbi__zlength_extra	lib/stb/stb_image.h	/^static int stbi__zlength_extra[31]=$/;"	v
+stbi__zreceive	lib/stb/stb_image.h	/^stbi_inline static unsigned int stbi__zreceive(stbi__zbuf *z, int n)$/;"	f
+stbi_convert_iphone_png_to_rgb	lib/stb/stb_image.h	/^STBIDEF void stbi_convert_iphone_png_to_rgb(int flag_true_if_should_convert)$/;"	f
+stbi_failure_reason	lib/stb/stb_image.h	/^STBIDEF const char *stbi_failure_reason(void)$/;"	f
+stbi_hdr_to_ldr_gamma	lib/stb/stb_image.h	/^STBIDEF void   stbi_hdr_to_ldr_gamma(float gamma) { stbi__h2l_gamma_i = 1\/gamma; }$/;"	f
+stbi_hdr_to_ldr_scale	lib/stb/stb_image.h	/^STBIDEF void   stbi_hdr_to_ldr_scale(float scale) { stbi__h2l_scale_i = 1\/scale; }$/;"	f
+stbi_image_free	lib/stb/stb_image.h	/^STBIDEF void stbi_image_free(void *retval_from_stbi_load)$/;"	f
+stbi_info	lib/stb/stb_image.h	/^STBIDEF int stbi_info(char const *filename, int *x, int *y, int *comp)$/;"	f
+stbi_info_from_callbacks	lib/stb/stb_image.h	/^STBIDEF int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int *x, int *y, int *comp)$/;"	f
+stbi_info_from_file	lib/stb/stb_image.h	/^STBIDEF int stbi_info_from_file(FILE *f, int *x, int *y, int *comp)$/;"	f
+stbi_info_from_memory	lib/stb/stb_image.h	/^STBIDEF int stbi_info_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp)$/;"	f
+stbi_inline	lib/stb/stb_image.h	586;"	d
+stbi_inline	lib/stb/stb_image.h	588;"	d
+stbi_inline	lib/stb/stb_image.h	591;"	d
+stbi_io_callbacks	lib/stb/stb_image.h	/^} stbi_io_callbacks;$/;"	t	typeref:struct:__anon56
+stbi_is_hdr	lib/stb/stb_image.h	/^STBIDEF int      stbi_is_hdr          (char const *filename)$/;"	f
+stbi_is_hdr_from_callbacks	lib/stb/stb_image.h	/^STBIDEF int      stbi_is_hdr_from_callbacks(stbi_io_callbacks const *clbk, void *user)$/;"	f
+stbi_is_hdr_from_file	lib/stb/stb_image.h	/^STBIDEF int      stbi_is_hdr_from_file(FILE *f)$/;"	f
+stbi_is_hdr_from_memory	lib/stb/stb_image.h	/^STBIDEF int stbi_is_hdr_from_memory(stbi_uc const *buffer, int len)$/;"	f
+stbi_ldr_to_hdr_gamma	lib/stb/stb_image.h	/^STBIDEF void   stbi_ldr_to_hdr_gamma(float gamma) { stbi__l2h_gamma = gamma; }$/;"	f
+stbi_ldr_to_hdr_scale	lib/stb/stb_image.h	/^STBIDEF void   stbi_ldr_to_hdr_scale(float scale) { stbi__l2h_scale = scale; }$/;"	f
+stbi_load	lib/stb/stb_image.h	/^STBIDEF stbi_uc *stbi_load(char const *filename, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi_load_from_callbacks	lib/stb/stb_image.h	/^STBIDEF stbi_uc *stbi_load_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi_load_from_file	lib/stb/stb_image.h	/^STBIDEF stbi_uc *stbi_load_from_file(FILE *f, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi_load_from_memory	lib/stb/stb_image.h	/^STBIDEF stbi_uc *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi_loadf	lib/stb/stb_image.h	/^STBIDEF float *stbi_loadf(char const *filename, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi_loadf_from_callbacks	lib/stb/stb_image.h	/^STBIDEF float *stbi_loadf_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi_loadf_from_file	lib/stb/stb_image.h	/^STBIDEF float *stbi_loadf_from_file(FILE *f, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi_loadf_from_memory	lib/stb/stb_image.h	/^STBIDEF float *stbi_loadf_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp)$/;"	f
+stbi_lrot	lib/stb/stb_image.h	622;"	d
+stbi_lrot	lib/stb/stb_image.h	624;"	d
+stbi_set_flip_vertically_on_load	lib/stb/stb_image.h	/^STBIDEF void stbi_set_flip_vertically_on_load(int flag_true_if_should_flip)$/;"	f
+stbi_set_unpremultiply_on_load	lib/stb/stb_image.h	/^STBIDEF void stbi_set_unpremultiply_on_load(int flag_true_if_should_unpremultiply)$/;"	f
+stbi_uc	lib/stb/stb_image.h	/^typedef unsigned char stbi_uc;$/;"	t
+stbi_zlib_decode_buffer	lib/stb/stb_image.h	/^STBIDEF int stbi_zlib_decode_buffer(char *obuffer, int olen, char const *ibuffer, int ilen)$/;"	f
+stbi_zlib_decode_malloc	lib/stb/stb_image.h	/^STBIDEF char *stbi_zlib_decode_malloc(char const *buffer, int len, int *outlen)$/;"	f
+stbi_zlib_decode_malloc_guesssize	lib/stb/stb_image.h	/^STBIDEF char *stbi_zlib_decode_malloc_guesssize(const char *buffer, int len, int initial_size, int *outlen)$/;"	f
+stbi_zlib_decode_malloc_guesssize_headerflag	lib/stb/stb_image.h	/^STBIDEF char *stbi_zlib_decode_malloc_guesssize_headerflag(const char *buffer, int len, int initial_size, int *outlen, int parse_header)$/;"	f
+stbi_zlib_decode_noheader_buffer	lib/stb/stb_image.h	/^STBIDEF int stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const char *ibuffer, int ilen)$/;"	f
+stbi_zlib_decode_noheader_malloc	lib/stb/stb_image.h	/^STBIDEF char *stbi_zlib_decode_noheader_malloc(char const *buffer, int len, int *outlen)$/;"	f
 std	lib/glm/gtx/hash.hpp	/^namespace std$/;"	n
 stencil	lib/vulkan/vulkan.h	/^    uint32_t    stencil;$/;"	m	struct:VkClearDepthStencilValue
 stencilLoadOp	lib/vulkan/vulkan.h	/^    VkAttachmentLoadOp              stencilLoadOp;$/;"	m	struct:VkAttachmentDescription
 stencilStoreOp	lib/vulkan/vulkan.h	/^    VkAttachmentStoreOp             stencilStoreOp;$/;"	m	struct:VkAttachmentDescription
 stencilTestEnable	lib/vulkan/vulkan.h	/^    VkBool32                                  stencilTestEnable;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo
+step	lib/stb/stb_image.h	/^   int parse, step;$/;"	m	struct:__anon71
 storage	lib/glm/detail/type_vec.hpp	/^		struct storage<double, 32, true>$/;"	s	namespace:glm::detail
 storage	lib/glm/detail/type_vec.hpp	/^		struct storage<float, 16, true>$/;"	s	namespace:glm::detail
 storage	lib/glm/detail/type_vec.hpp	/^		struct storage<int, 16, true>$/;"	s	namespace:glm::detail
@@ -7334,6 +7811,9 @@ subpassCount	lib/vulkan/vulkan.h	/^    uint32_t                          subpass
 subresource	lib/vulkan/vulkan.h	/^    VkImageSubresource         subresource;$/;"	m	struct:VkSparseImageMemoryBind
 subresourceRange	lib/vulkan/vulkan.h	/^    VkImageSubresourceRange    subresourceRange;$/;"	m	struct:VkImageMemoryBarrier
 subresourceRange	lib/vulkan/vulkan.h	/^    VkImageSubresourceRange    subresourceRange;$/;"	m	struct:VkImageViewCreateInfo
+succ_high	lib/stb/stb_image.h	/^   int            succ_high;$/;"	m	struct:__anon60
+succ_low	lib/stb/stb_image.h	/^   int            succ_low;$/;"	m	struct:__anon60
+suffix	lib/stb/stb_image.h	/^   stbi_uc suffix;$/;"	m	struct:__anon70
 supportedAlpha	lib/vulkan/vulkan.h	/^    VkDisplayPlaneAlphaFlagsKHR    supportedAlpha;$/;"	m	struct:VkDisplayPlaneCapabilitiesKHR
 supportedCompositeAlpha	lib/vulkan/vulkan.h	/^    VkCompositeAlphaFlagsKHR         supportedCompositeAlpha;$/;"	m	struct:VkSurfaceCapabilitiesKHR
 supportedIndexSet	src/device_queue_indices.cpp	/^bool DeviceQueueIndicies::supportedIndexSet() $/;"	f	class:DeviceQueueIndicies
@@ -7358,6 +7838,7 @@ taylorInvSqrt	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER tvec3<T, P> taylor
 taylorInvSqrt	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER tvec4<T, P> taylorInvSqrt(tvec4<T, P> const & r)$/;"	f	namespace:glm::detail
 tdualquat	lib/glm/gtx/dual_quaternion.hpp	/^	struct tdualquat$/;"	s	namespace:glm
 tessellationShader	lib/vulkan/vulkan.h	/^    VkBool32    tessellationShader;$/;"	m	struct:VkPhysicalDeviceFeatures
+texCoord	inc/vulkan_manager.h	/^		glm::vec2 texCoord;$/;"	m	struct:VulkanManager::Vertex
 textureCompressionASTC_LDR	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionASTC_LDR;$/;"	m	struct:VkPhysicalDeviceFeatures
 textureCompressionBC	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionBC;$/;"	m	struct:VkPhysicalDeviceFeatures
 textureCompressionETC2	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionETC2;$/;"	m	struct:VkPhysicalDeviceFeatures
@@ -7377,11 +7858,15 @@ tmat4x4	lib/glm/detail/type_mat4x4.hpp	/^	struct tmat4x4$/;"	s	namespace:glm
 toMat3	lib/glm/gtx/quaternion.hpp	/^	GLM_FUNC_DECL tmat3x3<T, P> toMat3($/;"	f	namespace:glm
 toMat4	lib/glm/gtx/quaternion.hpp	/^	GLM_FUNC_DECL tmat4x4<T, P> toMat4($/;"	f	namespace:glm
 toQuat	lib/glm/gtx/quaternion.hpp	/^	GLM_FUNC_DECL tquat<T, P> toQuat($/;"	f	namespace:glm
+todo	lib/stb/stb_image.h	/^   int restart_interval, todo;$/;"	m	struct:__anon60
 topology	lib/vulkan/vulkan.h	/^    VkPrimitiveTopology                        topology;$/;"	m	struct:VkPipelineInputAssemblyStateCreateInfo
+tq	lib/stb/stb_image.h	/^      int tq;$/;"	m	struct:__anon60::__anon61
 tquat	lib/glm/gtc/quaternion.hpp	/^	struct tquat$/;"	s	namespace:glm
 transferIndexSet	src/device_queue_indices.cpp	/^bool DeviceQueueIndicies::transferIndexSet() $/;"	f	class:DeviceQueueIndicies
 transform	lib/vulkan/vk_icd.h	/^    VkSurfaceTransformFlagBitsKHR transform;$/;"	m	struct:__anon50
 transform	lib/vulkan/vulkan.h	/^    VkSurfaceTransformFlagBitsKHR     transform;$/;"	m	struct:VkDisplaySurfaceCreateInfoKHR
+transitionImageLayout	src/vulkan_manager.cpp	/^void VulkanManager::transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout)$/;"	f	class:VulkanManager
+transparent	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon71
 transpose_type	lib/glm/detail/type_mat2x2.hpp	/^		typedef tmat2x2<T, P> transpose_type;$/;"	t	struct:glm::tmat2x2
 transpose_type	lib/glm/detail/type_mat2x3.hpp	/^		typedef tmat3x2<T, P> transpose_type;$/;"	t	struct:glm::tmat2x3
 transpose_type	lib/glm/detail/type_mat2x4.hpp	/^		typedef tmat4x2<T, P> transpose_type;$/;"	t	struct:glm::tmat2x4
@@ -7455,6 +7940,8 @@ type	lib/glm/gtx/type_trait.hpp	/^	struct type<tvec1, T, P>$/;"	s	namespace:glm
 type	lib/glm/gtx/type_trait.hpp	/^	struct type<tvec2, T, P>$/;"	s	namespace:glm
 type	lib/glm/gtx/type_trait.hpp	/^	struct type<tvec3, T, P>$/;"	s	namespace:glm
 type	lib/glm/gtx/type_trait.hpp	/^	struct type<tvec4, T, P>$/;"	s	namespace:glm
+type	lib/stb/stb_image.h	/^   stbi__uint32 type;$/;"	m	struct:__anon65
+type	lib/stb/stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon69
 type	lib/vulkan/libspirv.h	/^  spv_operand_type_t type;$/;"	m	struct:spv_parsed_operand_t
 type	lib/vulkan/vulkan.h	/^    VkDescriptorType    type;$/;"	m	struct:VkDescriptorPoolSize
 type_id	lib/vulkan/libspirv.h	/^  uint32_t type_id;$/;"	m	struct:spv_parsed_instruction_t
@@ -7619,7 +8106,9 @@ uvec3	lib/glm/detail/type_vec.hpp	/^	typedef mediump_uvec3		uvec3;$/;"	t	namespa
 uvec4	lib/glm/detail/type_vec.hpp	/^	typedef highp_uvec4			uvec4;$/;"	t	namespace:glm
 uvec4	lib/glm/detail/type_vec.hpp	/^	typedef lowp_uvec4			uvec4;$/;"	t	namespace:glm
 uvec4	lib/glm/detail/type_vec.hpp	/^	typedef mediump_uvec4		uvec4;$/;"	t	namespace:glm
+v	lib/stb/stb_image.h	/^      int h,v;$/;"	m	struct:__anon60::__anon61
 valid_loader_magic_value	lib/vulkan/vk_icd.h	/^static inline bool valid_loader_magic_value(void *pNewObject) {$/;"	f
+validate_uint32	lib/stb/stb_image.h	/^typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];$/;"	t
 value	lib/glm/detail/precision.hpp	/^			static const bool value = true;$/;"	m	struct:glm::detail::is_aligned
 value	lib/glm/detail/precision.hpp	/^		static const bool value = false;$/;"	m	struct:glm::detail::is_aligned
 value	lib/glm/detail/type_mat2x2.hpp	/^		col_type value[2];$/;"	m	struct:glm::tmat2x2
@@ -7635,6 +8124,7 @@ value	lib/glm/gtx/io.hpp	/^			CTy value[3];$/;"	m	struct:glm::io::delimeter
 value	lib/glm/gtx/io.hpp	/^			order_type value;$/;"	m	struct:glm::io::order
 value	lib/glm/gtx/io.hpp	/^			unsigned value;$/;"	m	struct:glm::io::precision
 value	lib/glm/gtx/io.hpp	/^			unsigned value;$/;"	m	struct:glm::io::width
+value	lib/stb/stb_image.h	/^   stbi__uint16 value[288];$/;"	m	struct:__anon63
 value_address	lib/glm/detail/type_gentype.hpp	/^		value_const_pointer value_address() const{return value_pointer(this);}$/;"	f	struct:glm::detail::genType
 value_address	lib/glm/detail/type_gentype.hpp	/^		value_pointer value_address(){return value_pointer(this);}$/;"	f	struct:glm::detail::genType
 value_const_pointer	lib/glm/detail/type_gentype.hpp	/^		typedef VALTYPE const * value_const_pointer;$/;"	t	struct:glm::detail::genType
@@ -7656,6 +8146,7 @@ value_type	lib/glm/detail/type_vec3.hpp	/^		typedef T value_type;$/;"	t	struct:g
 value_type	lib/glm/detail/type_vec4.hpp	/^		typedef T value_type;$/;"	t	struct:glm::tvec4
 value_type	lib/glm/gtc/quaternion.hpp	/^		typedef T value_type;$/;"	t	struct:glm::tquat
 value_type	lib/glm/gtx/dual_quaternion.hpp	/^		typedef T value_type;$/;"	t	struct:glm::tdualquat
+values	lib/stb/stb_image.h	/^   stbi_uc  values[256];$/;"	m	struct:__anon59
 variableMultisampleRate	lib/vulkan/vulkan.h	/^    VkBool32    variableMultisampleRate;$/;"	m	struct:VkPhysicalDeviceFeatures
 vec1	lib/glm/gtc/vec1.hpp	/^	typedef highp_vec1				vec1;$/;"	t	namespace:glm
 vec1	lib/glm/gtc/vec1.hpp	/^	typedef lowp_vec1				vec1;$/;"	t	namespace:glm
@@ -7685,10 +8176,14 @@ viewportBoundsRange	lib/vulkan/vulkan.h	/^    float                 viewportBoun
 viewportCount	lib/vulkan/vulkan.h	/^    uint32_t                              viewportCount;$/;"	m	struct:VkPipelineViewportStateCreateInfo
 viewportSubPixelBits	lib/vulkan/vulkan.h	/^    uint32_t              viewportSubPixelBits;$/;"	m	struct:VkPhysicalDeviceLimits
 visibleRegion	lib/vulkan/vulkan.h	/^    VkExtent2D    visibleRegion;$/;"	m	struct:VkDisplayModeParametersKHR
+vs	lib/stb/stb_image.h	/^   int hs,vs;   \/\/ expansion factor in each axis$/;"	m	struct:__anon62
 w	lib/glm/detail/type_vec4.hpp	/^				struct { T x, y, z, w;};$/;"	m	struct:glm::tvec4::__anon1::__anon2
 w	lib/glm/detail/type_vec4.hpp	/^			union { T w, a, q; };$/;"	m	union:glm::tvec4::__anon8
 w	lib/glm/gtc/quaternion.hpp	/^				struct { T x, y, z, w;};$/;"	m	struct:glm::tquat::__anon39::__anon40
 w	lib/glm/gtc/quaternion.hpp	/^			T x, y, z, w;$/;"	m	struct:glm::tquat
+w	lib/stb/stb_image.h	/^   int w,h;$/;"	m	struct:__anon71
+w2	lib/stb/stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon60::__anon61
+w_lores	lib/stb/stb_image.h	/^   int w_lores; \/\/ horizontal pixels pre-expansion$/;"	m	struct:__anon62
 waitIdle	src/vulkan_manager.cpp	/^void VulkanManager::waitIdle() $/;"	f	class:VulkanManager
 waitSemaphoreCount	lib/vulkan/vulkan.h	/^    uint32_t                                    waitSemaphoreCount;$/;"	m	struct:VkBindSparseInfo
 waitSemaphoreCount	lib/vulkan/vulkan.h	/^    uint32_t                       waitSemaphoreCount;$/;"	m	struct:VkSubmitInfo
@@ -7723,6 +8218,7 @@ x	lib/glm/detail/type_vec4.hpp	/^				struct { T x, y, z, w;};$/;"	m	struct:glm::
 x	lib/glm/detail/type_vec4.hpp	/^			union { T x, r, s; };$/;"	m	union:glm::tvec4::__anon5
 x	lib/glm/gtc/quaternion.hpp	/^				struct { T x, y, z, w;};$/;"	m	struct:glm::tquat::__anon39::__anon40
 x	lib/glm/gtc/quaternion.hpp	/^			T x, y, z, w;$/;"	m	struct:glm::tquat
+x	lib/stb/stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon60::__anon61
 x	lib/vulkan/vulkan.h	/^    float    x;$/;"	m	struct:VkViewport
 x	lib/vulkan/vulkan.h	/^    int32_t    x;$/;"	m	struct:VkOffset2D
 x	lib/vulkan/vulkan.h	/^    int32_t    x;$/;"	m	struct:VkOffset3D
@@ -7735,10 +8231,13 @@ y	lib/glm/detail/type_vec4.hpp	/^				struct { T x, y, z, w;};$/;"	m	struct:glm::
 y	lib/glm/detail/type_vec4.hpp	/^			union { T y, g, t; };$/;"	m	union:glm::tvec4::__anon6
 y	lib/glm/gtc/quaternion.hpp	/^				struct { T x, y, z, w;};$/;"	m	struct:glm::tquat::__anon39::__anon40
 y	lib/glm/gtc/quaternion.hpp	/^			T x, y, z, w;$/;"	m	struct:glm::tquat
+y	lib/stb/stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon60::__anon61
 y	lib/vulkan/vulkan.h	/^    float    y;$/;"	m	struct:VkViewport
 y	lib/vulkan/vulkan.h	/^    int32_t    y;$/;"	m	struct:VkOffset2D
 y	lib/vulkan/vulkan.h	/^    int32_t    y;$/;"	m	struct:VkOffset3D
 y	lib/vulkan/vulkan.h	/^    uint32_t    y;$/;"	m	struct:VkDispatchIndirectCommand
+ypos	lib/stb/stb_image.h	/^   int ypos;    \/\/ which pre-expansion row we're on$/;"	m	struct:__anon62
+ystep	lib/stb/stb_image.h	/^   int ystep;   \/\/ how far through vertical expansion we are$/;"	m	struct:__anon62
 z	lib/glm/detail/type_vec3.hpp	/^				struct{ T x, y, z; };$/;"	m	struct:glm::tvec3::__anon17::__anon18
 z	lib/glm/detail/type_vec3.hpp	/^			union { T z, b, p; };$/;"	m	union:glm::tvec3::__anon23
 z	lib/glm/detail/type_vec4.hpp	/^				struct { T x, y, z, w;};$/;"	m	struct:glm::tvec4::__anon1::__anon2
@@ -7747,6 +8246,14 @@ z	lib/glm/gtc/quaternion.hpp	/^				struct { T x, y, z, w;};$/;"	m	struct:glm::tq
 z	lib/glm/gtc/quaternion.hpp	/^			T x, y, z, w;$/;"	m	struct:glm::tquat
 z	lib/vulkan/vulkan.h	/^    int32_t    z;$/;"	m	struct:VkOffset3D
 z	lib/vulkan/vulkan.h	/^    uint32_t    z;$/;"	m	struct:VkDispatchIndirectCommand
+z_distance	lib/stb/stb_image.h	/^   stbi__zhuffman z_length, z_distance;$/;"	m	struct:__anon64
+z_expandable	lib/stb/stb_image.h	/^   int   z_expandable;$/;"	m	struct:__anon64
+z_length	lib/stb/stb_image.h	/^   stbi__zhuffman z_length, z_distance;$/;"	m	struct:__anon64
+zbuffer	lib/stb/stb_image.h	/^   stbi_uc *zbuffer, *zbuffer_end;$/;"	m	struct:__anon64
+zbuffer_end	lib/stb/stb_image.h	/^   stbi_uc *zbuffer, *zbuffer_end;$/;"	m	struct:__anon64
+zout	lib/stb/stb_image.h	/^   char *zout;$/;"	m	struct:__anon64
+zout_end	lib/stb/stb_image.h	/^   char *zout_end;$/;"	m	struct:__anon64
+zout_start	lib/stb/stb_image.h	/^   char *zout_start;$/;"	m	struct:__anon64
 ~DeviceQueueIndicies	src/device_queue_indices.cpp	/^DeviceQueueIndicies::~DeviceQueueIndicies()$/;"	f	class:DeviceQueueIndicies
 ~Engine	src/engine.cpp	/^Engine::~Engine() $/;"	f	class:Engine
 ~InputManager	src/input_manager.cpp	/^InputManager::~InputManager()$/;"	f	class:InputManager
