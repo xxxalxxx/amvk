@@ -717,6 +717,7 @@ GLM_FORCE_CXX11	lib/glm/detail/setup.hpp	123;"	d
 GLM_FORCE_CXX98	lib/glm/detail/setup.hpp	125;"	d
 GLM_FORCE_CXX98	lib/glm/detail/setup.hpp	129;"	d
 GLM_FORCE_CXX98	lib/glm/detail/setup.hpp	132;"	d
+GLM_FORCE_DEPTH_ZERO_TO_ONE	inc/vulkan_manager.h	5;"	d
 GLM_FORCE_PURE	lib/glm/detail/setup.hpp	228;"	d
 GLM_FORCE_RADIANS	inc/vulkan_manager.h	4;"	d
 GLM_FUNC_DECL	lib/glm/detail/setup.hpp	521;"	d
@@ -2943,8 +2944,8 @@ VK_BUFFER_USAGE_TRANSFER_SRC_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_TRANS
 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT = 0x00000010,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT = 0x00000004,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_VERTEX_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT = 0x00000080,$/;"	e	enum:VkBufferUsageFlagBits
-VK_CALL_IPROC	inc/vulkan_manager.h	184;"	d
-VK_CHECK_RESULT	inc/vulkan_manager.h	174;"	d
+VK_CALL_IPROC	inc/vulkan_manager.h	195;"	d
+VK_CHECK_RESULT	inc/vulkan_manager.h	185;"	d
 VK_COLORSPACE_SRGB_NONLINEAR_KHR	lib/vulkan/vulkan.h	3178;"	d
 VK_COLOR_COMPONENT_A_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_A_BIT = 0x00000008,$/;"	e	enum:VkColorComponentFlagBits
 VK_COLOR_COMPONENT_B_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_B_BIT = 0x00000004,$/;"	e	enum:VkColorComponentFlagBits
@@ -4700,12 +4701,13 @@ countof	lib/glm/detail/setup.hpp	/^		constexpr std::size_t countof(T const (&)[N
 createBuffer	src/vulkan_manager.cpp	/^void VulkanManager::createBuffer(VkBuffer& buffer, $/;"	f	class:VulkanManager
 createCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::createCommandBuffers()$/;"	f	class:VulkanManager
 createCommandPool	src/vulkan_manager.cpp	/^void VulkanManager::createCommandPool()$/;"	f	class:VulkanManager
+createDepthResources	src/vulkan_manager.cpp	/^void VulkanManager::createDepthResources()$/;"	f	class:VulkanManager
 createDescriptorPool	src/vulkan_manager.cpp	/^void VulkanManager::createDescriptorPool()$/;"	f	class:VulkanManager
 createDescriptorSet	src/vulkan_manager.cpp	/^void VulkanManager::createDescriptorSet() $/;"	f	class:VulkanManager
 createDescriptorSetLayout	src/vulkan_manager.cpp	/^void VulkanManager::createDescriptorSetLayout()$/;"	f	class:VulkanManager
 createFramebuffers	src/vulkan_manager.cpp	/^void VulkanManager::createFramebuffers()$/;"	f	class:VulkanManager
 createImage	src/vulkan_manager.cpp	/^void VulkanManager::createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,$/;"	f	class:VulkanManager
-createImageView	src/vulkan_manager.cpp	/^void VulkanManager::createImageView(VkImage image, VkFormat format, VkImageView& imageView)$/;"	f	class:VulkanManager
+createImageView	src/vulkan_manager.cpp	/^void VulkanManager::createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkImageView& imageView)$/;"	f	class:VulkanManager
 createImageViews	src/vulkan_manager.cpp	/^void VulkanManager::createImageViews() $/;"	f	class:VulkanManager
 createIndexBuffer	src/quad.cpp	/^void Quad::createIndexBuffer()$/;"	f	class:Quad
 createIndexBuffer	src/vulkan_manager.cpp	/^void VulkanManager::createIndexBuffer()$/;"	f	class:VulkanManager
@@ -5362,6 +5364,7 @@ getBindingDesc	src/vulkan_manager.cpp	/^VkVertexInputBindingDescription VulkanMa
 getComputeQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getComputeQueueIndex()$/;"	f	class:DeviceQueueIndicies
 getCurrentDir	inc/file_manager.h	15;"	d
 getCurrentDir	inc/file_manager.h	18;"	d
+getDepthFormat	src/vulkan_manager.cpp	/^VkFormat VulkanManager::getDepthFormat()$/;"	f	class:VulkanManager
 getDeviceQueueFamilyIndices	src/vulkan_manager.cpp	/^DeviceQueueIndicies VulkanManager::getDeviceQueueFamilyIndices(const VkPhysicalDevice& physicalDevice)$/;"	f	class:VulkanManager
 getExtensionNames	src/vulkan_manager.cpp	/^std::vector<const char*> VulkanManager::getExtensionNames() $/;"	f	class:VulkanManager
 getExtent	src/vulkan_manager.cpp	/^VkExtent2D VulkanManager::getExtent(VkSurfaceCapabilitiesKHR& surfaceCapabilities, const Window& window)$/;"	f	class:VulkanManager
@@ -5373,6 +5376,7 @@ getInstance	src/file_manager.cpp	/^FileManager& FileManager::getInstance()$/;"	f
 getMemoryType	src/vulkan_manager.cpp	/^uint32_t VulkanManager::getMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags& flags)$/;"	f	class:VulkanManager
 getPresentMode	src/vulkan_manager.cpp	/^VkPresentModeKHR VulkanManager::getPresentMode(const std::vector<VkPresentModeKHR>& presentModes) $/;"	f	class:VulkanManager
 getResourcePath	src/file_manager.cpp	/^std::string FileManager::getResourcePath(std::string&& path) const $/;"	f	class:FileManager
+getSupportedFormat	src/vulkan_manager.cpp	/^VkFormat VulkanManager::getSupportedFormat($/;"	f	class:VulkanManager
 getSupportedQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getSupportedQueueIndex()$/;"	f	class:DeviceQueueIndicies
 getSurfaceFormat	src/vulkan_manager.cpp	/^VkSurfaceFormatKHR VulkanManager::getSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surfaceFormats) $/;"	f	class:VulkanManager
 getSwapChainDesc	src/vulkan_manager.cpp	/^VulkanManager::SwapChainDesc VulkanManager::getSwapChainDesc(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface)$/;"	f	class:VulkanManager
@@ -6390,6 +6394,9 @@ mBinPath	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mR
 mComputeIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
 mCondition	inc/task_manager.h	/^	std::condition_variable mCondition;$/;"	m	class:TaskManager
 mContinue	inc/task_manager.h	/^	std::atomic_bool mContinue;$/;"	m	class:TaskManager
+mDepthImage	inc/vulkan_manager.h	/^	VkImage mDepthImage;$/;"	m	class:VulkanManager
+mDepthImageMem	inc/vulkan_manager.h	/^	VkDeviceMemory mDepthImageMem;$/;"	m	class:VulkanManager
+mDepthImageView	inc/vulkan_manager.h	/^	VkImageView mDepthImageView;$/;"	m	class:VulkanManager
 mDeviceQueueIndices	inc/vulkan_context.h	/^	DeviceQueueIndicies mDeviceQueueIndices;$/;"	m	class:VulkanContext
 mDeviceQueueIndices	inc/vulkan_manager.h	/^	DeviceQueueIndicies mDeviceQueueIndices;$/;"	m	class:VulkanManager
 mDeviceQueueIndiciesArr	inc/device_queue_indices.h	/^	int *mDeviceQueueIndiciesArr[NUM_DEVICE_QUEUE_INDICES];$/;"	m	class:DeviceQueueIndicies
@@ -6406,6 +6413,7 @@ mImageAvailableSemaphore	inc/vulkan_manager.h	/^	VkSemaphore mImageAvailableSema
 mIndexBuffer	inc/quad.h	/^	VkBuffer mVertexBuffer, mIndexBuffer;$/;"	m	class:Quad
 mInputManager	inc/window.h	/^	InputManager mInputManager;$/;"	m	class:Window
 mNumIndices	inc/quad.h	/^	uint32_t mNumIndices;$/;"	m	class:Quad
+mNumIndices	inc/vulkan_manager.h	/^	size_t mNumIndices;$/;"	m	class:VulkanManager
 mNumIndicesFound	inc/device_queue_indices.h	/^	int mNumIndicesFound; $/;"	m	class:DeviceQueueIndicies
 mNumThreads	inc/task_manager.h	/^	size_t mNumThreads;$/;"	m	class:TaskManager
 mPool	inc/task_manager.h	/^	std::vector<std::thread> mPool;$/;"	m	class:TaskManager
@@ -7179,7 +7187,7 @@ pollEvents	inc/input_manager.h	/^	inline void pollEvents() { glfwPollEvents(); }
 polygonMode	lib/vulkan/vulkan.h	/^    VkPolygonMode                              polygonMode;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo
 poolSizeCount	lib/vulkan/vulkan.h	/^    uint32_t                       poolSizeCount;$/;"	m	struct:VkDescriptorPoolCreateInfo
 pos	inc/quad.h	/^		glm::vec2 pos;$/;"	m	struct:Quad::Vertex
-pos	inc/vulkan_manager.h	/^		glm::vec2 pos;$/;"	m	struct:VulkanManager::Vertex
+pos	inc/vulkan_manager.h	/^		glm::vec3 pos;$/;"	m	struct:VulkanManager::Vertex
 position	lib/vulkan/libspirv.h	/^  spv_position_t position;$/;"	m	struct:spv_diagnostic_t
 ppEnabledExtensionNames	lib/vulkan/vulkan.h	/^    const char* const*                 ppEnabledExtensionNames;$/;"	m	struct:VkDeviceCreateInfo
 ppEnabledExtensionNames	lib/vulkan/vulkan.h	/^    const char* const*          ppEnabledExtensionNames;$/;"	m	struct:VkInstanceCreateInfo
