@@ -725,7 +725,7 @@ void VulkanManager::createCommandBuffers()
 		vkCmdBindVertexBuffers(mVkCommandBuffers[i], 0, 1, vertBuf, offsets);
 		vkCmdBindIndexBuffer(mVkCommandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT32);
 		vkCmdBindDescriptorSets(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mVkPipelineLayout, 0, 1, &mVkDescriptorSet, 0, nullptr);
-		vkCmdDrawIndexed(mVkCommandBuffers[i], 6, 1, 0, 0, 0);
+		vkCmdDrawIndexed(mVkCommandBuffers[i], mNumIndices, 1, 0, 0, 0);
 
 		vkCmdEndRenderPass(mVkCommandBuffers[i]);
 
@@ -914,7 +914,7 @@ void VulkanManager::createIndexBuffer()
 		4, 5, 6, 6, 7, 4
 	};
 	
-	mNumIndices = ARRAY_SIZE(indices);
+	mNumIndices = indices.size(); 
 
 	LOG("num indices:" << mNumIndices);
 	

@@ -2943,8 +2943,8 @@ VK_BUFFER_USAGE_TRANSFER_SRC_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_TRANS
 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT = 0x00000010,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT = 0x00000004,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_VERTEX_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT = 0x00000080,$/;"	e	enum:VkBufferUsageFlagBits
-VK_CALL_IPROC	inc/vulkan_manager.h	184;"	d
-VK_CHECK_RESULT	inc/vulkan_manager.h	174;"	d
+VK_CALL_IPROC	inc/vulkan_manager.h	185;"	d
+VK_CHECK_RESULT	inc/vulkan_manager.h	175;"	d
 VK_COLORSPACE_SRGB_NONLINEAR_KHR	lib/vulkan/vulkan.h	3178;"	d
 VK_COLOR_COMPONENT_A_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_A_BIT = 0x00000008,$/;"	e	enum:VkColorComponentFlagBits
 VK_COLOR_COMPONENT_B_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_B_BIT = 0x00000004,$/;"	e	enum:VkColorComponentFlagBits
@@ -6406,6 +6406,7 @@ mImageAvailableSemaphore	inc/vulkan_manager.h	/^	VkSemaphore mImageAvailableSema
 mIndexBuffer	inc/quad.h	/^	VkBuffer mVertexBuffer, mIndexBuffer;$/;"	m	class:Quad
 mInputManager	inc/window.h	/^	InputManager mInputManager;$/;"	m	class:Window
 mNumIndices	inc/quad.h	/^	uint32_t mNumIndices;$/;"	m	class:Quad
+mNumIndices	inc/vulkan_manager.h	/^	size_t mNumIndices;$/;"	m	class:VulkanManager
 mNumIndicesFound	inc/device_queue_indices.h	/^	int mNumIndicesFound; $/;"	m	class:DeviceQueueIndicies
 mNumThreads	inc/task_manager.h	/^	size_t mNumThreads;$/;"	m	class:TaskManager
 mPool	inc/task_manager.h	/^	std::vector<std::thread> mPool;$/;"	m	class:TaskManager
