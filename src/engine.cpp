@@ -38,8 +38,8 @@ void Engine::init()
 	mVulkanManager.createImageViews();
 	mVulkanManager.createRenderPass();
 	mVulkanManager.createPipeline();
-	mVulkanManager.createFramebuffers();
 	mVulkanManager.createCommandPool();
+	mVulkanManager.createFramebuffers();
 	mVulkanManager.createCommandBuffers();
 	mVulkanManager.createSemaphores();
 	LOG("INIT SUCCESSFUL");
