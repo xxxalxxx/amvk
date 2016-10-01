@@ -1,4 +1,7 @@
 .*.swp
 .*.swo
 .*.sw*
+bin/
+obj/
 *.o
+
