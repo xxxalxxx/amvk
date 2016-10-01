@@ -7179,7 +7179,7 @@ pollEvents	inc/input_manager.h	/^	inline void pollEvents() { glfwPollEvents(); }
 polygonMode	lib/vulkan/vulkan.h	/^    VkPolygonMode                              polygonMode;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo
 poolSizeCount	lib/vulkan/vulkan.h	/^    uint32_t                       poolSizeCount;$/;"	m	struct:VkDescriptorPoolCreateInfo
 pos	inc/quad.h	/^		glm::vec2 pos;$/;"	m	struct:Quad::Vertex
-pos	inc/vulkan_manager.h	/^		glm::vec2 pos;$/;"	m	struct:VulkanManager::Vertex
+pos	inc/vulkan_manager.h	/^		glm::vec3 pos;$/;"	m	struct:VulkanManager::Vertex
 position	lib/vulkan/libspirv.h	/^  spv_position_t position;$/;"	m	struct:spv_diagnostic_t
 ppEnabledExtensionNames	lib/vulkan/vulkan.h	/^    const char* const*                 ppEnabledExtensionNames;$/;"	m	struct:VkDeviceCreateInfo
 ppEnabledExtensionNames	lib/vulkan/vulkan.h	/^    const char* const*          ppEnabledExtensionNames;$/;"	m	struct:VkInstanceCreateInfo

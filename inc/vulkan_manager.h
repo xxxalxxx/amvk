@@ -121,7 +121,7 @@ private:
 
 
 	struct Vertex {
-		glm::vec2 pos;
+		glm::vec3 pos;
 		glm::vec3 color;
 		glm::vec2 texCoord;
 	};
@@ -156,6 +156,7 @@ private:
 	VkVertexInputBindingDescription getBindingDesc();
 	std::array<VkVertexInputAttributeDescription, 3> getAttrDesc();
 
+	size_t mNumIndices;
 	VkBuffer vertexBuffer, indexBuffer, uniformBuffer, uniformStagingBuffer;
 	VkDeviceMemory vertexBufferMem, indexBufferMem, uniformBufferMem, uniformStagingBufferMem;
 	

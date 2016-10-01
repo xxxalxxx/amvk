@@ -81,6 +81,7 @@ VulkanManager::VulkanManager(const Window& window):
 	mVkPhysicalDevice(VK_NULL_HANDLE),
 	mVkSwapChain(VK_NULL_HANDLE),
 	mWindow(window),
+	mNumIndices(0),
 	vertexBuffer(VK_NULL_HANDLE),
 	indexBuffer(VK_NULL_HANDLE),
 	uniformBuffer(VK_NULL_HANDLE),
@@ -874,10 +875,15 @@ void VulkanManager::copyBuffer(VkBuffer src, VkBuffer dst, VkDeviceSize size)
 void VulkanManager::createVertexBuffer() 
 {
 	const std::vector<Vertex> vertices = {
-	    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-		{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-		{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-		{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+	    {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+		{{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+		{{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+
+	    {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+		{{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+		{{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
 	};
 
 	VkDeviceSize bufSize = sizeof(vertices[0]) * vertices.size();
@@ -903,9 +909,16 @@ void VulkanManager::createVertexBuffer()
 
 void VulkanManager::createIndexBuffer()
 {
-const std::vector<uint32_t> indices = {
-	    0, 1, 2, 2, 3, 0
-};
+	const std::vector<uint32_t> indices = {
+	    0, 1, 2, 2, 3, 0,
+		4, 5, 6, 6, 7, 4
+	};
+	
+	mNumIndices = ARRAY_SIZE(indices);
+
+	LOG("num indices:" << mNumIndices);
+	
+
 	VkDeviceSize bufSize = sizeof(indices[0]) * indices.size();
 	VkBuffer stagingBuf;
 	VkDeviceMemory stagingBufDeviceMem;
@@ -942,7 +955,7 @@ std::array<VkVertexInputAttributeDescription, 3> VulkanManager::getAttrDesc()
 
 	attributeDescriptions[0].binding = 0;
 	attributeDescriptions[0].location = 0;
-	attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+	attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
 	attributeDescriptions[0].offset = offsetof(Vertex, pos);
 
 	attributeDescriptions[1].binding = 0;
@@ -1082,13 +1095,13 @@ void VulkanManager::updateUniformBuffer()
 	ubo.proj[1][1] *= -1;
 	
 	void* data;
-	LOG("m1 w:" << mSwapChainExtent.width << " h:" << mSwapChainExtent.height);
+//	LOG("m1 w:" << mSwapChainExtent.width << " h:" << mSwapChainExtent.height);
 	vkMapMemory(mVkDevice, uniformStagingBufferMem, 0, sizeof(ubo), 0, &data);
-	LOG("m2");
+//	LOG("m2");
 	memcpy(data, &ubo, sizeof(ubo));
-	LOG("m3");
+//	LOG("m3");
 	vkUnmapMemory(mVkDevice, uniformStagingBufferMem);
-	LOG("m4");
+//	LOG("m4");
 	copyBuffer(uniformStagingBuffer, uniformBuffer, sizeof(ubo));	
 }
 
