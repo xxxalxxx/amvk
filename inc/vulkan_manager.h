@@ -2,7 +2,7 @@
 #define AMVK_VULKAN_MANAGER_H
 
 #define GLM_FORCE_RADIANS
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#define GLM_FORCE_ZERO_TO_ONE
 
 #include <limits>
 #include <cstring>
@@ -39,7 +39,6 @@ public:
 	void createImageViews();
 	void createRenderPass();
 	void createPipeline();
-	void createDepthResources();
 	void createFramebuffers();
 	void createCommandPool();
 	void createCommandBuffers();
@@ -135,9 +134,9 @@ private:
 
 	void createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,
 			VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
-	void transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
+	void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
 	void copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height);
-	void createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkImageView& imageView);
+	void createImageView(VkImage image, VkFormat format, VkImageView& imageView);
 	void createTextureImage();
 	void createTextureImageView();
 	void createTextureSampler();
@@ -153,11 +152,11 @@ private:
 
 	void createVertexBuffer();
 	void createIndexBuffer();
-	size_t mNumIndices;
 
 	VkVertexInputBindingDescription getBindingDesc();
 	std::array<VkVertexInputAttributeDescription, 3> getAttrDesc();
 
+	size_t mNumIndices;
 	VkBuffer vertexBuffer, indexBuffer, uniformBuffer, uniformStagingBuffer;
 	VkDeviceMemory vertexBufferMem, indexBufferMem, uniformBufferMem, uniformStagingBufferMem;
 	
@@ -170,15 +169,13 @@ private:
 	VkDescriptorSetLayout mVkDescriptorSetLayout;
 	VkDescriptorPool mVkDescriptorPool;
 	VkDescriptorSet mVkDescriptorSet;
-
-
-	VkFormat getSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
-	VkFormat getDepthFormat();
+	void createDepthResources();
+	void getSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
+	void getDepthFormat();
 
 	VkImage mDepthImage;
-	VkDeviceMemory mDepthImageMem;
+	VkDeviceMemory mDepthImageDeviceMem;
 	VkImageView mDepthImageView;
-
 };
 
 

@@ -1145,7 +1145,7 @@ void VulkanManager::updateUniformBuffer()
 	copyBuffer(uniformStagingBuffer, uniformBuffer, sizeof(ubo));	
 }
 
-void VulkanManager::transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout)
+void VulkanManager::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
 {
 	VkCommandBuffer cmdBuf = beginSingleTimeCommands();
 
@@ -1156,30 +1156,36 @@ void VulkanManager::transitionImageLayout(VkImage image, VkImageLayout oldLayout
 	barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	barrier.image = image;
-	barrier.subresourceRange.aspectMask = newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-										? VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT
-										: VK_IMAGE_ASPECT_COLOR_BIT;
-
+	
+	if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) {
+		barrier.subresourceRange.aspectMask == VK_IMAGE_ASPECT_DEPTH_BIT;
+		
+		if (format == VK_FORMAT_D32_SFLOAT_S8_UINT 
+		|| format == VK_FORMAT_D24_UNORM_S8_UINT)
+			barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+	} else {
+		barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	}
 
 	barrier.subresourceRange.baseMipLevel = 0;
 	barrier.subresourceRange.levelCount = 1;
 	barrier.subresourceRange.baseArrayLayer = 0;
 	barrier.subresourceRange.layerCount = 1;
 
-	 if (oldLayout == VK_IMAGE_LAYOUT_PREINITIALIZED 
-			 && newLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL) {
+	if (oldLayout == VK_IMAGE_LAYOUT_PREINITIALIZED 
+	&& newLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL) {
 		barrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
 		barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
 	} else if (oldLayout == VK_IMAGE_LAYOUT_PREINITIALIZED 
-			&& newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
+	&& newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
 		barrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
 		barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 	} else if (oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL 
-			&& newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) {
+	&& newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) {
 		barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 		barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 	} else if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED
-			&& newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) {
+	&& newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) {
 		barrier.srcAccessMask = 0;
 		barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT
 							  | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
@@ -1294,17 +1300,23 @@ void VulkanManager::createTextureImage()
 				VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
 				mTextureImage, mTextureImageMem);
 
-	transitionImageLayout(stagingImg,
-						VK_IMAGE_LAYOUT_PREINITIALIZED, 
-						VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+	transitionImageLayout(
+			stagingImg,
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_LAYOUT_PREINITIALIZED, 
+			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
 
-	transitionImageLayout(mTextureImage, 
+	transitionImageLayout(
+			mTextureImage, 
+			VK_FORMAT_R8G8B8A8_UNORM,
 			VK_IMAGE_LAYOUT_PREINITIALIZED, 
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 	
 	copyImage(stagingImg, mTextureImage, w, h);
 
-	transitionImageLayout(mTextureImage, 
+	transitionImageLayout(
+			mTextureImage, 
+			VK_FORMAT_R8G8B8A8_UNORM,
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
 			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
@@ -1411,6 +1423,7 @@ void VulkanManager::createDepthResources()
 
 	transitionImageLayout(
 			mDepthImage,
+			depthFormat,
 			VK_IMAGE_LAYOUT_UNDEFINED,
 			VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
 }
