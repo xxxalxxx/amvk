@@ -673,6 +673,7 @@ void VulkanManager::createPipeline()
 
 	VK_CHECK_RESULT(vkCreateGraphicsPipelines(mVkDevice, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &mVkPipeline));
 	LOG("PIPELINE CREATED");
+	LOG("22222TEST");
 }
 
 void VulkanManager::createShaderModule(const std::vector<char>& shaderSpvCode, VkShaderModule& shaderModule)

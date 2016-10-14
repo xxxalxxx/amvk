@@ -15,7 +15,7 @@ CXXFLAGS=-Wall -Werror -std=c++14 -I. -Isrc -Iinc -Ilib
 RM=rm -f
 LDLIBS=$(shell pkg-config --static --libs glfw3) -L$(VULKAN_LIB_PATH) -lvulkan
 
-all: clean $(TARGET)
+all: $(TARGET)
 	LD_LIBRARY_PATH=$(VULKAN_LIB_PATH) VK_LAYER_PATH=$(VULKAN_SDK_DIR)/etc/explicit_layer.d ./$(TARGET)
 
 $(TARGET): $(OBJS)
