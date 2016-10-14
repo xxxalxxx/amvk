@@ -39,7 +39,7 @@ void Engine::init()
 	mVulkanManager.createRenderPass();
 	mVulkanManager.createPipeline();
 	mVulkanManager.createCommandPool();
-	mVulkanManager.createDepthResources();
+
 	mVulkanManager.createFramebuffers();
 	mVulkanManager.createCommandBuffers();
 	mVulkanManager.createSemaphores();

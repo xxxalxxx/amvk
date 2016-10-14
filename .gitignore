@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 .*.swp
 .*.swo
 .*.sw*
 bin/
 obj/
 *.o
+=======
+>>>>>>> depth
 
