@@ -7,7 +7,7 @@
 #include <string>
 #include "vulkan/vulkan.h"
 
-//#define AMVK_DBG
+#define AMVK_DEBUG
 
 #define NS(ns, name) ns ## _ ## name
 #define LOG(x) do { std::cout << x << std::endl; } while(0)

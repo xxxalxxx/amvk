@@ -23,7 +23,7 @@ std::string FileManager::getResourcePath(std::string&& path) const
 
 std::vector<char> FileManager::readShader(const std::string& shaderName)
 {
-	std::string filename = mShaderDir + shaderName;
+	std::string filename = mShaderDir + shaderName + ".spv";
 	LOG("SHADER FILE NAME:" << filename);
 	return readFile(filename);
 }

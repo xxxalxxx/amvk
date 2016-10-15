@@ -26,8 +26,7 @@ void Engine::init()
 	mWindow.setWindowSizeCallback(onWindowResized);
 	mVulkanManager.createVkInstance();
 
-	#ifdef AMVK_DBG
-	LOG("DBG ENABLED");
+	#ifdef AMVK_DEBUG
 	mVulkanManager.enableDebug();
 	#endif
 

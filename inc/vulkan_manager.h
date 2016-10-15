@@ -18,9 +18,6 @@
 #include "file_manager.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-
-
 #include <chrono>
 
 class VulkanManager { 
@@ -108,7 +105,7 @@ private:
 	std::vector<VkCommandBuffer> mVkCommandBuffers;
 
 	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;
-	VkDebugReportCallbackEXT msgCallback; 
+	VkDebugReportCallbackEXT mDebugReportCallback; 
 
 	VkShaderModule vertShaderModule;
 	VkShaderModule fragShaderModule;
@@ -182,45 +179,28 @@ private:
 	VkImageView mDepthImageView;
 };
 
-
-#define VK_CHECK_RESULT(f) { \
-	VkResult result = (f); \
-	if (result != VK_SUCCESS) { \
+#define VK_THROW_RESULT_ERROR(text, result) \
+	do { \
 		char str[128]; \
 		int resultCode = static_cast<int>(result); \
-		sprintf(str, #f " VkResult: %s (code: %d)", VulkanManager::sGetVkResultString(resultCode), resultCode); \
+		sprintf(str, #text " VkResult: %s (code: %d)", VulkanManager::sGetVkResultString(resultCode), resultCode); \
 		throw std::runtime_error(str); \
-	} \
-}
+	} while (0)
+
+#define VK_CHECK_RESULT(f)  \
+	do { \
+		VkResult result = (f); \
+		if (result != VK_SUCCESS) \
+			VK_THROW_RESULT_ERROR(f, result); \
+	} while (0)
 
 #define VK_CALL_IPROC(instance, func, ...) \
-		do { \
-			auto __##func = (PFN_##func) vkGetInstanceProcAddr(instance, #func); \
-			if (!__##func) { \
-				throw std::runtime_error("Failed to get Vulkan instance procedure for " #func); \
-			} \
-			if (__##func(__VA_ARGS__) != VK_SUCCESS) { \
-			   throw std::runtime_error("Failed to call iproc for " #func); \
-			} \
-		} while(0)
-
-/*
-#define VK_GET_IPROC(NAME) \
 	do { \
-		*(void **)&swapChain->fp##NAME = swapChainGetInstanceProc(swapChain, "vk" #NAME); \
-		if (!swapChain->fp##NAME) { \
-				fprintf(stderr, "Failed to get Vulkan instance procedure: `%s'\n", #NAME); \
-				return false; \
-				} \
-	} while (0) 
-
-#define VK_GET_DPROC(NAME) \
-	do { \
-		*(void **)&swapChain->fp##NAME = swapChainGetDeviceProc(swapChain, "vk" #NAME); \
-			if (!swapChain->fp##NAME) { \
-				printf(stderr, "Failed to get Vulkan device procedure: `%s'\n", #NAME); \
-				return false; \
-			} \
+		auto __##func = (PFN_##func) vkGetInstanceProcAddr(instance, #func); \
+		if (!__##func) \
+			throw std::runtime_error("Failed to get Vulkan instance procedure for " #func); \
+		if (__##func(__VA_ARGS__) != VK_SUCCESS) \
+		   throw std::runtime_error("Failed to call iproc for " #func); \
 	} while (0)
-*/
+
 #endif

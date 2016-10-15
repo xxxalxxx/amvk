@@ -3,7 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
-
+#define AMVK_DBG
 const char* VulkanManager::sGetVkResultString(int result) {
 		switch(result) {
 		case 0:
@@ -71,7 +71,7 @@ const std::vector<const char*> VulkanManager::sDeviceExtensions = {
 };
 
 const std::vector<const char*> VulkanManager::sValidationLayers = {
-	"VK_LAYER_LUNARG_standard_validation"
+	"VK_LAYER_LUNARG_standard_validation",
 };
 
 
@@ -135,7 +135,7 @@ std::vector<const char*> VulkanManager::getExtensionNames()
 	for (unsigned i = 0; i < numExt; ++i)
 		extensions.push_back(ppExtenstions[i]);
 
-	#ifdef AMVK_DBG
+	#ifdef AMVK_DEBUG
 		extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
 	#endif
 
@@ -144,13 +144,29 @@ std::vector<const char*> VulkanManager::getExtensionNames()
 
 void VulkanManager::createVkInstance() 
 {
-	#ifdef AMVK_DBG
+	#ifdef AMVK_DEBUG
 	{
 		uint32_t numLayers;
-		vkEnumerateInstanceExtensionProperties(&numLayers, nullptr);
+		vkEnumerateInstanceLayerProperties(&numLayers, nullptr);
 		std::vector<VkLayerProperties> props(numLayers);
-		vkEnumerateInstanceExtensionProperties(&numLayers, props.data());
-	}	
+		vkEnumerateInstanceLayerProperties(&numLayers, props.data());
+	
+		for (const char* layerName : sValidationLayers) {
+            bool layerFound = false;
+			for (const auto& layerProperties : props) {
+				if (strcmp(layerName, layerProperties.layerName) == 0) {
+					layerFound = true;
+					break;
+                }
+			}
+
+			if (!layerFound) {
+				std::string msg = "Unable to found layer:";
+				msg += layerName;
+				throw std::runtime_error(msg);
+			}
+		}
+	}
 	#endif
 
 	VkApplicationInfo applicationInfo = {};
@@ -169,13 +185,16 @@ void VulkanManager::createVkInstance()
 	instanceInfo.ppEnabledExtensionNames = extensionNames.data();
 
 	#ifdef AMVK_DEBUG
+	LOG("DEBUG EXISTS");
 	instanceInfo.enabledLayerCount = sValidationLayers.size();
 	instanceInfo.ppEnabledLayerNames = sValidationLayers.data();
 	#else
+	LOG("DEBUG DOES NOT EXIST");
 	instanceInfo.enabledLayerCount = 0;
 	#endif
 
 	VK_CHECK_RESULT(vkCreateInstance(&instanceInfo, nullptr, &mVkInstance));
+	LOG("INSTANCE CREATED");
 }
 
 void VulkanManager::createVkSurface(GLFWwindow& glfwWindow)
@@ -187,7 +206,7 @@ void VulkanManager::createVkSurface(GLFWwindow& glfwWindow)
 }
 
 
-static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 		VkDebugReportFlagsEXT flags, 
 		VkDebugReportObjectTypeEXT objType, 
 		uint64_t obj, 
@@ -197,7 +216,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 		const char* msg, 
 		void* userData) 
 {
-	std::cout << "validation layer: " << msg << std::endl;
+	std::cerr << ">>> VK_VALIDATION_LAYER: " << msg << std::endl;
 	return VK_FALSE;
 }
 
@@ -206,10 +225,15 @@ void VulkanManager::enableDebug()
 {
 	VkDebugReportCallbackCreateInfoEXT createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-	createInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
-	createInfo.pfnCallback = debugCallback;
+	createInfo.pNext = nullptr;
+	createInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT 
+					 | VK_DEBUG_REPORT_WARNING_BIT_EXT
+					 | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+	createInfo.pfnCallback = &debugCallback;
+	createInfo.pUserData = nullptr;
 
-	VK_CALL_IPROC(mVkInstance, vkCreateDebugReportCallbackEXT, mVkInstance, &createInfo, nullptr, &msgCallback);
+	VK_CALL_IPROC(mVkInstance, vkCreateDebugReportCallbackEXT, mVkInstance, &createInfo, nullptr, &mDebugReportCallback);
+	LOG("DEBUG ENABLED");
 }
 
 void VulkanManager::createPhysicalDevice() 
@@ -279,7 +303,7 @@ void VulkanManager::createLogicalDevice()
 	createInfo.enabledExtensionCount = sDeviceExtensions.size();
 	createInfo.ppEnabledExtensionNames = sDeviceExtensions.data();
 	
-	#ifdef AMVK_DBG
+	#ifdef AMVK_DEBUG
 	createInfo.enabledLayerCount = sValidationLayers.size();
 	createInfo.ppEnabledLayerNames = sValidationLayers.data(); 
 	#else
@@ -463,9 +487,7 @@ void VulkanManager::createImageViews()
 {
 	mSwapChainImageViews.resize(mSwapChainImages.size());
 	for (size_t i = 0; i < mSwapChainImages.size(); ++i) {
-
 		createImageView(mSwapChainImages[i], mSwapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, mSwapChainImageViews[i]);
-
 		LOG("IMAGE VIEW CREATED");
 	}
 }
@@ -543,11 +565,9 @@ void VulkanManager::createPipeline()
 {
 	createDescriptorSetLayout();
 
-
-
 	FileManager& fileManager = FileManager::getInstance();
-	auto vertShaderSrc = fileManager.readShader("shader.vert.spv");
-	auto fragShaderSrc = fileManager.readShader("shader.frag.spv");
+	auto vertShaderSrc = fileManager.readShader("shader.vert");
+	auto fragShaderSrc = fileManager.readShader("shader.frag");
 
 
 	createShaderModule(vertShaderSrc, vertShaderModule);
@@ -673,7 +693,6 @@ void VulkanManager::createPipeline()
 
 	VK_CHECK_RESULT(vkCreateGraphicsPipelines(mVkDevice, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &mVkPipeline));
 	LOG("PIPELINE CREATED");
-	LOG("22222TEST");
 }
 
 void VulkanManager::createShaderModule(const std::vector<char>& shaderSpvCode, VkShaderModule& shaderModule)
@@ -799,7 +818,6 @@ void VulkanManager::createSemaphores()
 
 void VulkanManager::draw() 
 {
-
 	uint32_t imageIndex = 0;
 
 	VkResult result = vkAcquireNextImageKHR(mVkDevice, 
@@ -811,7 +829,7 @@ void VulkanManager::draw()
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 		recreateSwapChain();
-	} else if (result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR) {	
+	} else if (result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR) {
 		VkSubmitInfo submitInfo = {};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 		
@@ -840,12 +858,7 @@ void VulkanManager::draw()
 		VK_CHECK_RESULT(vkQueuePresentKHR(mSupportedQueue, &presentInfo));
 
 	} else {
-		char str[128]; \
-		int resultCode = static_cast<int>(result); \
-		sprintf(str,"failed vkAcquireNextImageKHR Result: %s (code: %d)", 
-				VulkanManager::sGetVkResultString(resultCode), 
-				resultCode); 
-		throw std::runtime_error(str);
+		VK_THROW_RESULT_ERROR("Failed vkAcquireNextImageKHR", result);
 	}
 }
 
@@ -895,7 +908,7 @@ void VulkanManager::createBuffer(VkBuffer& buffer,
 	if (buffer != VK_NULL_HANDLE) {
 	
 	}
-	LOG("a");	
+
 	VK_CHECK_RESULT(vkCreateBuffer(mVkDevice, &buffInfo, nullptr, &buffer));
 	
 	VkMemoryRequirements memReqs;
@@ -906,13 +919,8 @@ void VulkanManager::createBuffer(VkBuffer& buffer,
 	allocInfo.allocationSize = memReqs.size;
 	allocInfo.memoryTypeIndex = getMemoryType(memReqs.memoryTypeBits, prop);
 	
-	if (memory != VK_NULL_HANDLE) {
-	
-	}
-	LOG("b");
 	VK_CHECK_RESULT(vkAllocateMemory(mVkDevice, &allocInfo, nullptr, &memory));
 	vkBindBufferMemory(mVkDevice, buffer, memory, 0);
-	LOG("c");
 }
 
 void VulkanManager::copyBuffer(VkBuffer src, VkBuffer dst, VkDeviceSize size)
@@ -961,7 +969,7 @@ void VulkanManager::createVertexBuffer()
 								vertexBufferMem, 
 								VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 								VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);	
-	LOG("4");
+
 	copyBuffer(stagingBuf, vertexBuffer, bufSize);
 }
 
@@ -1154,21 +1162,15 @@ void VulkanManager::updateUniformBuffer()
 	ubo.proj[1][1] *= -1;
 	
 	void* data;
-//	LOG("m1 w:" << mSwapChainExtent.width << " h:" << mSwapChainExtent.height);
 	vkMapMemory(mVkDevice, uniformStagingBufferMem, 0, sizeof(ubo), 0, &data);
-//	LOG("m2");
 	memcpy(data, &ubo, sizeof(ubo));
-//	LOG("m3");
 	vkUnmapMemory(mVkDevice, uniformStagingBufferMem);
-//	LOG("m4");
 	copyBuffer(uniformStagingBuffer, uniformBuffer, sizeof(ubo));	
 }
 
 void VulkanManager::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
 {
-	LOG("!1");
 	VkCommandBuffer cmdBuf = beginSingleTimeCommands();
-	LOG("!2");
 	VkImageMemoryBarrier barrier = {};
 	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	barrier.oldLayout = oldLayout;
@@ -1176,7 +1178,6 @@ void VulkanManager::transitionImageLayout(VkImage image, VkFormat format, VkImag
 	barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	barrier.image = image;
-
 
 	if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) {
 		barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
@@ -1205,7 +1206,6 @@ void VulkanManager::transitionImageLayout(VkImage image, VkFormat format, VkImag
 		barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 		barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 	} else if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED
-
 			&& newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) {
 
 		barrier.srcAccessMask = 0;
@@ -1214,16 +1214,15 @@ void VulkanManager::transitionImageLayout(VkImage image, VkFormat format, VkImag
 	} else {
 		throw std::invalid_argument("unsupported layout transition!");
 	}
-	LOG("z");
+
 	vkCmdPipelineBarrier(cmdBuf,
 						VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
 						0, 
 						0, nullptr, 
 						0, nullptr, 
 						1, &barrier);
-	LOG("w");
+
 	endSingleTimeCommands(cmdBuf);
-	LOG("y");
 }
 
 void VulkanManager::copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height)
@@ -1301,14 +1300,14 @@ void VulkanManager::createTextureImage()
 
 	VkImage stagingImg;
 	VkDeviceMemory stagingImageMem;
-	LOG("z");
+
 	createImage(w, h, 
 				VK_FORMAT_R8G8B8A8_UNORM, 
 				VK_IMAGE_TILING_LINEAR,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT, 
 				VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
 				stagingImg, stagingImageMem);
-	LOG("zz");
+
 	void* data;
 	vkMapMemory(mVkDevice, stagingImageMem, 0, imageSize, 0, &data);
 	memcpy(data, pixels, (size_t) imageSize);
@@ -1469,7 +1468,6 @@ bool VulkanManager::hasStencilComponent(VkFormat format)
 
 void VulkanManager::createDepthResources() 
 {
-	LOG("a");
 	VkFormat depthFormat = findDepthFormat();
 	createImage(
 			mSwapChainExtent.width, 
@@ -1480,11 +1478,9 @@ void VulkanManager::createDepthResources()
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 			mDepthImage,
 			mDepthImageMem);
-	LOG("B");
+
 	createImageView(mDepthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, mDepthImageView);
-	LOG("c");
 	transitionImageLayout(mDepthImage, depthFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-	LOG("d");
 }
 
 
