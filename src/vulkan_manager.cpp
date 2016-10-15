@@ -2,8 +2,6 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
-
-#define AMVK_DBG
 const char* VulkanManager::sGetVkResultString(int result) {
 		switch(result) {
 		case 0:
@@ -279,7 +277,7 @@ void VulkanManager::createLogicalDevice()
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 	std::unordered_set<int> uniqueIndices;
 	
-	for (size_t i = 0; i < NUM_DEVICE_QUEUE_INDICES; ++i) {
+	for (size_t i = 0; i < 2; ++i) {
 		uniqueIndices.insert(mDeviceQueueIndices[i]);
 	}
 
@@ -539,15 +537,14 @@ void VulkanManager::createRenderPass()
 	dependancy.srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 	dependancy.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
 	dependancy.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dependancy.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+	dependancy.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT 
+							 | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
 	std::array<VkAttachmentDescription, 2> attachments = {
 		att, 
 		depthAtt
 	};
 	
-
-
 	VkRenderPassCreateInfo createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
 	createInfo.attachmentCount = attachments.size();
@@ -568,7 +565,6 @@ void VulkanManager::createPipeline()
 	FileManager& fileManager = FileManager::getInstance();
 	auto vertShaderSrc = fileManager.readShader("shader.vert");
 	auto fragShaderSrc = fileManager.readShader("shader.frag");
-
 
 	createShaderModule(vertShaderSrc, vertShaderModule);
 	createShaderModule(fragShaderSrc, fragShaderModule);
@@ -605,6 +601,7 @@ void VulkanManager::createPipeline()
 	assemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 	assemblyInfo.primitiveRestartEnable = VK_FALSE;
 	LOG("EXTENT W:" << mSwapChainExtent.width << " H:" << mSwapChainExtent.height);
+	
 	VkViewport viewport = {};
 	viewport.x = 0.0f;
 	viewport.y = 0.0f;
@@ -712,21 +709,22 @@ void VulkanManager::createFramebuffers()
 
 	mSwapChainFramebuffers.resize(mSwapChainImageViews.size());
 
-	for (size_t i = 0; i < mSwapChainFramebuffers.size(); ++i) {
+	VkFramebufferCreateInfo createInfo = {};
+	createInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+	createInfo.renderPass = mVkRenderPass;
+	createInfo.width = mSwapChainExtent.width;
+	createInfo.height = mSwapChainExtent.height;
+	createInfo.layers = 1;
 
+	for (size_t i = 0; i < mSwapChainFramebuffers.size(); ++i) {
 		std::array<VkImageView, 2> attachments = { 
 			mSwapChainImageViews[i],
 			mDepthImageView
 		};
 
-		VkFramebufferCreateInfo createInfo = {};
-		createInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-		createInfo.renderPass = mVkRenderPass;
 		createInfo.attachmentCount = attachments.size();
 		createInfo.pAttachments = attachments.data();
-		createInfo.width = mSwapChainExtent.width;
-		createInfo.height = mSwapChainExtent.height;
-		createInfo.layers = 1;
+
 		VK_CHECK_RESULT(vkCreateFramebuffer(mVkDevice, &createInfo, nullptr, &mSwapChainFramebuffers[i]));
 		LOG("FRAMEBUFFER CREATED");
 	}
@@ -774,11 +772,10 @@ void VulkanManager::createCommandBuffers()
 		
 		VK_CHECK_RESULT(vkBeginCommandBuffer(mVkCommandBuffers[i], &beginInfo));
 
-		
-		std::array<VkClearValue, 2> clearValues = {};
-		clearValues[0].color = {0.2f, 0.0f, 0.0f, 1.0f};
-		clearValues[1].depthStencil = {1.0f, 0};	
-
+		VkClearValue clearValues[] = {
+			{0.4f, 0.1f, 0.1f, 1.0f}, // VkClearColorValue color; 
+			{1.0f, 0}				  // VkClearDepthStencilValue depthStencil 
+		};
 
 		VkRenderPassBeginInfo renderPassBeginInfo = {};
 		renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -786,8 +783,8 @@ void VulkanManager::createCommandBuffers()
 		renderPassBeginInfo.framebuffer = mSwapChainFramebuffers[i];
 		renderPassBeginInfo.renderArea.offset = {0, 0};
 		renderPassBeginInfo.renderArea.extent = mSwapChainExtent;
-		renderPassBeginInfo.clearValueCount = clearValues.size();
-		renderPassBeginInfo.pClearValues = clearValues.data();
+		renderPassBeginInfo.clearValueCount = ARRAY_SIZE(clearValues);
+		renderPassBeginInfo.pClearValues = clearValues;
 
 		vkCmdBeginRenderPass(mVkCommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -799,8 +796,6 @@ void VulkanManager::createCommandBuffers()
 		vkCmdBindDescriptorSets(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mVkPipelineLayout, 0, 1, &mVkDescriptorSet, 0, nullptr);
 
 		vkCmdDrawIndexed(mVkCommandBuffers[i], mNumIndices, 1, 0, 0, 0);
-
-
 		vkCmdEndRenderPass(mVkCommandBuffers[i]);
 
 		VK_CHECK_RESULT(vkEndCommandBuffer(mVkCommandBuffers[i]));
@@ -976,7 +971,6 @@ void VulkanManager::createVertexBuffer()
 void VulkanManager::createIndexBuffer()
 {
 	const std::vector<uint32_t> indices = {
-
 	    0, 1, 2, 2, 3, 0,
 		4, 5, 6, 6, 7, 4
 	};
@@ -1018,23 +1012,16 @@ VkVertexInputBindingDescription VulkanManager::getBindingDesc()
 
 std::array<VkVertexInputAttributeDescription, 3> VulkanManager::getAttrDesc() 
 {
-	std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions = {};
+    // uint32_t    location;
+    // uint32_t    binding;
+    // VkFormat    format;
+    // uint32_t    offset;
 
-	attributeDescriptions[0].binding = 0;
-	attributeDescriptions[0].location = 0;
-	attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-	attributeDescriptions[0].offset = offsetof(Vertex, pos);
-
-	attributeDescriptions[1].binding = 0;
-	attributeDescriptions[1].location = 1;
-	attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-	attributeDescriptions[1].offset = offsetof(Vertex, color);
-
-	attributeDescriptions[2].binding = 0;
-	attributeDescriptions[2].location = 2;
-	attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-	attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
-
+	std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions = {{
+		{ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos) },
+		{ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) },
+		{ 2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCoord) }
+	}};
 
 	return attributeDescriptions;
 }

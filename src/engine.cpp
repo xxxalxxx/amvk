@@ -30,7 +30,7 @@ void Engine::init()
 	mVulkanManager.enableDebug();
 	#endif
 
-	mVulkanManager.createVkSurface(*(mWindow.mGlfwWindow));
+	mVulkanManager.createVkSurface(*mWindow.mGlfwWindow);
 	mVulkanManager.createPhysicalDevice();
 	mVulkanManager.createLogicalDevice();
 	mVulkanManager.createSwapChain(mWindow);
