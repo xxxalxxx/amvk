@@ -1,10 +1,10 @@
-<<<<<<< HEAD
-.*.swp
-.*.swo
-.*.sw*
+# .*.swp
+# .*.swo
+# .*.sw*
 bin/
 obj/
+res/
+*.d
 *.o
-=======
->>>>>>> depth
+
 
