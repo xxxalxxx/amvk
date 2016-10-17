@@ -582,6 +582,7 @@ void VulkanManager::createPipeline()
 	VkPipelineDynamicStateCreateInfo dynamicInfo;
 	dynamicInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
 	dynamicInfo.pNext = nullptr;
+	dynamicInfo.flags = 0;
 	dynamicInfo.dynamicStateCount = ARRAY_SIZE(dynamicStates);
 	dynamicInfo.pDynamicStates = dynamicStates;
 

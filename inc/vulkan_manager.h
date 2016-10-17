@@ -187,7 +187,7 @@ private:
 
 #define VK_CHECK_RESULT(f)  \
 	do { \
-		VkResult result = (f); \
+		VkResult result = f; \
 		if (result != VK_SUCCESS) \
 			VK_THROW_RESULT_ERROR(f, result); \
 	} while (0)
