@@ -2,67 +2,6 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
-const char* VulkanManager::sGetVkResultString(int result) {
-		switch(result) {
-		case 0:
-				return "VK_SUCCESS";
-		case 1: 
-				return "VK_NOT_READY";
-		case 2: 
-				return "VK_TIMEOUT";
-		case 3: 
-				return "VK_EVENT_SET";
-		case 4: 
-				return "VK_EVENT_RESET";
-		case 5: 
-				return "VK_INCOMPLETE";
-		case -1: 
-				return "VK_ERROR_OUT_OF_HOST_MEMORY";
-		case -2: 
-				return "VK_ERROR_OUT_OF_DEVICE_MEMORY";
-		case -3: 
-				return "VK_ERROR_INITIALIZATION_FAILED";
-		case -4: 
-				return "VK_ERROR_DEVICE_LOST";
-		case -5: 
-				return "VK_ERROR_MEMORY_MAP_FAILED";
-		case -6: 
-				return "VK_ERROR_LAYER_NOT_PRESET";
-		case -7: 
-				return "VK_ERROR_EXTENSTION_NOT_PRESENT";
-		case -8: 
-				return "VK_ERROR_FEATURE_NOT_PRESENT";
-		case -9: 
-				return "VK_ERROR_INCOMPATIBLE_DRIVER";
-		case -10: 
-				return "VK_ERROR_TOO_MANY_OBJECTS";
-		case -11: 
-				return "VK_ERROR_FORMAT_IS_NOT_SUPPORTED";
-		case -12:
-				return "VK_ERROR_FRAGMENT_POOL";
-		case -1000000000: 
-				return "VK_ERROR_SURFACE_LOST_KHR";
-		case -1000000001: 
-				return "VK_ERROR_NATIVE_WINDOW_IN_USE_KHR";
-		case -1000001003: 
-				return "VK_ERROR_SUBOPTIMAL_KHR";
-		case -1000001004: 
-				return "VK_ERROR_OUT_OF_DATE_KHR";
-		case -1000003001: 
-				return "VK_ERROR_INCOMPATIBLE_DISPLAY_KHR";
-		case -1000011001: 
-				return "VK_ERROR_VALIDATION_FAILED_EXT";
-		case -1000012000: 
-				return "VK_ERROR_INVALID_SHADER_NV";
-		default: 
-				return "ERROR_CODE_NOT_FOUND";
-		}
-}
-
-const char* VulkanManager::sGetVkResultString(VkResult result) {
-	return sGetVkResultString(static_cast<int>(result));
-}
-
 
 const std::vector<const char*> VulkanManager::sDeviceExtensions = {
 	VK_KHR_SWAPCHAIN_EXTENSION_NAME
@@ -600,8 +539,11 @@ void VulkanManager::createPipeline()
 	assemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 	assemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 	assemblyInfo.primitiveRestartEnable = VK_FALSE;
+	
 	LOG("EXTENT W:" << mSwapChainExtent.width << " H:" << mSwapChainExtent.height);
 	
+
+	/*
 	VkViewport viewport = {};
 	viewport.x = 0.0f;
 	viewport.y = 0.0f;
@@ -610,6 +552,7 @@ void VulkanManager::createPipeline()
 	viewport.minDepth = 0.0f;
 	viewport.maxDepth = 1.0f;
 
+	
 	VkRect2D scissor = {};
 	scissor.offset = {0, 0};
 	scissor.extent = mSwapChainExtent;
@@ -620,6 +563,27 @@ void VulkanManager::createPipeline()
 	viewportState.pViewports = &viewport;
 	viewportState.scissorCount = 1;
 	viewportState.pScissors = &scissor;
+	*/
+
+	VkPipelineViewportStateCreateInfo viewportState;
+	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	viewportState.pNext = nullptr;
+	viewportState.flags = 0;
+	viewportState.viewportCount = 1;
+	viewportState.pViewports = nullptr;
+	viewportState.scissorCount = 1;
+	viewportState.pScissors = nullptr;
+
+	VkDynamicState dynamicStates[] = {
+		VK_DYNAMIC_STATE_VIEWPORT,
+		VK_DYNAMIC_STATE_SCISSOR
+	};
+
+	VkPipelineDynamicStateCreateInfo dynamicInfo;
+	dynamicInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+	dynamicInfo.pNext = nullptr;
+	dynamicInfo.dynamicStateCount = ARRAY_SIZE(dynamicStates);
+	dynamicInfo.pDynamicStates = dynamicStates;
 
 	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
 	rasterizationState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
@@ -683,6 +647,7 @@ void VulkanManager::createPipeline()
 	pipelineInfo.pMultisampleState = &multisampleState;
 	pipelineInfo.pDepthStencilState = &depthStencil;
 	pipelineInfo.pColorBlendState = &blendState;
+	pipelineInfo.pDynamicState = &dynamicInfo;
 	pipelineInfo.layout = mVkPipelineLayout;
 	pipelineInfo.renderPass = mVkRenderPass;
 	pipelineInfo.subpass = 0;
@@ -787,8 +752,24 @@ void VulkanManager::createCommandBuffers()
 		renderPassBeginInfo.pClearValues = clearValues;
 
 		vkCmdBeginRenderPass(mVkCommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-
 		vkCmdBindPipeline(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mVkPipeline);
+		
+		VkViewport viewport;
+		viewport.x = 0.0f;
+		viewport.y = 0.0f;
+		viewport.width = (float) mSwapChainExtent.width;
+		viewport.height = (float) mSwapChainExtent.height;
+		viewport.minDepth = 0.0f;
+		viewport.maxDepth = 1.0f;
+
+		
+		VkRect2D scissor = {};
+		scissor.offset = {0, 0};
+		scissor.extent = mSwapChainExtent;
+
+		vkCmdSetViewport(mVkCommandBuffers[i], 0, 1, &viewport);
+		vkCmdSetScissor(mVkCommandBuffers[i], 0, 1, &scissor);
+		
 		VkBuffer vertBuf[] = { vertexBuffer };
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(mVkCommandBuffers[i], 0, 1, vertBuf, offsets);

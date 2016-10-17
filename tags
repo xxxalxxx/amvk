@@ -13,8 +13,8 @@ AMVK_INPUT_MANAGER_H	inc/input_manager.h	2;"	d
 AMVK_MACROS_H	inc/macro.h	3;"	d
 AMVK_QUAD_H	inc/quad.h	2;"	d
 AMVK_TASK_MANAGER_H	inc/task_manager.h	4;"	d
-AMVK_VULKAN_DEBUG_MANAGER_H	inc/vulkan_debug_manager.h	2;"	d
 AMVK_VULKAN_MANAGER_H	inc/vulkan_manager.h	2;"	d
+AMVK_VULKAN_PIPELINE_BUILDER_H	inc/vulkan_pipeline_builder.h	2;"	d
 AMVK_WINDOW_H	inc/window.h	2;"	d
 ARRAY_SIZE	inc/macro.h	17;"	d
 AccessQualifier	lib/vulkan/spirv.hpp	/^enum AccessQualifier {$/;"	g	namespace:spv
@@ -1885,7 +1885,7 @@ SPV_UNSUPPORTED	lib/vulkan/libspirv.h	/^  SPV_UNSUPPORTED = 1,$/;"	e	enum:spv_re
 SPV_VERSION	lib/vulkan/spirv.h	53;"	d
 SPV_VERSION	lib/vulkan/spirv.hpp	49;"	d
 SPV_WARNING	lib/vulkan/libspirv.h	/^  SPV_WARNING = 3,$/;"	e	enum:spv_result_t
-SRCS	Makefile	/^SRCS=main.cpp task_manager.cpp window.cpp engine.cpp input_manager.cpp vulkan_manager.cpp device_queue_indices.cpp file_manager.cpp$/;"	m
+SRCS	Makefile	/^SRCS=main.cpp task_manager.cpp window.cpp engine.cpp input_manager.cpp vulkan_manager.cpp device_queue_indices.cpp file_manager.cpp vulkan_utils.cpp$/;"	m
 SRC_DIR	Makefile	/^SRC_DIR := src$/;"	m
 STBIDEF	lib/stb/stb_image.h	415;"	d
 STBIDEF	lib/stb/stb_image.h	417;"	d
@@ -2944,8 +2944,8 @@ VK_BUFFER_USAGE_TRANSFER_SRC_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_TRANS
 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT = 0x00000010,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT = 0x00000004,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_VERTEX_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT = 0x00000080,$/;"	e	enum:VkBufferUsageFlagBits
-VK_CALL_IPROC	inc/vulkan_manager.h	197;"	d
-VK_CHECK_RESULT	inc/vulkan_manager.h	190;"	d
+VK_CALL_IPROC	inc/vulkan_manager.h	195;"	d
+VK_CHECK_RESULT	inc/vulkan_manager.h	188;"	d
 VK_COLORSPACE_SRGB_NONLINEAR_KHR	lib/vulkan/vulkan.h	3178;"	d
 VK_COLOR_COMPONENT_A_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_A_BIT = 0x00000008,$/;"	e	enum:VkColorComponentFlagBits
 VK_COLOR_COMPONENT_B_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_B_BIT = 0x00000004,$/;"	e	enum:VkColorComponentFlagBits
@@ -3778,7 +3778,7 @@ VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATI
 VK_SYSTEM_ALLOCATION_SCOPE_MAX_ENUM	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATION_SCOPE_MAX_ENUM = 0x7FFFFFFF$/;"	e	enum:VkSystemAllocationScope
 VK_SYSTEM_ALLOCATION_SCOPE_OBJECT	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATION_SCOPE_OBJECT = 1,$/;"	e	enum:VkSystemAllocationScope
 VK_SYSTEM_ALLOCATION_SCOPE_RANGE_SIZE	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATION_SCOPE_RANGE_SIZE = (VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE - VK_SYSTEM_ALLOCATION_SCOPE_COMMAND + 1),$/;"	e	enum:VkSystemAllocationScope
-VK_THROW_RESULT_ERROR	inc/vulkan_manager.h	182;"	d
+VK_THROW_RESULT_ERROR	inc/vulkan_manager.h	180;"	d
 VK_TIMEOUT	lib/vulkan/vulkan.h	/^    VK_TIMEOUT = 2,$/;"	e	enum:VkResult
 VK_TRUE	lib/vulkan/vulkan.h	100;"	d
 VK_UUID_SIZE	lib/vulkan/vulkan.h	105;"	d
@@ -3797,6 +3797,7 @@ VPATH	Makefile	/^VPATH=inc:src:lib$/;"	m
 VULKAN_H_	lib/vulkan/vulkan.h	2;"	d
 VULKAN_LIB_PATH	Makefile	/^VULKAN_LIB_PATH := $(VULKAN_SDK_DIR)\/lib$/;"	m
 VULKAN_SDK_DIR	Makefile	/^VULKAN_SDK_DIR := \/home\/al\/VulkanSDK\/1.0.21.1\/x86_64$/;"	m
+VULKAN_UTILS_H	inc/vulkan_utils.h	2;"	d
 Version	lib/vulkan/spirv.hpp	/^static const unsigned int Version = 0x00010100;$/;"	m	namespace:spv
 Vertex	inc/quad.h	/^	struct Vertex {$/;"	s	class:Quad
 Vertex	inc/vulkan_manager.h	/^	struct Vertex {$/;"	s	class:VulkanManager
@@ -4311,9 +4312,10 @@ VkXcbSurfaceCreateInfoKHR	lib/vulkan/vulkan.h	/^} VkXcbSurfaceCreateInfoKHR;$/;"
 VkXlibSurfaceCreateFlagsKHR	lib/vulkan/vulkan.h	/^typedef VkFlags VkXlibSurfaceCreateFlagsKHR;$/;"	t
 VkXlibSurfaceCreateInfoKHR	lib/vulkan/vulkan.h	/^typedef struct VkXlibSurfaceCreateInfoKHR {$/;"	s
 VkXlibSurfaceCreateInfoKHR	lib/vulkan/vulkan.h	/^} VkXlibSurfaceCreateInfoKHR;$/;"	t	typeref:struct:VkXlibSurfaceCreateInfoKHR
-VulkanDebugManager	inc/vulkan_debug_manager.h	/^class VulkanDebugManager {$/;"	c
 VulkanManager	inc/vulkan_manager.h	/^class VulkanManager { $/;"	c
 VulkanManager	src/vulkan_manager.cpp	/^VulkanManager::VulkanManager(const Window& window):$/;"	f	class:VulkanManager
+VulkanPipelineBuilder	inc/vulkan_pipeline_builder.h	/^class VulkanPipelineBuilder {$/;"	c
+VulkanUtils	inc/vulkan_utils.h	/^class VulkanUtils {$/;"	c
 WaitForFences	lib/vulkan/vk_layer.h	/^    PFN_vkWaitForFences WaitForFences;$/;"	m	struct:VkLayerDispatchTable_
 Window	inc/window.h	/^class Window {$/;"	c
 Window	src/window.cpp	/^Window::Window():$/;"	f	class:Window
@@ -5386,6 +5388,8 @@ getTransfersQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::g
 getVkDevice	src/vulkan_manager.cpp	/^const VkDevice& VulkanManager::getVkDevice() const $/;"	f	class:VulkanManager
 getVkExtensionProperties	src/vulkan_manager.cpp	/^std::vector<VkExtensionProperties> VulkanManager::getVkExtensionProperties() $/;"	f	class:VulkanManager
 getVkExtensionPropertyNames	src/vulkan_manager.cpp	/^std::vector<std::string> VulkanManager::getVkExtensionPropertyNames(std::vector<VkExtensionProperties>& vkExtensionProperties)$/;"	f	class:VulkanManager
+getVkResultString	src/vulkan_utils.cpp	/^const char* VulkanUtils::getVkResultString(VkResult result)$/;"	f	class:VulkanUtils
+getVkResultString	src/vulkan_utils.cpp	/^const char* VulkanUtils::getVkResultString(int result)$/;"	f	class:VulkanUtils
 getVulkanManager	src/engine.cpp	/^VulkanManager& Engine::getVulkanManager()$/;"	f	class:Engine
 getWidth	src/window.cpp	/^unsigned Window::getWidth() const  $/;"	f	class:Window
 getWindow	src/engine.cpp	/^Window& Engine::getWindow()$/;"	f	class:Engine
@@ -7282,8 +7286,6 @@ s	lib/stb/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon60
 s	lib/stb/stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon66
 sDeviceExtensions	inc/vulkan_manager.h	/^	static const std::vector<const char*> sDeviceExtensions;$/;"	m	class:VulkanManager
 sDeviceExtensions	src/vulkan_manager.cpp	/^const std::vector<const char*> VulkanManager::sDeviceExtensions = {$/;"	m	class:VulkanManager	file:
-sGetVkResultString	src/vulkan_manager.cpp	/^const char* VulkanManager::sGetVkResultString(VkResult result) {$/;"	f	class:VulkanManager
-sGetVkResultString	src/vulkan_manager.cpp	/^const char* VulkanManager::sGetVkResultString(int result) {$/;"	f	class:VulkanManager
 sType	lib/vulkan/vk_layer.h	/^    VkStructureType sType; \/\/ VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO$/;"	m	struct:__anon53
 sType	lib/vulkan/vk_layer.h	/^    VkStructureType sType; \/\/ VK_STRUCTURE_TYPE_LOADER_INSTANCE_CREATE_INFO$/;"	m	struct:__anon51
 sType	lib/vulkan/vulkan.h	/^    VkStructureType                                  sType;$/;"	m	struct:VkGraphicsPipelineCreateInfo

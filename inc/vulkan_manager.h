@@ -16,6 +16,7 @@
 #include "window.h"
 #include "device_queue_indices.h"
 #include "file_manager.h"
+#include "vulkan_utils.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
@@ -61,9 +62,6 @@ public:
 	std::vector<VkExtensionProperties> getVkExtensionProperties();
 	std::vector<std::string> getVkExtensionPropertyNames(std::vector<VkExtensionProperties>& extensionProperties);
 	std::vector<const char*> getExtensionNames();
-	
-	static const char* sGetVkResultString(int result);
-	static const char* sGetVkResultString(VkResult result);
 
 private:
 	DeviceQueueIndicies getDeviceQueueFamilyIndices(const VkPhysicalDevice& physicalDevice);
@@ -183,7 +181,7 @@ private:
 	do { \
 		char str[128]; \
 		int resultCode = static_cast<int>(result); \
-		sprintf(str, #text " VkResult: %s (code: %d)", VulkanManager::sGetVkResultString(resultCode), resultCode); \
+		sprintf(str, #text " VkResult: %s (code: %d)", VulkanUtils::getVkResultString(resultCode), resultCode); \
 		throw std::runtime_error(str); \
 	} while (0)
 
