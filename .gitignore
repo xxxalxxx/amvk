@@ -1,9 +1,6 @@
-# .*.swp
-# .*.swo
-# .*.sw*
-bin/
-obj/
-res/
+./bin/
+./obj/
+./res/
 *.d
 *.o
 
