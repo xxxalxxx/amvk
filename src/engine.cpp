@@ -36,10 +36,22 @@ void Engine::init()
 	mVulkanManager.createSwapChain(mWindow);
 	mVulkanManager.createImageViews();
 	mVulkanManager.createRenderPass();
+	mVulkanManager.createDescriptorSetLayout();
 	mVulkanManager.createPipeline();
 	mVulkanManager.createCommandPool();
 
 	mVulkanManager.createFramebuffers();
+
+	mVulkanManager.createTextureImage();
+	mVulkanManager.createTextureImageView();
+	mVulkanManager.createTextureSampler();
+	mVulkanManager.createVertexBuffer();
+	mVulkanManager.createIndexBuffer();
+	mVulkanManager.createUniformBuffer();
+	mVulkanManager.createDescriptorPool();
+	mVulkanManager.createDescriptorSet();
+
+
 	mVulkanManager.createCommandBuffers();
 	mVulkanManager.createSemaphores();
 	LOG("INIT SUCCESSFUL");

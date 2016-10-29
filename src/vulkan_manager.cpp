@@ -432,7 +432,6 @@ void VulkanManager::createImageViews()
 
 void VulkanManager::createRenderPass()
 {
-
 	VkAttachmentDescription att = {};
 	att.format = mSwapChainImageFormat;
 	att.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -499,8 +498,8 @@ void VulkanManager::createRenderPass()
 
 void VulkanManager::createPipeline()
 {
-	createDescriptorSetLayout();
-
+	VulkanPipelineCreator pc;
+	
 	FileManager& fileManager = FileManager::getInstance();
 	auto vertShaderSrc = fileManager.readShader("shader.vert");
 	auto fragShaderSrc = fileManager.readShader("shader.frag");
@@ -508,17 +507,8 @@ void VulkanManager::createPipeline()
 	createShaderModule(vertShaderSrc, vertShaderModule);
 	createShaderModule(fragShaderSrc, fragShaderModule);
 
-	VkPipelineShaderStageCreateInfo vertStageCreateInfo = {};
-	vertStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-	vertStageCreateInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-	vertStageCreateInfo.module = vertShaderModule;
-	vertStageCreateInfo.pName = "main";
-
-	VkPipelineShaderStageCreateInfo fragStageCreateInfo = {};
-	fragStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-	fragStageCreateInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-	fragStageCreateInfo.module = fragShaderModule;
-	fragStageCreateInfo.pName = "main";
+	VkPipelineShaderStageCreateInfo vertStageCreateInfo = pc.shaderStage(vertShaderModule, VK_SHADER_STAGE_VERTEX_BIT);
+	VkPipelineShaderStageCreateInfo fragStageCreateInfo = pc.shaderStage(fragShaderModule, VK_SHADER_STAGE_FRAGMENT_BIT);
 
 	VkPipelineShaderStageCreateInfo stages[] = {
 		vertStageCreateInfo,
@@ -535,98 +525,26 @@ void VulkanManager::createPipeline()
 	vertexInputInfo.pVertexBindingDescriptions = &bindingDesc;
 	vertexInputInfo.pVertexAttributeDescriptions = attrDesc.data();
 
-	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = {};
-	assemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-	assemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-	assemblyInfo.primitiveRestartEnable = VK_FALSE;
-	
+	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = pc.inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
 	LOG("EXTENT W:" << mSwapChainExtent.width << " H:" << mSwapChainExtent.height);
 	
 
-	/*
-	VkViewport viewport = {};
-	viewport.x = 0.0f;
-	viewport.y = 0.0f;
-	viewport.width = (float) mSwapChainExtent.width;
-	viewport.height = (float) mSwapChainExtent.height;
-	viewport.minDepth = 0.0f;
-	viewport.maxDepth = 1.0f;
 
-	
-	VkRect2D scissor = {};
-	scissor.offset = {0, 0};
-	scissor.extent = mSwapChainExtent;
-
-	VkPipelineViewportStateCreateInfo viewportState = {};
-	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;	
-	viewportState.viewportCount = 1;
-	viewportState.pViewports = &viewport;
-	viewportState.scissorCount = 1;
-	viewportState.pScissors = &scissor;
-	*/
-
-	VkPipelineViewportStateCreateInfo viewportState;
-	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-	viewportState.pNext = nullptr;
-	viewportState.flags = 0;
-	viewportState.viewportCount = 1;
-	viewportState.pViewports = nullptr;
-	viewportState.scissorCount = 1;
-	viewportState.pScissors = nullptr;
+	VkPipelineViewportStateCreateInfo viewportState = pc.viewportStateDynamic();
 
 	VkDynamicState dynamicStates[] = {
 		VK_DYNAMIC_STATE_VIEWPORT,
 		VK_DYNAMIC_STATE_SCISSOR
 	};
 
-	VkPipelineDynamicStateCreateInfo dynamicInfo;
-	dynamicInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-	dynamicInfo.pNext = nullptr;
-	dynamicInfo.flags = 0;
-	dynamicInfo.dynamicStateCount = ARRAY_SIZE(dynamicStates);
-	dynamicInfo.pDynamicStates = dynamicStates;
+	VkPipelineDynamicStateCreateInfo dynamicInfo = pc.dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
 
-	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
-	rasterizationState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-	rasterizationState.depthClampEnable = VK_FALSE;
-	rasterizationState.rasterizerDiscardEnable = VK_FALSE;
-	rasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
-	rasterizationState.lineWidth = 1.0f;
-	rasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
-	rasterizationState.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-	rasterizationState.depthBiasEnable = VK_FALSE;
+	VkPipelineRasterizationStateCreateInfo rasterizationState = pc.rasterizationStateCullBackCCW();
+	VkPipelineDepthStencilStateCreateInfo depthStencil = pc.depthStencilStateDepthLessNoStencil();
+	VkPipelineMultisampleStateCreateInfo multisampleState = pc.multisampleStateNoMultisampleNoSampleShading();
+	VkPipelineColorBlendAttachmentState blendAttachmentState = pc.blendAttachmentStateDisabled();
 
-
-	VkPipelineDepthStencilStateCreateInfo depthStencil = {};
-	depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-	depthStencil.depthTestEnable = VK_TRUE;
-	depthStencil.depthWriteEnable = VK_TRUE;
-	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
-	depthStencil.depthBoundsTestEnable = VK_FALSE;
-	depthStencil.stencilTestEnable = VK_FALSE;
-
-	VkPipelineMultisampleStateCreateInfo multisampleState = {};
-	multisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-	multisampleState.sampleShadingEnable = VK_FALSE;
-	multisampleState.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-	
-	VkPipelineColorBlendAttachmentState blendAttachmentState = {};
-	blendAttachmentState.colorWriteMask = VK_COLOR_COMPONENT_R_BIT 
-										| VK_COLOR_COMPONENT_G_BIT 
-										| VK_COLOR_COMPONENT_B_BIT 
-										| VK_COLOR_COMPONENT_A_BIT;
-	blendAttachmentState.blendEnable = VK_FALSE;
-
-	VkPipelineColorBlendStateCreateInfo blendState = {};
-	blendState.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-	blendState.logicOpEnable = VK_FALSE;
-	blendState.logicOp = VK_LOGIC_OP_COPY;
-	blendState.attachmentCount = 1;
-	blendState.pAttachments = &blendAttachmentState;
-	blendState.blendConstants[0] = 0.0f;
-	blendState.blendConstants[1] = 0.0f;
-	blendState.blendConstants[2] = 0.0f;
-	blendState.blendConstants[3] = 0.0f;
+	VkPipelineColorBlendStateCreateInfo blendState = pc.blendStateDisabled(&blendAttachmentState, 1); 
 
 	VkDescriptorSetLayout setLayouts[] = { mVkDescriptorSetLayout };
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
@@ -707,14 +625,6 @@ void VulkanManager::createCommandPool()
 
 void VulkanManager::createCommandBuffers()
 {
-	createTextureImage();
-	createTextureImageView();
-	createTextureSampler();
-	createVertexBuffer();
-	createIndexBuffer();
-	createUniformBuffer();
-	createDescriptorPool();
-	createDescriptorSet();
 
 	if (!mVkCommandBuffers.empty())
 		vkFreeCommandBuffers(mVkDevice, mVkCommandPool, mVkCommandBuffers.size(), mVkCommandBuffers.data());
@@ -762,7 +672,6 @@ void VulkanManager::createCommandBuffers()
 		viewport.height = (float) mSwapChainExtent.height;
 		viewport.minDepth = 0.0f;
 		viewport.maxDepth = 1.0f;
-
 		
 		VkRect2D scissor = {};
 		scissor.offset = {0, 0};
@@ -1128,7 +1037,6 @@ void VulkanManager::updateUniformBuffer()
 	ubo.model = glm::rotate(glm::mat4(), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	ubo.proj = glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
-	ubo.proj[1][1] *= -1;
 	
 	void* data;
 	vkMapMemory(mVkDevice, uniformStagingBufferMem, 0, sizeof(ubo), 0, &data);

@@ -3,6 +3,33 @@
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_ZERO_TO_ONE
+#define GLM_VULKAN_PERSPECTIVE
+
+#define VK_THROW_RESULT_ERROR(text, result) \
+	do { \
+		char str[128]; \
+		int resultCode = static_cast<int>(result); \
+		sprintf(str, #text " VkResult: %s (code: %d)", VulkanUtils::getVkResultString(resultCode), resultCode); \
+		throw std::runtime_error(str); \
+	} while (0)
+
+#define VK_CHECK_RESULT(f)  \
+	do { \
+		VkResult result = f; \
+		if (result != VK_SUCCESS) \
+			VK_THROW_RESULT_ERROR(f, result); \
+	} while (0)
+
+#define VK_CALL_IPROC(instance, func, ...) \
+	do { \
+		auto __##func = (PFN_##func) vkGetInstanceProcAddr(instance, #func); \
+		if (!__##func) \
+			throw std::runtime_error("Failed to get Vulkan instance procedure for " #func); \
+		if (__##func(__VA_ARGS__) != VK_SUCCESS) \
+		   throw std::runtime_error("Failed to call iproc for " #func); \
+	} while (0)
+
+#endif
 
 #include <limits>
 #include <cstring>
@@ -17,6 +44,7 @@
 #include "device_queue_indices.h"
 #include "file_manager.h"
 #include "vulkan_utils.h"
+#include "vulkan_pipeline_creator.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
@@ -36,9 +64,24 @@ public:
 	void createSwapChain(const Window& window);
 	void createImageViews();
 	void createRenderPass();
+	void createDescriptorSetLayout();
+
 	void createPipeline();
 	void createFramebuffers();
 	void createCommandPool();
+
+	void createTextureImage();
+	void createTextureImageView();
+	void createTextureSampler();
+
+	void createVertexBuffer();
+	void createIndexBuffer();
+
+	void createUniformBuffer();
+	void createDescriptorPool();
+	void createDescriptorSet();
+
+
 	void createCommandBuffers();
 	void createSemaphores();
 	
@@ -114,7 +157,6 @@ private:
 	static const std::vector<const char*> sDeviceExtensions;
 	static const std::vector<const char*> sValidationLayers;
 
-
 	struct Vertex {
 		glm::vec3 pos;
 		glm::vec3 color;
@@ -132,9 +174,6 @@ private:
 	void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
 	void copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height);
 	void createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkImageView& imageView);
-	void createTextureImage();
-	void createTextureImageView();
-	void createTextureSampler();
 
 	VkCommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(VkCommandBuffer commandBuf);
@@ -144,10 +183,6 @@ private:
 	VkSampler mTextureSampler;
 
 
-
-	void createVertexBuffer();
-	void createIndexBuffer();
-
 	VkVertexInputBindingDescription getBindingDesc();
 	std::array<VkVertexInputAttributeDescription, 3> getAttrDesc();
 
@@ -156,10 +191,6 @@ private:
 	VkDeviceMemory vertexBufferMem, indexBufferMem, uniformBufferMem, uniformStagingBufferMem;
 	
 
-	void createDescriptorSetLayout();
-	void createUniformBuffer();
-	void createDescriptorPool();
-	void createDescriptorSet();
 
 	VkDescriptorSetLayout mVkDescriptorSetLayout;
 	VkDescriptorPool mVkDescriptorPool;
@@ -177,28 +208,3 @@ private:
 	VkImageView mDepthImageView;
 };
 
-#define VK_THROW_RESULT_ERROR(text, result) \
-	do { \
-		char str[128]; \
-		int resultCode = static_cast<int>(result); \
-		sprintf(str, #text " VkResult: %s (code: %d)", VulkanUtils::getVkResultString(resultCode), resultCode); \
-		throw std::runtime_error(str); \
-	} while (0)
-
-#define VK_CHECK_RESULT(f)  \
-	do { \
-		VkResult result = f; \
-		if (result != VK_SUCCESS) \
-			VK_THROW_RESULT_ERROR(f, result); \
-	} while (0)
-
-#define VK_CALL_IPROC(instance, func, ...) \
-	do { \
-		auto __##func = (PFN_##func) vkGetInstanceProcAddr(instance, #func); \
-		if (!__##func) \
-			throw std::runtime_error("Failed to get Vulkan instance procedure for " #func); \
-		if (__##func(__VA_ARGS__) != VK_SUCCESS) \
-		   throw std::runtime_error("Failed to call iproc for " #func); \
-	} while (0)
-
-#endif

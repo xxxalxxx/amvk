@@ -296,7 +296,11 @@ namespace glm
 
 		tmat4x4<T, defaultp> Result(static_cast<T>(0));
 		Result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
-		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
+# ifdef GLM_VULKAN_PERSPECTIVE
+		Result[1][1] = - static_cast<T>(1) / (tanHalfFovy);
+# else
+ 		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
+#endif
 		Result[2][3] = - static_cast<T>(1);
 
 #		if GLM_DEPTH_CLIP_SPACE == GLM_DEPTH_ZERO_TO_ONE
@@ -324,7 +328,11 @@ namespace glm
 		
 		tmat4x4<T, defaultp> Result(static_cast<T>(0));
 		Result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
+#ifdef GLM_VULKAN_PERSPECTIVE
+		Result[1][1] = - static_cast<T>(1) / (tanHalfFovy);
+#else 
 		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
+#endif
 		Result[2][3] = static_cast<T>(1);
 
 #		if GLM_DEPTH_CLIP_SPACE == GLM_DEPTH_ZERO_TO_ONE
