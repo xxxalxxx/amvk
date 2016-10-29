@@ -29,7 +29,6 @@
 		   throw std::runtime_error("Failed to call iproc for " #func); \
 	} while (0)
 
-#endif
 
 #include <limits>
 #include <cstring>
@@ -41,6 +40,7 @@
 
 #include "macro.h"
 #include "window.h"
+#include "timer.h"
 #include "device_queue_indices.h"
 #include "file_manager.h"
 #include "vulkan_utils.h"
@@ -82,12 +82,11 @@ public:
 	void createDescriptorPool();
 	void createDescriptorSet();
 
-
 	void createCommandBuffers();
 	void createSemaphores();
 	
-	void updateUniformBuffer();
-	void updateCommandBuffers();
+	void updateUniformBuffer(const Timer& timer);
+	void updateCommandBuffers(const Timer& timer);
 	void draw();
 	
 	void waitIdle();
@@ -199,7 +198,6 @@ private:
 	VkDeviceMemory vertexBufferMem, indexBufferMem, uniformBufferMem, uniformStagingBufferMem;
 	
 
-
 	VkDescriptorSetLayout mVkDescriptorSetLayout;
 	VkDescriptorPool mVkDescriptorPool;
 	VkDescriptorSet mVkDescriptorSet;
@@ -214,3 +212,4 @@ private:
 	VkImageView mDepthImageView;
 };
 
+#endif

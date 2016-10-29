@@ -13,11 +13,12 @@ int main() {
 	Window& window = engine.getWindow();
 	InputManager& inputManager = window.getInputManager();
 	VulkanManager& vulkanManager = engine.getVulkanManager();
-
+	Timer& timer = engine.getTimer();
 	while (window.isOpen()) {
 		inputManager.pollEvents();
-		vulkanManager.updateUniformBuffer();
-		vulkanManager.updateCommandBuffers();
+		timer.tick();
+		vulkanManager.updateUniformBuffer(timer);
+		vulkanManager.updateCommandBuffers(timer);
 		vulkanManager.draw();
 	}
 	vulkanManager.waitIdle();

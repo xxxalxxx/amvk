@@ -30,6 +30,9 @@ public:
 
 	VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW();
 
+	VkPipelineLayoutCreateInfo layout(VkDescriptorSetLayout* setLayouts, uint32_t setLayoutCount,
+			VkPushConstantRange* pushConstantRanges,uint32_t pushConstantRangeCount);
+
 private:
 };
 

@@ -74,3 +74,8 @@ VulkanManager& Engine::getVulkanManager()
 {
 	return mVulkanManager;
 }
+
+Timer& Engine::getTimer()
+{
+	return mTimer;
+}

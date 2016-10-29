@@ -7,6 +7,7 @@
 #include "task_manager.h"
 #include "vulkan_manager.h"
 #include "window.h"
+#include "timer.h"
 
 class Engine {
 public:
@@ -17,11 +18,12 @@ public:
 	Window& getWindow();
 	TaskManager& getTaskManager();
 	VulkanManager& getVulkanManager();
-
+	Timer& getTimer();
 private:
 	Window mWindow;
 	TaskManager mTaskManager;
 	VulkanManager mVulkanManager;
+	Timer mTimer;
 };
 
 

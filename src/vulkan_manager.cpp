@@ -559,12 +559,7 @@ void VulkanManager::createPipeline()
 	pushConstantRange.offset = 0;
 	pushConstantRange.size = sizeof(PushConstants); 
 
-	VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
-	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 1;
-	pipelineLayoutInfo.pSetLayouts = setLayouts;
-	pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
-	pipelineLayoutInfo.pushConstantRangeCount = 1;
+	VkPipelineLayoutCreateInfo pipelineLayoutInfo = pc.layout(setLayouts, 1, &pushConstantRange, 1);
 
 	VK_CHECK_RESULT(vkCreatePipelineLayout(mVkDevice, &pipelineLayoutInfo, nullptr, &mVkPipelineLayout));
 
@@ -649,10 +644,10 @@ void VulkanManager::createCommandBuffers()
 
 	LOG("COMMAND POOL ALLOCATED");
 
-	updateCommandBuffers();
+//	updateCommandBuffers();
 }
 
-void VulkanManager::updateCommandBuffers() 
+void VulkanManager::updateCommandBuffers(const Timer& timer) 
 {
 	VkClearValue clearValues[] = {
 		{0.4f, 0.1f, 0.1f, 1.0f}, // VkClearColorValue color; 
@@ -671,8 +666,6 @@ void VulkanManager::updateCommandBuffers()
 	renderPassBeginInfo.clearValueCount = ARRAY_SIZE(clearValues);
 	renderPassBeginInfo.pClearValues = clearValues;
 	
-//	LOG("ext w:" <<mSwapChainExtent.width << " h:" << mSwapChainExtent.height);
-
 	for (size_t i = 0; i < mVkCommandBuffers.size(); ++i) {
 		VK_CHECK_RESULT(vkBeginCommandBuffer(mVkCommandBuffers[i], &beginInfo));
 
@@ -681,12 +674,8 @@ void VulkanManager::updateCommandBuffers()
 		vkCmdBeginRenderPass(mVkCommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 		vkCmdBindPipeline(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mVkPipeline);
 	
-		static auto tStart = std::chrono::high_resolution_clock::now();
-		auto currentTime = std::chrono::high_resolution_clock::now();
-		float time = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - tStart).count() / 1000.0f;
-		
 		PushConstants pushConstants;
-		pushConstants.model = glm::rotate(glm::mat4(), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		pushConstants.model = glm::rotate(glm::mat4(), (float) timer.total() * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		pushConstants.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		pushConstants.proj = glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
 
@@ -1094,7 +1083,7 @@ void VulkanManager::createDescriptorPool()
 	VK_CHECK_RESULT(vkCreateDescriptorPool(mVkDevice, &poolInfo, nullptr, &mVkDescriptorPool));
 }
 
-void VulkanManager::updateUniformBuffer()
+void VulkanManager::updateUniformBuffer(const Timer& timer)
 {
     static auto startTime = std::chrono::high_resolution_clock::now();
 	auto currentTime = std::chrono::high_resolution_clock::now();
@@ -1241,7 +1230,7 @@ void VulkanManager::createTextureImage()
 	int w, h, channels;
 	stbi_uc* pixels = stbi_load(path.c_str(), &w, &h, &channels, STBI_rgb_alpha);
 
-	VkDeviceSize imageSize = w * h * 4;
+	VkDeviceSize imageSize = w * h * 4; // 4 rbga channels
 
 	if (!pixels)
 		throw std::runtime_error("Unable to load image");
@@ -1290,7 +1279,6 @@ void VulkanManager::createTextureImage()
 	vkDestroyImage(mVkDevice, stagingImg, nullptr);
 	vkFreeMemory(mVkDevice, stagingImageMem, nullptr);
 }
-
 
 void VulkanManager::createImageView(
 		VkImage image, 
@@ -1373,10 +1361,7 @@ void VulkanManager::endSingleTimeCommands(VkCommandBuffer cmdBuf)
 	vkFreeCommandBuffers(mVkDevice, mVkCommandPool, 1, &cmdBuf);
 }
 
-
-
 VkFormat VulkanManager::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) 
-
 {
 	for (VkFormat format : candidates) {
 		VkFormatProperties props;
@@ -1392,7 +1377,6 @@ VkFormat VulkanManager::findSupportedFormat(const std::vector<VkFormat>& candida
 	throw new std::runtime_error("failed to find supported format");
 }
 
-
 VkFormat VulkanManager::findDepthFormat()
 {
 	return findSupportedFormat(
@@ -1400,8 +1384,6 @@ VkFormat VulkanManager::findDepthFormat()
 			VK_IMAGE_TILING_OPTIMAL,
 			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
 }
-
-
 
 bool VulkanManager::hasStencilComponent(VkFormat format) 
 {

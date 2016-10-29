@@ -150,3 +150,19 @@ VkPipelineRasterizationStateCreateInfo VulkanPipelineCreator::rasterizationState
 	return rasterizationState;
 }
 
+VkPipelineLayoutCreateInfo VulkanPipelineCreator::layout(
+		VkDescriptorSetLayout* setLayouts, 
+		uint32_t setLayoutCount,
+		VkPushConstantRange* pushConstantRanges,
+		uint32_t pushConstantRangeCount)
+{
+	VkPipelineLayoutCreateInfo pipelineLayoutInfo;
+	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	pipelineLayoutInfo.pNext = nullptr;
+	pipelineLayoutInfo.setLayoutCount = setLayoutCount;
+	pipelineLayoutInfo.pSetLayouts = setLayouts;
+	pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges;
+	pipelineLayoutInfo.pushConstantRangeCount = pushConstantRangeCount;
+
+	return pipelineLayoutInfo;
+}
