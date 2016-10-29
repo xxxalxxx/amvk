@@ -11,9 +11,6 @@ const std::vector<const char*> VulkanManager::sValidationLayers = {
 	"VK_LAYER_LUNARG_standard_validation",
 };
 
-
-
-
 VulkanManager::VulkanManager(const Window& window):
 	mVkPhysicalDevice(VK_NULL_HANDLE),
 	mVkSwapChain(VK_NULL_HANDLE),
@@ -408,16 +405,15 @@ VkPresentModeKHR VulkanManager::getPresentMode(const std::vector<VkPresentModeKH
 
 VkExtent2D VulkanManager::getExtent(VkSurfaceCapabilitiesKHR& surfaceCapabilities, const Window& window)
 {
-	if (surfaceCapabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
-		return surfaceCapabilities.currentExtent;
-	} else {
-		VkExtent2D extent;
-		extent.width = std::max(surfaceCapabilities.minImageExtent.width, 
-								std::min(window.getWidth(), surfaceCapabilities.maxImageExtent.width));
-		extent.height = std::max(surfaceCapabilities.minImageExtent.height, 
-								 std::min(window.getHeight(), surfaceCapabilities.maxImageExtent.height));
-		return extent;
-	}
+	VkExtent2D extent;
+	extent.width = std::max(
+			surfaceCapabilities.minImageExtent.width, 
+			std::min(window.getWidth(), surfaceCapabilities.maxImageExtent.width));
+	extent.height = std::max(
+			surfaceCapabilities.minImageExtent.height, 
+			std::min(window.getHeight(), surfaceCapabilities.maxImageExtent.height));
+	
+	return extent;
 }
 
 void VulkanManager::createImageViews() 
@@ -606,8 +602,6 @@ void VulkanManager::createShaderModule(const std::vector<char>& shaderSpvCode, V
 
 void VulkanManager::createFramebuffers()
 {
-	createDepthResources();
-
 	mSwapChainFramebuffers.resize(mSwapChainImageViews.size());
 
 	VkFramebufferCreateInfo createInfo = {};
@@ -636,15 +630,13 @@ void VulkanManager::createCommandPool()
 	VkCommandPoolCreateInfo createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	createInfo.queueFamilyIndex = mDeviceQueueIndices.getGraphicsQueueIndex();
+	createInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 	VK_CHECK_RESULT(vkCreateCommandPool(mVkDevice, &createInfo, nullptr, &mVkCommandPool));
 	LOG("COMMAND BUFFER CREATED");
 }
 
 void VulkanManager::createCommandBuffers()
 {
-	if (!mVkCommandBuffers.empty())
-		vkFreeCommandBuffers(mVkDevice, mVkCommandPool, mVkCommandBuffers.size(), mVkCommandBuffers.data());
-
 	mVkCommandBuffers.resize(mSwapChainFramebuffers.size());
 
 	VkCommandBufferAllocateInfo allocInfo = {};
@@ -657,34 +649,55 @@ void VulkanManager::createCommandBuffers()
 
 	LOG("COMMAND POOL ALLOCATED");
 
+	updateCommandBuffers();
+}
+
+void VulkanManager::updateCommandBuffers() 
+{
 	VkClearValue clearValues[] = {
 		{0.4f, 0.1f, 0.1f, 1.0f}, // VkClearColorValue color; 
 		{1.0f, 0}				  // VkClearDepthStencilValue depthStencil 
 	};
 
+	VkCommandBufferBeginInfo beginInfo = {};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+
+	VkRenderPassBeginInfo renderPassBeginInfo = {};
+	renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	renderPassBeginInfo.renderPass = mVkRenderPass;
+	renderPassBeginInfo.renderArea.offset = {0, 0};
+	renderPassBeginInfo.renderArea.extent = mSwapChainExtent;
+	renderPassBeginInfo.clearValueCount = ARRAY_SIZE(clearValues);
+	renderPassBeginInfo.pClearValues = clearValues;
+	
+//	LOG("ext w:" <<mSwapChainExtent.width << " h:" << mSwapChainExtent.height);
 
 	for (size_t i = 0; i < mVkCommandBuffers.size(); ++i) {
-		VkCommandBufferBeginInfo beginInfo = {};
-		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-		
 		VK_CHECK_RESULT(vkBeginCommandBuffer(mVkCommandBuffers[i], &beginInfo));
 
-
-		LOG("IN COMMAND BUFFER");
-
-		VkRenderPassBeginInfo renderPassBeginInfo = {};
-		renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		renderPassBeginInfo.renderPass = mVkRenderPass;
 		renderPassBeginInfo.framebuffer = mSwapChainFramebuffers[i];
-		renderPassBeginInfo.renderArea.offset = {0, 0};
-		renderPassBeginInfo.renderArea.extent = mSwapChainExtent;
-		renderPassBeginInfo.clearValueCount = ARRAY_SIZE(clearValues);
-		renderPassBeginInfo.pClearValues = clearValues;
-
+		
 		vkCmdBeginRenderPass(mVkCommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 		vkCmdBindPipeline(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mVkPipeline);
+	
+		static auto tStart = std::chrono::high_resolution_clock::now();
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		float time = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - tStart).count() / 1000.0f;
 		
+		PushConstants pushConstants;
+		pushConstants.model = glm::rotate(glm::mat4(), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		pushConstants.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		pushConstants.proj = glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
+
+		vkCmdPushConstants(
+				mVkCommandBuffers[i], 
+				mVkPipelineLayout, 
+				VK_SHADER_STAGE_VERTEX_BIT, 
+				0,
+				sizeof(PushConstants),
+				&pushConstants);
+
 		VkViewport viewport;
 		viewport.x = 0.0f;
 		viewport.y = 0.0f;
@@ -700,22 +713,25 @@ void VulkanManager::createCommandBuffers()
 		vkCmdSetViewport(mVkCommandBuffers[i], 0, 1, &viewport);
 		vkCmdSetScissor(mVkCommandBuffers[i], 0, 1, &scissor);
 		
-		VkBuffer vertBuf[] = { vertexBuffer };
-		VkDeviceSize offsets[] = { 0 };
+		VkBuffer vertBuf[] = {vertexBuffer};
+		VkDeviceSize offsets[] = {0};
 		vkCmdBindVertexBuffers(mVkCommandBuffers[i], 0, 1, vertBuf, offsets);
 		vkCmdBindIndexBuffer(mVkCommandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT32);
-		vkCmdBindDescriptorSets(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mVkPipelineLayout, 0, 1, &mVkDescriptorSet, 0, nullptr);
+		vkCmdBindDescriptorSets(
+				mVkCommandBuffers[i], 
+				VK_PIPELINE_BIND_POINT_GRAPHICS, 
+				mVkPipelineLayout, 
+				0, 
+				1, 
+				&mVkDescriptorSet, 
+				0, 
+				nullptr);
 
 		vkCmdDrawIndexed(mVkCommandBuffers[i], mNumIndices, 1, 0, 0, 0);
 		vkCmdEndRenderPass(mVkCommandBuffers[i]);
 
 		VK_CHECK_RESULT(vkEndCommandBuffer(mVkCommandBuffers[i]));
 	}
-}
-
-void VulkanManager::updateCommandBuffers() 
-{
-
 }
 
 void VulkanManager::createSemaphores()
@@ -780,8 +796,27 @@ void VulkanManager::waitIdle()
 
 void VulkanManager::recreateSwapChain()
 {
-	waitIdle();
+	vkQueueWaitIdle(mGraphicsQueue);
+	vkDeviceWaitIdle(mVkDevice);
+
+	vkFreeCommandBuffers(mVkDevice, mVkCommandPool, (uint32_t) mVkCommandBuffers.size(), mVkCommandBuffers.data());
 	
+	for (auto& framebuffer : mSwapChainFramebuffers)
+		vkDestroyFramebuffer(mVkDevice, framebuffer, nullptr);
+
+	vkDestroyImageView(mVkDevice, mDepthImageView, nullptr);
+	vkDestroyImage(mVkDevice, mDepthImage, nullptr);
+	vkFreeMemory(mVkDevice, mDepthImageMem, nullptr);
+	
+	vkDestroyPipeline(mVkDevice, mVkPipeline, nullptr);
+	vkDestroyRenderPass(mVkDevice, mVkRenderPass, nullptr);
+
+	for (size_t i = 0; i < mSwapChainImages.size(); ++i) {
+		vkDestroyImageView(mVkDevice, mSwapChainImageViews[i], nullptr);
+	}
+
+	vkDestroySwapchainKHR(mVkDevice, mVkSwapChain, nullptr);
+
 	createSwapChain(mWindow);
     createImageViews();
     createRenderPass();
@@ -816,9 +851,6 @@ void VulkanManager::createBuffer(VkBuffer& buffer,
 	buffInfo.size = size;
 	buffInfo.usage = usage;
 	buffInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	if (buffer != VK_NULL_HANDLE) {
-	
-	}
 
 	VK_CHECK_RESULT(vkCreateBuffer(mVkDevice, &buffInfo, nullptr, &buffer));
 	
@@ -850,7 +882,6 @@ void VulkanManager::copyBuffer(VkBuffer src, VkBuffer dst, VkDeviceSize size)
 void VulkanManager::createVertexBuffer() 
 {
 	const std::vector<Vertex> vertices = {
-
 	    {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
 		{{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
 		{{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
@@ -866,22 +897,28 @@ void VulkanManager::createVertexBuffer()
 	VkDeviceSize bufSize = sizeof(vertices[0]) * vertices.size();
 	VkBuffer stagingBuf;
 	VkDeviceMemory stagingBufDeviceMem;
-	createBuffer(stagingBuf, 
-								bufSize, 
-								stagingBufDeviceMem, 
-								VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
-								VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);	
+	createBuffer(
+			stagingBuf, 
+			bufSize, 
+			stagingBufDeviceMem, 
+			VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
 	void* data;
 	vkMapMemory(mVkDevice, stagingBufDeviceMem, 0, bufSize, 0 , &data);
 	memcpy(data, vertices.data(), (size_t) bufSize);
 	vkUnmapMemory(mVkDevice, stagingBufDeviceMem);
-	createBuffer(vertexBuffer, 
-								bufSize, 
-								vertexBufferMem, 
-								VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-								VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);	
+	createBuffer(
+			vertexBuffer, 
+			bufSize, 
+			vertexBufferMem, 
+			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
 	copyBuffer(stagingBuf, vertexBuffer, bufSize);
+
+	vkDestroyBuffer(mVkDevice, stagingBuf, nullptr);
+	vkFreeMemory(mVkDevice, stagingBufDeviceMem, nullptr);
 }
 
 void VulkanManager::createIndexBuffer()
@@ -899,11 +936,12 @@ void VulkanManager::createIndexBuffer()
 	VkDeviceSize bufSize = sizeof(indices[0]) * indices.size();
 	VkBuffer stagingBuf;
 	VkDeviceMemory stagingBufDeviceMem;
-	createBuffer(stagingBuf, 
-								bufSize, 
-								stagingBufDeviceMem, 
-								VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
-								VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);	
+	createBuffer(
+			stagingBuf, 
+			bufSize, 
+			stagingBufDeviceMem, 
+			VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);	
 	void* data;
 	vkMapMemory(mVkDevice, stagingBufDeviceMem, 0, bufSize, 0 , &data);
 	memcpy(data, indices.data(), (size_t) bufSize);
@@ -914,6 +952,10 @@ void VulkanManager::createIndexBuffer()
 								VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
 								VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);	
 	copyBuffer(stagingBuf, indexBuffer, bufSize);
+
+
+	vkDestroyBuffer(mVkDevice, stagingBuf, nullptr);
+	vkFreeMemory(mVkDevice, stagingBufDeviceMem, nullptr);
 }
 
 
@@ -1146,10 +1188,14 @@ void VulkanManager::copyImage(VkImage srcImage, VkImage dstImage, uint32_t width
 	copy.extent.height = height;
 	copy.extent.depth = 1;
 
-	vkCmdCopyImage(cmdBuf, 
-				   srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-				   dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-				   1, &copy);
+	vkCmdCopyImage(
+			cmdBuf, 
+			srcImage, 
+			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+			dstImage, 
+			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			1, 
+			&copy);
 
 	endSingleTimeCommands(cmdBuf);
 }
@@ -1224,27 +1270,25 @@ void VulkanManager::createTextureImage()
 				VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
 				mTextureImage, mTextureImageMem);
 
-
 	transitionImageLayout(stagingImg,
 						VK_FORMAT_R8G8B8A8_UNORM,
 						VK_IMAGE_LAYOUT_PREINITIALIZED, 
 						VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
 
 	transitionImageLayout(mTextureImage, 
-
 			VK_FORMAT_R8G8B8A8_UNORM,
 			VK_IMAGE_LAYOUT_PREINITIALIZED, 
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 	
 	copyImage(stagingImg, mTextureImage, w, h);
 
-
 	transitionImageLayout(mTextureImage, 
-
 			VK_FORMAT_R8G8B8A8_UNORM,
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
 			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
+	vkDestroyImage(mVkDevice, stagingImg, nullptr);
+	vkFreeMemory(mVkDevice, stagingImageMem, nullptr);
 }
 
 
@@ -1253,7 +1297,6 @@ void VulkanManager::createImageView(
 		VkFormat format, 
 		VkImageAspectFlags aspectFlags, 
 		VkImageView& imageView)
-
 {
 	VkImageViewCreateInfo viewInfo = {};
 	viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -1273,9 +1316,7 @@ void VulkanManager::createImageView(
 
 void VulkanManager::createTextureImageView()
 {
-
 	createImageView(mTextureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, mTextureImageView);
-
 }
 
 void VulkanManager::createTextureSampler()
@@ -1355,7 +1396,6 @@ VkFormat VulkanManager::findSupportedFormat(const std::vector<VkFormat>& candida
 VkFormat VulkanManager::findDepthFormat()
 {
 	return findSupportedFormat(
-
 			{VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
 			VK_IMAGE_TILING_OPTIMAL,
 			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);

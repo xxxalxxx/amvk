@@ -8,7 +8,7 @@ Window::Window():
 	calcAspect();
 }
 
-Window::Window(unsigned w, unsigned h): 
+Window::Window(uint32_t w, uint32_t h): 
 	mWidth(w), 
 	mHeight(h),
 	mGlfwWindow(nullptr)
@@ -77,19 +77,19 @@ float Window::getAspect() const
 	return mAspect;
 }
 
-void Window::setWidth(unsigned w) 
+void Window::setWidth(uint32_t w) 
 {
 	mWidth = w;
 	calcAspect();
 }
 
-void Window::setHeight(unsigned h) 
+void Window::setHeight(uint32_t h) 
 {
 	mHeight = h;
 	calcAspect();
 }
 
-void Window::setDimens(unsigned w, unsigned h) 
+void Window::setDimens(uint32_t w, uint32_t h) 
 {
 	mWidth = w;
 	mHeight = h;

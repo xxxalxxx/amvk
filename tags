@@ -16,7 +16,7 @@ AMVK_TASK_MANAGER_H	inc/task_manager.h	4;"	d
 AMVK_VULKAN_MANAGER_H	inc/vulkan_manager.h	2;"	d
 AMVK_VULKAN_PIPELINE_CREATOR_H	inc/vulkan_pipeline_creator.h	2;"	d
 AMVK_WINDOW_H	inc/window.h	2;"	d
-ARRAY_SIZE	inc/macro.h	17;"	d
+ARRAY_SIZE	inc/macro.h	13;"	d
 AccessQualifier	lib/vulkan/spirv.hpp	/^enum AccessQualifier {$/;"	g	namespace:spv
 AccessQualifierMax	lib/vulkan/spirv.hpp	/^    AccessQualifierMax = 0x7fffffff,$/;"	e	enum:spv::AccessQualifier
 AccessQualifierReadOnly	lib/vulkan/spirv.hpp	/^    AccessQualifierReadOnly = 0,$/;"	e	enum:spv::AccessQualifier
@@ -1213,7 +1213,7 @@ LAST_CONCRETE	lib/vulkan/libspirv.h	95;"	d
 LAST_VARIABLE	lib/vulkan/libspirv.h	/^  LAST_VARIABLE(SPV_OPERAND_TYPE_VARIABLE_ID_LITERAL_INTEGER),$/;"	e	enum:spv_operand_type_t
 LAST_VARIABLE	lib/vulkan/libspirv.h	174;"	d
 LDLIBS	Makefile	/^LDLIBS=$(shell pkg-config --static --libs glfw3) -L$(VULKAN_LIB_PATH) -lvulkan$/;"	m
-LOG	inc/macro.h	13;"	d
+LOG	inc/macro.h	12;"	d
 LinkageType	lib/vulkan/spirv.hpp	/^enum LinkageType {$/;"	g	namespace:spv
 LinkageTypeExport	lib/vulkan/spirv.hpp	/^    LinkageTypeExport = 0,$/;"	e	enum:spv::LinkageType
 LinkageTypeImport	lib/vulkan/spirv.hpp	/^    LinkageTypeImport = 1,$/;"	e	enum:spv::LinkageType
@@ -1277,7 +1277,6 @@ MergePipelineCaches	lib/vulkan/vk_layer.h	/^    PFN_vkMergePipelineCaches MergeP
 MessageTask	inc/task_manager.h	/^	MessageTask(int id): mId(id) {}$/;"	f	class:MessageTask
 MessageTask	inc/task_manager.h	/^class MessageTask : public Task {$/;"	c
 NOMINMAX	lib/vulkan/vk_sdk_platform.h	26;"	d
-NS	inc/macro.h	12;"	d
 NUM_DEVICE_QUEUE_INDICES	inc/device_queue_indices.h	6;"	d
 OBJS	Makefile	/^OBJS=$(patsubst %.cpp,$(OBJ_DIR)\/%.o, $(SRCS_NO_PATH))$/;"	m
 OBJ_DIR	Makefile	/^OBJ_DIR := obj$/;"	m
@@ -1772,6 +1771,7 @@ PFN_vkUnmapMemory	lib/vulkan/vulkan.h	/^typedef void (VKAPI_PTR *PFN_vkUnmapMemo
 PFN_vkUpdateDescriptorSets	lib/vulkan/vulkan.h	/^typedef void (VKAPI_PTR *PFN_vkUpdateDescriptorSets)(VkDevice device, uint32_t descriptorWriteCount, const VkWriteDescriptorSet* pDescriptorWrites, uint32_t descriptorCopyCount, const VkCopyDescriptorSet* pDescriptorCopies);$/;"	t
 PFN_vkVoidFunction	lib/vulkan/vulkan.h	/^typedef void (VKAPI_PTR *PFN_vkVoidFunction)(void);$/;"	t
 PFN_vkWaitForFences	lib/vulkan/vulkan.h	/^typedef VkResult (VKAPI_PTR *PFN_vkWaitForFences)(VkDevice device, uint32_t fenceCount, const VkFence* pFences, VkBool32 waitAll, uint64_t timeout);$/;"	t
+PushConstants	inc/vulkan_manager.h	/^	struct PushConstants {$/;"	s	class:VulkanManager
 Quad	inc/quad.h	/^class Quad {$/;"	c
 QueueBindSparse	lib/vulkan/vk_layer.h	/^    PFN_vkQueueBindSparse QueueBindSparse;$/;"	m	struct:VkLayerDispatchTable_
 QueuePresentKHR	lib/vulkan/vk_layer.h	/^    PFN_vkQueuePresentKHR QueuePresentKHR;$/;"	m	struct:VkLayerDispatchTable_
@@ -1786,7 +1786,6 @@ ResetEvent	lib/vulkan/vk_layer.h	/^    PFN_vkResetEvent ResetEvent;$/;"	m	struct
 ResetFences	lib/vulkan/vk_layer.h	/^    PFN_vkResetFences ResetFences;$/;"	m	struct:VkLayerDispatchTable_
 Revision	lib/vulkan/spirv.hpp	/^static const unsigned int Revision = 2;$/;"	m	namespace:spv
 SHADER_DIR	inc/file_manager.h	/^	static constexpr const char* SHADER_DIR = "shader\/spv\/";$/;"	m	class:FileManager
-SHADER_ENTRY_NAME	inc/vulkan_manager.h	/^	static constexpr const char* SHADER_ENTRY_NAME = "main";$/;"	m	class:VulkanManager
 SOURCE_EXTENSIONS	.ycm_extra_conf.py	/^SOURCE_EXTENSIONS = [ '.cpp', '.cxx', '.cc', '.c', '.m', '.mm' ]$/;"	v
 SPIRV_TOOLS_LIBSPIRV_H_	lib/vulkan/libspirv.h	28;"	d
 SPV_BINARY_TO_TEXT_OPTION_COLOR	lib/vulkan/libspirv.h	/^  SPV_BINARY_TO_TEXT_OPTION_COLOR = SPV_BIT(2),$/;"	e	enum:spv_binary_to_text_options_t
@@ -1946,7 +1945,6 @@ STBI_grey_alpha	lib/stb/stb_image.h	/^   STBI_grey_alpha = 2,$/;"	e	enum:__anon5
 STBI_rgb	lib/stb/stb_image.h	/^   STBI_rgb        = 3,$/;"	e	enum:__anon55
 STBI_rgb_alpha	lib/stb/stb_image.h	/^   STBI_rgb_alpha  = 4$/;"	e	enum:__anon55
 STB_IMAGE_IMPLEMENTATION	src/vulkan_manager.cpp	3;"	d	file:
-STRINGIFY	inc/macro.h	15;"	d
 SamplerAddressingMode	lib/vulkan/spirv.hpp	/^enum SamplerAddressingMode {$/;"	g	namespace:spv
 SamplerAddressingModeClamp	lib/vulkan/spirv.hpp	/^    SamplerAddressingModeClamp = 2,$/;"	e	enum:spv::SamplerAddressingMode
 SamplerAddressingModeClampToEdge	lib/vulkan/spirv.hpp	/^    SamplerAddressingModeClampToEdge = 1,$/;"	e	enum:spv::SamplerAddressingMode
@@ -2827,7 +2825,6 @@ StorageClassWorkgroup	lib/vulkan/spirv.hpp	/^    StorageClassWorkgroup = 4,$/;"	
 Stub	lib/glm/detail/_swizzle.hpp	/^		struct Stub {};$/;"	s	struct:glm::detail::_swizzle_base2
 SwapChainDesc	inc/vulkan_manager.h	/^	struct SwapChainDesc {$/;"	s	class:VulkanManager
 TARGET	Makefile	/^TARGET=$(BIN_DIR)\/myengine$/;"	m
-TOSTRING	inc/macro.h	16;"	d
 Task	inc/task_manager.h	/^class Task {$/;"	c
 TaskManager	inc/task_manager.h	/^class TaskManager {$/;"	c
 TaskManager	src/task_manager.cpp	/^TaskManager::TaskManager(): mNumThreads(std::thread::hardware_concurrency())$/;"	f	class:TaskManager
@@ -4323,7 +4320,7 @@ VulkanUtils	inc/vulkan_utils.h	/^class VulkanUtils {$/;"	c
 WaitForFences	lib/vulkan/vk_layer.h	/^    PFN_vkWaitForFences WaitForFences;$/;"	m	struct:VkLayerDispatchTable_
 Window	inc/window.h	/^class Window {$/;"	c
 Window	src/window.cpp	/^Window::Window():$/;"	f	class:Window
-Window	src/window.cpp	/^Window::Window(unsigned w, unsigned h): $/;"	f	class:Window
+Window	src/window.cpp	/^Window::Window(uint32_t w, uint32_t h): $/;"	f	class:Window
 WordCountShift	lib/vulkan/spirv.hpp	/^static const unsigned int WordCountShift = 16;$/;"	m	namespace:spv
 YCbCr_to_RGB_kernel	lib/stb/stb_image.h	/^   void (*YCbCr_to_RGB_kernel)(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step);$/;"	m	struct:__anon60
 _GLM_SWIZZLE2_2_MEMBERS	lib/glm/detail/_swizzle.hpp	300;"	d
@@ -6874,6 +6871,7 @@ mipmapPrecisionBits	lib/vulkan/vulkan.h	/^    uint32_t              mipmapPrecis
 mirSurface	lib/vulkan/vk_icd.h	/^    MirSurface *mirSurface;$/;"	m	struct:__anon45
 mirSurface	lib/vulkan/vulkan.h	/^    MirSurface*                   mirSurface;$/;"	m	struct:VkMirSurfaceCreateInfoKHR
 mod289	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER T mod289(T const & x)$/;"	f	namespace:glm::detail
+model	inc/vulkan_manager.h	/^	    glm::mat4 model;$/;"	m	struct:VulkanManager::PushConstants
 model	inc/vulkan_manager.h	/^	    glm::mat4 model;$/;"	m	struct:VulkanManager::UBO
 module	lib/vulkan/vulkan.h	/^    VkShaderModule                      module;$/;"	m	struct:VkPipelineShaderStageCreateInfo
 mr	lib/stb/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon68
@@ -7191,6 +7189,7 @@ preserveAttachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                      
 primitiveRestartEnable	lib/vulkan/vulkan.h	/^    VkBool32                                   primitiveRestartEnable;$/;"	m	struct:VkPipelineInputAssemblyStateCreateInfo
 profile	lib/glm/detail/type_gentype.hpp	/^	enum profile$/;"	g	namespace:glm
 progressive	lib/stb/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon60
+proj	inc/vulkan_manager.h	/^		glm::mat4 proj;$/;"	m	struct:VulkanManager::PushConstants
 proj	inc/vulkan_manager.h	/^		glm::mat4 proj;$/;"	m	struct:VulkanManager::UBO
 propertyFlags	lib/vulkan/vulkan.h	/^    VkMemoryPropertyFlags    propertyFlags;$/;"	m	struct:VkMemoryType
 pushConstantRangeCount	lib/vulkan/vulkan.h	/^    uint32_t                        pushConstantRangeCount;$/;"	m	struct:VkPipelineLayoutCreateInfo
@@ -7225,6 +7224,7 @@ range	lib/vulkan/vulkan.h	/^    VkDeviceSize               range;$/;"	m	struct:V
 range	lib/vulkan/vulkan.h	/^    VkDeviceSize    range;$/;"	m	struct:VkDescriptorBufferInfo
 rasterizationOrder	lib/vulkan/vulkan.h	/^    VkRasterizationOrderAMD    rasterizationOrder;$/;"	m	struct:VkPipelineRasterizationStateRasterizationOrderAMD
 rasterizationSamples	lib/vulkan/vulkan.h	/^    VkSampleCountFlagBits                    rasterizationSamples;$/;"	m	struct:VkPipelineMultisampleStateCreateInfo
+rasterizationStateCullBackCCW	src/vulkan_pipeline_creator.cpp	/^VkPipelineRasterizationStateCreateInfo VulkanPipelineCreator::rasterizationStateCullBackCCW() $/;"	f	class:VulkanPipelineCreator
 rasterizerDiscardEnable	lib/vulkan/vulkan.h	/^    VkBool32                                   rasterizerDiscardEnable;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo
 ratio	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon71
 raw_coeff	lib/stb/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon60::__anon61
@@ -7381,11 +7381,11 @@ scissorCount	lib/vulkan/vulkan.h	/^    uint32_t                              sci
 separator	lib/glm/gtx/io.hpp	/^			char_type  separator;$/;"	m	class:glm::io::format_punct
 setComputeIndex	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::setComputeIndex(int index) $/;"	f	class:DeviceQueueIndicies
 setCursorPosCallback	src/input_manager.cpp	/^void InputManager::setCursorPosCallback(GLFWcursorposfun cbfun)$/;"	f	class:InputManager
-setDimens	src/window.cpp	/^void Window::setDimens(unsigned w, unsigned h) $/;"	f	class:Window
+setDimens	src/window.cpp	/^void Window::setDimens(uint32_t w, uint32_t h) $/;"	f	class:Window
 setFramebufferSizeCallback	src/input_manager.cpp	/^void InputManager::setFramebufferSizeCallback(GLFWframebuffersizefun cbfun)$/;"	f	class:InputManager
 setGlfwWindow	src/input_manager.cpp	/^void InputManager::setGlfwWindow(GLFWwindow& glfwWindow)$/;"	f	class:InputManager
 setGraphicsIndex	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::setGraphicsIndex(int index) $/;"	f	class:DeviceQueueIndicies
-setHeight	src/window.cpp	/^void Window::setHeight(unsigned h) $/;"	f	class:Window
+setHeight	src/window.cpp	/^void Window::setHeight(uint32_t h) $/;"	f	class:Window
 setIndex	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::setIndex(int& currIndex, int index)$/;"	f	class:DeviceQueueIndicies
 setKeyCallback	src/input_manager.cpp	/^void InputManager::setKeyCallback(GLFWkeyfun cbfun)$/;"	f	class:InputManager
 setLayoutCount	lib/vulkan/vulkan.h	/^    uint32_t                        setLayoutCount;$/;"	m	struct:VkPipelineLayoutCreateInfo
@@ -7393,7 +7393,7 @@ setMouseButtonCallback	src/input_manager.cpp	/^void InputManager::setMouseButton
 setScrollCallback	src/input_manager.cpp	/^void InputManager::setScrollCallback(GLFWscrollfun cbfun)$/;"	f	class:InputManager
 setSupportedIndex	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::setSupportedIndex(int index)$/;"	f	class:DeviceQueueIndicies
 setTransferIndex	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::setTransferIndex(int index) $/;"	f	class:DeviceQueueIndicies
-setWidth	src/window.cpp	/^void Window::setWidth(unsigned w) $/;"	f	class:Window
+setWidth	src/window.cpp	/^void Window::setWidth(uint32_t w) $/;"	f	class:Window
 setWindowSizeCallback	src/window.cpp	/^void Window::setWindowSizeCallback(GLFWwindowsizefun f) $/;"	f	class:Window
 set_loader_magic_value	lib/vulkan/vk_icd.h	/^static inline void set_loader_magic_value(void *pNewObject) {$/;"	f
 shaderClipDistance	lib/vulkan/vulkan.h	/^    VkBool32    shaderClipDistance;$/;"	m	struct:VkPhysicalDeviceFeatures
@@ -8085,6 +8085,7 @@ uniformStagingBufferMem	inc/vulkan_manager.h	/^	VkDeviceMemory vertexBufferMem, 
 uninitialize	lib/glm/detail/setup.hpp	/^	enum ctor{uninitialize};$/;"	e	enum:glm::ctor
 unnormalizedCoordinates	lib/vulkan/vulkan.h	/^    VkBool32                unnormalizedCoordinates;$/;"	m	struct:VkSamplerCreateInfo
 unset	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::unset() $/;"	f	class:DeviceQueueIndicies
+updateCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::updateCommandBuffers() $/;"	f	class:VulkanManager
 updateUniformBuffer	src/vulkan_manager.cpp	/^void VulkanManager::updateUniformBuffer()$/;"	f	class:VulkanManager
 usage	lib/vulkan/vulkan.h	/^    VkBufferUsageFlags     usage;$/;"	m	struct:VkBufferCreateInfo
 usage	lib/vulkan/vulkan.h	/^    VkImageUsageFlags        usage;$/;"	m	struct:VkImageCreateInfo
@@ -8164,6 +8165,7 @@ vertexBufferMem	inc/vulkan_manager.h	/^	VkDeviceMemory vertexBufferMem, indexBuf
 vertexCount	lib/vulkan/vulkan.h	/^    uint32_t    vertexCount;$/;"	m	struct:VkDrawIndirectCommand
 vertexOffset	lib/vulkan/vulkan.h	/^    int32_t     vertexOffset;$/;"	m	struct:VkDrawIndexedIndirectCommand
 vertexPipelineStoresAndAtomics	lib/vulkan/vulkan.h	/^    VkBool32    vertexPipelineStoresAndAtomics;$/;"	m	struct:VkPhysicalDeviceFeatures
+view	inc/vulkan_manager.h	/^		glm::mat4 view;$/;"	m	struct:VulkanManager::PushConstants
 view	inc/vulkan_manager.h	/^		glm::mat4 view;$/;"	m	struct:VulkanManager::UBO
 viewType	lib/vulkan/vulkan.h	/^    VkImageViewType            viewType;$/;"	m	struct:VkImageViewCreateInfo
 viewportBoundsRange	lib/vulkan/vulkan.h	/^    float                 viewportBoundsRange[2];$/;"	m	struct:VkPhysicalDeviceLimits

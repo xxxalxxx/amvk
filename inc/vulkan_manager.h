@@ -67,6 +67,7 @@ public:
 	void createDescriptorSetLayout();
 
 	void createPipeline();
+	void createDepthResources();
 	void createFramebuffers();
 	void createCommandPool();
 
@@ -154,7 +155,6 @@ private:
 	
 	const Window& mWindow;
 	
-	static constexpr const char* SHADER_ENTRY_NAME = "main";
 	static const std::vector<const char*> sDeviceExtensions;
 	static const std::vector<const char*> sValidationLayers;
 
@@ -184,6 +184,7 @@ private:
 
 	VkCommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(VkCommandBuffer commandBuf);
+	
 	VkImage mTextureImage;
 	VkDeviceMemory mTextureImageMem;
 	VkImageView mTextureImageView;
@@ -204,14 +205,12 @@ private:
 	VkDescriptorSet mVkDescriptorSet;
 
 	
-	void createDepthResources();
 	VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 	VkFormat findDepthFormat();
 	bool hasStencilComponent(VkFormat format);
 
 	VkImage mDepthImage;
 	VkDeviceMemory mDepthImageMem;
-
 	VkImageView mDepthImageView;
 };
 

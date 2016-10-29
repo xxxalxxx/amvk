@@ -20,14 +20,14 @@ class Window {
 
 public:
 	Window();
-	Window(unsigned w, unsigned h);
+	Window(uint32_t w, uint32_t h);
 	virtual ~Window();
 	inline bool isOpen() { return !glfwWindowShouldClose(mGlfwWindow); }
 	InputManager& getInputManager();
 
-	void setDimens(unsigned w, unsigned h);
-	void setWidth(unsigned w);
-	void setHeight(unsigned h);
+	void setDimens(uint32_t w, uint32_t h);
+	void setWidth(uint32_t w);
+	void setHeight(uint32_t h);
 	void setWindowSizeCallback(GLFWwindowsizefun f);
 	
 	unsigned getWidth() const;

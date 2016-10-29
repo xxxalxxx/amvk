@@ -15,8 +15,10 @@ void onWindowResized(GLFWwindow* window, int width, int height) {
 	if (width * height == 0) 
 		return;
 
-//	Engine* eng = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
-//	eng->getVulkanManager().recreateSwapChain();
+	Engine* eng = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
+	Window& engWindow = eng->getWindow();
+	engWindow.setDimens(width, height);
+	eng->getVulkanManager().recreateSwapChain();
 }
 
 
@@ -26,9 +28,9 @@ void Engine::init()
 	mWindow.setWindowSizeCallback(onWindowResized);
 	mVulkanManager.createVkInstance();
 
-	#ifdef AMVK_DEBUG
+#ifdef AMVK_DEBUG
 	mVulkanManager.enableDebug();
-	#endif
+#endif
 
 	mVulkanManager.createVkSurface(*mWindow.mGlfwWindow);
 	mVulkanManager.createPhysicalDevice();
@@ -40,6 +42,7 @@ void Engine::init()
 	mVulkanManager.createPipeline();
 	mVulkanManager.createCommandPool();
 
+	mVulkanManager.createDepthResources();
 	mVulkanManager.createFramebuffers();
 
 	mVulkanManager.createTextureImage();
