@@ -86,6 +86,7 @@ public:
 	void createSemaphores();
 	
 	void updateUniformBuffer();
+	void updateCommandBuffers();
 	void draw();
 	
 	void waitIdle();
@@ -164,6 +165,12 @@ private:
 	};
 
 	struct UBO {
+	    glm::mat4 model;
+		glm::mat4 view;
+		glm::mat4 proj;
+	};
+
+	struct PushConstants {
 	    glm::mat4 model;
 		glm::mat4 view;
 		glm::mat4 proj;

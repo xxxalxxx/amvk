@@ -547,11 +547,28 @@ void VulkanManager::createPipeline()
 	VkPipelineColorBlendStateCreateInfo blendState = pc.blendStateDisabled(&blendAttachmentState, 1); 
 
 	VkDescriptorSetLayout setLayouts[] = { mVkDescriptorSetLayout };
+	
+	VkPhysicalDeviceProperties physicalDeviceProperties;
+	vkGetPhysicalDeviceProperties(mVkPhysicalDevice, &physicalDeviceProperties);
+	uint32_t maxPushConstantsSize = physicalDeviceProperties.limits.maxPushConstantsSize;
+	LOG("MAX PUSH CONST SIZE max:" << maxPushConstantsSize << " curr:" << sizeof(PushConstants));
+
+	if (sizeof(PushConstants) > maxPushConstantsSize)
+		throw std::runtime_error("Push Constants exceed max size. Use uniform buffer.");
+	if (sizeof(PushConstants) % 4 != 0)
+		throw std::runtime_error("Push Constants size must be a multiple of 4");
+
+	VkPushConstantRange pushConstantRange;
+	pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+	pushConstantRange.offset = 0;
+	pushConstantRange.size = sizeof(PushConstants); 
+
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 	pipelineLayoutInfo.setLayoutCount = 1;
 	pipelineLayoutInfo.pSetLayouts = setLayouts;
-	pipelineLayoutInfo.pushConstantRangeCount = 0;
+	pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
+	pipelineLayoutInfo.pushConstantRangeCount = 1;
 
 	VK_CHECK_RESULT(vkCreatePipelineLayout(mVkDevice, &pipelineLayoutInfo, nullptr, &mVkPipelineLayout));
 
@@ -625,7 +642,6 @@ void VulkanManager::createCommandPool()
 
 void VulkanManager::createCommandBuffers()
 {
-
 	if (!mVkCommandBuffers.empty())
 		vkFreeCommandBuffers(mVkDevice, mVkCommandPool, mVkCommandBuffers.size(), mVkCommandBuffers.data());
 
@@ -641,6 +657,12 @@ void VulkanManager::createCommandBuffers()
 
 	LOG("COMMAND POOL ALLOCATED");
 
+	VkClearValue clearValues[] = {
+		{0.4f, 0.1f, 0.1f, 1.0f}, // VkClearColorValue color; 
+		{1.0f, 0}				  // VkClearDepthStencilValue depthStencil 
+	};
+
+
 	for (size_t i = 0; i < mVkCommandBuffers.size(); ++i) {
 		VkCommandBufferBeginInfo beginInfo = {};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -648,10 +670,8 @@ void VulkanManager::createCommandBuffers()
 		
 		VK_CHECK_RESULT(vkBeginCommandBuffer(mVkCommandBuffers[i], &beginInfo));
 
-		VkClearValue clearValues[] = {
-			{0.4f, 0.1f, 0.1f, 1.0f}, // VkClearColorValue color; 
-			{1.0f, 0}				  // VkClearDepthStencilValue depthStencil 
-		};
+
+		LOG("IN COMMAND BUFFER");
 
 		VkRenderPassBeginInfo renderPassBeginInfo = {};
 		renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -691,6 +711,11 @@ void VulkanManager::createCommandBuffers()
 
 		VK_CHECK_RESULT(vkEndCommandBuffer(mVkCommandBuffers[i]));
 	}
+}
+
+void VulkanManager::updateCommandBuffers() 
+{
+
 }
 
 void VulkanManager::createSemaphores()
