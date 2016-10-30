@@ -1,10 +1,6 @@
 #ifndef AMVK_VULKAN_MANAGER_H
 #define AMVK_VULKAN_MANAGER_H
 
-#define GLM_FORCE_RADIANS
-#define GLM_FORCE_ZERO_TO_ONE
-#define GLM_VULKAN_PERSPECTIVE
-
 #define VK_THROW_RESULT_ERROR(text, result) \
 	do { \
 		char str[128]; \
@@ -29,7 +25,6 @@
 		   throw std::runtime_error("Failed to call iproc for " #func); \
 	} while (0)
 
-
 #include <limits>
 #include <cstring>
 #include <vector>
@@ -40,6 +35,7 @@
 
 #include "macro.h"
 #include "window.h"
+#include "camera.h"
 #include "timer.h"
 #include "device_queue_indices.h"
 #include "file_manager.h"
@@ -86,7 +82,7 @@ public:
 	void createSemaphores();
 	
 	void updateUniformBuffer(const Timer& timer);
-	void updateCommandBuffers(const Timer& timer);
+	void updateCommandBuffers(const Timer& timer, Camera& camera);
 	void draw();
 	
 	void waitIdle();

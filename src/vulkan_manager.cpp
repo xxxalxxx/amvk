@@ -647,7 +647,7 @@ void VulkanManager::createCommandBuffers()
 //	updateCommandBuffers();
 }
 
-void VulkanManager::updateCommandBuffers(const Timer& timer) 
+void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera) 
 {
 	VkClearValue clearValues[] = {
 		{0.4f, 0.1f, 0.1f, 1.0f}, // VkClearColorValue color; 
@@ -676,8 +676,8 @@ void VulkanManager::updateCommandBuffers(const Timer& timer)
 	
 		PushConstants pushConstants;
 		pushConstants.model = glm::rotate(glm::mat4(), (float) timer.total() * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		pushConstants.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		pushConstants.proj = glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
+		pushConstants.view = camera.view();//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		pushConstants.proj = camera.proj(); //glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
 
 		vkCmdPushConstants(
 				mVkCommandBuffers[i], 

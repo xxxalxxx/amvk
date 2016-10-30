@@ -9,6 +9,10 @@
 
 #define AMVK_DEBUG
 
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_ZERO_TO_ONE
+#define GLM_VULKAN_PERSPECTIVE
+
 #define LOG(x) do { std::cout << x << std::endl; } while(0)
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 

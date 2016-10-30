@@ -1,20 +1,8 @@
 #include "input_manager.h"
 #include <iostream>
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, GL_TRUE); 
-		window = nullptr;
-	} else if(key == GLFW_KEY_E && action == GLFW_PRESS) {
-		std::cout<< "E PRESSED" <<std::endl;
-	} else if(key == GLFW_KEY_E && action ==GLFW_REPEAT) {
-		std::cout<< "E REPEAT" <<std::endl;
-	}
-}
 
-
-InputManager::InputManager():
+InputManager::InputManager(): 
 	mGlfwWindow(nullptr)
 {
 
@@ -72,7 +60,11 @@ void InputManager::setMouseButtonCallback(GLFWmousebuttonfun cbfun)
 	glfwSetMouseButtonCallback(mGlfwWindow, cbfun);
 }
 
-void InputManager::init() 
+
+
+
+bool InputManager::keyPressed(int key)
 {
-	setKeyCallback(keyCallback);
+	return glfwGetKey(mGlfwWindow, key) == GLFW_PRESS;
 }
+

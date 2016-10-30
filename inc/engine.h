@@ -14,16 +14,18 @@ public:
 	Engine();
 	virtual ~Engine();
 	void init();
-
+	void handleMovement(double dt);
 	Window& getWindow();
 	TaskManager& getTaskManager();
 	VulkanManager& getVulkanManager();
 	Timer& getTimer();
+	Camera& getCamera();
 private:
 	Window mWindow;
 	TaskManager mTaskManager;
 	VulkanManager mVulkanManager;
 	Timer mTimer;
+	Camera mCamera;
 };
 
 

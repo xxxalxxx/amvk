@@ -5,6 +5,7 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 AMVK_BUFFER_MANAGER_H	inc/buffer_manager.h	2;"	d
+AMVK_CAMERA_H	inc/camera.h	2;"	d
 AMVK_CMD_PASS_H	inc/cmd_pass.h	2;"	d
 AMVK_DEBUG	inc/macro.h	10;"	d
 AMVK_DEVICE_QUEUE_INDICES	inc/device_queue_indices.h	2;"	d
@@ -18,7 +19,7 @@ AMVK_TIMER_H	inc/timer.h	2;"	d
 AMVK_VULKAN_MANAGER_H	inc/vulkan_manager.h	2;"	d
 AMVK_VULKAN_PIPELINE_CREATOR_H	inc/vulkan_pipeline_creator.h	2;"	d
 AMVK_WINDOW_H	inc/window.h	2;"	d
-ARRAY_SIZE	inc/macro.h	13;"	d
+ARRAY_SIZE	inc/macro.h	17;"	d
 AccessQualifier	lib/vulkan/spirv.hpp	/^enum AccessQualifier {$/;"	g	namespace:spv
 AccessQualifierMax	lib/vulkan/spirv.hpp	/^    AccessQualifierMax = 0x7fffffff,$/;"	e	enum:spv::AccessQualifier
 AccessQualifierReadOnly	lib/vulkan/spirv.hpp	/^    AccessQualifierReadOnly = 0,$/;"	e	enum:spv::AccessQualifier
@@ -91,6 +92,8 @@ COMBO	lib/stb/stb_image.h	1359;"	d
 CURRENT_LOADER_ICD_INTERFACE_VERSION	lib/vulkan/vk_icd.h	31;"	d
 CXX	Makefile	/^CXX=g++$/;"	m
 CXXFLAGS	Makefile	/^CXXFLAGS=-Wall -Werror -std=c++14 -I. -Isrc -Iinc -Ilib$/;"	m
+Camera	inc/camera.h	/^class Camera {$/;"	c
+Camera	src/camera.cpp	/^Camera::Camera():$/;"	f	class:Camera
 Capability	lib/vulkan/spirv.hpp	/^enum Capability {$/;"	g	namespace:spv
 CapabilityAddresses	lib/vulkan/spirv.hpp	/^    CapabilityAddresses = 4,$/;"	e	enum:spv::Capability
 CapabilityAtomicStorage	lib/vulkan/spirv.hpp	/^    CapabilityAtomicStorage = 21,$/;"	e	enum:spv::Capability
@@ -227,8 +230,6 @@ CreateWaylandSurfaceKHR	lib/vulkan/vk_layer.h	/^    PFN_vkCreateWaylandSurfaceKH
 CreateWin32SurfaceKHR	lib/vulkan/vk_layer.h	/^    PFN_vkCreateWin32SurfaceKHR CreateWin32SurfaceKHR;$/;"	m	struct:VkLayerInstanceDispatchTable_
 CreateXcbSurfaceKHR	lib/vulkan/vk_layer.h	/^    PFN_vkCreateXcbSurfaceKHR CreateXcbSurfaceKHR;$/;"	m	struct:VkLayerInstanceDispatchTable_
 CreateXlibSurfaceKHR	lib/vulkan/vk_layer.h	/^    PFN_vkCreateXlibSurfaceKHR CreateXlibSurfaceKHR;$/;"	m	struct:VkLayerInstanceDispatchTable_
-DEFAULT_WINDOW_HEIGHT	inc/window.h	13;"	d
-DEFAULT_WINDOW_WIDTH	inc/window.h	12;"	d
 DEPS	Makefile	/^DEPS=$(patsubst %.cpp,$(OBJ_DIR)\/%.d, $(SRCS_NO_PATH))$/;"	m
 DebugReportMessageEXT	lib/vulkan/vk_layer.h	/^    PFN_vkDebugReportMessageEXT DebugReportMessageEXT;$/;"	m	struct:VkLayerInstanceDispatchTable_
 Decoration	lib/vulkan/spirv.hpp	/^enum Decoration {$/;"	g	namespace:spv
@@ -725,8 +726,8 @@ GLM_FORCE_CXX98	lib/glm/detail/setup.hpp	125;"	d
 GLM_FORCE_CXX98	lib/glm/detail/setup.hpp	129;"	d
 GLM_FORCE_CXX98	lib/glm/detail/setup.hpp	132;"	d
 GLM_FORCE_PURE	lib/glm/detail/setup.hpp	228;"	d
-GLM_FORCE_RADIANS	inc/vulkan_manager.h	4;"	d
-GLM_FORCE_ZERO_TO_ONE	inc/vulkan_manager.h	5;"	d
+GLM_FORCE_RADIANS	inc/macro.h	12;"	d
+GLM_FORCE_ZERO_TO_ONE	inc/macro.h	13;"	d
 GLM_FUNC_DECL	lib/glm/detail/setup.hpp	521;"	d
 GLM_FUNC_QUALIFIER	lib/glm/detail/setup.hpp	522;"	d
 GLM_HAS_ALIGNED_TYPE	lib/glm/detail/setup.hpp	660;"	d
@@ -956,7 +957,7 @@ GLM_VERSION_MAJOR	lib/glm/detail/setup.hpp	14;"	d
 GLM_VERSION_MINOR	lib/glm/detail/setup.hpp	15;"	d
 GLM_VERSION_PATCH	lib/glm/detail/setup.hpp	16;"	d
 GLM_VERSION_REVISION	lib/glm/detail/setup.hpp	17;"	d
-GLM_VULKAN_PERSPECTIVE	inc/vulkan_manager.h	6;"	d
+GLM_VULKAN_PERSPECTIVE	inc/macro.h	14;"	d
 GLSLstd450	lib/vulkan/GLSL.std.450.h	/^enum GLSLstd450 {$/;"	g
 GLSLstd450Acos	lib/vulkan/GLSL.std.450.h	/^    GLSLstd450Acos = 17,$/;"	e	enum:GLSLstd450
 GLSLstd450Acosh	lib/vulkan/GLSL.std.450.h	/^    GLSLstd450Acosh = 23,$/;"	e	enum:GLSLstd450
@@ -1197,7 +1198,7 @@ ImageOperandsSampleMask	lib/vulkan/spirv.hpp	/^    ImageOperandsSampleMask = 0x0
 ImageOperandsSampleShift	lib/vulkan/spirv.hpp	/^    ImageOperandsSampleShift = 6,$/;"	e	enum:spv::ImageOperandsShift
 ImageOperandsShift	lib/vulkan/spirv.hpp	/^enum ImageOperandsShift {$/;"	g	namespace:spv
 InputManager	inc/input_manager.h	/^class InputManager {$/;"	c
-InputManager	src/input_manager.cpp	/^InputManager::InputManager():$/;"	f	class:InputManager
+InputManager	src/input_manager.cpp	/^InputManager::InputManager(): $/;"	f	class:InputManager
 InputManager	src/input_manager.cpp	/^InputManager::InputManager(GLFWwindow& glfwWindow): $/;"	f	class:InputManager
 InvalidateMappedMemoryRanges	lib/vulkan/vk_layer.h	/^    PFN_vkInvalidateMappedMemoryRanges InvalidateMappedMemoryRanges;$/;"	m	struct:VkLayerDispatchTable_
 IsHeaderFile	.ycm_extra_conf.py	/^def IsHeaderFile( filename ):$/;"	f
@@ -1218,7 +1219,7 @@ LAST_CONCRETE	lib/vulkan/libspirv.h	95;"	d
 LAST_VARIABLE	lib/vulkan/libspirv.h	/^  LAST_VARIABLE(SPV_OPERAND_TYPE_VARIABLE_ID_LITERAL_INTEGER),$/;"	e	enum:spv_operand_type_t
 LAST_VARIABLE	lib/vulkan/libspirv.h	174;"	d
 LDLIBS	Makefile	/^LDLIBS=$(shell pkg-config --static --libs glfw3) -L$(VULKAN_LIB_PATH) -lvulkan$/;"	m
-LOG	inc/macro.h	12;"	d
+LOG	inc/macro.h	16;"	d
 LinkageType	lib/vulkan/spirv.hpp	/^enum LinkageType {$/;"	g	namespace:spv
 LinkageTypeExport	lib/vulkan/spirv.hpp	/^    LinkageTypeExport = 0,$/;"	e	enum:spv::LinkageType
 LinkageTypeImport	lib/vulkan/spirv.hpp	/^    LinkageTypeImport = 1,$/;"	e	enum:spv::LinkageType
@@ -1235,6 +1236,10 @@ LoopControlMax	lib/vulkan/spirv.hpp	/^    LoopControlMax = 0x7fffffff,$/;"	e	enu
 LoopControlShift	lib/vulkan/spirv.hpp	/^enum LoopControlShift {$/;"	g	namespace:spv
 LoopControlUnrollMask	lib/vulkan/spirv.hpp	/^    LoopControlUnrollMask = 0x00000001,$/;"	e	enum:spv::LoopControlMask
 LoopControlUnrollShift	lib/vulkan/spirv.hpp	/^    LoopControlUnrollShift = 0,$/;"	e	enum:spv::LoopControlShift
+MAX_FOV_RADIANS	inc/camera.h	/^    const static float MAX_FOV_RADIANS, MIN_FOV_RADIANS;$/;"	m	class:Camera
+MAX_FOV_RADIANS	src/camera.cpp	/^const float Camera::MAX_FOV_RADIANS = M_PI_2;$/;"	m	class:Camera	file:
+MIN_FOV_RADIANS	inc/camera.h	/^    const static float MAX_FOV_RADIANS, MIN_FOV_RADIANS;$/;"	m	class:Camera
+MIN_FOV_RADIANS	src/camera.cpp	/^const float Camera::MIN_FOV_RADIANS = M_PI_4;$/;"	m	class:Camera	file:
 MIN_SUPPORTED_LOADER_ICD_INTERFACE_VERSION	lib/vulkan/vk_icd.h	32;"	d
 MagicNumber	lib/vulkan/spirv.hpp	/^static const unsigned int MagicNumber = 0x07230203;$/;"	m	namespace:spv
 MakeRelativePathsInFlagsAbsolute	.ycm_extra_conf.py	/^def MakeRelativePathsInFlagsAbsolute( flags, working_directory ):$/;"	f
@@ -1783,6 +1788,8 @@ QueuePresentKHR	lib/vulkan/vk_layer.h	/^    PFN_vkQueuePresentKHR QueuePresentKH
 QueueSubmit	lib/vulkan/vk_layer.h	/^    PFN_vkQueueSubmit QueueSubmit;$/;"	m	struct:VkLayerDispatchTable_
 QueueWaitIdle	lib/vulkan/vk_layer.h	/^    PFN_vkQueueWaitIdle QueueWaitIdle;$/;"	m	struct:VkLayerDispatchTable_
 RESOURCE_DIR	inc/file_manager.h	/^	static constexpr const char* RESOURCE_DIR = "res\/";$/;"	m	class:FileManager
+RIGHT	inc/camera.h	/^    const static glm::vec3 UP, RIGHT;$/;"	m	class:Camera
+RIGHT	src/camera.cpp	/^const glm::vec3 Camera::RIGHT = glm::vec3(1.0f, 0.0f, 0.0f);$/;"	m	class:Camera	file:
 RM	Makefile	/^RM=rm -f$/;"	m
 ResetCommandBuffer	lib/vulkan/vk_layer.h	/^    PFN_vkResetCommandBuffer ResetCommandBuffer;$/;"	m	struct:VkLayerDispatchTable_
 ResetCommandPool	lib/vulkan/vk_layer.h	/^    PFN_vkResetCommandPool ResetCommandPool;$/;"	m	struct:VkLayerDispatchTable_
@@ -2836,6 +2843,8 @@ TaskManager	src/task_manager.cpp	/^TaskManager::TaskManager(): mNumThreads(std::
 Timer	inc/timer.h	/^class Timer {$/;"	c
 Timer	src/timer.cpp	/^Timer::Timer()$/;"	f	class:Timer
 UBO	inc/vulkan_manager.h	/^	struct UBO {$/;"	s	class:VulkanManager
+UP	inc/camera.h	/^    const static glm::vec3 UP, RIGHT;$/;"	m	class:Camera
+UP	src/camera.cpp	/^const glm::vec3 Camera::UP = glm::vec3(0.0f, 1.0f, 0.0f);$/;"	m	class:Camera	file:
 UnmapMemory	lib/vulkan/vk_layer.h	/^    PFN_vkUnmapMemory UnmapMemory;$/;"	m	struct:VkLayerDispatchTable_
 UpdateDescriptorSets	lib/vulkan/vk_layer.h	/^    PFN_vkUpdateDescriptorSets UpdateDescriptorSets;$/;"	m	struct:VkLayerDispatchTable_
 VKAPI_ATTR	lib/vulkan/vk_platform.h	51;"	d
@@ -2951,8 +2960,8 @@ VK_BUFFER_USAGE_TRANSFER_SRC_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_TRANS
 VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT = 0x00000010,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT = 0x00000004,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_VERTEX_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT = 0x00000080,$/;"	e	enum:VkBufferUsageFlagBits
-VK_CALL_IPROC	inc/vulkan_manager.h	23;"	d
-VK_CHECK_RESULT	inc/vulkan_manager.h	16;"	d
+VK_CALL_IPROC	inc/vulkan_manager.h	19;"	d
+VK_CHECK_RESULT	inc/vulkan_manager.h	12;"	d
 VK_COLORSPACE_SRGB_NONLINEAR_KHR	lib/vulkan/vulkan.h	3178;"	d
 VK_COLOR_COMPONENT_A_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_A_BIT = 0x00000008,$/;"	e	enum:VkColorComponentFlagBits
 VK_COLOR_COMPONENT_B_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_B_BIT = 0x00000004,$/;"	e	enum:VkColorComponentFlagBits
@@ -3785,7 +3794,7 @@ VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATI
 VK_SYSTEM_ALLOCATION_SCOPE_MAX_ENUM	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATION_SCOPE_MAX_ENUM = 0x7FFFFFFF$/;"	e	enum:VkSystemAllocationScope
 VK_SYSTEM_ALLOCATION_SCOPE_OBJECT	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATION_SCOPE_OBJECT = 1,$/;"	e	enum:VkSystemAllocationScope
 VK_SYSTEM_ALLOCATION_SCOPE_RANGE_SIZE	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATION_SCOPE_RANGE_SIZE = (VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE - VK_SYSTEM_ALLOCATION_SCOPE_COMMAND + 1),$/;"	e	enum:VkSystemAllocationScope
-VK_THROW_RESULT_ERROR	inc/vulkan_manager.h	8;"	d
+VK_THROW_RESULT_ERROR	inc/vulkan_manager.h	4;"	d
 VK_TIMEOUT	lib/vulkan/vulkan.h	/^    VK_TIMEOUT = 2,$/;"	e	enum:VkResult
 VK_TRUE	lib/vulkan/vulkan.h	100;"	d
 VK_UUID_SIZE	lib/vulkan/vulkan.h	105;"	d
@@ -4746,6 +4755,7 @@ currentDisplay	lib/vulkan/vulkan.h	/^    VkDisplayKHR    currentDisplay;$/;"	m	s
 currentExtent	lib/vulkan/vulkan.h	/^    VkExtent2D                       currentExtent;$/;"	m	struct:VkSurfaceCapabilitiesKHR
 currentStackIndex	lib/vulkan/vulkan.h	/^    uint32_t        currentStackIndex;$/;"	m	struct:VkDisplayPlanePropertiesKHR
 currentTransform	lib/vulkan/vulkan.h	/^    VkSurfaceTransformFlagBitsKHR    currentTransform;$/;"	m	struct:VkSurfaceCapabilitiesKHR
+cursorPosCallback	src/engine.cpp	/^void cursorPosCallback(GLFWwindow* window, double xpos, double ypos)$/;"	f
 data	lib/glm/detail/type_vec.hpp	/^			uint8 data[size];$/;"	m	struct:glm::detail::storage::type
 data	lib/glm/detail/type_vec4.hpp	/^				typename detail::storage<T, sizeof(T) * 4, detail::is_aligned<P>::value>::type data;$/;"	m	union:glm::tvec4::__anon1
 data	lib/glm/gtc/quaternion.hpp	/^				typename detail::storage<T, sizeof(T) * 4, detail::is_aligned<P>::value>::type data;$/;"	m	union:glm::tquat::__anon39
@@ -5375,6 +5385,7 @@ getAspect	src/window.cpp	/^float Window::getAspect() const$/;"	f	class:Window
 getAttrDesc	src/vulkan_manager.cpp	/^std::array<VkVertexInputAttributeDescription, 3> VulkanManager::getAttrDesc() $/;"	f	class:VulkanManager
 getBinPath	src/file_manager.cpp	/^std::string FileManager::getBinPath() $/;"	f	class:FileManager
 getBindingDesc	src/vulkan_manager.cpp	/^VkVertexInputBindingDescription VulkanManager::getBindingDesc()$/;"	f	class:VulkanManager
+getCamera	src/engine.cpp	/^Camera& Engine::getCamera()$/;"	f	class:Engine
 getComputeQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getComputeQueueIndex()$/;"	f	class:DeviceQueueIndicies
 getCurrentDir	inc/file_manager.h	15;"	d
 getCurrentDir	inc/file_manager.h	18;"	d
@@ -5592,6 +5603,7 @@ h	lib/stb/stb_image.h	/^      int h,v;$/;"	m	struct:__anon60::__anon61
 h	lib/stb/stb_image.h	/^   int w,h;$/;"	m	struct:__anon71
 h2	lib/stb/stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon60::__anon61
 ha	lib/stb/stb_image.h	/^      int hd,ha;$/;"	m	struct:__anon60::__anon61
+handleMovement	src/engine.cpp	/^void Engine::handleMovement(double dt) $/;"	f	class:Engine
 hasStencilComponent	src/vulkan_manager.cpp	/^bool VulkanManager::hasStencilComponent(VkFormat format) $/;"	f	class:VulkanManager
 hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::tdualquat<T,P> >$/;"	s	namespace:std
 hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::tmat2x2<T,P> >$/;"	s	namespace:std
@@ -6024,7 +6036,6 @@ indexBufferMem	inc/vulkan_manager.h	/^	VkDeviceMemory vertexBufferMem, indexBuff
 indexCount	lib/vulkan/vulkan.h	/^    uint32_t    indexCount;$/;"	m	struct:VkDrawIndexedIndirectCommand
 inheritedQueries	lib/vulkan/vulkan.h	/^    VkBool32    inheritedQueries;$/;"	m	struct:VkPhysicalDeviceFeatures
 init	src/engine.cpp	/^void Engine::init() $/;"	f	class:Engine
-init	src/input_manager.cpp	/^void InputManager::init() $/;"	f	class:InputManager
 init	src/vulkan_manager.cpp	/^void VulkanManager::init() $/;"	f	class:VulkanManager
 initBinPath	src/file_manager.cpp	/^void FileManager::initBinPath()$/;"	f	class:FileManager
 initWindow	src/window.cpp	/^void Window::initWindow(Engine& engine)$/;"	f	class:Window
@@ -6107,7 +6118,8 @@ ivec3	lib/glm/detail/type_vec.hpp	/^	typedef mediump_ivec3		ivec3;$/;"	t	namespa
 ivec4	lib/glm/detail/type_vec.hpp	/^	typedef highp_ivec4			ivec4;$/;"	t	namespace:glm
 ivec4	lib/glm/detail/type_vec.hpp	/^	typedef lowp_ivec4			ivec4;$/;"	t	namespace:glm
 ivec4	lib/glm/detail/type_vec.hpp	/^	typedef mediump_ivec4		ivec4;$/;"	t	namespace:glm
-keyCallback	src/input_manager.cpp	/^void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)$/;"	f
+keyCallback	src/engine.cpp	/^void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)$/;"	f
+keyPressed	src/input_manager.cpp	/^bool InputManager::keyPressed(int key)$/;"	f	class:InputManager
 largePoints	lib/vulkan/vulkan.h	/^    VkBool32    largePoints;$/;"	m	struct:VkPhysicalDeviceFeatures
 layerCount	lib/vulkan/vulkan.h	/^    uint32_t              layerCount;$/;"	m	struct:VkImageSubresourceLayers
 layerCount	lib/vulkan/vulkan.h	/^    uint32_t              layerCount;$/;"	m	struct:VkImageSubresourceRange
@@ -6406,8 +6418,10 @@ lowp_vec3	lib/glm/fwd.hpp	/^	typedef tvec3<float, lowp> lowp_vec3;$/;"	t	namespa
 lowp_vec4	lib/glm/detail/type_vec.hpp	/^	typedef tvec4<float, lowp>		lowp_vec4;$/;"	t	namespace:glm
 lowp_vec4	lib/glm/fwd.hpp	/^	typedef tvec4<float, lowp> lowp_vec4;$/;"	t	namespace:glm
 lpal	lib/stb/stb_image.h	/^   stbi_uc lpal[256][4];$/;"	m	struct:__anon71
+mAspect	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera
 mAspect	inc/window.h	/^	float mAspect;$/;"	m	class:Window
 mBinPath	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;$/;"	m	class:FileManager
+mCamera	inc/engine.h	/^	Camera mCamera;$/;"	m	class:Engine
 mCmdBuff	inc/cmd_pass.h	/^	VkCommandBuffer mCmdBuff;$/;"	m	class:CmdPass
 mComputeIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
 mCondition	inc/task_manager.h	/^	std::condition_variable mCondition;$/;"	m	class:TaskManager
@@ -6420,7 +6434,11 @@ mDeviceQueueIndices	inc/vulkan_manager.h	/^	DeviceQueueIndicies mDeviceQueueIndi
 mDeviceQueueIndiciesArr	inc/device_queue_indices.h	/^	int *mDeviceQueueIndiciesArr[NUM_DEVICE_QUEUE_INDICES];$/;"	m	class:DeviceQueueIndicies
 mDt	inc/timer.h	/^	double mDt;$/;"	m	class:Timer
 mEngineRoot	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;$/;"	m	class:FileManager
+mEye	inc/camera.h	/^    glm::vec3 mEye; $/;"	m	class:Camera
+mFOV	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera
 mFPS	inc/timer.h	/^	uint32_t mFPS;$/;"	m	class:Timer
+mFar	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera
+mForwardMovementScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera
 mFrameTime	inc/timer.h	/^	double mFrameTime;$/;"	m	class:Timer
 mGlfwWindow	inc/input_manager.h	/^	GLFWwindow* mGlfwWindow;$/;"	m	class:InputManager
 mGlfwWindow	inc/window.h	/^	GLFWwindow* mGlfwWindow;$/;"	m	class:Window
@@ -6431,17 +6449,25 @@ mId	inc/task_manager.h	/^	int mId;$/;"	m	class:MessageTask
 mImageAvailableSemaphore	inc/vulkan_manager.h	/^	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;$/;"	m	class:VulkanManager
 mIndexBuffer	inc/quad.h	/^	VkBuffer mVertexBuffer, mIndexBuffer;$/;"	m	class:Quad
 mInputManager	inc/window.h	/^	InputManager mInputManager;$/;"	m	class:Window
+mMouseSensitivityScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera
+mNear	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera
 mNumFrames	inc/timer.h	/^	uint32_t mNumFrames;$/;"	m	class:Timer
 mNumIndices	inc/quad.h	/^	uint32_t mNumIndices;$/;"	m	class:Quad
 mNumIndices	inc/vulkan_manager.h	/^	size_t mNumIndices;$/;"	m	class:VulkanManager
 mNumIndicesFound	inc/device_queue_indices.h	/^	int mNumIndicesFound; $/;"	m	class:DeviceQueueIndicies
 mNumThreads	inc/task_manager.h	/^	size_t mNumThreads;$/;"	m	class:TaskManager
+mPitch	inc/camera.h	/^    float mPitch, mYaw;$/;"	m	class:Camera
 mPool	inc/task_manager.h	/^	std::vector<std::thread> mPool;$/;"	m	class:TaskManager
 mPresentModes	inc/vulkan_manager.h	/^		std::vector<VkPresentModeKHR> mPresentModes;$/;"	m	struct:VulkanManager::SwapChainDesc
+mPrevMouseX	inc/camera.h	/^    double mPrevMouseX, mPrevMouseY;$/;"	m	class:Camera
+mPrevMouseY	inc/camera.h	/^    double mPrevMouseX, mPrevMouseY;$/;"	m	class:Camera
 mPrevTime	inc/timer.h	/^	std::chrono::high_resolution_clock::time_point mPrevTime;$/;"	m	class:Timer
+mProj	inc/camera.h	/^    glm::mat4 mProj, mView; $/;"	m	class:Camera
 mRenderFinishedSemaphore	inc/vulkan_manager.h	/^	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;$/;"	m	class:VulkanManager
 mResourceDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;$/;"	m	class:FileManager
+mScrollSensitivityScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera
 mShaderDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;$/;"	m	class:FileManager
+mSidewaysMovementScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera
 mStartTime	inc/timer.h	/^	std::chrono::high_resolution_clock::time_point mStartTime;$/;"	m	class:Timer
 mSupportedIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
 mSupportedQueue	inc/vulkan_manager.h	/^	VkQueue mGraphicsQueue, mSupportedQueue;$/;"	m	class:VulkanManager
@@ -6464,6 +6490,7 @@ mTimer	inc/engine.h	/^	Timer mTimer;$/;"	m	class:Engine
 mTotalTime	inc/timer.h	/^	double mTotalTime;$/;"	m	class:Timer
 mTransferIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
 mVertexBuffer	inc/quad.h	/^	VkBuffer mVertexBuffer, mIndexBuffer;$/;"	m	class:Quad
+mView	inc/camera.h	/^    glm::mat4 mProj, mView; $/;"	m	class:Camera
 mVkCommandBuffers	inc/vulkan_manager.h	/^	std::vector<VkCommandBuffer> mVkCommandBuffers;$/;"	m	class:VulkanManager
 mVkCommandPool	inc/cmd_pass.h	/^	const VkCommandPool& mVkCommandPool;$/;"	m	class:CmdPass
 mVkCommandPool	inc/vulkan_manager.h	/^	VkCommandPool mVkCommandPool;$/;"	m	class:VulkanManager
@@ -6485,6 +6512,7 @@ mVulkanManager	inc/engine.h	/^	VulkanManager mVulkanManager;$/;"	m	class:Engine
 mWidth	inc/window.h	/^	unsigned mWidth, mHeight;$/;"	m	class:Window
 mWindow	inc/engine.h	/^	Window mWindow;$/;"	m	class:Engine
 mWindow	inc/vulkan_manager.h	/^	const Window& mWindow;$/;"	m	class:VulkanManager
+mYaw	inc/camera.h	/^    float mPitch, mYaw;$/;"	m	class:Camera
 ma	lib/stb/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon68
 magFilter	lib/vulkan/vulkan.h	/^    VkFilter                magFilter;$/;"	m	struct:VkSamplerCreateInfo
 main	lib/glm/detail/dummy.cpp	/^int main()$/;"	f
@@ -6896,6 +6924,9 @@ mod289	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER T mod289(T const & x)$/;"
 model	inc/vulkan_manager.h	/^	    glm::mat4 model;$/;"	m	struct:VulkanManager::PushConstants
 model	inc/vulkan_manager.h	/^	    glm::mat4 model;$/;"	m	struct:VulkanManager::UBO
 module	lib/vulkan/vulkan.h	/^    VkShaderModule                      module;$/;"	m	struct:VkPipelineShaderStageCreateInfo
+mouseButtonCallback	src/engine.cpp	/^void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)$/;"	f
+moveSideways	src/camera.cpp	/^void Camera::moveSideways(float direction, float dt)$/;"	f	class:Camera
+moveStraight	src/camera.cpp	/^void Camera::moveStraight(float direction, float dt)$/;"	f	class:Camera
 mr	lib/stb/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon68
 multiDrawIndirect	lib/vulkan/vulkan.h	/^    VkBool32    multiDrawIndirect;$/;"	m	struct:VkPhysicalDeviceFeatures
 multiViewport	lib/vulkan/vulkan.h	/^    VkBool32    multiViewport;$/;"	m	struct:VkPhysicalDeviceFeatures
@@ -7213,6 +7244,7 @@ profile	lib/glm/detail/type_gentype.hpp	/^	enum profile$/;"	g	namespace:glm
 progressive	lib/stb/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon60
 proj	inc/vulkan_manager.h	/^		glm::mat4 proj;$/;"	m	struct:VulkanManager::PushConstants
 proj	inc/vulkan_manager.h	/^		glm::mat4 proj;$/;"	m	struct:VulkanManager::UBO
+proj	src/camera.cpp	/^glm::mat4& Camera::proj()$/;"	f	class:Camera
 propertyFlags	lib/vulkan/vulkan.h	/^    VkMemoryPropertyFlags    propertyFlags;$/;"	m	struct:VkMemoryType
 pushConstantRangeCount	lib/vulkan/vulkan.h	/^    uint32_t                        pushConstantRangeCount;$/;"	m	struct:VkPipelineLayoutCreateInfo
 q	lib/glm/detail/type_vec4.hpp	/^				struct { T s, t, p, q; };$/;"	m	struct:glm::tvec4::__anon1::__anon4
@@ -7256,6 +7288,8 @@ readFile	src/file_manager.cpp	/^std::vector<char> FileManager::readFile(const st
 readShader	src/file_manager.cpp	/^std::vector<char> FileManager::readShader(const std::string& shaderName)$/;"	f	class:FileManager
 read_from_callbacks	lib/stb/stb_image.h	/^   int read_from_callbacks;$/;"	m	struct:__anon57
 real	lib/glm/gtx/dual_quaternion.hpp	/^		glm::tquat<T, P> real, dual;$/;"	m	struct:glm::tdualquat
+rebuildPerspective	src/camera.cpp	/^void Camera::rebuildPerspective()$/;"	f	class:Camera
+rebuildView	src/camera.cpp	/^void Camera::rebuildView()$/;"	f	class:Camera
 recreateSwapChain	src/vulkan_manager.cpp	/^void VulkanManager::recreateSwapChain()$/;"	f	class:VulkanManager
 rect	lib/vulkan/vulkan.h	/^    VkRect2D    rect;$/;"	m	struct:VkClearRect
 reference	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> & reference;$/;"	t	struct:glm::detail::genType
@@ -7400,7 +7434,9 @@ saturate	lib/glm/gtx/compatibility.hpp	/^	template <typename T, precision P> GLM
 saturate	lib/glm/gtx/compatibility.hpp	/^	template <typename T, precision P> GLM_FUNC_QUALIFIER tvec4<T, P> saturate(const tvec4<T, P>& x){return clamp(x, T(0), T(1));}					\/\/!< \\brief Returns clamp(x, 0, 1) for each component in x. (From GLM_GTX_compatibility)$/;"	f	namespace:glm
 scan_n	lib/stb/stb_image.h	/^   int scan_n, order[4];$/;"	m	struct:__anon60
 scissorCount	lib/vulkan/vulkan.h	/^    uint32_t                              scissorCount;$/;"	m	struct:VkPipelineViewportStateCreateInfo
+scrollCallback	src/engine.cpp	/^void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)$/;"	f
 separator	lib/glm/gtx/io.hpp	/^			char_type  separator;$/;"	m	class:glm::io::format_punct
+setAspect	src/camera.cpp	/^void Camera::setAspect(double aspect)$/;"	f	class:Camera
 setComputeIndex	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::setComputeIndex(int index) $/;"	f	class:DeviceQueueIndicies
 setCursorPosCallback	src/input_manager.cpp	/^void InputManager::setCursorPosCallback(GLFWcursorposfun cbfun)$/;"	f	class:InputManager
 setDimens	src/window.cpp	/^void Window::setDimens(uint32_t w, uint32_t h) $/;"	f	class:Window
@@ -8109,7 +8145,9 @@ uniformStagingBufferMem	inc/vulkan_manager.h	/^	VkDeviceMemory vertexBufferMem, 
 uninitialize	lib/glm/detail/setup.hpp	/^	enum ctor{uninitialize};$/;"	e	enum:glm::ctor
 unnormalizedCoordinates	lib/vulkan/vulkan.h	/^    VkBool32                unnormalizedCoordinates;$/;"	m	struct:VkSamplerCreateInfo
 unset	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::unset() $/;"	f	class:DeviceQueueIndicies
-updateCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::updateCommandBuffers(const Timer& timer) $/;"	f	class:VulkanManager
+updateCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera) $/;"	f	class:VulkanManager
+updateFOV	src/camera.cpp	/^void Camera::updateFOV(float scrollDirection)$/;"	f	class:Camera
+updateOrientation	src/camera.cpp	/^void Camera::updateOrientation(double mouseX, double mouseY)$/;"	f	class:Camera
 updateUniformBuffer	src/vulkan_manager.cpp	/^void VulkanManager::updateUniformBuffer(const Timer& timer)$/;"	f	class:VulkanManager
 usage	lib/vulkan/vulkan.h	/^    VkBufferUsageFlags     usage;$/;"	m	struct:VkBufferCreateInfo
 usage	lib/vulkan/vulkan.h	/^    VkImageUsageFlags        usage;$/;"	m	struct:VkImageCreateInfo
@@ -8191,6 +8229,7 @@ vertexOffset	lib/vulkan/vulkan.h	/^    int32_t     vertexOffset;$/;"	m	struct:Vk
 vertexPipelineStoresAndAtomics	lib/vulkan/vulkan.h	/^    VkBool32    vertexPipelineStoresAndAtomics;$/;"	m	struct:VkPhysicalDeviceFeatures
 view	inc/vulkan_manager.h	/^		glm::mat4 view;$/;"	m	struct:VulkanManager::PushConstants
 view	inc/vulkan_manager.h	/^		glm::mat4 view;$/;"	m	struct:VulkanManager::UBO
+view	src/camera.cpp	/^glm::mat4& Camera::view()$/;"	f	class:Camera
 viewType	lib/vulkan/vulkan.h	/^    VkImageViewType            viewType;$/;"	m	struct:VkImageViewCreateInfo
 viewportBoundsRange	lib/vulkan/vulkan.h	/^    float                 viewportBoundsRange[2];$/;"	m	struct:VkPhysicalDeviceLimits
 viewportCount	lib/vulkan/vulkan.h	/^    uint32_t                              viewportCount;$/;"	m	struct:VkPipelineViewportStateCreateInfo

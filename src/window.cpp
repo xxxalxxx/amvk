@@ -1,8 +1,8 @@
 #include "window.h"
 
 Window::Window():
-	mWidth(DEFAULT_WINDOW_WIDTH), 
-	mHeight(DEFAULT_WINDOW_HEIGHT),
+	mWidth(800), 
+	mHeight(600),
 	mGlfwWindow(nullptr)
 {
 	calcAspect();
@@ -38,10 +38,9 @@ void Window::initWindow(Engine& engine)
 		throw std::runtime_error("GLFW window initialization failed");
 	}
 
-	//glfwSetInputMode(mGlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(mGlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetInputMode(mGlfwWindow, GLFW_STICKY_KEYS, 1);
 	mInputManager.setGlfwWindow(*mGlfwWindow);
-	mInputManager.init();
 	glfwSetWindowUserPointer(mGlfwWindow, (void*) &engine);
 }
 

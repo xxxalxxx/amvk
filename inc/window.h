@@ -8,12 +8,9 @@
 
 #include "macro.h"
 #include "input_manager.h"
-
-#define DEFAULT_WINDOW_WIDTH 800
-#define DEFAULT_WINDOW_HEIGHT 600
+#include "camera.h"
 
 class Engine;
-
 
 class Window {
 	friend class Engine;
