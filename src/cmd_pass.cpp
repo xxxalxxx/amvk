@@ -31,3 +31,8 @@ CmdPass::~CmdPass()
 	vkQueueWaitIdle(mVkQueue);
 	vkFreeCommandBuffers(mVkDevice, mVkCommandPool, 1, &mCmdBuff);
 }
+
+VkCommandBuffer CmdPass::commandBuffer() 
+{
+	return mCmdBuff;
+}

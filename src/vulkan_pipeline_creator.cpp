@@ -69,6 +69,28 @@ VkPipelineShaderStageCreateInfo VulkanPipelineCreator::shaderStage(VkShaderModul
 	return vertStageCreateInfo;
 }
 
+VkPipelineShaderStageCreateInfo VulkanPipelineCreator::shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)
+{
+	FileManager& fm = FileManager::getInstance();
+	auto shaderSpvCode = fm.readShader(path);
+
+	VkShaderModuleCreateInfo createInfo = {};
+	createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+	createInfo.codeSize = shaderSpvCode.size();
+	createInfo.pCode = (uint32_t*) shaderSpvCode.data();
+	VkShaderModule shaderModule;
+	VK_CHECK_RESULT(vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule));
+
+	VkPipelineShaderStageCreateInfo vertStageCreateInfo = {};
+	vertStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	vertStageCreateInfo.stage = stage;
+	vertStageCreateInfo.module = shaderModule;
+	vertStageCreateInfo.pName = "main";
+
+	return vertStageCreateInfo;
+}
+
+
 VkPipelineColorBlendAttachmentState VulkanPipelineCreator::blendAttachmentStateDisabled() 
 {
 	VkPipelineColorBlendAttachmentState blendAttachmentState = {};
@@ -156,9 +178,10 @@ VkPipelineLayoutCreateInfo VulkanPipelineCreator::layout(
 		VkPushConstantRange* pushConstantRanges,
 		uint32_t pushConstantRangeCount)
 {
-	VkPipelineLayoutCreateInfo pipelineLayoutInfo;
+	VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 	pipelineLayoutInfo.pNext = nullptr;
+	pipelineLayoutInfo.flags = 0;
 	pipelineLayoutInfo.setLayoutCount = setLayoutCount;
 	pipelineLayoutInfo.pSetLayouts = setLayouts;
 	pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges;

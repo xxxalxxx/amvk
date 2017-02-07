@@ -1,7 +1,6 @@
 #include "vulkan_manager.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
+
 
 const std::vector<const char*> VulkanManager::sDeviceExtensions = {
 	VK_KHR_SWAPCHAIN_EXTENSION_NAME

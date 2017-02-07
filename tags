@@ -5,6 +5,7 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 AMVK_BUFFER_MANAGER_H	inc/buffer_manager.h	2;"	d
+AMVK_BUFFER_MANAGER_H	inc/vulkan_buffer_creator.h	2;"	d
 AMVK_CAMERA_H	inc/camera.h	2;"	d
 AMVK_CMD_PASS_H	inc/cmd_pass.h	2;"	d
 AMVK_DEBUG	inc/macro.h	10;"	d
@@ -14,10 +15,17 @@ AMVK_FILE_MANAGER	inc/file_manager.h	2;"	d
 AMVK_INPUT_MANAGER_H	inc/input_manager.h	2;"	d
 AMVK_MACROS_H	inc/macro.h	3;"	d
 AMVK_QUAD_H	inc/quad.h	2;"	d
+AMVK_SWAP_CHAIN_DESC_H	inc/swap_chain_desc.h	2;"	d
 AMVK_TASK_MANAGER_H	inc/task_manager.h	4;"	d
+AMVK_TEXTURE_MANAGER_H	inc/texture_manager.h	2;"	d
 AMVK_TIMER_H	inc/timer.h	2;"	d
+AMVK_VULKAN_IMAGE_MANAGER_H	inc/vulkan_image_creator.h	2;"	d
 AMVK_VULKAN_MANAGER_H	inc/vulkan_manager.h	2;"	d
 AMVK_VULKAN_PIPELINE_CREATOR_H	inc/vulkan_pipeline_creator.h	2;"	d
+AMVK_VULKAN_RENDER_MANAGER_H	inc/vulkan_render_manager.h	2;"	d
+AMVK_VULKAN_RENDER_PASS_CREATOR_H	inc/vulkan_render_pass_creator.h	2;"	d
+AMVK_VULKAN_STATE_H	inc/vulkan_state.h	2;"	d
+AMVK_VULKAN_UTILS_H	inc/vulkan_utils.h	2;"	d
 AMVK_WINDOW_H	inc/window.h	2;"	d
 ARRAY_SIZE	inc/macro.h	17;"	d
 AccessQualifier	lib/vulkan/spirv.hpp	/^enum AccessQualifier {$/;"	g	namespace:spv
@@ -1781,8 +1789,10 @@ PFN_vkUnmapMemory	lib/vulkan/vulkan.h	/^typedef void (VKAPI_PTR *PFN_vkUnmapMemo
 PFN_vkUpdateDescriptorSets	lib/vulkan/vulkan.h	/^typedef void (VKAPI_PTR *PFN_vkUpdateDescriptorSets)(VkDevice device, uint32_t descriptorWriteCount, const VkWriteDescriptorSet* pDescriptorWrites, uint32_t descriptorCopyCount, const VkCopyDescriptorSet* pDescriptorCopies);$/;"	t
 PFN_vkVoidFunction	lib/vulkan/vulkan.h	/^typedef void (VKAPI_PTR *PFN_vkVoidFunction)(void);$/;"	t
 PFN_vkWaitForFences	lib/vulkan/vulkan.h	/^typedef VkResult (VKAPI_PTR *PFN_vkWaitForFences)(VkDevice device, uint32_t fenceCount, const VkFence* pFences, VkBool32 waitAll, uint64_t timeout);$/;"	t
+PushConstants	inc/quad.h	/^	struct PushConstants {$/;"	s	class:Quad
 PushConstants	inc/vulkan_manager.h	/^	struct PushConstants {$/;"	s	class:VulkanManager
 Quad	inc/quad.h	/^class Quad {$/;"	c
+Quad	src/quad.cpp	/^Quad::Quad(const VulkanState& vulkanState):$/;"	f	class:Quad
 QueueBindSparse	lib/vulkan/vk_layer.h	/^    PFN_vkQueueBindSparse QueueBindSparse;$/;"	m	struct:VkLayerDispatchTable_
 QueuePresentKHR	lib/vulkan/vk_layer.h	/^    PFN_vkQueuePresentKHR QueuePresentKHR;$/;"	m	struct:VkLayerDispatchTable_
 QueueSubmit	lib/vulkan/vk_layer.h	/^    PFN_vkQueueSubmit QueueSubmit;$/;"	m	struct:VkLayerDispatchTable_
@@ -1956,7 +1966,7 @@ STBI_grey	lib/stb/stb_image.h	/^   STBI_grey       = 1,$/;"	e	enum:__anon55
 STBI_grey_alpha	lib/stb/stb_image.h	/^   STBI_grey_alpha = 2,$/;"	e	enum:__anon55
 STBI_rgb	lib/stb/stb_image.h	/^   STBI_rgb        = 3,$/;"	e	enum:__anon55
 STBI_rgb_alpha	lib/stb/stb_image.h	/^   STBI_rgb_alpha  = 4$/;"	e	enum:__anon55
-STB_IMAGE_IMPLEMENTATION	src/vulkan_manager.cpp	3;"	d	file:
+STB_IMAGE_IMPLEMENTATION	src/texture_manager.cpp	4;"	d	file:
 SamplerAddressingMode	lib/vulkan/spirv.hpp	/^enum SamplerAddressingMode {$/;"	g	namespace:spv
 SamplerAddressingModeClamp	lib/vulkan/spirv.hpp	/^    SamplerAddressingModeClamp = 2,$/;"	e	enum:spv::SamplerAddressingMode
 SamplerAddressingModeClampToEdge	lib/vulkan/spirv.hpp	/^    SamplerAddressingModeClampToEdge = 1,$/;"	e	enum:spv::SamplerAddressingMode
@@ -2835,13 +2845,20 @@ StorageClassUniform	lib/vulkan/spirv.hpp	/^    StorageClassUniform = 2,$/;"	e	en
 StorageClassUniformConstant	lib/vulkan/spirv.hpp	/^    StorageClassUniformConstant = 0,$/;"	e	enum:spv::StorageClass
 StorageClassWorkgroup	lib/vulkan/spirv.hpp	/^    StorageClassWorkgroup = 4,$/;"	e	enum:spv::StorageClass
 Stub	lib/glm/detail/_swizzle.hpp	/^		struct Stub {};$/;"	s	struct:glm::detail::_swizzle_base2
+SwapChainDesc	inc/swap_chain_desc.h	/^class SwapChainDesc {$/;"	c
 SwapChainDesc	inc/vulkan_manager.h	/^	struct SwapChainDesc {$/;"	s	class:VulkanManager
+SwapChainDesc	src/swap_chain_desc.cpp	/^SwapChainDesc::SwapChainDesc() $/;"	f	class:SwapChainDesc
 TARGET	Makefile	/^TARGET=$(BIN_DIR)\/myengine$/;"	m
 Task	inc/task_manager.h	/^class Task {$/;"	c
 TaskManager	inc/task_manager.h	/^class TaskManager {$/;"	c
 TaskManager	src/task_manager.cpp	/^TaskManager::TaskManager(): mNumThreads(std::thread::hardware_concurrency())$/;"	f	class:TaskManager
+TextureData	inc/texture_manager.h	/^class TextureData {$/;"	c
+TextureData	src/texture_manager.cpp	/^TextureData::TextureData():$/;"	f	class:TextureData
+TextureManager	inc/texture_manager.h	/^class TextureManager {$/;"	c
+TextureManager	src/texture_manager.cpp	/^TextureManager::TextureManager()$/;"	f	class:TextureManager
 Timer	inc/timer.h	/^class Timer {$/;"	c
 Timer	src/timer.cpp	/^Timer::Timer()$/;"	f	class:Timer
+UBO	inc/quad.h	/^	struct UBO {$/;"	s	class:Quad
 UBO	inc/vulkan_manager.h	/^	struct UBO {$/;"	s	class:VulkanManager
 UP	inc/camera.h	/^    const static glm::vec3 UP, RIGHT;$/;"	m	class:Camera
 UP	src/camera.cpp	/^const glm::vec3 Camera::UP = glm::vec3(0.0f, 1.0f, 0.0f);$/;"	m	class:Camera	file:
@@ -2961,7 +2978,9 @@ VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNI
 VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT = 0x00000004,$/;"	e	enum:VkBufferUsageFlagBits
 VK_BUFFER_USAGE_VERTEX_BUFFER_BIT	lib/vulkan/vulkan.h	/^    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT = 0x00000080,$/;"	e	enum:VkBufferUsageFlagBits
 VK_CALL_IPROC	inc/vulkan_manager.h	19;"	d
+VK_CALL_IPROC	inc/vulkan_utils.h	23;"	d
 VK_CHECK_RESULT	inc/vulkan_manager.h	12;"	d
+VK_CHECK_RESULT	inc/vulkan_utils.h	16;"	d
 VK_COLORSPACE_SRGB_NONLINEAR_KHR	lib/vulkan/vulkan.h	3178;"	d
 VK_COLOR_COMPONENT_A_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_A_BIT = 0x00000008,$/;"	e	enum:VkColorComponentFlagBits
 VK_COLOR_COMPONENT_B_BIT	lib/vulkan/vulkan.h	/^    VK_COLOR_COMPONENT_B_BIT = 0x00000004,$/;"	e	enum:VkColorComponentFlagBits
@@ -3795,6 +3814,7 @@ VK_SYSTEM_ALLOCATION_SCOPE_MAX_ENUM	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATI
 VK_SYSTEM_ALLOCATION_SCOPE_OBJECT	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATION_SCOPE_OBJECT = 1,$/;"	e	enum:VkSystemAllocationScope
 VK_SYSTEM_ALLOCATION_SCOPE_RANGE_SIZE	lib/vulkan/vulkan.h	/^    VK_SYSTEM_ALLOCATION_SCOPE_RANGE_SIZE = (VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE - VK_SYSTEM_ALLOCATION_SCOPE_COMMAND + 1),$/;"	e	enum:VkSystemAllocationScope
 VK_THROW_RESULT_ERROR	inc/vulkan_manager.h	4;"	d
+VK_THROW_RESULT_ERROR	inc/vulkan_utils.h	8;"	d
 VK_TIMEOUT	lib/vulkan/vulkan.h	/^    VK_TIMEOUT = 2,$/;"	e	enum:VkResult
 VK_TRUE	lib/vulkan/vulkan.h	100;"	d
 VK_UUID_SIZE	lib/vulkan/vulkan.h	105;"	d
@@ -3813,7 +3833,6 @@ VPATH	Makefile	/^VPATH=inc:src:lib$/;"	m
 VULKAN_H_	lib/vulkan/vulkan.h	2;"	d
 VULKAN_LIB_PATH	Makefile	/^VULKAN_LIB_PATH := $(VULKAN_SDK_DIR)\/lib$/;"	m
 VULKAN_SDK_DIR	Makefile	/^VULKAN_SDK_DIR := \/home\/al\/VulkanSDK\/1.0.21.1\/x86_64$/;"	m
-VULKAN_UTILS_H	inc/vulkan_utils.h	2;"	d
 Version	lib/vulkan/spirv.hpp	/^static const unsigned int Version = 0x00010100;$/;"	m	namespace:spv
 Vertex	inc/quad.h	/^	struct Vertex {$/;"	s	class:Quad
 Vertex	inc/vulkan_manager.h	/^	struct Vertex {$/;"	s	class:VulkanManager
@@ -4328,10 +4347,25 @@ VkXcbSurfaceCreateInfoKHR	lib/vulkan/vulkan.h	/^} VkXcbSurfaceCreateInfoKHR;$/;"
 VkXlibSurfaceCreateFlagsKHR	lib/vulkan/vulkan.h	/^typedef VkFlags VkXlibSurfaceCreateFlagsKHR;$/;"	t
 VkXlibSurfaceCreateInfoKHR	lib/vulkan/vulkan.h	/^typedef struct VkXlibSurfaceCreateInfoKHR {$/;"	s
 VkXlibSurfaceCreateInfoKHR	lib/vulkan/vulkan.h	/^} VkXlibSurfaceCreateInfoKHR;$/;"	t	typeref:struct:VkXlibSurfaceCreateInfoKHR
+VulkanBufferCreator	inc/vulkan_buffer_creator.h	/^class VulkanBufferCreator {$/;"	c
+VulkanBufferCreator	src/vulkan_buffer_creator.cpp	/^VulkanBufferCreator::VulkanBufferCreator(const VulkanState& vulkanState):$/;"	f	class:VulkanBufferCreator
+VulkanBufferDesc	inc/vulkan_buffer_creator.h	/^class VulkanBufferDesc {$/;"	c
+VulkanBufferDesc	src/vulkan_buffer_creator.cpp	/^VulkanBufferDesc::VulkanBufferDesc(const VkDevice& device):$/;"	f	class:VulkanBufferDesc
+VulkanImageCreator	inc/vulkan_image_creator.h	/^class VulkanImageCreator {$/;"	c
+VulkanImageCreator	src/vulkan_image_creator.cpp	/^VulkanImageCreator::VulkanImageCreator(const VulkanState& vulkanState):$/;"	f	class:VulkanImageCreator
+VulkanImageDesc	inc/vulkan_image_creator.h	/^class VulkanImageDesc {$/;"	c
+VulkanImageDesc	src/vulkan_image_creator.cpp	/^VulkanImageDesc::VulkanImageDesc(const VkDevice& vkDevice):$/;"	f	class:VulkanImageDesc
 VulkanManager	inc/vulkan_manager.h	/^class VulkanManager { $/;"	c
 VulkanManager	src/vulkan_manager.cpp	/^VulkanManager::VulkanManager(const Window& window):$/;"	f	class:VulkanManager
 VulkanPipelineCreator	inc/vulkan_pipeline_creator.h	/^class VulkanPipelineCreator {$/;"	c
 VulkanPipelineCreator	src/vulkan_pipeline_creator.cpp	/^VulkanPipelineCreator::VulkanPipelineCreator()$/;"	f	class:VulkanPipelineCreator
+VulkanRenderManager	inc/vulkan_render_manager.h	/^class VulkanRenderManager {$/;"	c
+VulkanRenderManager	src/vulkan_render_manager.cpp	/^VulkanRenderManager::VulkanRenderManager(VulkanState& vulkanState):$/;"	f	class:VulkanRenderManager
+VulkanRenderPassCreator	inc/vulkan_render_pass_creator.h	/^class VulkanRenderPassCreator {$/;"	c
+VulkanRenderPassCreator	src/vulkan_render_pass_creator.cpp	/^VulkanRenderPassCreator::VulkanRenderPassCreator() $/;"	f	class:VulkanRenderPassCreator
+VulkanState	inc/vulkan_state.h	/^	VulkanState(): $/;"	f	struct:VulkanState
+VulkanState	inc/vulkan_state.h	/^struct VulkanState {$/;"	s
+VulkanTexture	inc/vulkan_image_creator.h	/^struct VulkanTexture {$/;"	s
 VulkanUtils	inc/vulkan_utils.h	/^class VulkanUtils {$/;"	c
 WaitForFences	lib/vulkan/vk_layer.h	/^    PFN_vkWaitForFences WaitForFences;$/;"	m	struct:VkLayerDispatchTable_
 Window	inc/window.h	/^class Window {$/;"	c
@@ -4530,6 +4564,8 @@ attachment	lib/vulkan/vulkan.h	/^    uint32_t         attachment;$/;"	m	struct:V
 attachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                                      attachmentCount;$/;"	m	struct:VkPipelineColorBlendStateCreateInfo
 attachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                          attachmentCount;$/;"	m	struct:VkRenderPassCreateInfo
 attachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                    attachmentCount;$/;"	m	struct:VkFramebufferCreateInfo
+attachmentDescColor	src/vulkan_render_pass_creator.cpp	/^VkAttachmentDescription VulkanRenderPassCreator::attachmentDescColor(VkFormat format) const $/;"	f	class:VulkanRenderPassCreator
+attachmentDescDepthNoStencil	src/vulkan_render_pass_creator.cpp	/^VkAttachmentDescription VulkanRenderPassCreator::attachmentDescDepthNoStencil(VkFormat format) const $/;"	f	class:VulkanRenderPassCreator
 b	lib/glm/detail/type_vec3.hpp	/^				struct{ T r, g, b; };$/;"	m	struct:glm::tvec3::__anon17::__anon19
 b	lib/glm/detail/type_vec3.hpp	/^			union { T z, b, p; };$/;"	m	union:glm::tvec3::__anon23
 b	lib/glm/detail/type_vec4.hpp	/^				struct { T r, g, b, a; };$/;"	m	struct:glm::tvec4::__anon1::__anon3
@@ -4590,6 +4626,7 @@ bool_type	lib/glm/detail/type_vec4.hpp	/^		typedef tvec4<bool, P> bool_type;$/;"
 borderColor	lib/vulkan/vulkan.h	/^    VkBorderColor           borderColor;$/;"	m	struct:VkSamplerCreateInfo
 bpp	lib/stb/stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon68
 bss_	lib/glm/gtx/io.hpp	/^			basic_state_saver<CTy> const bss_;$/;"	m	class:glm::io::basic_format_saver
+buffer	inc/vulkan_buffer_creator.h	/^	VkBuffer buffer;$/;"	m	class:VulkanBufferDesc
 buffer	lib/vulkan/vulkan.h	/^    VkBuffer                     buffer;$/;"	m	struct:VkSparseBufferMemoryBindInfo
 buffer	lib/vulkan/vulkan.h	/^    VkBuffer                   buffer;$/;"	m	struct:VkBufferViewCreateInfo
 buffer	lib/vulkan/vulkan.h	/^    VkBuffer           buffer;$/;"	m	struct:VkBufferMemoryBarrier
@@ -4677,8 +4714,10 @@ cols	lib/glm/gtx/type_trait.hpp	/^			cols = 4,$/;"	e	enum:glm::type::__anon36
 cols	lib/glm/gtx/type_trait.hpp	/^		static length_t const cols = 0;$/;"	m	struct:glm::type
 column	lib/vulkan/libspirv.h	/^  size_t column;$/;"	m	struct:spv_position_t
 column_major	lib/glm/gtx/io.hpp	/^		enum order_type { column_major, row_major};$/;"	e	enum:glm::io::order_type
+commandBuffer	src/cmd_pass.cpp	/^VkCommandBuffer CmdPass::commandBuffer() $/;"	f	class:CmdPass
 commandBufferCount	lib/vulkan/vulkan.h	/^    uint32_t                       commandBufferCount;$/;"	m	struct:VkSubmitInfo
 commandBufferCount	lib/vulkan/vulkan.h	/^    uint32_t                commandBufferCount;$/;"	m	struct:VkCommandBufferAllocateInfo
+commandPool	inc/vulkan_state.h	/^	VkCommandPool commandPool;$/;"	m	struct:VulkanState
 commandPool	lib/vulkan/vulkan.h	/^    VkCommandPool           commandPool;$/;"	m	struct:VkCommandBufferAllocateInfo
 compareEnable	lib/vulkan/vulkan.h	/^    VkBool32                compareEnable;$/;"	m	struct:VkSamplerCreateInfo
 compareMask	lib/vulkan/vulkan.h	/^    uint32_t       compareMask;$/;"	m	struct:VkStencilOpState
@@ -4717,32 +4756,48 @@ const_pointer	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const * 
 const_pointer_const	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const * const const_pointer_const;$/;"	t	struct:glm::detail::genType
 const_reference	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const & const_reference;$/;"	t	struct:glm::detail::genType
 constantID	lib/vulkan/vulkan.h	/^    uint32_t    constantID;$/;"	m	struct:VkSpecializationMapEntry
+copyBuffer	src/vulkan_buffer_creator.cpp	/^void VulkanBufferCreator::copyBuffer(VkBuffer src, VkBuffer dst, VkDeviceSize size) const$/;"	f	class:VulkanBufferCreator
 copyBuffer	src/vulkan_manager.cpp	/^void VulkanManager::copyBuffer(VkBuffer src, VkBuffer dst, VkDeviceSize size)$/;"	f	class:VulkanManager
+copyImage	src/vulkan_image_creator.cpp	/^void VulkanImageCreator::copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height) const$/;"	f	class:VulkanImageCreator
 copyImage	src/vulkan_manager.cpp	/^void VulkanManager::copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height)$/;"	f	class:VulkanManager
 countof	lib/glm/detail/setup.hpp	/^		constexpr std::size_t countof(T const (&)[N])$/;"	f	namespace:glm
+createBuffer	src/vulkan_buffer_creator.cpp	/^void VulkanBufferCreator::createBuffer($/;"	f	class:VulkanBufferCreator
 createBuffer	src/vulkan_manager.cpp	/^void VulkanManager::createBuffer(VkBuffer& buffer, $/;"	f	class:VulkanManager
 createCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::createCommandBuffers()$/;"	f	class:VulkanManager
 createCommandPool	src/vulkan_manager.cpp	/^void VulkanManager::createCommandPool()$/;"	f	class:VulkanManager
 createDepthResources	src/vulkan_manager.cpp	/^void VulkanManager::createDepthResources() $/;"	f	class:VulkanManager
+createDescriptorPool	src/quad.cpp	/^void Quad::createDescriptorPool()$/;"	f	class:Quad
 createDescriptorPool	src/vulkan_manager.cpp	/^void VulkanManager::createDescriptorPool()$/;"	f	class:VulkanManager
+createDescriptorSet	src/quad.cpp	/^void Quad::createDescriptorSet() $/;"	f	class:Quad
 createDescriptorSet	src/vulkan_manager.cpp	/^void VulkanManager::createDescriptorSet() $/;"	f	class:VulkanManager
+createDescriptorSetLayout	src/quad.cpp	/^void Quad::createDescriptorSetLayout()$/;"	f	class:Quad
 createDescriptorSetLayout	src/vulkan_manager.cpp	/^void VulkanManager::createDescriptorSetLayout()$/;"	f	class:VulkanManager
 createFramebuffers	src/vulkan_manager.cpp	/^void VulkanManager::createFramebuffers()$/;"	f	class:VulkanManager
+createImage	src/vulkan_image_creator.cpp	/^void VulkanImageCreator::createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,$/;"	f	class:VulkanImageCreator
 createImage	src/vulkan_manager.cpp	/^void VulkanManager::createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,$/;"	f	class:VulkanManager
+createImageView	src/vulkan_image_creator.cpp	/^void VulkanImageCreator::createImageView($/;"	f	class:VulkanImageCreator
 createImageView	src/vulkan_manager.cpp	/^void VulkanManager::createImageView($/;"	f	class:VulkanManager
 createImageViews	src/vulkan_manager.cpp	/^void VulkanManager::createImageViews() $/;"	f	class:VulkanManager
+createIndexBuffer	src/quad.cpp	/^void Quad::createIndexBuffer(const VulkanBufferCreator& vbc)$/;"	f	class:Quad
 createIndexBuffer	src/vulkan_manager.cpp	/^void VulkanManager::createIndexBuffer()$/;"	f	class:VulkanManager
 createLogicalDevice	src/vulkan_manager.cpp	/^void VulkanManager::createLogicalDevice() $/;"	f	class:VulkanManager
 createPhysicalDevice	src/vulkan_manager.cpp	/^void VulkanManager::createPhysicalDevice() $/;"	f	class:VulkanManager
+createPipeline	src/quad.cpp	/^void Quad::createPipeline()$/;"	f	class:Quad
 createPipeline	src/vulkan_manager.cpp	/^void VulkanManager::createPipeline()$/;"	f	class:VulkanManager
+createRenderPass	src/quad.cpp	/^void Quad::createRenderPass(const VulkanImageCreator& vic)$/;"	f	class:Quad
 createRenderPass	src/vulkan_manager.cpp	/^void VulkanManager::createRenderPass()$/;"	f	class:VulkanManager
 createSemaphores	src/vulkan_manager.cpp	/^void VulkanManager::createSemaphores()$/;"	f	class:VulkanManager
 createShaderModule	src/vulkan_manager.cpp	/^void VulkanManager::createShaderModule(const std::vector<char>& shaderSpvCode, VkShaderModule& shaderModule)$/;"	f	class:VulkanManager
 createSwapChain	src/vulkan_manager.cpp	/^void VulkanManager::createSwapChain(const Window& window)$/;"	f	class:VulkanManager
+createTextureImage	src/quad.cpp	/^void Quad::createTextureImage(const VulkanImageCreator& vic)$/;"	f	class:Quad
 createTextureImage	src/vulkan_manager.cpp	/^void VulkanManager::createTextureImage()$/;"	f	class:VulkanManager
+createTextureImageView	src/quad.cpp	/^void Quad::createTextureImageView(const VulkanImageCreator& vic)$/;"	f	class:Quad
 createTextureImageView	src/vulkan_manager.cpp	/^void VulkanManager::createTextureImageView()$/;"	f	class:VulkanManager
+createTextureSampler	src/quad.cpp	/^void Quad::createTextureSampler()$/;"	f	class:Quad
 createTextureSampler	src/vulkan_manager.cpp	/^void VulkanManager::createTextureSampler()$/;"	f	class:VulkanManager
+createUniformBuffer	src/quad.cpp	/^void Quad::createUniformBuffer(const VulkanBufferCreator& vbc)$/;"	f	class:Quad
 createUniformBuffer	src/vulkan_manager.cpp	/^void VulkanManager::createUniformBuffer()$/;"	f	class:VulkanManager
+createVertexBuffer	src/quad.cpp	/^void Quad::createVertexBuffer(const VulkanBufferCreator& vbc) $/;"	f	class:Quad
 createVertexBuffer	src/vulkan_manager.cpp	/^void VulkanManager::createVertexBuffer() $/;"	f	class:VulkanManager
 createVkInstance	src/vulkan_manager.cpp	/^void VulkanManager::createVkInstance() $/;"	f	class:VulkanManager
 createVkSurface	src/vulkan_manager.cpp	/^void VulkanManager::createVkSurface(GLFWwindow& glfwWindow)$/;"	f	class:VulkanManager
@@ -4836,6 +4891,7 @@ depthClamp	lib/vulkan/vulkan.h	/^    VkBool32    depthClamp;$/;"	m	struct:VkPhys
 depthClampEnable	lib/vulkan/vulkan.h	/^    VkBool32                                   depthClampEnable;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo
 depthCompareOp	lib/vulkan/vulkan.h	/^    VkCompareOp                               depthCompareOp;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo
 depthFailOp	lib/vulkan/vulkan.h	/^    VkStencilOp    depthFailOp;$/;"	m	struct:VkStencilOpState
+depthFormat	inc/vulkan_state.h	/^	VkFormat depthFormat;$/;"	m	struct:VulkanState
 depthPitch	lib/vulkan/vulkan.h	/^    VkDeviceSize    depthPitch;$/;"	m	struct:VkSubresourceLayout
 depthStencil	lib/vulkan/vulkan.h	/^    VkClearDepthStencilValue    depthStencil;$/;"	m	union:VkClearValue
 depthStencilStateDepthLessNoStencil	src/vulkan_pipeline_creator.cpp	/^VkPipelineDepthStencilStateCreateInfo VulkanPipelineCreator::depthStencilStateDepthLessNoStencil() $/;"	f	class:VulkanPipelineCreator
@@ -4843,6 +4899,7 @@ depthTestEnable	lib/vulkan/vulkan.h	/^    VkBool32                              
 depthWriteEnable	lib/vulkan/vulkan.h	/^    VkBool32                                  depthWriteEnable;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo
 dequant	lib/stb/stb_image.h	/^   stbi_uc dequant[4][64];$/;"	m	struct:__anon60
 description	lib/vulkan/vulkan.h	/^    char        description[VK_MAX_DESCRIPTION_SIZE];$/;"	m	struct:VkLayerProperties
+descriptor	inc/vulkan_image_creator.h	/^	VkDescriptorImageInfo descriptor;$/;"	m	struct:VulkanTexture
 descriptorCount	lib/vulkan/vulkan.h	/^    uint32_t                         descriptorCount;$/;"	m	struct:VkWriteDescriptorSet
 descriptorCount	lib/vulkan/vulkan.h	/^    uint32_t              descriptorCount;$/;"	m	struct:VkDescriptorSetLayoutBinding
 descriptorCount	lib/vulkan/vulkan.h	/^    uint32_t            descriptorCount;$/;"	m	struct:VkDescriptorPoolSize
@@ -4863,8 +4920,10 @@ detail	lib/glm/detail/type_half.hpp	/^namespace detail$/;"	n	namespace:glm
 detail	lib/glm/detail/type_int.hpp	/^namespace detail$/;"	n	namespace:glm
 detail	lib/glm/detail/type_mat.hpp	/^namespace detail$/;"	n	namespace:glm
 detail	lib/glm/detail/type_vec.hpp	/^namespace detail$/;"	n	namespace:glm
+device	inc/vulkan_state.h	/^	VkDevice device;$/;"	m	struct:VulkanState
 deviceExtensionsSupported	src/vulkan_manager.cpp	/^bool VulkanManager::deviceExtensionsSupported(const VkPhysicalDevice& physicalDevice) $/;"	f	class:VulkanManager
 deviceID	lib/vulkan/vulkan.h	/^    uint32_t                            deviceID;$/;"	m	struct:VkPhysicalDeviceProperties
+deviceMemory	inc/vulkan_image_creator.h	/^	VkDeviceMemory deviceMemory;$/;"	m	struct:VulkanTexture
 deviceName	lib/vulkan/vulkan.h	/^    char                                deviceName[VK_MAX_PHYSICAL_DEVICE_NAME_SIZE];$/;"	m	struct:VkPhysicalDeviceProperties
 deviceType	lib/vulkan/vulkan.h	/^    VkPhysicalDeviceType                deviceType;$/;"	m	struct:VkPhysicalDeviceProperties
 device_info	lib/vulkan/vk_layer.h	/^    void *device_info;$/;"	m	struct:VkLayerDeviceInfo_
@@ -4925,6 +4984,7 @@ dpy	lib/vulkan/vulkan.h	/^    Display*                       dpy;$/;"	m	struct:V
 dquat	lib/glm/fwd.hpp	/^	typedef highp_dquat			dquat;$/;"	t	namespace:glm
 dquat	lib/glm/fwd.hpp	/^	typedef lowp_dquat			dquat;$/;"	t	namespace:glm
 dquat	lib/glm/fwd.hpp	/^	typedef mediump_dquat		dquat;$/;"	t	namespace:glm
+draw	src/quad.cpp	/^void Quad::draw(VkCommandBuffer& commandBuffer) $/;"	f	class:Quad
 draw	src/vulkan_manager.cpp	/^void VulkanManager::draw() $/;"	f	class:VulkanManager
 drawIndirectFirstInstance	lib/vulkan/vulkan.h	/^    VkBool32    drawIndirectFirstInstance;$/;"	m	struct:VkPhysicalDeviceFeatures
 driverVersion	lib/vulkan/vulkan.h	/^    uint32_t                            driverVersion;$/;"	m	struct:VkPhysicalDeviceProperties
@@ -5163,7 +5223,9 @@ fileManager	inc/file_manager.h	/^	void operator=(const FileManager& fileManager)
 fillModeNonSolid	lib/vulkan/vulkan.h	/^    VkBool32    fillModeNonSolid;$/;"	m	struct:VkPhysicalDeviceFeatures
 fill_	lib/glm/gtx/io.hpp	/^			char_type       fill_;$/;"	m	class:glm::io::basic_state_saver
 finalLayout	lib/vulkan/vulkan.h	/^    VkImageLayout                   finalLayout;$/;"	m	struct:VkAttachmentDescription
+findDepthFormat	src/vulkan_image_creator.cpp	/^VkFormat VulkanImageCreator::findDepthFormat() const$/;"	f	class:VulkanImageCreator
 findDepthFormat	src/vulkan_manager.cpp	/^VkFormat VulkanManager::findDepthFormat()$/;"	f	class:VulkanManager
+findSupportedFormat	src/vulkan_image_creator.cpp	/^VkFormat VulkanImageCreator::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const$/;"	f	class:VulkanImageCreator
 findSupportedFormat	src/vulkan_manager.cpp	/^VkFormat VulkanManager::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) $/;"	f	class:VulkanManager
 first	lib/stb/stb_image.h	/^   stbi_uc first;$/;"	m	struct:__anon70
 firstIndex	lib/vulkan/vulkan.h	/^    uint32_t    firstIndex;$/;"	m	struct:VkDrawIndexedIndirectCommand
@@ -5382,10 +5444,13 @@ g	lib/vulkan/vulkan.h	/^    VkComponentSwizzle    g;$/;"	m	struct:VkComponentMap
 genType	lib/glm/detail/type_gentype.hpp	/^	struct genType$/;"	s	namespace:glm::detail
 geometryShader	lib/vulkan/vulkan.h	/^    VkBool32    geometryShader;$/;"	m	struct:VkPhysicalDeviceFeatures
 getAspect	src/window.cpp	/^float Window::getAspect() const$/;"	f	class:Window
+getAttrDesc	src/quad.cpp	/^std::array<VkVertexInputAttributeDescription, 3> Quad::getAttrDesc() const $/;"	f	class:Quad
 getAttrDesc	src/vulkan_manager.cpp	/^std::array<VkVertexInputAttributeDescription, 3> VulkanManager::getAttrDesc() $/;"	f	class:VulkanManager
 getBinPath	src/file_manager.cpp	/^std::string FileManager::getBinPath() $/;"	f	class:FileManager
+getBindingDesc	src/quad.cpp	/^VkVertexInputBindingDescription Quad::getBindingDesc() const$/;"	f	class:Quad
 getBindingDesc	src/vulkan_manager.cpp	/^VkVertexInputBindingDescription VulkanManager::getBindingDesc()$/;"	f	class:VulkanManager
 getCamera	src/engine.cpp	/^Camera& Engine::getCamera()$/;"	f	class:Engine
+getChannels	src/texture_manager.cpp	/^int TextureData::getChannels() const$/;"	f	class:TextureData
 getComputeQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getComputeQueueIndex()$/;"	f	class:DeviceQueueIndicies
 getCurrentDir	inc/file_manager.h	15;"	d
 getCurrentDir	inc/file_manager.h	18;"	d
@@ -5394,24 +5459,30 @@ getExtensionNames	src/vulkan_manager.cpp	/^std::vector<const char*> VulkanManage
 getExtent	src/vulkan_manager.cpp	/^VkExtent2D VulkanManager::getExtent(VkSurfaceCapabilitiesKHR& surfaceCapabilities, const Window& window)$/;"	f	class:VulkanManager
 getFilePath	src/file_manager.cpp	/^std::string FileManager::getFilePath(const std::string& filename)$/;"	f	class:FileManager
 getGraphicsQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getGraphicsQueueIndex()$/;"	f	class:DeviceQueueIndicies
+getHeight	src/texture_manager.cpp	/^int TextureData::getHeight() const $/;"	f	class:TextureData
 getHeight	src/window.cpp	/^unsigned Window::getHeight() const $/;"	f	class:Window
 getInputManager	src/window.cpp	/^InputManager& Window::getInputManager()$/;"	f	class:Window
 getInstance	src/file_manager.cpp	/^FileManager& FileManager::getInstance()$/;"	f	class:FileManager
+getMemoryType	src/vulkan_buffer_creator.cpp	/^uint32_t VulkanBufferCreator::getMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags& flags) const$/;"	f	class:VulkanBufferCreator
 getMemoryType	src/vulkan_manager.cpp	/^uint32_t VulkanManager::getMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags& flags)$/;"	f	class:VulkanManager
+getPixels	src/texture_manager.cpp	/^stbi_uc* TextureData::getPixels()$/;"	f	class:TextureData
 getPresentMode	src/vulkan_manager.cpp	/^VkPresentModeKHR VulkanManager::getPresentMode(const std::vector<VkPresentModeKHR>& presentModes) $/;"	f	class:VulkanManager
 getResourcePath	src/file_manager.cpp	/^std::string FileManager::getResourcePath(std::string&& path) const $/;"	f	class:FileManager
+getSize	src/texture_manager.cpp	/^uint64_t TextureData::getSize() const $/;"	f	class:TextureData
 getSupportedQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getSupportedQueueIndex()$/;"	f	class:DeviceQueueIndicies
 getSurfaceFormat	src/vulkan_manager.cpp	/^VkSurfaceFormatKHR VulkanManager::getSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surfaceFormats) $/;"	f	class:VulkanManager
 getSwapChainDesc	src/vulkan_manager.cpp	/^VulkanManager::SwapChainDesc VulkanManager::getSwapChainDesc(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface)$/;"	f	class:VulkanManager
 getTaskManager	src/engine.cpp	/^TaskManager& Engine::getTaskManager() $/;"	f	class:Engine
 getTimer	src/engine.cpp	/^Timer& Engine::getTimer()$/;"	f	class:Engine
 getTransfersQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getTransfersQueueIndex()$/;"	f	class:DeviceQueueIndicies
+getVertexInputStateCreateInfo	src/quad.cpp	/^VkPipelineVertexInputStateCreateInfo Quad::getVertexInputStateCreateInfo($/;"	f	class:Quad
 getVkDevice	src/vulkan_manager.cpp	/^const VkDevice& VulkanManager::getVkDevice() const $/;"	f	class:VulkanManager
 getVkExtensionProperties	src/vulkan_manager.cpp	/^std::vector<VkExtensionProperties> VulkanManager::getVkExtensionProperties() $/;"	f	class:VulkanManager
 getVkExtensionPropertyNames	src/vulkan_manager.cpp	/^std::vector<std::string> VulkanManager::getVkExtensionPropertyNames(std::vector<VkExtensionProperties>& vkExtensionProperties)$/;"	f	class:VulkanManager
 getVkResultString	src/vulkan_utils.cpp	/^const char* VulkanUtils::getVkResultString(VkResult result)$/;"	f	class:VulkanUtils
 getVkResultString	src/vulkan_utils.cpp	/^const char* VulkanUtils::getVkResultString(int result)$/;"	f	class:VulkanUtils
 getVulkanManager	src/engine.cpp	/^VulkanManager& Engine::getVulkanManager()$/;"	f	class:Engine
+getWidth	src/texture_manager.cpp	/^int TextureData::getWidth() const $/;"	f	class:TextureData
 getWidth	src/window.cpp	/^unsigned Window::getWidth() const  $/;"	f	class:Window
 getWindow	src/engine.cpp	/^Window& Engine::getWindow()$/;"	f	class:Engine
 glm	lib/glm/detail/_noise.hpp	/^namespace glm{$/;"	n
@@ -5597,6 +5668,8 @@ glm_vec4_swizzle_xyzw	lib/glm/simd/common.h	/^GLM_FUNC_QUALIFIER glm_vec4 glm_ve
 globalAlpha	lib/vulkan/vk_icd.h	/^    float globalAlpha;$/;"	m	struct:__anon50
 globalAlpha	lib/vulkan/vulkan.h	/^    float                             globalAlpha;$/;"	m	struct:VkDisplaySurfaceCreateInfoKHR
 graphicsIndexSet	src/device_queue_indices.cpp	/^bool DeviceQueueIndicies::graphicsIndexSet() $/;"	f	class:DeviceQueueIndicies
+graphicsQueue	inc/vulkan_state.h	/^	VkQueue graphicsQueue;$/;"	m	struct:VulkanState
+graphicsQueueIndex	inc/vulkan_state.h	/^	uint32_t graphicsQueueIndex;$/;"	m	struct:VulkanState
 gtx	lib/glm/gtx/number_precision.hpp	/^namespace gtx$/;"	n	namespace:glm
 gtx	lib/glm/gtx/optimum_pow.hpp	/^namespace gtx$/;"	n	namespace:glm
 h	lib/stb/stb_image.h	/^      int h,v;$/;"	m	struct:__anon60::__anon61
@@ -5623,6 +5696,7 @@ hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::tvec4<T,P> >$/;"	s	namespace:std
 hd	lib/stb/stb_image.h	/^      int hd,ha;$/;"	m	struct:__anon60::__anon61
 hdata	lib/glm/detail/type_half.hpp	/^	typedef short hdata;$/;"	t	namespace:glm::detail
 heapIndex	lib/vulkan/vulkan.h	/^    uint32_t                 heapIndex;$/;"	m	struct:VkMemoryType
+height	inc/vulkan_image_creator.h	/^	uint32_t width, height;$/;"	m	struct:VulkanTexture
 height	lib/vulkan/vulkan.h	/^    float    height;$/;"	m	struct:VkViewport
 height	lib/vulkan/vulkan.h	/^    uint32_t                    height;$/;"	m	struct:VkFramebufferCreateInfo
 height	lib/vulkan/vulkan.h	/^    uint32_t    height;$/;"	m	struct:VkExtent2D
@@ -5949,6 +6023,8 @@ id	lib/glm/gtx/io.hpp	/^			static std::locale::id id;$/;"	m	class:glm::io::forma
 id	lib/stb/stb_image.h	/^      int id;$/;"	m	struct:__anon60::__anon61
 idata	lib/stb/stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon66
 idct_block_kernel	lib/stb/stb_image.h	/^   void (*idct_block_kernel)(stbi_uc *out, int out_stride, short data[64]);$/;"	m	struct:__anon60
+image	inc/vulkan_image_creator.h	/^	VkImage image;$/;"	m	class:VulkanImageDesc
+image	inc/vulkan_image_creator.h	/^	VkImage image;$/;"	m	struct:VulkanTexture
 image	lib/vulkan/vulkan.h	/^    VkImage                           image;$/;"	m	struct:VkSparseImageMemoryBindInfo
 image	lib/vulkan/vulkan.h	/^    VkImage                      image;$/;"	m	struct:VkSparseImageOpaqueMemoryBindInfo
 image	lib/vulkan/vulkan.h	/^    VkImage                    image;$/;"	m	struct:VkImageMemoryBarrier
@@ -5964,6 +6040,7 @@ imageExtent	lib/vulkan/vulkan.h	/^    VkExtent2D                       imageExte
 imageExtent	lib/vulkan/vulkan.h	/^    VkExtent3D                  imageExtent;$/;"	m	struct:VkBufferImageCopy
 imageFormat	lib/vulkan/vulkan.h	/^    VkFormat                         imageFormat;$/;"	m	struct:VkSwapchainCreateInfoKHR
 imageGranularity	lib/vulkan/vulkan.h	/^    VkExtent3D                  imageGranularity;$/;"	m	struct:VkSparseImageFormatProperties
+imageLayout	inc/vulkan_image_creator.h	/^	VkImageLayout imageLayout;$/;"	m	struct:VulkanTexture
 imageLayout	lib/vulkan/vulkan.h	/^    VkImageLayout    imageLayout;$/;"	m	struct:VkDescriptorImageInfo
 imageMipTailFirstLod	lib/vulkan/vulkan.h	/^    uint32_t                         imageMipTailFirstLod;$/;"	m	struct:VkSparseImageMemoryRequirements
 imageMipTailOffset	lib/vulkan/vulkan.h	/^    VkDeviceSize                     imageMipTailOffset;$/;"	m	struct:VkSparseImageMemoryRequirements
@@ -5975,6 +6052,7 @@ imageSharingMode	lib/vulkan/vulkan.h	/^    VkSharingMode                    imag
 imageSubresource	lib/vulkan/vulkan.h	/^    VkImageSubresourceLayers    imageSubresource;$/;"	m	struct:VkBufferImageCopy
 imageType	lib/vulkan/vulkan.h	/^    VkImageType              imageType;$/;"	m	struct:VkImageCreateInfo
 imageUsage	lib/vulkan/vulkan.h	/^    VkImageUsageFlags                imageUsage;$/;"	m	struct:VkSwapchainCreateInfoKHR
+imageView	inc/vulkan_image_creator.h	/^	VkImageView imageView;$/;"	m	class:VulkanImageDesc
 imageView	lib/vulkan/vulkan.h	/^    VkImageView      imageView;$/;"	m	struct:VkDescriptorImageInfo
 imat2	lib/glm/gtc/matrix_integer.hpp	/^	typedef highp_imat2								imat2;$/;"	t	namespace:glm
 imat2	lib/glm/gtc/matrix_integer.hpp	/^	typedef lowp_imat2								imat2;$/;"	t	namespace:glm
@@ -6031,11 +6109,11 @@ implementationVersion	lib/vulkan/vulkan.h	/^    uint32_t    implementationVersio
 independentBlend	lib/vulkan/vulkan.h	/^    VkBool32    independentBlend;$/;"	m	struct:VkPhysicalDeviceFeatures
 index	lib/vulkan/libspirv.h	/^  size_t index;$/;"	m	struct:spv_position_t
 indexBuffer	inc/vulkan_manager.h	/^	VkBuffer vertexBuffer, indexBuffer, uniformBuffer, uniformStagingBuffer;$/;"	m	class:VulkanManager
-indexBufferMem	inc/quad.h	/^	VkDeviceMemory vertexBufferMem, indexBufferMem;$/;"	m	class:Quad
 indexBufferMem	inc/vulkan_manager.h	/^	VkDeviceMemory vertexBufferMem, indexBufferMem, uniformBufferMem, uniformStagingBufferMem;$/;"	m	class:VulkanManager
 indexCount	lib/vulkan/vulkan.h	/^    uint32_t    indexCount;$/;"	m	struct:VkDrawIndexedIndirectCommand
 inheritedQueries	lib/vulkan/vulkan.h	/^    VkBool32    inheritedQueries;$/;"	m	struct:VkPhysicalDeviceFeatures
 init	src/engine.cpp	/^void Engine::init() $/;"	f	class:Engine
+init	src/quad.cpp	/^void Quad::init()$/;"	f	class:Quad
 init	src/vulkan_manager.cpp	/^void VulkanManager::init() $/;"	f	class:VulkanManager
 initBinPath	src/file_manager.cpp	/^void FileManager::initBinPath()$/;"	f	class:FileManager
 initWindow	src/window.cpp	/^void Window::initWindow(Engine& engine)$/;"	f	class:Window
@@ -6047,6 +6125,7 @@ inline	lib/vulkan/vk_sdk_platform.h	29;"	d
 inputAssemblyNoRestart	src/vulkan_pipeline_creator.cpp	/^VkPipelineInputAssemblyStateCreateInfo VulkanPipelineCreator::inputAssemblyNoRestart(VkPrimitiveTopology topology) $/;"	f	class:VulkanPipelineCreator
 inputAttachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                        inputAttachmentCount;$/;"	m	struct:VkSubpassDescription
 inputRate	lib/vulkan/vulkan.h	/^    VkVertexInputRate    inputRate;$/;"	m	struct:VkVertexInputBindingDescription
+instance	inc/vulkan_state.h	/^	VkInstance instance;$/;"	m	struct:VulkanState
 instanceCount	lib/vulkan/vulkan.h	/^    uint32_t    instanceCount;$/;"	m	struct:VkDrawIndexedIndirectCommand
 instanceCount	lib/vulkan/vulkan.h	/^    uint32_t    instanceCount;$/;"	m	struct:VkDrawIndirectCommand
 int1	lib/glm/gtx/compatibility.hpp	/^	typedef int							int1;			\/\/!< \\brief integer vector with 1 component. (From GLM_GTX_compatibility extension)$/;"	t	namespace:glm
@@ -6121,6 +6200,7 @@ ivec4	lib/glm/detail/type_vec.hpp	/^	typedef mediump_ivec4		ivec4;$/;"	t	namespa
 keyCallback	src/engine.cpp	/^void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)$/;"	f
 keyPressed	src/input_manager.cpp	/^bool InputManager::keyPressed(int key)$/;"	f	class:InputManager
 largePoints	lib/vulkan/vulkan.h	/^    VkBool32    largePoints;$/;"	m	struct:VkPhysicalDeviceFeatures
+layerCount	inc/vulkan_image_creator.h	/^	uint32_t layerCount;$/;"	m	struct:VulkanTexture
 layerCount	lib/vulkan/vulkan.h	/^    uint32_t              layerCount;$/;"	m	struct:VkImageSubresourceLayers
 layerCount	lib/vulkan/vulkan.h	/^    uint32_t              layerCount;$/;"	m	struct:VkImageSubresourceRange
 layerCount	lib/vulkan/vulkan.h	/^    uint32_t    layerCount;$/;"	m	struct:VkClearRect
@@ -6168,6 +6248,7 @@ lineWidthRange	lib/vulkan/vulkan.h	/^    float                 lineWidthRange[2]
 line_size	lib/stb/stb_image.h	/^   int line_size;$/;"	m	struct:__anon71
 linearTilingFeatures	lib/vulkan/vulkan.h	/^    VkFormatFeatureFlags    linearTilingFeatures;$/;"	m	struct:VkFormatProperties
 linebuf	lib/stb/stb_image.h	/^      stbi_uc *linebuf;$/;"	m	struct:__anon60::__anon61
+load	src/texture_manager.cpp	/^stbi_uc* TextureData::load(const char* resource, int reqComp)$/;"	f	class:TextureData
 loadOp	lib/vulkan/vulkan.h	/^    VkAttachmentLoadOp              loadOp;$/;"	m	struct:VkAttachmentDescription
 load_jpeg_image	lib/stb/stb_image.h	/^static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp, int req_comp)$/;"	f
 loaderData	lib/vulkan/vk_icd.h	/^    void *loaderData;$/;"	m	union:__anon42
@@ -6422,6 +6503,7 @@ mAspect	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera
 mAspect	inc/window.h	/^	float mAspect;$/;"	m	class:Window
 mBinPath	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;$/;"	m	class:FileManager
 mCamera	inc/engine.h	/^	Camera mCamera;$/;"	m	class:Engine
+mChannels	inc/texture_manager.h	/^	int mWidth, mHeight, mChannels, mSize;$/;"	m	class:TextureData
 mCmdBuff	inc/cmd_pass.h	/^	VkCommandBuffer mCmdBuff;$/;"	m	class:CmdPass
 mComputeIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
 mCondition	inc/task_manager.h	/^	std::condition_variable mCondition;$/;"	m	class:TaskManager
@@ -6444,19 +6526,20 @@ mGlfwWindow	inc/input_manager.h	/^	GLFWwindow* mGlfwWindow;$/;"	m	class:InputMan
 mGlfwWindow	inc/window.h	/^	GLFWwindow* mGlfwWindow;$/;"	m	class:Window
 mGraphicsIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
 mGraphicsQueue	inc/vulkan_manager.h	/^	VkQueue mGraphicsQueue, mSupportedQueue;$/;"	m	class:VulkanManager
+mHeight	inc/texture_manager.h	/^	int mWidth, mHeight, mChannels, mSize;$/;"	m	class:TextureData
 mHeight	inc/window.h	/^	unsigned mWidth, mHeight;$/;"	m	class:Window
 mId	inc/task_manager.h	/^	int mId;$/;"	m	class:MessageTask
 mImageAvailableSemaphore	inc/vulkan_manager.h	/^	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;$/;"	m	class:VulkanManager
-mIndexBuffer	inc/quad.h	/^	VkBuffer mVertexBuffer, mIndexBuffer;$/;"	m	class:Quad
+mIndexBufferDesc	inc/quad.h	/^	VulkanBufferDesc mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;$/;"	m	class:Quad
 mInputManager	inc/window.h	/^	InputManager mInputManager;$/;"	m	class:Window
 mMouseSensitivityScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera
 mNear	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera
 mNumFrames	inc/timer.h	/^	uint32_t mNumFrames;$/;"	m	class:Timer
-mNumIndices	inc/quad.h	/^	uint32_t mNumIndices;$/;"	m	class:Quad
 mNumIndices	inc/vulkan_manager.h	/^	size_t mNumIndices;$/;"	m	class:VulkanManager
 mNumIndicesFound	inc/device_queue_indices.h	/^	int mNumIndicesFound; $/;"	m	class:DeviceQueueIndicies
 mNumThreads	inc/task_manager.h	/^	size_t mNumThreads;$/;"	m	class:TaskManager
 mPitch	inc/camera.h	/^    float mPitch, mYaw;$/;"	m	class:Camera
+mPixels	inc/texture_manager.h	/^	stbi_uc* mPixels; $/;"	m	class:TextureData
 mPool	inc/task_manager.h	/^	std::vector<std::thread> mPool;$/;"	m	class:TaskManager
 mPresentModes	inc/vulkan_manager.h	/^		std::vector<VkPresentModeKHR> mPresentModes;$/;"	m	struct:VulkanManager::SwapChainDesc
 mPrevMouseX	inc/camera.h	/^    double mPrevMouseX, mPrevMouseY;$/;"	m	class:Camera
@@ -6468,6 +6551,7 @@ mResourceDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir
 mScrollSensitivityScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera
 mShaderDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir;$/;"	m	class:FileManager
 mSidewaysMovementScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera
+mSize	inc/texture_manager.h	/^	int mWidth, mHeight, mChannels, mSize;$/;"	m	class:TextureData
 mStartTime	inc/timer.h	/^	std::chrono::high_resolution_clock::time_point mStartTime;$/;"	m	class:Timer
 mSupportedIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
 mSupportedQueue	inc/vulkan_manager.h	/^	VkQueue mGraphicsQueue, mSupportedQueue;$/;"	m	class:VulkanManager
@@ -6482,33 +6566,48 @@ mSwapChainImages	inc/vulkan_manager.h	/^	std::vector<VkImage> mSwapChainImages;$
 mTaskManager	inc/engine.h	/^	TaskManager mTaskManager;$/;"	m	class:Engine
 mTasks	inc/task_manager.h	/^	std::queue<Task*> mTasks;$/;"	m	class:TaskManager
 mTasksMutex	inc/task_manager.h	/^	std::mutex mTasksMutex;$/;"	m	class:TaskManager
+mTextureDesc	inc/quad.h	/^	VulkanImageDesc mTextureDesc;$/;"	m	class:Quad
 mTextureImage	inc/vulkan_manager.h	/^	VkImage mTextureImage;$/;"	m	class:VulkanManager
 mTextureImageMem	inc/vulkan_manager.h	/^	VkDeviceMemory mTextureImageMem;$/;"	m	class:VulkanManager
 mTextureImageView	inc/vulkan_manager.h	/^	VkImageView mTextureImageView;$/;"	m	class:VulkanManager
+mTextureSampler	inc/quad.h	/^	VkSampler mTextureSampler;$/;"	m	class:Quad
 mTextureSampler	inc/vulkan_manager.h	/^	VkSampler mTextureSampler;$/;"	m	class:VulkanManager
 mTimer	inc/engine.h	/^	Timer mTimer;$/;"	m	class:Engine
 mTotalTime	inc/timer.h	/^	double mTotalTime;$/;"	m	class:Timer
 mTransferIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies
-mVertexBuffer	inc/quad.h	/^	VkBuffer mVertexBuffer, mIndexBuffer;$/;"	m	class:Quad
+mUniformBufferDesc	inc/quad.h	/^	VulkanBufferDesc mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;$/;"	m	class:Quad
+mUniformStagingBufferDesc	inc/quad.h	/^	VulkanBufferDesc mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;$/;"	m	class:Quad
+mVertexBufferDesc	inc/quad.h	/^	VulkanBufferDesc mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;$/;"	m	class:Quad
 mView	inc/camera.h	/^    glm::mat4 mProj, mView; $/;"	m	class:Camera
 mVkCommandBuffers	inc/vulkan_manager.h	/^	std::vector<VkCommandBuffer> mVkCommandBuffers;$/;"	m	class:VulkanManager
 mVkCommandPool	inc/cmd_pass.h	/^	const VkCommandPool& mVkCommandPool;$/;"	m	class:CmdPass
 mVkCommandPool	inc/vulkan_manager.h	/^	VkCommandPool mVkCommandPool;$/;"	m	class:VulkanManager
+mVkDescriptorPool	inc/quad.h	/^	VkDescriptorPool mVkDescriptorPool;$/;"	m	class:Quad
 mVkDescriptorPool	inc/vulkan_manager.h	/^	VkDescriptorPool mVkDescriptorPool;$/;"	m	class:VulkanManager
+mVkDescriptorSet	inc/quad.h	/^	VkDescriptorSet mVkDescriptorSet;$/;"	m	class:Quad
 mVkDescriptorSet	inc/vulkan_manager.h	/^	VkDescriptorSet mVkDescriptorSet;$/;"	m	class:VulkanManager
+mVkDescriptorSetLayout	inc/quad.h	/^	VkDescriptorSetLayout mVkDescriptorSetLayout;$/;"	m	class:Quad
 mVkDescriptorSetLayout	inc/vulkan_manager.h	/^	VkDescriptorSetLayout mVkDescriptorSetLayout;$/;"	m	class:VulkanManager
 mVkDevice	inc/cmd_pass.h	/^	const VkDevice& mVkDevice;$/;"	m	class:CmdPass
-mVkDevice	inc/quad.h	/^	VkDevice mVkDevice;$/;"	m	class:Quad
+mVkDevice	inc/vulkan_buffer_creator.h	/^	const VkDevice& mVkDevice;$/;"	m	class:VulkanBufferDesc
+mVkDevice	inc/vulkan_image_creator.h	/^	const VkDevice& mVkDevice;$/;"	m	class:VulkanImageDesc
 mVkDevice	inc/vulkan_manager.h	/^	VkDevice mVkDevice;$/;"	m	class:VulkanManager
 mVkInstance	inc/vulkan_manager.h	/^	VkInstance mVkInstance;$/;"	m	class:VulkanManager
 mVkPhysicalDevice	inc/vulkan_manager.h	/^	VkPhysicalDevice mVkPhysicalDevice;	$/;"	m	class:VulkanManager
+mVkPipeline	inc/quad.h	/^	VkPipeline mVkPipeline;$/;"	m	class:Quad
 mVkPipeline	inc/vulkan_manager.h	/^	VkPipeline mVkPipeline;$/;"	m	class:VulkanManager
+mVkPipelineLayout	inc/quad.h	/^	VkPipelineLayout mVkPipelineLayout;$/;"	m	class:Quad
 mVkPipelineLayout	inc/vulkan_manager.h	/^	VkPipelineLayout mVkPipelineLayout;$/;"	m	class:VulkanManager
 mVkQueue	inc/cmd_pass.h	/^	const VkQueue mVkQueue;$/;"	m	class:CmdPass
 mVkRenderPass	inc/vulkan_manager.h	/^	VkRenderPass mVkRenderPass;$/;"	m	class:VulkanManager
 mVkSurface	inc/vulkan_manager.h	/^	VkSurfaceKHR mVkSurface;$/;"	m	class:VulkanManager
 mVkSwapChain	inc/vulkan_manager.h	/^	VkSwapchainKHR mVkSwapChain;$/;"	m	class:VulkanManager
 mVulkanManager	inc/engine.h	/^	VulkanManager mVulkanManager;$/;"	m	class:Engine
+mVulkanState	inc/quad.h	/^	const VulkanState& mVulkanState;$/;"	m	class:Quad
+mVulkanState	inc/vulkan_buffer_creator.h	/^	const VulkanState& mVulkanState;$/;"	m	class:VulkanBufferCreator
+mVulkanState	inc/vulkan_image_creator.h	/^	const VulkanState& mVulkanState;$/;"	m	class:VulkanImageCreator
+mVulkanState	inc/vulkan_render_manager.h	/^	VulkanState& mVulkanState;$/;"	m	class:VulkanRenderManager
+mWidth	inc/texture_manager.h	/^	int mWidth, mHeight, mChannels, mSize;$/;"	m	class:TextureData
 mWidth	inc/window.h	/^	unsigned mWidth, mHeight;$/;"	m	class:Window
 mWindow	inc/engine.h	/^	Window mWindow;$/;"	m	class:Engine
 mWindow	inc/vulkan_manager.h	/^	const Window& mWindow;$/;"	m	class:VulkanManager
@@ -6879,6 +6978,8 @@ mediump_vec3	lib/glm/detail/type_vec.hpp	/^	typedef tvec3<float, mediump>	medium
 mediump_vec3	lib/glm/fwd.hpp	/^	typedef tvec3<float, mediump> mediump_vec3;$/;"	t	namespace:glm
 mediump_vec4	lib/glm/detail/type_vec.hpp	/^	typedef tvec4<float, mediump>	mediump_vec4;$/;"	t	namespace:glm
 mediump_vec4	lib/glm/fwd.hpp	/^	typedef tvec4<float, mediump> mediump_vec4;$/;"	t	namespace:glm
+memory	inc/vulkan_buffer_creator.h	/^	VkDeviceMemory memory;$/;"	m	class:VulkanBufferDesc
+memory	inc/vulkan_image_creator.h	/^	VkDeviceMemory memory;$/;"	m	class:VulkanImageDesc
 memory	lib/vulkan/vulkan.h	/^    VkDeviceMemory             memory;$/;"	m	struct:VkSparseImageMemoryBind
 memory	lib/vulkan/vulkan.h	/^    VkDeviceMemory             memory;$/;"	m	struct:VkSparseMemoryBind
 memory	lib/vulkan/vulkan.h	/^    VkDeviceMemory     memory;$/;"	m	struct:VkMappedMemoryRange
@@ -6914,6 +7015,7 @@ minTexelOffset	lib/vulkan/vulkan.h	/^    int32_t               minTexelOffset;$/
 minUniformBufferOffsetAlignment	lib/vulkan/vulkan.h	/^    VkDeviceSize          minUniformBufferOffsetAlignment;$/;"	m	struct:VkPhysicalDeviceLimits
 mipLevel	lib/vulkan/vulkan.h	/^    uint32_t              mipLevel;$/;"	m	struct:VkImageSubresource
 mipLevel	lib/vulkan/vulkan.h	/^    uint32_t              mipLevel;$/;"	m	struct:VkImageSubresourceLayers
+mipLevels	inc/vulkan_image_creator.h	/^	uint32_t mipLevels;$/;"	m	struct:VulkanTexture
 mipLevels	lib/vulkan/vulkan.h	/^    uint32_t                 mipLevels;$/;"	m	struct:VkImageCreateInfo
 mipLodBias	lib/vulkan/vulkan.h	/^    float                   mipLodBias;$/;"	m	struct:VkSamplerCreateInfo
 mipmapMode	lib/vulkan/vulkan.h	/^    VkSamplerMipmapMode     mipmapMode;$/;"	m	struct:VkSamplerCreateInfo
@@ -6921,6 +7023,8 @@ mipmapPrecisionBits	lib/vulkan/vulkan.h	/^    uint32_t              mipmapPrecis
 mirSurface	lib/vulkan/vk_icd.h	/^    MirSurface *mirSurface;$/;"	m	struct:__anon45
 mirSurface	lib/vulkan/vulkan.h	/^    MirSurface*                   mirSurface;$/;"	m	struct:VkMirSurfaceCreateInfoKHR
 mod289	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER T mod289(T const & x)$/;"	f	namespace:glm::detail
+model	inc/quad.h	/^	    glm::mat4 model;$/;"	m	struct:Quad::PushConstants
+model	inc/quad.h	/^	    glm::mat4 model;$/;"	m	struct:Quad::UBO
 model	inc/vulkan_manager.h	/^	    glm::mat4 model;$/;"	m	struct:VulkanManager::PushConstants
 model	inc/vulkan_manager.h	/^	    glm::mat4 model;$/;"	m	struct:VulkanManager::UBO
 module	lib/vulkan/vulkan.h	/^    VkShaderModule                      module;$/;"	m	struct:VkPipelineShaderStageCreateInfo
@@ -6937,6 +7041,7 @@ nice	lib/glm/detail/type_gentype.hpp	/^		nice,$/;"	e	enum:glm::profile
 nomore	lib/stb/stb_image.h	/^   int            nomore;      \/\/ flag if we saw a marker so must stop$/;"	m	struct:__anon60
 nonCoherentAtomSize	lib/vulkan/vulkan.h	/^    VkDeviceSize          nonCoherentAtomSize;$/;"	m	struct:VkPhysicalDeviceLimits
 null	lib/glm/detail/type_gentype.hpp	/^		enum ctor{null};$/;"	e	enum:glm::detail::genType::ctor
+numIndices	inc/quad.h	/^	uint32_t numIndices;$/;"	m	class:Quad
 num_bits	lib/stb/stb_image.h	/^   int num_bits;$/;"	m	struct:__anon64
 num_operands	lib/vulkan/libspirv.h	/^  uint16_t num_operands;$/;"	m	struct:spv_parsed_instruction_t
 num_words	lib/vulkan/libspirv.h	/^  uint16_t num_words;$/;"	m	struct:spv_parsed_instruction_t
@@ -7204,6 +7309,7 @@ pfnNextGetInstanceProcAddr	lib/vulkan/vk_layer.h	/^    PFN_vkGetInstanceProcAddr
 pfnReallocation	lib/vulkan/vulkan.h	/^    PFN_vkReallocationFunction              pfnReallocation;$/;"	m	struct:VkAllocationCallbacks
 pfnSetDeviceLoaderData	lib/vulkan/vk_layer.h	/^        PFN_vkSetDeviceLoaderData pfnSetDeviceLoaderData;$/;"	m	union:__anon53::__anon54
 pfnSetInstanceLoaderData	lib/vulkan/vk_layer.h	/^        PFN_vkSetInstanceLoaderData pfnSetInstanceLoaderData;$/;"	m	union:__anon51::__anon52
+physicalDevice	inc/vulkan_state.h	/^	VkPhysicalDevice physicalDevice;$/;"	m	struct:VulkanState
 physicalDimensions	lib/vulkan/vulkan.h	/^    VkExtent2D                    physicalDimensions;$/;"	m	struct:VkDisplayPropertiesKHR
 physicalResolution	lib/vulkan/vulkan.h	/^    VkExtent2D                    physicalResolution;$/;"	m	struct:VkDisplayPropertiesKHR
 pipelineBindPoint	lib/vulkan/vulkan.h	/^    VkPipelineBindPoint             pipelineBindPoint;$/;"	m	struct:VkSubpassDescription
@@ -7224,7 +7330,7 @@ pointer_const	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> * const 
 pollEvents	inc/input_manager.h	/^	inline void pollEvents() { glfwPollEvents(); }$/;"	f	class:InputManager
 polygonMode	lib/vulkan/vulkan.h	/^    VkPolygonMode                              polygonMode;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo
 poolSizeCount	lib/vulkan/vulkan.h	/^    uint32_t                       poolSizeCount;$/;"	m	struct:VkDescriptorPoolCreateInfo
-pos	inc/quad.h	/^		glm::vec2 pos;$/;"	m	struct:Quad::Vertex
+pos	inc/quad.h	/^		glm::vec3 pos;$/;"	m	struct:Quad::Vertex
 pos	inc/vulkan_manager.h	/^		glm::vec3 pos;$/;"	m	struct:VulkanManager::Vertex
 position	lib/vulkan/libspirv.h	/^  spv_position_t position;$/;"	m	struct:spv_diagnostic_t
 ppEnabledExtensionNames	lib/vulkan/vulkan.h	/^    const char* const*                 ppEnabledExtensionNames;$/;"	m	struct:VkDeviceCreateInfo
@@ -7238,10 +7344,15 @@ precision	lib/glm/gtx/io.hpp	/^		struct precision$/;"	s	namespace:glm::io
 precision_	lib/glm/gtx/io.hpp	/^			streamsize_type precision_;$/;"	m	class:glm::io::basic_state_saver
 prefix	lib/stb/stb_image.h	/^   stbi__int16 prefix;$/;"	m	struct:__anon70
 presentMode	lib/vulkan/vulkan.h	/^    VkPresentModeKHR                 presentMode;$/;"	m	struct:VkSwapchainCreateInfoKHR
+presentModes	inc/swap_chain_desc.h	/^	std::vector<VkPresentModeKHR> presentModes;$/;"	m	class:SwapChainDesc
+presentQueue	inc/vulkan_state.h	/^	VkQueue presentQueue; $/;"	m	struct:VulkanState
+presentQueueIndex	inc/vulkan_state.h	/^	uint32_t presentQueueIndex;$/;"	m	struct:VulkanState
 preserveAttachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                        preserveAttachmentCount;$/;"	m	struct:VkSubpassDescription
 primitiveRestartEnable	lib/vulkan/vulkan.h	/^    VkBool32                                   primitiveRestartEnable;$/;"	m	struct:VkPipelineInputAssemblyStateCreateInfo
 profile	lib/glm/detail/type_gentype.hpp	/^	enum profile$/;"	g	namespace:glm
 progressive	lib/stb/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon60
+proj	inc/quad.h	/^		glm::mat4 proj;$/;"	m	struct:Quad::PushConstants
+proj	inc/quad.h	/^		glm::mat4 proj;$/;"	m	struct:Quad::UBO
 proj	inc/vulkan_manager.h	/^		glm::mat4 proj;$/;"	m	struct:VulkanManager::PushConstants
 proj	inc/vulkan_manager.h	/^		glm::mat4 proj;$/;"	m	struct:VulkanManager::UBO
 proj	src/camera.cpp	/^glm::mat4& Camera::proj()$/;"	f	class:Camera
@@ -7296,6 +7407,8 @@ reference	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> & reference;
 reference	lib/vulkan/vulkan.h	/^    uint32_t       reference;$/;"	m	struct:VkStencilOpState
 refreshRate	lib/vulkan/vulkan.h	/^    uint32_t      refreshRate;$/;"	m	struct:VkDisplayModeParametersKHR
 renderArea	lib/vulkan/vulkan.h	/^    VkRect2D               renderArea;$/;"	m	struct:VkRenderPassBeginInfo
+renderPass	inc/quad.h	/^	VkRenderPass renderPass;$/;"	m	class:Quad
+renderPass	inc/vulkan_state.h	/^	VkRenderPass renderPass;$/;"	m	struct:VulkanState
 renderPass	lib/vulkan/vulkan.h	/^    VkRenderPass                                     renderPass;$/;"	m	struct:VkGraphicsPipelineCreateInfo
 renderPass	lib/vulkan/vulkan.h	/^    VkRenderPass                     renderPass;$/;"	m	struct:VkCommandBufferInheritanceInfo
 renderPass	lib/vulkan/vulkan.h	/^    VkRenderPass                renderPass;$/;"	m	struct:VkFramebufferCreateInfo
@@ -7424,6 +7537,7 @@ sampledImageColorSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sa
 sampledImageDepthSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sampledImageDepthSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits
 sampledImageIntegerSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sampledImageIntegerSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits
 sampledImageStencilSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sampledImageStencilSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits
+sampler	inc/vulkan_image_creator.h	/^	VkSampler sampler;$/;"	m	struct:VulkanTexture
 sampler	lib/vulkan/vulkan.h	/^    VkSampler        sampler;$/;"	m	struct:VkDescriptorImageInfo
 samplerAnisotropy	lib/vulkan/vulkan.h	/^    VkBool32    samplerAnisotropy;$/;"	m	struct:VkPhysicalDeviceFeatures
 samples	lib/vulkan/vulkan.h	/^    VkSampleCountFlagBits           samples;$/;"	m	struct:VkAttachmentDescription
@@ -7464,6 +7578,7 @@ shaderResourceMinLod	lib/vulkan/vulkan.h	/^    VkBool32    shaderResourceMinLod;
 shaderResourceResidency	lib/vulkan/vulkan.h	/^    VkBool32    shaderResourceResidency;$/;"	m	struct:VkPhysicalDeviceFeatures
 shaderSampledImageArrayDynamicIndexing	lib/vulkan/vulkan.h	/^    VkBool32    shaderSampledImageArrayDynamicIndexing;$/;"	m	struct:VkPhysicalDeviceFeatures
 shaderStage	src/vulkan_pipeline_creator.cpp	/^VkPipelineShaderStageCreateInfo VulkanPipelineCreator::shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)$/;"	f	class:VulkanPipelineCreator
+shaderStage	src/vulkan_pipeline_creator.cpp	/^VkPipelineShaderStageCreateInfo VulkanPipelineCreator::shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)$/;"	f	class:VulkanPipelineCreator
 shaderStorageBufferArrayDynamicIndexing	lib/vulkan/vulkan.h	/^    VkBool32    shaderStorageBufferArrayDynamicIndexing;$/;"	m	struct:VkPhysicalDeviceFeatures
 shaderStorageImageArrayDynamicIndexing	lib/vulkan/vulkan.h	/^    VkBool32    shaderStorageImageArrayDynamicIndexing;$/;"	m	struct:VkPhysicalDeviceFeatures
 shaderStorageImageExtendedFormats	lib/vulkan/vulkan.h	/^    VkBool32    shaderStorageImageExtendedFormats;$/;"	m	struct:VkPhysicalDeviceFeatures
@@ -7866,15 +7981,23 @@ subresourceRange	lib/vulkan/vulkan.h	/^    VkImageSubresourceRange    subresourc
 succ_high	lib/stb/stb_image.h	/^   int            succ_high;$/;"	m	struct:__anon60
 succ_low	lib/stb/stb_image.h	/^   int            succ_low;$/;"	m	struct:__anon60
 suffix	lib/stb/stb_image.h	/^   stbi_uc suffix;$/;"	m	struct:__anon70
+supported	src/swap_chain_desc.cpp	/^bool SwapChainDesc::supported() const $/;"	f	class:SwapChainDesc
 supportedAlpha	lib/vulkan/vulkan.h	/^    VkDisplayPlaneAlphaFlagsKHR    supportedAlpha;$/;"	m	struct:VkDisplayPlaneCapabilitiesKHR
 supportedCompositeAlpha	lib/vulkan/vulkan.h	/^    VkCompositeAlphaFlagsKHR         supportedCompositeAlpha;$/;"	m	struct:VkSurfaceCapabilitiesKHR
 supportedIndexSet	src/device_queue_indices.cpp	/^bool DeviceQueueIndicies::supportedIndexSet() $/;"	f	class:DeviceQueueIndicies
 supportedTransforms	lib/vulkan/vulkan.h	/^    VkSurfaceTransformFlagsKHR       supportedTransforms;$/;"	m	struct:VkSurfaceCapabilitiesKHR
 supportedTransforms	lib/vulkan/vulkan.h	/^    VkSurfaceTransformFlagsKHR    supportedTransforms;$/;"	m	struct:VkDisplayPropertiesKHR
 supportedUsageFlags	lib/vulkan/vulkan.h	/^    VkImageUsageFlags                supportedUsageFlags;$/;"	m	struct:VkSurfaceCapabilitiesKHR
+surface	inc/vulkan_state.h	/^	VkSurfaceKHR surface;$/;"	m	struct:VulkanState
 surface	lib/vulkan/vk_icd.h	/^    struct wl_surface *surface;$/;"	m	struct:__anon46	typeref:struct:__anon46::wl_surface
 surface	lib/vulkan/vulkan.h	/^    VkSurfaceKHR                     surface;$/;"	m	struct:VkSwapchainCreateInfoKHR
 surface	lib/vulkan/vulkan.h	/^    struct wl_surface*                surface;$/;"	m	struct:VkWaylandSurfaceCreateInfoKHR	typeref:struct:VkWaylandSurfaceCreateInfoKHR::wl_surface
+surfaceCapabilities	inc/swap_chain_desc.h	/^	VkSurfaceCapabilitiesKHR surfaceCapabilities;$/;"	m	class:SwapChainDesc
+surfaceFormats	inc/swap_chain_desc.h	/^	std::vector<VkSurfaceFormatKHR> surfaceFormats;$/;"	m	class:SwapChainDesc
+swapChain	inc/vulkan_state.h	/^	VkSwapchainKHR swapChain;$/;"	m	struct:VulkanState
+swapChainDesc	inc/vulkan_state.h	/^	SwapChainDesc swapChainDesc;$/;"	m	struct:VulkanState
+swapChainExtent	inc/vulkan_state.h	/^	VkExtent2D swapChainExtent;$/;"	m	struct:VulkanState
+swapChainImageFormat	inc/vulkan_state.h	/^	VkFormat swapChainImageFormat;$/;"	m	struct:VulkanState
 swapchainCount	lib/vulkan/vulkan.h	/^    uint32_t                 swapchainCount;$/;"	m	struct:VkPresentInfoKHR
 t	lib/glm/detail/type_vec2.hpp	/^				struct{ T s, t; };$/;"	m	struct:glm::tvec2::__anon9::__anon12
 t	lib/glm/detail/type_vec2.hpp	/^			union {T y, g, t;};$/;"	m	union:glm::tvec2::__anon14
@@ -7890,6 +8013,7 @@ taylorInvSqrt	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER tvec3<T, P> taylor
 taylorInvSqrt	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER tvec4<T, P> taylorInvSqrt(tvec4<T, P> const & r)$/;"	f	namespace:glm::detail
 tdualquat	lib/glm/gtx/dual_quaternion.hpp	/^	struct tdualquat$/;"	s	namespace:glm
 tessellationShader	lib/vulkan/vulkan.h	/^    VkBool32    tessellationShader;$/;"	m	struct:VkPhysicalDeviceFeatures
+texCoord	inc/quad.h	/^		glm::vec2 texCoord;$/;"	m	struct:Quad::Vertex
 texCoord	inc/vulkan_manager.h	/^		glm::vec2 texCoord;$/;"	m	struct:VulkanManager::Vertex
 textureCompressionASTC_LDR	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionASTC_LDR;$/;"	m	struct:VkPhysicalDeviceFeatures
 textureCompressionBC	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionBC;$/;"	m	struct:VkPhysicalDeviceFeatures
@@ -7919,6 +8043,7 @@ tquat	lib/glm/gtc/quaternion.hpp	/^	struct tquat$/;"	s	namespace:glm
 transferIndexSet	src/device_queue_indices.cpp	/^bool DeviceQueueIndicies::transferIndexSet() $/;"	f	class:DeviceQueueIndicies
 transform	lib/vulkan/vk_icd.h	/^    VkSurfaceTransformFlagBitsKHR transform;$/;"	m	struct:__anon50
 transform	lib/vulkan/vulkan.h	/^    VkSurfaceTransformFlagBitsKHR     transform;$/;"	m	struct:VkDisplaySurfaceCreateInfoKHR
+transitionImageLayout	src/vulkan_image_creator.cpp	/^void VulkanImageCreator::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) const$/;"	f	class:VulkanImageCreator
 transitionImageLayout	src/vulkan_manager.cpp	/^void VulkanManager::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)$/;"	f	class:VulkanManager
 transparent	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon71
 transpose_type	lib/glm/detail/type_mat2x2.hpp	/^		typedef tmat2x2<T, P> transpose_type;$/;"	t	struct:glm::tmat2x2
@@ -8145,6 +8270,7 @@ uniformStagingBufferMem	inc/vulkan_manager.h	/^	VkDeviceMemory vertexBufferMem, 
 uninitialize	lib/glm/detail/setup.hpp	/^	enum ctor{uninitialize};$/;"	e	enum:glm::ctor
 unnormalizedCoordinates	lib/vulkan/vulkan.h	/^    VkBool32                unnormalizedCoordinates;$/;"	m	struct:VkSamplerCreateInfo
 unset	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::unset() $/;"	f	class:DeviceQueueIndicies
+update	src/quad.cpp	/^void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera)$/;"	f	class:Quad
 updateCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera) $/;"	f	class:VulkanManager
 updateFOV	src/camera.cpp	/^void Camera::updateFOV(float scrollDirection)$/;"	f	class:Camera
 updateOrientation	src/camera.cpp	/^void Camera::updateOrientation(double mouseX, double mouseY)$/;"	f	class:Camera
@@ -8222,11 +8348,13 @@ vertShaderModule	inc/vulkan_manager.h	/^	VkShaderModule vertShaderModule;$/;"	m	
 vertexAttributeDescriptionCount	lib/vulkan/vulkan.h	/^    uint32_t                                    vertexAttributeDescriptionCount;$/;"	m	struct:VkPipelineVertexInputStateCreateInfo
 vertexBindingDescriptionCount	lib/vulkan/vulkan.h	/^    uint32_t                                    vertexBindingDescriptionCount;$/;"	m	struct:VkPipelineVertexInputStateCreateInfo
 vertexBuffer	inc/vulkan_manager.h	/^	VkBuffer vertexBuffer, indexBuffer, uniformBuffer, uniformStagingBuffer;$/;"	m	class:VulkanManager
-vertexBufferMem	inc/quad.h	/^	VkDeviceMemory vertexBufferMem, indexBufferMem;$/;"	m	class:Quad
 vertexBufferMem	inc/vulkan_manager.h	/^	VkDeviceMemory vertexBufferMem, indexBufferMem, uniformBufferMem, uniformStagingBufferMem;$/;"	m	class:VulkanManager
 vertexCount	lib/vulkan/vulkan.h	/^    uint32_t    vertexCount;$/;"	m	struct:VkDrawIndirectCommand
 vertexOffset	lib/vulkan/vulkan.h	/^    int32_t     vertexOffset;$/;"	m	struct:VkDrawIndexedIndirectCommand
 vertexPipelineStoresAndAtomics	lib/vulkan/vulkan.h	/^    VkBool32    vertexPipelineStoresAndAtomics;$/;"	m	struct:VkPhysicalDeviceFeatures
+view	inc/quad.h	/^		glm::mat4 view;$/;"	m	struct:Quad::PushConstants
+view	inc/quad.h	/^		glm::mat4 view;$/;"	m	struct:Quad::UBO
+view	inc/vulkan_image_creator.h	/^	VkImageView view;$/;"	m	struct:VulkanTexture
 view	inc/vulkan_manager.h	/^		glm::mat4 view;$/;"	m	struct:VulkanManager::PushConstants
 view	inc/vulkan_manager.h	/^		glm::mat4 view;$/;"	m	struct:VulkanManager::UBO
 view	src/camera.cpp	/^glm::mat4& Camera::view()$/;"	f	class:Camera
@@ -8251,6 +8379,7 @@ waitSemaphoreCount	lib/vulkan/vulkan.h	/^    uint32_t                       wait
 waitSemaphoreCount	lib/vulkan/vulkan.h	/^    uint32_t                 waitSemaphoreCount;$/;"	m	struct:VkPresentInfoKHR
 wformat_saver	lib/glm/gtx/io.hpp	/^		typedef basic_format_saver<wchar_t> wformat_saver;$/;"	t	namespace:glm::io
 wideLines	lib/vulkan/vulkan.h	/^    VkBool32    wideLines;$/;"	m	struct:VkPhysicalDeviceFeatures
+width	inc/vulkan_image_creator.h	/^	uint32_t width, height;$/;"	m	struct:VulkanTexture
 width	lib/glm/gtx/io.hpp	/^			unsigned   width;$/;"	m	class:glm::io::format_punct
 width	lib/glm/gtx/io.hpp	/^		struct width$/;"	s	namespace:glm::io
 width	lib/vulkan/vulkan.h	/^    float    width;$/;"	m	struct:VkViewport
@@ -8319,7 +8448,15 @@ zout_start	lib/stb/stb_image.h	/^   char *zout_start;$/;"	m	struct:__anon64
 ~DeviceQueueIndicies	src/device_queue_indices.cpp	/^DeviceQueueIndicies::~DeviceQueueIndicies()$/;"	f	class:DeviceQueueIndicies
 ~Engine	src/engine.cpp	/^Engine::~Engine() $/;"	f	class:Engine
 ~InputManager	src/input_manager.cpp	/^InputManager::~InputManager()$/;"	f	class:InputManager
+~Quad	src/quad.cpp	/^Quad::~Quad() $/;"	f	class:Quad
 ~Task	inc/task_manager.h	/^	virtual ~Task() {}$/;"	f	class:Task
 ~TaskManager	src/task_manager.cpp	/^TaskManager::~TaskManager() $/;"	f	class:TaskManager
+~TextureData	src/texture_manager.cpp	/^TextureData::~TextureData()$/;"	f	class:TextureData
+~TextureManager	src/texture_manager.cpp	/^TextureManager::~TextureManager()$/;"	f	class:TextureManager
+~VulkanBufferCreator	src/vulkan_buffer_creator.cpp	/^VulkanBufferCreator::~VulkanBufferCreator()$/;"	f	class:VulkanBufferCreator
+~VulkanBufferDesc	src/vulkan_buffer_creator.cpp	/^VulkanBufferDesc::~VulkanBufferDesc() $/;"	f	class:VulkanBufferDesc
+~VulkanImageDesc	src/vulkan_image_creator.cpp	/^VulkanImageDesc::~VulkanImageDesc() $/;"	f	class:VulkanImageDesc
 ~VulkanManager	src/vulkan_manager.cpp	/^VulkanManager::~VulkanManager()$/;"	f	class:VulkanManager
+~VulkanRenderManager	src/vulkan_render_manager.cpp	/^VulkanRenderManager::~VulkanRenderManager()$/;"	f	class:VulkanRenderManager
+~VulkanRenderPassCreator	src/vulkan_render_pass_creator.cpp	/^VulkanRenderPassCreator::~VulkanRenderPassCreator() $/;"	f	class:VulkanRenderPassCreator
 ~Window	src/window.cpp	/^Window::~Window() $/;"	f	class:Window
