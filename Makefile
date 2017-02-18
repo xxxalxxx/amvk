@@ -1,4 +1,4 @@
-VULKAN_SDK_DIR := /home/al/VulkanSDK/1.0.21.1/x86_64
+VULKAN_SDK_DIR := /home/al/VulkanSDK/1.0.39.1/x86_64
 VULKAN_LIB_PATH := $(VULKAN_SDK_DIR)/lib
 BIN_DIR := bin
 INC_DIR := inc
