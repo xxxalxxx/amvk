@@ -45,11 +45,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
 #include "texture_manager.h"
+#include "quad.h"
 
 class VulkanManager { 
 	friend class Engine;
 	struct SwapChainDesc;
 public:
+
 	VulkanManager(const Window& window);
 	virtual ~VulkanManager();
 	void init();
@@ -115,12 +117,13 @@ private:
 	
 	void createShaderModule(const std::vector<char>& shaderSpvCode, VkShaderModule& shaderModule);
 
-	VkInstance mVkInstance;
-	VkSurfaceKHR mVkSurface;
-	VkPhysicalDevice mVkPhysicalDevice;	
-	VkDevice mVkDevice;
+	//VkInstance mVkInstance;
+
+	//VkSurfaceKHR mVkSurface;
+	//VkPhysicalDevice mVkPhysicalDevice;	
+	//VkDevice mVkDevice;
 	DeviceQueueIndicies mDeviceQueueIndices;
-	VkQueue mGraphicsQueue, mSupportedQueue;
+	//VkQueue mGraphicsQueue, mSupportedQueue;
 
 	struct SwapChainDesc {
 		VkSurfaceCapabilitiesKHR mSurfaceCapabilities;
@@ -129,18 +132,18 @@ private:
 	};
 
 	SwapChainDesc mSwapChainDesc;
-	VkSwapchainKHR mVkSwapChain;
+	//VkSwapchainKHR mVkSwapChain;
 	std::vector<VkImage> mSwapChainImages;
 	std::vector<VkImageView> mSwapChainImageViews;
 	std::vector<VkFramebuffer> mSwapChainFramebuffers;
 	VkFormat mSwapChainImageFormat;
 	VkExtent2D mSwapChainExtent;
 
-	VkRenderPass mVkRenderPass;
+	//VkRenderPass mVkRenderPass;
 	VkPipelineLayout mVkPipelineLayout;
 	VkPipeline mVkPipeline;
 
-	VkCommandPool mVkCommandPool;
+	//VkCommandPool mVkCommandPool;
 	std::vector<VkCommandBuffer> mVkCommandBuffers;
 
 	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;
@@ -207,6 +210,9 @@ private:
 	VkImage mDepthImage;
 	VkDeviceMemory mDepthImageMem;
 	VkImageView mDepthImageView;
+
+	VulkanState mVulkanState;
+	Quad mQuad;
 };
 
 #endif

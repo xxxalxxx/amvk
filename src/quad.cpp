@@ -21,8 +21,6 @@ void Quad::init()
 	VulkanBufferCreator vbc(mVulkanState);
 	VulkanImageCreator vic(mVulkanState);
 
-
-
 	createRenderPass(vic);
 
 	createDescriptorSetLayout();

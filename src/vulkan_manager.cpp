@@ -11,8 +11,8 @@ const std::vector<const char*> VulkanManager::sValidationLayers = {
 };
 
 VulkanManager::VulkanManager(const Window& window):
-	mVkPhysicalDevice(VK_NULL_HANDLE),
-	mVkSwapChain(VK_NULL_HANDLE),
+	//mVkPhysicalDevice(VK_NULL_HANDLE),
+	//mVkSwapChain(VK_NULL_HANDLE),
 	mWindow(window),
 	mNumIndices(0),
 	vertexBuffer(VK_NULL_HANDLE),
@@ -25,14 +25,14 @@ VulkanManager::VulkanManager(const Window& window):
 	uniformStagingBufferMem(VK_NULL_HANDLE),
 	mDepthImage(VK_NULL_HANDLE),
 	mDepthImageMem(VK_NULL_HANDLE),
-	mDepthImageView(VK_NULL_HANDLE)
+	mDepthImageView(VK_NULL_HANDLE),
+	mQuad(mVulkanState)
 {
-
+	
 }
 
 VulkanManager::~VulkanManager()
 {
-
 }
 
 void VulkanManager::init() 
@@ -48,6 +48,7 @@ std::vector<VkExtensionProperties> VulkanManager::getVkExtensionProperties()
 	vkEnumerateInstanceExtensionProperties(nullptr, &numExt, extensionProperties.data());
 	LOG("N:" << extensionProperties.size());
 	return extensionProperties;
+
 }
 
 std::vector<std::string> VulkanManager::getVkExtensionPropertyNames(std::vector<VkExtensionProperties>& vkExtensionProperties)
@@ -126,13 +127,13 @@ void VulkanManager::createVkInstance()
 	instanceInfo.enabledLayerCount = 0;
 	#endif
 
-	VK_CHECK_RESULT(vkCreateInstance(&instanceInfo, nullptr, &mVkInstance));
+	VK_CHECK_RESULT(vkCreateInstance(&instanceInfo, nullptr, &mVulkanState.instance));
 	LOG("INSTANCE CREATED");
 }
 
 void VulkanManager::createVkSurface(GLFWwindow& glfwWindow)
 {	
-	VK_CHECK_RESULT(glfwCreateWindowSurface(mVkInstance, &glfwWindow, nullptr, &mVkSurface));
+	VK_CHECK_RESULT(glfwCreateWindowSurface(mVulkanState.instance, &glfwWindow, nullptr, &mVulkanState.surface));
 	
 	if (glfwVulkanSupported() == GLFW_FALSE)
 		throw std::runtime_error("Vulkan is not supported by GLFW. Cannot create surface");
@@ -165,20 +166,21 @@ void VulkanManager::enableDebug()
 	createInfo.pfnCallback = &debugCallback;
 	createInfo.pUserData = nullptr;
 
-	VK_CALL_IPROC(mVkInstance, vkCreateDebugReportCallbackEXT, mVkInstance, &createInfo, nullptr, &mDebugReportCallback);
+	VK_CALL_IPROC(mVulkanState.instance, vkCreateDebugReportCallbackEXT, mVulkanState.instance, &createInfo, nullptr, &mDebugReportCallback);
 	LOG("DEBUG ENABLED");
+
 }
 
 void VulkanManager::createPhysicalDevice() 
 {
 	uint32_t numDevices = 0;
-	vkEnumeratePhysicalDevices(mVkInstance, &numDevices, nullptr);
+	vkEnumeratePhysicalDevices(mVulkanState.instance, &numDevices, nullptr);
 
 	if (!numDevices)
 		throw std::runtime_error("No Physical devices found");
 
 	std::vector<VkPhysicalDevice> devices(numDevices);
-	vkEnumeratePhysicalDevices(mVkInstance, &numDevices, devices.data());
+	vkEnumeratePhysicalDevices(mVulkanState.instance, &numDevices, devices.data());
 
 	for (const auto& device : devices) {
 		DeviceQueueIndicies dqi = getDeviceQueueFamilyIndices(device);
@@ -187,7 +189,7 @@ void VulkanManager::createPhysicalDevice()
 		if (!extenstionsSupported)
 			continue;
 
-		SwapChainDesc swapChainDesc = getSwapChainDesc(device, mVkSurface);
+		SwapChainDesc swapChainDesc = getSwapChainDesc(device, mVulkanState.surface);
 		bool swapChainSupported = !swapChainDesc.mSurfaceFormats.empty() && !swapChainDesc.mPresentModes.empty();
 
 		if (!swapChainSupported) 
@@ -270,7 +272,7 @@ DeviceQueueIndicies VulkanManager::getDeviceQueueFamilyIndices(const VkPhysicalD
 			//	deviceQueueIndicies.setTransferIndex(i);
 
 			VkBool32 surfaceSupported = false;
-			VK_CHECK_RESULT(vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, mVkSurface, &surfaceSupported));
+			VK_CHECK_RESULT(vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, mVulkanState.surface, &surfaceSupported));
 
 			if (surfaceSupported) 
 				deviceQueueIndicies.setSupportedIndex(i);
@@ -310,7 +312,7 @@ void VulkanManager::createSwapChain(const Window& window)
 	
 	VkSwapchainCreateInfoKHR createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	createInfo.surface = mVkSurface;
+	createInfo.surface = mVulkanState.surface;
 	createInfo.minImageCount = numImages;
 	createInfo.imageFormat = surfaceFormat.format;
 	createInfo.imageColorSpace = surfaceFormat.colorSpace;
