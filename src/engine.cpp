@@ -118,38 +118,8 @@ void Engine::init()
 	inputManager.setScrollCallback(scrollCallback);
 	inputManager.setMouseButtonCallback(mouseButtonCallback);
 	inputManager.setKeyCallback(keyCallback);
-	mVulkanManager.createVkInstance();
 
-#ifdef AMVK_DEBUG
-	mVulkanManager.enableDebug();
-#endif
-
-	mVulkanManager.createVkSurface(*mWindow.mGlfwWindow);
-	mVulkanManager.createPhysicalDevice();
-	mVulkanManager.createLogicalDevice();
-	mVulkanManager.createSwapChain(mWindow);
-	mVulkanManager.createImageViews();
-	mVulkanManager.createRenderPass();
-	mVulkanManager.createDescriptorSetLayout();
-	mVulkanManager.createPipeline();
-	mVulkanManager.createCommandPool();
-
-	mVulkanManager.createDepthResources();
-	mVulkanManager.createFramebuffers();
-
-	mVulkanManager.createTextureImage();
-	mVulkanManager.createTextureImageView();
-	mVulkanManager.createTextureSampler();
-	mVulkanManager.createVertexBuffer();
-	mVulkanManager.createIndexBuffer();
-	mVulkanManager.createUniformBuffer();
-	mVulkanManager.createDescriptorPool();
-	mVulkanManager.createDescriptorSet();
-
-
-	mVulkanManager.createCommandBuffers();
-	mVulkanManager.createSemaphores();
-	LOG("INIT SUCCESSFUL");
+	mVulkanManager.init();
 }
 
 Window& Engine::getWindow()

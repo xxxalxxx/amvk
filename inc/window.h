@@ -30,6 +30,8 @@ public:
 	unsigned getWidth() const;
 	unsigned getHeight() const;
 	float getAspect() const;
+
+	GLFWwindow* mGlfwWindow;
 private:
 	void initWindow(Engine& engine);
 
@@ -40,7 +42,6 @@ private:
 	unsigned mWidth, mHeight;
 	float mAspect;
 
-	GLFWwindow* mGlfwWindow;
 };
 
 #endif

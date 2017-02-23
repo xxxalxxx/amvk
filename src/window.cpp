@@ -1,17 +1,17 @@
 #include "window.h"
 
 Window::Window():
+	mGlfwWindow(nullptr),
 	mWidth(800), 
-	mHeight(600),
-	mGlfwWindow(nullptr)
+	mHeight(600)
 {
 	calcAspect();
 }
 
 Window::Window(uint32_t w, uint32_t h): 
+	mGlfwWindow(nullptr),
 	mWidth(w), 
-	mHeight(h),
-	mGlfwWindow(nullptr)
+	mHeight(h)
 {
 	calcAspect();
 }

@@ -21,7 +21,7 @@ void Quad::init()
 	VulkanBufferCreator vbc(mVulkanState);
 	VulkanImageCreator vic(mVulkanState);
 
-	createRenderPass(vic);
+	//createRenderPass(vic);
 
 	createDescriptorSetLayout();
 	createPipeline();
@@ -406,7 +406,7 @@ void Quad::createPipeline()
 	pipelineInfo.pColorBlendState = &blendState;
 	pipelineInfo.pDynamicState = &dynamicInfo;
 	pipelineInfo.layout = mVkPipelineLayout;
-	pipelineInfo.renderPass = renderPass;
+	pipelineInfo.renderPass = mVulkanState.renderPass;
 	pipelineInfo.subpass = 0;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 

@@ -38,6 +38,44 @@ VulkanManager::~VulkanManager()
 void VulkanManager::init() 
 {
 
+	createVkInstance();
+
+#ifdef AMVK_DEBUG
+	enableDebug();
+#endif
+
+	createVkSurface(*mWindow.mGlfwWindow);
+	createPhysicalDevice();
+	createLogicalDevice();
+	createSwapChain(mWindow);
+	createImageViews();
+	createRenderPass();
+	
+	
+	//createDescriptorSetLayout();
+	//createPipeline();
+	createCommandPool();
+	mQuad.init();
+
+
+
+	createDepthResources();
+	createFramebuffers();
+
+	//createTextureImage();
+	//createTextureImageView();
+	//createTextureSampler();
+	//createVertexBuffer();
+	//createIndexBuffer();
+	//createUniformBuffer();
+	//createDescriptorPool();
+	//createDescriptorSet();
+
+
+	createCommandBuffers();
+	createSemaphores();
+	LOG("INIT SUCCESSFUL");
+
 }
 
 std::vector<VkExtensionProperties> VulkanManager::getVkExtensionProperties() 
@@ -673,9 +711,9 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 		renderPassBeginInfo.framebuffer = mSwapChainFramebuffers[i];
 		
 		vkCmdBeginRenderPass(mVkCommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-		vkCmdBindPipeline(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mVkPipeline);
-	
-		PushConstants pushConstants;
+		vkCmdBindPipeline(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mQuad.mVkPipeline);
+		mQuad.update(mVkCommandBuffers[i], timer, camera);
+		/*PushConstants pushConstants;
 		pushConstants.model = glm::rotate(glm::mat4(), (float) timer.total() * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		pushConstants.view = camera.view();//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		pushConstants.proj = camera.proj(); //glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
@@ -686,7 +724,7 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 				VK_SHADER_STAGE_VERTEX_BIT, 
 				0,
 				sizeof(PushConstants),
-				&pushConstants);
+				&pushConstants);*/
 
 		VkViewport viewport;
 		viewport.x = 0.0f;
@@ -703,7 +741,7 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 		vkCmdSetViewport(mVkCommandBuffers[i], 0, 1, &viewport);
 		vkCmdSetScissor(mVkCommandBuffers[i], 0, 1, &scissor);
 		
-		VkBuffer vertBuf[] = {vertexBuffer};
+		/*VkBuffer vertBuf[] = {vertexBuffer};
 		VkDeviceSize offsets[] = {0};
 		vkCmdBindVertexBuffers(mVkCommandBuffers[i], 0, 1, vertBuf, offsets);
 		vkCmdBindIndexBuffer(mVkCommandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT32);
@@ -717,7 +755,10 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 				0, 
 				nullptr);
 
-		vkCmdDrawIndexed(mVkCommandBuffers[i], mNumIndices, 1, 0, 0, 0);
+		vkCmdDrawIndexed(mVkCommandBuffers[i], mNumIndices, 1, 0, 0, 0);*/
+
+		mQuad.draw(mVkCommandBuffers[i]);
+
 		vkCmdEndRenderPass(mVkCommandBuffers[i]);
 
 		VK_CHECK_RESULT(vkEndCommandBuffer(mVkCommandBuffers[i]));
