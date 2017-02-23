@@ -45,7 +45,7 @@ public:
 	void draw(VkCommandBuffer& commandBuffer); 
 	void init();
 	void update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera);
-
+	void updateUniformBuffers(); 
 
 	VkPipelineVertexInputStateCreateInfo getVertexInputStateCreateInfo(
 		VkVertexInputBindingDescription& bindingDesc, 
@@ -67,6 +67,7 @@ public:
 	VkDescriptorSet mVkDescriptorSet;
 
 private:
+
 	void createVertexBuffer(const VulkanBufferCreator& vbc);
 	void createIndexBuffer(const VulkanBufferCreator& vbc);
 	void createUniformBuffer(const VulkanBufferCreator& vbc);

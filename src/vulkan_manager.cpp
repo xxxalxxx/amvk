@@ -688,6 +688,9 @@ void VulkanManager::createCommandBuffers()
 
 void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera) 
 {
+
+	mQuad.updateUniformBuffers();
+
 	VkClearValue clearValues[] = {
 		{0.4f, 0.1f, 0.1f, 1.0f}, // VkClearColorValue color; 
 		{1.0f, 0}				  // VkClearDepthStencilValue depthStencil 
@@ -713,18 +716,6 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 		vkCmdBeginRenderPass(mVkCommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 		vkCmdBindPipeline(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mQuad.mVkPipeline);
 		mQuad.update(mVkCommandBuffers[i], timer, camera);
-		/*PushConstants pushConstants;
-		pushConstants.model = glm::rotate(glm::mat4(), (float) timer.total() * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		pushConstants.view = camera.view();//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		pushConstants.proj = camera.proj(); //glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
-
-		vkCmdPushConstants(
-				mVkCommandBuffers[i], 
-				mVkPipelineLayout, 
-				VK_SHADER_STAGE_VERTEX_BIT, 
-				0,
-				sizeof(PushConstants),
-				&pushConstants);*/
 
 		VkViewport viewport;
 		viewport.x = 0.0f;
@@ -741,21 +732,7 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 		vkCmdSetViewport(mVkCommandBuffers[i], 0, 1, &viewport);
 		vkCmdSetScissor(mVkCommandBuffers[i], 0, 1, &scissor);
 		
-		/*VkBuffer vertBuf[] = {vertexBuffer};
-		VkDeviceSize offsets[] = {0};
-		vkCmdBindVertexBuffers(mVkCommandBuffers[i], 0, 1, vertBuf, offsets);
-		vkCmdBindIndexBuffer(mVkCommandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT32);
-		vkCmdBindDescriptorSets(
-				mVkCommandBuffers[i], 
-				VK_PIPELINE_BIND_POINT_GRAPHICS, 
-				mVkPipelineLayout, 
-				0, 
-				1, 
-				&mVkDescriptorSet, 
-				0, 
-				nullptr);
 
-		vkCmdDrawIndexed(mVkCommandBuffers[i], mNumIndices, 1, 0, 0, 0);*/
 
 		mQuad.draw(mVkCommandBuffers[i]);
 
@@ -1140,7 +1117,8 @@ void VulkanManager::updateUniformBuffer(const Timer& timer)
 	vkMapMemory(mVulkanState.device, uniformStagingBufferMem, 0, sizeof(ubo), 0, &data);
 	memcpy(data, &ubo, sizeof(ubo));
 	vkUnmapMemory(mVulkanState.device, uniformStagingBufferMem);
-	copyBuffer(uniformStagingBuffer, uniformBuffer, sizeof(ubo));	
+	VulkanBufferCreator vbc(mVulkanState);
+	vbc.copyBuffer(uniformStagingBuffer, uniformBuffer, sizeof(ubo));	
 }
 
 void VulkanManager::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)

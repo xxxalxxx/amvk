@@ -3,5 +3,7 @@
 ./res/
 *.d
 *.o
-
+*.swo
+*.swd
+*.swm
 

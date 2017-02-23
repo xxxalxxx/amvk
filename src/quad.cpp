@@ -38,12 +38,26 @@ void Quad::init()
 	createDescriptorSet();
 }
 
-void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera)
-{	
+void Quad::updateUniformBuffers() 
+{
+	UBO ubo = {};
+	
+	void* data;
+	vkMapMemory(mVulkanState.device, mUniformStagingBufferDesc.memory, 0, sizeof(ubo), 0, &data);
+	memcpy(data, &ubo, sizeof(ubo));
+	vkUnmapMemory(mVulkanState.device, mUniformStagingBufferDesc.memory);
+	VulkanBufferCreator vbc(mVulkanState);
+	vbc.copyBuffer(mUniformStagingBufferDesc.buffer, mUniformBufferDesc.buffer, sizeof(ubo));	
+
+}
+
+void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera) {	
 	PushConstants pushConstants;
 	pushConstants.model = glm::rotate(glm::mat4(), (float) timer.total() * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	pushConstants.view = camera.view();//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	pushConstants.proj = camera.proj(); //glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
+
+
 
 	vkCmdPushConstants(
 			commandBuffer, 
@@ -52,6 +66,8 @@ void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& ca
 			0,
 			sizeof(PushConstants),
 			&pushConstants);
+
+
 
 } 
 
@@ -77,7 +93,6 @@ void Quad::draw(VkCommandBuffer& commandBuffer)
 			&mVkDescriptorSet, 
 			0, 
 			nullptr);
-
 	LOG("Q 4");
 	vkCmdDrawIndexed(commandBuffer, numIndices, 1, 0, 0, 0);
 }
