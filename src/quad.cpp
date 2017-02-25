@@ -21,7 +21,7 @@ void Quad::init()
 	VulkanBufferCreator vbc(mVulkanState);
 	VulkanImageCreator vic(mVulkanState);
 
-	//createRenderPass(vic);
+	createRenderPass(vic);
 
 	createDescriptorSetLayout();
 	createPipeline();
@@ -77,13 +77,9 @@ void Quad::draw(VkCommandBuffer& commandBuffer)
 	VkBuffer vertBuf[] = {mVertexBufferDesc.buffer};
 	VkDeviceSize offsets[] = {0};
 
-	LOG("Q 1");
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertBuf, offsets);
-	
-	LOG("Q 2");
 	vkCmdBindIndexBuffer(commandBuffer, mIndexBufferDesc.buffer, 0, VK_INDEX_TYPE_UINT32);
 	
-	LOG("Q 3");
 	vkCmdBindDescriptorSets(
 			commandBuffer, 
 			VK_PIPELINE_BIND_POINT_GRAPHICS, 
@@ -93,7 +89,6 @@ void Quad::draw(VkCommandBuffer& commandBuffer)
 			&mVkDescriptorSet, 
 			0, 
 			nullptr);
-	LOG("Q 4");
 	vkCmdDrawIndexed(commandBuffer, numIndices, 1, 0, 0, 0);
 }
 

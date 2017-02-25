@@ -51,9 +51,7 @@ void VulkanManager::init()
 	createImageViews();
 	createRenderPass();
 	
-	
-	//createDescriptorSetLayout();
-	//createPipeline();
+
 	createCommandPool();
 	mQuad.init();
 
@@ -61,15 +59,6 @@ void VulkanManager::init()
 
 	createDepthResources();
 	createFramebuffers();
-
-	//createTextureImage();
-	//createTextureImageView();
-	//createTextureSampler();
-	//createVertexBuffer();
-	//createIndexBuffer();
-	//createUniformBuffer();
-	//createDescriptorPool();
-	//createDescriptorSet();
 
 
 	createCommandBuffers();
@@ -531,98 +520,6 @@ void VulkanManager::createRenderPass()
 	LOG("RENDER PASS CREATED");
 }
 
-void VulkanManager::createPipeline()
-{
-	VulkanPipelineCreator pc;
-	
-	FileManager& fileManager = FileManager::getInstance();
-	auto vertShaderSrc = fileManager.readShader("shader.vert");
-	auto fragShaderSrc = fileManager.readShader("shader.frag");
-
-	createShaderModule(vertShaderSrc, vertShaderModule);
-	createShaderModule(fragShaderSrc, fragShaderModule);
-
-	VkPipelineShaderStageCreateInfo vertStageCreateInfo = pc.shaderStage(vertShaderModule, VK_SHADER_STAGE_VERTEX_BIT);
-	VkPipelineShaderStageCreateInfo fragStageCreateInfo = pc.shaderStage(fragShaderModule, VK_SHADER_STAGE_FRAGMENT_BIT);
-
-	VkPipelineShaderStageCreateInfo stages[] = {
-		vertStageCreateInfo,
-		fragStageCreateInfo
-	};
-
-	auto bindingDesc = getBindingDesc();
-	auto attrDesc = getAttrDesc();
-
-	VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
-	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-	vertexInputInfo.vertexBindingDescriptionCount = 1;
-	vertexInputInfo.vertexAttributeDescriptionCount = attrDesc.size();
-	vertexInputInfo.pVertexBindingDescriptions = &bindingDesc;
-	vertexInputInfo.pVertexAttributeDescriptions = attrDesc.data();
-
-	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = pc.inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-	LOG("EXTENT W:" << mSwapChainExtent.width << " H:" << mSwapChainExtent.height);
-	
-
-
-	VkPipelineViewportStateCreateInfo viewportState = pc.viewportStateDynamic();
-
-	VkDynamicState dynamicStates[] = {
-		VK_DYNAMIC_STATE_VIEWPORT,
-		VK_DYNAMIC_STATE_SCISSOR
-	};
-
-	VkPipelineDynamicStateCreateInfo dynamicInfo = pc.dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
-
-	VkPipelineRasterizationStateCreateInfo rasterizationState = pc.rasterizationStateCullBackCCW();
-	VkPipelineDepthStencilStateCreateInfo depthStencil = pc.depthStencilStateDepthLessNoStencil();
-	VkPipelineMultisampleStateCreateInfo multisampleState = pc.multisampleStateNoMultisampleNoSampleShading();
-	VkPipelineColorBlendAttachmentState blendAttachmentState = pc.blendAttachmentStateDisabled();
-
-	VkPipelineColorBlendStateCreateInfo blendState = pc.blendStateDisabled(&blendAttachmentState, 1); 
-
-	VkDescriptorSetLayout setLayouts[] = { mVkDescriptorSetLayout };
-	
-	VkPhysicalDeviceProperties physicalDeviceProperties;
-	vkGetPhysicalDeviceProperties(mVulkanState.physicalDevice, &physicalDeviceProperties);
-	uint32_t maxPushConstantsSize = physicalDeviceProperties.limits.maxPushConstantsSize;
-	LOG("MAX PUSH CONST SIZE max:" << maxPushConstantsSize << " curr:" << sizeof(PushConstants));
-
-	if (sizeof(PushConstants) > maxPushConstantsSize)
-		throw std::runtime_error("Push Constants exceed max size. Use uniform buffer.");
-	if (sizeof(PushConstants) % 4 != 0)
-		throw std::runtime_error("Push Constants size must be a multiple of 4");
-
-	VkPushConstantRange pushConstantRange;
-	pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-	pushConstantRange.offset = 0;
-	pushConstantRange.size = sizeof(PushConstants); 
-
-	VkPipelineLayoutCreateInfo pipelineLayoutInfo = pc.layout(setLayouts, 1, &pushConstantRange, 1);
-
-	VK_CHECK_RESULT(vkCreatePipelineLayout(mVulkanState.device, &pipelineLayoutInfo, nullptr, &mVkPipelineLayout));
-
-	VkGraphicsPipelineCreateInfo pipelineInfo = {};
-	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-	pipelineInfo.stageCount = 2;
-	pipelineInfo.pStages = stages;
-	pipelineInfo.pVertexInputState = &vertexInputInfo;
-	pipelineInfo.pInputAssemblyState = &assemblyInfo;
-	pipelineInfo.pViewportState = &viewportState;
-	pipelineInfo.pRasterizationState = &rasterizationState;
-	pipelineInfo.pMultisampleState = &multisampleState;
-	pipelineInfo.pDepthStencilState = &depthStencil;
-	pipelineInfo.pColorBlendState = &blendState;
-	pipelineInfo.pDynamicState = &dynamicInfo;
-	pipelineInfo.layout = mVkPipelineLayout;
-	pipelineInfo.renderPass = mVulkanState.renderPass;
-	pipelineInfo.subpass = 0;
-	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
-
-	VK_CHECK_RESULT(vkCreateGraphicsPipelines(mVulkanState.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &mVkPipeline));
-	LOG("PIPELINE CREATED");
-}
-
 void VulkanManager::createShaderModule(const std::vector<char>& shaderSpvCode, VkShaderModule& shaderModule)
 {
 	VkShaderModuleCreateInfo createInfo = {};
@@ -804,7 +701,7 @@ void VulkanManager::waitIdle()
 
 void VulkanManager::recreateSwapChain()
 {
-	vkQueueWaitIdle(mVulkanState.graphicsQueue);
+/*	vkQueueWaitIdle(mVulkanState.graphicsQueue);
 	vkDeviceWaitIdle(mVulkanState.device);
 
 	vkFreeCommandBuffers(mVulkanState.device, mVulkanState.commandPool, (uint32_t) mVkCommandBuffers.size(), mVkCommandBuffers.data());
@@ -831,7 +728,7 @@ void VulkanManager::recreateSwapChain()
     createPipeline();
 	createDepthResources();
     createFramebuffers();
-    createCommandBuffers();
+    createCommandBuffers();*/
 }
 
 

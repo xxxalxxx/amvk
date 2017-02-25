@@ -65,7 +65,7 @@ public:
 	void createRenderPass();
 	void createDescriptorSetLayout();
 
-	void createPipeline();
+
 	void createDepthResources();
 	void createFramebuffers();
 	void createCommandPool();
@@ -117,13 +117,8 @@ private:
 	
 	void createShaderModule(const std::vector<char>& shaderSpvCode, VkShaderModule& shaderModule);
 
-	//VkInstance mVkInstance;
-
-	//VkSurfaceKHR mVkSurface;
-	//VkPhysicalDevice mVkPhysicalDevice;	
-	//VkDevice mVkDevice;
 	DeviceQueueIndicies mDeviceQueueIndices;
-	//VkQueue mGraphicsQueue, mSupportedQueue;
+
 
 	struct SwapChainDesc {
 		VkSurfaceCapabilitiesKHR mSurfaceCapabilities;
@@ -139,9 +134,9 @@ private:
 	VkFormat mSwapChainImageFormat;
 	VkExtent2D mSwapChainExtent;
 
-	//VkRenderPass mVkRenderPass;
+
 	VkPipelineLayout mVkPipelineLayout;
-	VkPipeline mVkPipeline;
+	//VkPipeline mVkPipeline;
 
 	//VkCommandPool mVkCommandPool;
 	std::vector<VkCommandBuffer> mVkCommandBuffers;
