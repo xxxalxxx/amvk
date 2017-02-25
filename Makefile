@@ -4,6 +4,7 @@ BIN_DIR := bin
 INC_DIR := inc
 SRC_DIR := src
 OBJ_DIR := obj
+SHADER_SPV_DIR := shader/spv
 SRC_DIRS := src
 
 TARGET=$(BIN_DIR)/myengine
@@ -15,7 +16,7 @@ DEPS=$(patsubst %.cpp,$(OBJ_DIR)/%.d, $(SRCS_NO_PATH))
 VPATH=inc:src:lib
 
 CXX=g++
-CXXFLAGS=-Wall -Werror -std=c++14 -I. -Isrc -Iinc -Ilib
+CXXFLAGS=-Wall -std=c++14 -I. -Isrc -Iinc -Ilib
 RM=rm -f
 LDLIBS=$(shell pkg-config --static --libs glfw3) -L$(VULKAN_LIB_PATH) -lvulkan
 
@@ -36,6 +37,6 @@ $(OBJ_DIR)/%.o : %.cpp
 .PHONY : clean
 
 clean:
-	$(RM) $(OBJ_DIR)/* $(TARGET)
+	$(RM) $(OBJ_DIR)/* $(TARGET) $(SHADER_SPV_DIR)/*
 
 -include $(DEPS)

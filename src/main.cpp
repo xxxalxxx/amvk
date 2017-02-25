@@ -20,7 +20,6 @@ int main() {
 		double dt = timer.tick();
 		engine.handleMovement(dt);
 
-		//vulkanManager.updateUniformBuffer(timer);
 		vulkanManager.updateCommandBuffers(timer, camera);
 
 		vulkanManager.draw();

@@ -19,7 +19,7 @@ double Timer::tick()
 		mFrameTime = 0.0;
 		mNumFrames = 0;
 	}
-	LOG("dt:" << mDt << " total:" << mTotalTime << " fps:" << mFPS << " frame time:" << mFrameTime);
+	//LOG("dt:" << mDt << " total:" << mTotalTime << " fps:" << mFPS << " frame time:" << mFrameTime);
 	return mDt;
 }
 

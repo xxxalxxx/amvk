@@ -69,22 +69,10 @@ public:
 	void createDepthResources();
 	void createFramebuffers();
 	void createCommandPool();
-
-	void createTextureImage();
-	void createTextureImageView();
-	void createTextureSampler();
-
-	void createVertexBuffer();
-	void createIndexBuffer();
-
-	void createUniformBuffer();
-	void createDescriptorPool();
-	void createDescriptorSet();
-
 	void createCommandBuffers();
 	void createSemaphores();
 	
-	void updateUniformBuffer(const Timer& timer);
+
 	void updateCommandBuffers(const Timer& timer, Camera& camera);
 	void draw();
 	
@@ -107,6 +95,8 @@ public:
 	std::vector<const char*> getExtensionNames();
 
 private:
+	void updateUniformBuffer(const Timer& timer);
+
 	DeviceQueueIndicies getDeviceQueueFamilyIndices(const VkPhysicalDevice& physicalDevice);
 	bool deviceExtensionsSupported(const VkPhysicalDevice& physicalDevice); 
 	
@@ -115,7 +105,7 @@ private:
 	VkPresentModeKHR getPresentMode(const std::vector<VkPresentModeKHR>& presentModes);
 	VkSurfaceFormatKHR getSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surfaceFormats);
 	
-	void createShaderModule(const std::vector<char>& shaderSpvCode, VkShaderModule& shaderModule);
+
 
 	DeviceQueueIndicies mDeviceQueueIndices;
 
@@ -135,45 +125,22 @@ private:
 	VkExtent2D mSwapChainExtent;
 
 
-	VkPipelineLayout mVkPipelineLayout;
-	//VkPipeline mVkPipeline;
 
-	//VkCommandPool mVkCommandPool;
 	std::vector<VkCommandBuffer> mVkCommandBuffers;
 
 	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;
 	VkDebugReportCallbackEXT mDebugReportCallback; 
 
-	VkShaderModule vertShaderModule;
-	VkShaderModule fragShaderModule;
-	
+
 	const Window& mWindow;
 	
 	static const std::vector<const char*> sDeviceExtensions;
 	static const std::vector<const char*> sValidationLayers;
 
-	struct Vertex {
-		glm::vec3 pos;
-		glm::vec3 color;
-		glm::vec2 texCoord;
-	};
-
-	struct UBO {
-	    glm::mat4 model;
-		glm::mat4 view;
-		glm::mat4 proj;
-	};
-
-	struct PushConstants {
-	    glm::mat4 model;
-		glm::mat4 view;
-		glm::mat4 proj;
-	};
-
 	void createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,
 			VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 	void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
-	void copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height);
+
 	void createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkImageView& imageView);
 
 	VkCommandBuffer beginSingleTimeCommands();
@@ -185,8 +152,7 @@ private:
 	VkSampler mTextureSampler;
 
 
-	VkVertexInputBindingDescription getBindingDesc();
-	std::array<VkVertexInputAttributeDescription, 3> getAttrDesc();
+
 
 	size_t mNumIndices;
 	VkBuffer vertexBuffer, indexBuffer, uniformBuffer, uniformStagingBuffer;

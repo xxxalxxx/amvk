@@ -8,6 +8,8 @@
 #include "vulkan_manager.h"
 #include "window.h"
 #include "timer.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 class Engine {
 public:
@@ -22,10 +24,11 @@ public:
 	Camera& getCamera();
 private:
 	Window mWindow;
+	Camera mCamera;
 	TaskManager mTaskManager;
 	VulkanManager mVulkanManager;
 	Timer mTimer;
-	Camera mCamera;
+
 };
 
 

@@ -3,12 +3,10 @@
 
 #include <cstdint>
 #include <cmath>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
-
 #include "macro.h"
+#include <glm/glm.hpp>
+
+
 
 class Camera {
 public:
@@ -24,16 +22,18 @@ public:
 	glm::mat4& proj();
 	glm::mat4& view();
 
+    double mPrevMouseX, mPrevMouseY;
 private:
 	float mNear, mFar, mFOV, mAspect;
     float mPitch, mYaw;
     float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;
-    double mPrevMouseX, mPrevMouseY;
+
     glm::vec3 mEye; 
     const static glm::vec3 UP, RIGHT;
     const static float MAX_FOV_RADIANS, MIN_FOV_RADIANS;
 
-    glm::mat4 mProj, mView; 
+    glm::mat4 mProj, mView;
+	bool initPrevPos;	
 };
 
 #endif

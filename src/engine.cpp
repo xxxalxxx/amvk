@@ -112,12 +112,14 @@ void Engine::init()
 {
 	mWindow.initWindow(*this);
 	mWindow.setWindowSizeCallback(onWindowResized);
-
 	InputManager& inputManager = mWindow.getInputManager();
 	inputManager.setCursorPosCallback(cursorPosCallback);
 	inputManager.setScrollCallback(scrollCallback);
 	inputManager.setMouseButtonCallback(mouseButtonCallback);
 	inputManager.setKeyCallback(keyCallback);
+	//glm::perspective(0.0f, 0.0f, 0.0f, 0.0f);
+	mCamera.mPrevMouseX = -400.0f;
+	mCamera.mPrevMouseY = 200.0f;
 
 	mVulkanManager.init();
 }
