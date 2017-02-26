@@ -16,7 +16,7 @@
 #include "vulkan_image_creator.h"
 #include "vulkan_render_pass_creator.h"
 #include "texture_manager.h"
-#include "vulkan_pipeline_creator.h"
+#include "pipeline_creator.h"
 #include "timer.h"
 #include "camera.h"
 

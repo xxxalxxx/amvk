@@ -1,13 +1,7 @@
-#include "vulkan_pipeline_creator.h"
+#include "pipeline_creator.h"
 
 
-
-VulkanPipelineCreator::VulkanPipelineCreator()
-{
-
-}
-
-VkPipelineViewportStateCreateInfo VulkanPipelineCreator::viewportStateDynamic() 
+VkPipelineViewportStateCreateInfo PipelineCreator::viewportStateDynamic() 
 {
 	VkPipelineViewportStateCreateInfo viewportState;
 	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -21,7 +15,7 @@ VkPipelineViewportStateCreateInfo VulkanPipelineCreator::viewportStateDynamic()
 	return viewportState;
 }
 
-VkPipelineViewportStateCreateInfo VulkanPipelineCreator::viewportStateDefault(VkExtent2D& extent)
+VkPipelineViewportStateCreateInfo PipelineCreator::viewportStateDefault(VkExtent2D& extent)
 {
 	VkViewport viewport = {};
 	viewport.x = 0.0f;
@@ -46,7 +40,7 @@ VkPipelineViewportStateCreateInfo VulkanPipelineCreator::viewportStateDefault(Vk
 }
 
 
-VkPipelineDynamicStateCreateInfo VulkanPipelineCreator::dynamicState(VkDynamicState* dynamicStates, uint32_t stateCount)
+VkPipelineDynamicStateCreateInfo PipelineCreator::dynamicState(VkDynamicState* dynamicStates, uint32_t stateCount)
 {
 	VkPipelineDynamicStateCreateInfo dynamicInfo;
 	dynamicInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
@@ -58,7 +52,7 @@ VkPipelineDynamicStateCreateInfo VulkanPipelineCreator::dynamicState(VkDynamicSt
 	return dynamicInfo;
 }
 
-VkPipelineShaderStageCreateInfo VulkanPipelineCreator::shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)
+VkPipelineShaderStageCreateInfo PipelineCreator::shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)
 {
 	VkPipelineShaderStageCreateInfo vertStageCreateInfo = {};
 	vertStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -69,7 +63,7 @@ VkPipelineShaderStageCreateInfo VulkanPipelineCreator::shaderStage(VkShaderModul
 	return vertStageCreateInfo;
 }
 
-VkPipelineShaderStageCreateInfo VulkanPipelineCreator::shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)
+VkPipelineShaderStageCreateInfo PipelineCreator::shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)
 {
 	FileManager& fm = FileManager::getInstance();
 	auto shaderSpvCode = fm.readShader(path);
@@ -91,7 +85,7 @@ VkPipelineShaderStageCreateInfo VulkanPipelineCreator::shaderStage(const VkDevic
 }
 
 
-VkPipelineColorBlendAttachmentState VulkanPipelineCreator::blendAttachmentStateDisabled() 
+VkPipelineColorBlendAttachmentState PipelineCreator::blendAttachmentStateDisabled() 
 {
 	VkPipelineColorBlendAttachmentState blendAttachmentState = {};
 	blendAttachmentState.colorWriteMask = VK_COLOR_COMPONENT_R_BIT 
@@ -104,7 +98,7 @@ VkPipelineColorBlendAttachmentState VulkanPipelineCreator::blendAttachmentStateD
 }
 
 
-VkPipelineColorBlendStateCreateInfo VulkanPipelineCreator::blendStateDisabled(
+VkPipelineColorBlendStateCreateInfo PipelineCreator::blendStateDisabled(
 		VkPipelineColorBlendAttachmentState* attachmentStates,  
 		uint32_t attachmentCount) 
 {
@@ -122,7 +116,7 @@ VkPipelineColorBlendStateCreateInfo VulkanPipelineCreator::blendStateDisabled(
 	return blendState;
 }
 
-VkPipelineInputAssemblyStateCreateInfo VulkanPipelineCreator::inputAssemblyNoRestart(VkPrimitiveTopology topology) 
+VkPipelineInputAssemblyStateCreateInfo PipelineCreator::inputAssemblyNoRestart(VkPrimitiveTopology topology) 
 {
 	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = {};
 	assemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -134,7 +128,7 @@ VkPipelineInputAssemblyStateCreateInfo VulkanPipelineCreator::inputAssemblyNoRes
 
 
 
-VkPipelineMultisampleStateCreateInfo VulkanPipelineCreator::multisampleStateNoMultisampleNoSampleShading()
+VkPipelineMultisampleStateCreateInfo PipelineCreator::multisampleStateNoMultisampleNoSampleShading()
 {
 	VkPipelineMultisampleStateCreateInfo multisampleState = {};
 	multisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -144,7 +138,7 @@ VkPipelineMultisampleStateCreateInfo VulkanPipelineCreator::multisampleStateNoMu
 	return multisampleState;
 }
 
-VkPipelineDepthStencilStateCreateInfo VulkanPipelineCreator::depthStencilStateDepthLessNoStencil() 
+VkPipelineDepthStencilStateCreateInfo PipelineCreator::depthStencilStateDepthLessNoStencil() 
 {
 	VkPipelineDepthStencilStateCreateInfo depthStencil = {};
 	depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -157,7 +151,7 @@ VkPipelineDepthStencilStateCreateInfo VulkanPipelineCreator::depthStencilStateDe
 	return depthStencil;
 }
 
-VkPipelineRasterizationStateCreateInfo VulkanPipelineCreator::rasterizationStateCullBackCCW() 
+VkPipelineRasterizationStateCreateInfo PipelineCreator::rasterizationStateCullBackCCW() 
 {
 	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
 	rasterizationState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
@@ -172,7 +166,7 @@ VkPipelineRasterizationStateCreateInfo VulkanPipelineCreator::rasterizationState
 	return rasterizationState;
 }
 
-VkPipelineLayoutCreateInfo VulkanPipelineCreator::layout(
+VkPipelineLayoutCreateInfo PipelineCreator::layout(
 		VkDescriptorSetLayout* setLayouts, 
 		uint32_t setLayoutCount,
 		VkPushConstantRange* pushConstantRanges,

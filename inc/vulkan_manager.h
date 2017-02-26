@@ -40,7 +40,7 @@
 #include "device_queue_indices.h"
 #include "file_manager.h"
 #include "vulkan_utils.h"
-#include "vulkan_pipeline_creator.h"
+#include "pipeline_creator.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>

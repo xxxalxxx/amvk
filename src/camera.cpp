@@ -18,7 +18,6 @@ Camera::Camera():
 {
 	rebuildView();
 	rebuildPerspective();
-	glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 10.0f);
 }
 
 void Camera::updateOrientation(double mouseX, double mouseY)

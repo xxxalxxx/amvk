@@ -708,8 +708,7 @@ void VulkanManager::recreateSwapChain()
 	vkDestroyRenderPass(mVulkanState.device, mVulkanState.renderPass, nullptr);
 
 	for (size_t i = 0; i < mSwapChainImages.size(); ++i) {
-		vkDestroyImageView(mVulkanState.device, mSwapChainImageViews[i], nullptr);
-	}
+		vkDestroyImageView(mVulkanState.device, mSwapC	}
 
 	vkDestroySwapchainKHR(mVulkanState.device, mVulkanState.swapChain, nullptr);
 

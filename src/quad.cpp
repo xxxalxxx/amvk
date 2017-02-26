@@ -21,7 +21,7 @@ void Quad::init()
 	VulkanBufferCreator vbc(mVulkanState);
 	VulkanImageCreator vic(mVulkanState);
 
-	createRenderPass(vic);
+	//createRenderPass(vic);
 
 	createDescriptorSetLayout();
 	createPipeline();
@@ -346,16 +346,8 @@ void Quad::createDescriptorSet()
 
 void Quad::createPipeline()
 {
-	VulkanPipelineCreator pc;
-	
-	// FileManager& fileManager = FileManager::getInstance();
-	// auto vertShaderSrc = fileManager.readShader("shader.vert");
-	// auto fragShaderSrc = fileManager.readShader("shader.frag");
-	// createShaderModule(vertShaderSrc, vertShaderModule);
-	// createShaderModule(fragShaderSrc, fragShaderModule);
-
-	VkPipelineShaderStageCreateInfo vertStageCreateInfo = pc.shaderStage(mVulkanState.device, "shader.vert", VK_SHADER_STAGE_VERTEX_BIT);
-	VkPipelineShaderStageCreateInfo fragStageCreateInfo = pc.shaderStage(mVulkanState.device, "shader.frag", VK_SHADER_STAGE_FRAGMENT_BIT);
+	VkPipelineShaderStageCreateInfo vertStageCreateInfo = PipelineCreator::shaderStage(mVulkanState.device, "shader.vert", VK_SHADER_STAGE_VERTEX_BIT);
+	VkPipelineShaderStageCreateInfo fragStageCreateInfo = PipelineCreator::shaderStage(mVulkanState.device, "shader.frag", VK_SHADER_STAGE_FRAGMENT_BIT);
 
 	VkPipelineShaderStageCreateInfo stages[] = {
 		vertStageCreateInfo,
@@ -366,21 +358,21 @@ void Quad::createPipeline()
 	auto attrDesc = getAttrDesc();
 	auto vertexInputInfo = getVertexInputStateCreateInfo(bindingDesc, attrDesc);
 
-	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = pc.inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-	VkPipelineViewportStateCreateInfo viewportState = pc.viewportStateDynamic();
+	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = PipelineCreator::inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+	VkPipelineViewportStateCreateInfo viewportState = PipelineCreator::viewportStateDynamic();
 
 	VkDynamicState dynamicStates[] = {
 		VK_DYNAMIC_STATE_VIEWPORT,
 		VK_DYNAMIC_STATE_SCISSOR
 	};
 
-	VkPipelineDynamicStateCreateInfo dynamicInfo = pc.dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
-	VkPipelineRasterizationStateCreateInfo rasterizationState = pc.rasterizationStateCullBackCCW();
-	VkPipelineDepthStencilStateCreateInfo depthStencil = pc.depthStencilStateDepthLessNoStencil();
-	VkPipelineMultisampleStateCreateInfo multisampleState = pc.multisampleStateNoMultisampleNoSampleShading();
-	VkPipelineColorBlendAttachmentState blendAttachmentState = pc.blendAttachmentStateDisabled();
+	VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
+	VkPipelineRasterizationStateCreateInfo rasterizationState = PipelineCreator::rasterizationStateCullBackCCW();
+	VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessNoStencil();
+	VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
+	VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
 
-	VkPipelineColorBlendStateCreateInfo blendState = pc.blendStateDisabled(&blendAttachmentState, 1); 
+	VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1); 
 
 	VkDescriptorSetLayout setLayouts[] = { mVkDescriptorSetLayout };
 	
@@ -399,7 +391,7 @@ void Quad::createPipeline()
 	pushConstantRange.offset = 0;
 	pushConstantRange.size = sizeof(PushConstants); 
 
-	VkPipelineLayoutCreateInfo pipelineLayoutInfo = pc.layout(setLayouts, 1, &pushConstantRange, 1);
+	VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(setLayouts, 1, &pushConstantRange, 1);
 
 	VK_CHECK_RESULT(vkCreatePipelineLayout(mVulkanState.device, &pipelineLayoutInfo, nullptr, &mVkPipelineLayout));
 
