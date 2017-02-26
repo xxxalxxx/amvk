@@ -18,7 +18,7 @@ Quad::~Quad()
 
 void Quad::init()
 {
-	VulkanBufferCreator vbc(mVulkanState);
+
 	VulkanImageCreator vic(mVulkanState);
 
 	//createRenderPass(vic);
@@ -30,9 +30,9 @@ void Quad::init()
 	createTextureImageView(vic);
 	createTextureSampler();
 
-	createVertexBuffer(vbc);
-	createIndexBuffer(vbc);
-	createUniformBuffer(vbc);
+	createVertexBuffer();
+	createIndexBuffer();
+	createUniformBuffer();
 
 	createDescriptorPool();
 	createDescriptorSet();
@@ -46,18 +46,21 @@ void Quad::updateUniformBuffers()
 	vkMapMemory(mVulkanState.device, mUniformStagingBufferDesc.memory, 0, sizeof(ubo), 0, &data);
 	memcpy(data, &ubo, sizeof(ubo));
 	vkUnmapMemory(mVulkanState.device, mUniformStagingBufferDesc.memory);
-	VulkanBufferCreator vbc(mVulkanState);
-	vbc.copyBuffer(mUniformStagingBufferDesc.buffer, mUniformBufferDesc.buffer, sizeof(ubo));	
+
+	BufferHelper::copyBuffer(
+			mVulkanState,	
+			mUniformStagingBufferDesc.buffer, 
+			mUniformBufferDesc.buffer, 
+			sizeof(ubo));
 
 }
 
-void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera) {	
+void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera) 
+{
 	PushConstants pushConstants;
 	pushConstants.model = glm::mat4();//glm::rotate(glm::mat4(), (float) (10.f * timer.total() * glm::radians(90.0f)), glm::vec3(0.0f, 0.0f, 1.0f));
 	pushConstants.view = camera.view();//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	pushConstants.proj = camera.proj(); //glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
-
-
 
 	vkCmdPushConstants(
 			commandBuffer, 
@@ -66,9 +69,6 @@ void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& ca
 			0,
 			sizeof(PushConstants),
 			&pushConstants);
-
-
-
 } 
 
 void Quad::draw(VkCommandBuffer& commandBuffer) 
@@ -89,10 +89,11 @@ void Quad::draw(VkCommandBuffer& commandBuffer)
 			&mVkDescriptorSet, 
 			0, 
 			nullptr);
+
 	vkCmdDrawIndexed(commandBuffer, numIndices, 1, 0, 0, 0);
 }
 
-void Quad::createVertexBuffer(const VulkanBufferCreator& vbc) 
+void Quad::createVertexBuffer() 
 {
 	const std::vector<Vertex> vertices = {
 	    {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
@@ -108,34 +109,21 @@ void Quad::createVertexBuffer(const VulkanBufferCreator& vbc)
 	};
 
 	VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+	mVertexBufferDesc.size = bufferSize;
+	BufferInfo stagingDesc(mVulkanState.device, bufferSize);
 
-	VulkanBufferDesc stagingDesc(mVulkanState.device);
+	BufferHelper::createStagingBuffer(mVulkanState,stagingDesc);
+	BufferHelper::mapMemory(mVulkanState, stagingDesc, vertices.data());
+	BufferHelper::createVertexBuffer(mVulkanState, mVertexBufferDesc);
 
-	vbc.createBuffer(
+	BufferHelper::copyBuffer(
+			mVulkanState,
 			stagingDesc.buffer, 
-			bufferSize, 
-			stagingDesc.memory, 
-			VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
-			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	void* data;
-	vkMapMemory(mVulkanState.device, stagingDesc.memory, 0, bufferSize, 0 , &data);
-	memcpy(data, vertices.data(), (size_t) bufferSize);
-	vkUnmapMemory(mVulkanState.device, stagingDesc.memory);
-	vbc.createBuffer(
 			mVertexBufferDesc.buffer, 
-			bufferSize, 
-			mVertexBufferDesc.memory, 
-			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-	vbc.copyBuffer(stagingDesc.buffer, mVertexBufferDesc.buffer, bufferSize);
-
-	//vkDestroyBuffer(mVulkanState.device, stagingDesc.buffer, nullptr);
-	//vkFreeMemory(mVulkanState.device, stagingDesc.memory, nullptr);
+			bufferSize);
 }
 
-void Quad::createIndexBuffer(const VulkanBufferCreator& vbc)
+void Quad::createIndexBuffer()
 {
 	const std::vector<uint32_t> indices = {
 	    0, 1, 2, 2, 3, 0,
@@ -144,45 +132,29 @@ void Quad::createIndexBuffer(const VulkanBufferCreator& vbc)
 	
 	numIndices = indices.size(); 
 	VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+	mIndexBufferDesc.size = bufferSize;
+	BufferInfo stagingDesc(mVulkanState.device, bufferSize);
 
-	VulkanBufferDesc stagingDesc(mVulkanState.device);
-
-	vbc.createBuffer(
-			stagingDesc.buffer, 
-			bufferSize, 
-			stagingDesc.memory, 
-			VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
-			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	void* data;
-	vkMapMemory(mVulkanState.device, stagingDesc.memory, 0, bufferSize, 0 , &data);
-	memcpy(data, indices.data(), (size_t) bufferSize);
-	vkUnmapMemory(mVulkanState.device, stagingDesc.memory);
-	vbc.createBuffer(
-			mIndexBufferDesc.buffer, 
-			bufferSize, 
-			mIndexBufferDesc.memory, 
-			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	BufferHelper::createStagingBuffer(mVulkanState, stagingDesc);
+	BufferHelper::mapMemory(mVulkanState, stagingDesc, indices.data());
+	BufferHelper::createIndexBuffer(mVulkanState,mIndexBufferDesc);
 	
-	vbc.copyBuffer(stagingDesc.buffer, mIndexBufferDesc.buffer, bufferSize);
+	BufferHelper::copyBuffer(
+			mVulkanState,
+			stagingDesc.buffer, 
+			mIndexBufferDesc.buffer, 
+			bufferSize);
 }
 
-void Quad::createUniformBuffer(const VulkanBufferCreator& vbc)
+void Quad::createUniformBuffer()
 {	
 	VkDeviceSize bufSize = sizeof(UBO);
-	vbc.createBuffer(
-			mUniformStagingBufferDesc.buffer, 
-			bufSize, 
-			mUniformStagingBufferDesc.memory, 
-			VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
-			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	
-	vbc.createBuffer(
-			mUniformBufferDesc.buffer, 
-			bufSize, 
-			mUniformBufferDesc.memory, 
-			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, 
-			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+	mUniformStagingBufferDesc.size = bufSize;
+	mUniformBufferDesc.size = bufSize;
+
+	BufferHelper::createStagingBuffer(mVulkanState, mUniformStagingBufferDesc);
+	BufferHelper::createUniformBuffer(mVulkanState, mUniformBufferDesc);
 }
 
 void Quad::createTextureImage(const VulkanImageCreator& vic)

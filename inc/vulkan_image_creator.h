@@ -7,7 +7,7 @@
 #include "cmd_pass.h"
 #include "vulkan_state.h"
 #include "vulkan_utils.h"
-#include "vulkan_buffer_creator.h"
+#include "buffer_helper.h"
 #include "macro.h"
 
 class VulkanImageDesc {

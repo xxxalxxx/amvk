@@ -29,7 +29,6 @@ VulkanImageCreator::VulkanImageCreator(const VulkanState& vulkanState):
 void VulkanImageCreator::createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,
 				VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) const
 {
-	VulkanBufferCreator vbc(mVulkanState);
 
 	VkImageCreateInfo imageInfo = {};
 	imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -54,7 +53,7 @@ void VulkanImageCreator::createImage(uint32_t w, uint32_t h, VkFormat format, Vk
 	VkMemoryAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	allocInfo.allocationSize = memReqs.size;
-	allocInfo.memoryTypeIndex = vbc.getMemoryType(memReqs.memoryTypeBits, properties);
+	allocInfo.memoryTypeIndex = BufferHelper::getMemoryType(mVulkanState.physicalDevice, memReqs.memoryTypeBits, properties);
 
 	VK_CHECK_RESULT(vkAllocateMemory(mVulkanState.device, &allocInfo, nullptr, &imageMemory));
 

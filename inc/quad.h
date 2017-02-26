@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "macro.h"
-#include "vulkan_buffer_creator.h"
+#include "buffer_helper.h"
 #include "vulkan_image_creator.h"
 #include "vulkan_render_pass_creator.h"
 #include "texture_manager.h"
@@ -57,7 +57,7 @@ public:
 
 
 	const VulkanState& mVulkanState;
-	VulkanBufferDesc mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;
+	BufferInfo mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;
 	VulkanImageDesc mTextureDesc;
 	VkDescriptorSetLayout mVkDescriptorSetLayout;
 	VkSampler mTextureSampler;
@@ -68,9 +68,9 @@ public:
 
 private:
 
-	void createVertexBuffer(const VulkanBufferCreator& vbc);
-	void createIndexBuffer(const VulkanBufferCreator& vbc);
-	void createUniformBuffer(const VulkanBufferCreator& vbc);
+	void createVertexBuffer();
+	void createIndexBuffer();
+	void createUniformBuffer();
 
 	void createDescriptorSetLayout();
 	void createPipeline();
