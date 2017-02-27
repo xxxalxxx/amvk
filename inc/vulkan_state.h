@@ -4,6 +4,14 @@
 #include <vulkan/vulkan.h>
 #include "swap_chain_desc.h"
 
+
+struct DeviceInfo {
+	DeviceInfo():
+	maxPushConstantsSize(0)
+	{}
+	uint32_t maxPushConstantsSize;
+};
+
 struct VulkanState {
 	VulkanState(): 
 	instance(VK_NULL_HANDLE), 
@@ -34,6 +42,9 @@ struct VulkanState {
 	VkCommandPool commandPool;
 
 	VkFormat depthFormat;
+
+	DeviceInfo deviceInfo;
+
 };
 
 #endif

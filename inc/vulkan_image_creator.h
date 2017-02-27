@@ -36,13 +36,51 @@ struct VulkanTexture {
 class VulkanImageCreator {
 public:
 	VulkanImageCreator(const VulkanState& vulkanState);
-	void createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,
-			VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) const;
-	void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) const;
-	void copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height) const;
-	void createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkImageView& imageView) const;
-	VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
+	void createImage(
+			uint32_t w, 
+			uint32_t h, 
+			VkFormat format, 
+			VkImageTiling tiling,
+			VkImageUsageFlags usage, 
+			VkMemoryPropertyFlags properties, 
+			VkImage& image, 
+			VkDeviceMemory& imageMemory) const;
+
+	void transitionImageLayout(
+			VkImage image, 
+			VkFormat format, 
+			VkImageLayout oldLayout, 
+			VkImageLayout newLayout) const;
+
+	void copyImage(
+			VkImage srcImage, 
+			VkImage dstImage, 
+			uint32_t width, 
+			uint32_t height) const;
+	
+	void createImageView(
+			VkImage image, 
+			VkFormat format, 
+			VkImageAspectFlags aspectFlags, 
+			VkImageView& imageView) const;
+	
+	VkFormat findSupportedFormat(
+			const std::vector<VkFormat>& candidates, 
+			VkImageTiling tiling, 
+			VkFormatFeatureFlags features) const;
+
 	VkFormat findDepthFormat() const;
+
+	static void transitionImageLayout(
+		VulkanState state,
+		VkImage image, 
+		VkFormat format, 
+		VkImageLayout oldLayout, 
+		VkImageLayout newLayout,
+		VkImageAspectFlags barrierAspectMask,
+		VkAccessFlags srcAccessMask,
+		VkAccessFlags dstAccessMask);
+
 private:
 	const VulkanState& mVulkanState;
 };

@@ -26,8 +26,15 @@ VulkanImageCreator::VulkanImageCreator(const VulkanState& vulkanState):
 
 }
 
-void VulkanImageCreator::createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,
-				VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) const
+void VulkanImageCreator::createImage(
+		uint32_t w, 
+		uint32_t h, 
+		VkFormat format, 
+		VkImageTiling tiling,
+		VkImageUsageFlags usage, 
+		VkMemoryPropertyFlags properties, 
+		VkImage& image, 
+		VkDeviceMemory& imageMemory) const
 {
 
 	VkImageCreateInfo imageInfo = {};
@@ -129,17 +136,62 @@ void VulkanImageCreator::transitionImageLayout(VkImage image, VkFormat format, V
 		throw std::invalid_argument("unsupported layout transition!");
 	}
 
-	vkCmdPipelineBarrier(cmdPass.commandBuffer(),
-						VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-						0, 
-						0, nullptr, 
-						0, nullptr, 
-						1, &barrier);
+	vkCmdPipelineBarrier(
+			cmdPass.commandBuffer(),
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+			0, 
+			0, 
+			nullptr, 
+			0, 
+			nullptr, 
+			1, 
+			&barrier);
+}
+
+void VulkanImageCreator::transitionImageLayout(
+		VulkanState state,
+		VkImage image, 
+		VkFormat format, 
+		VkImageLayout oldLayout, 
+		VkImageLayout newLayout,
+		VkImageAspectFlags barrierAspectMask,
+		VkAccessFlags srcAccessMask,
+		VkAccessFlags dstAccessMask)
+{
+	CmdPass cmdPass(state.device, state.commandPool, state.graphicsQueue);
+
+	VkImageMemoryBarrier barrier = {};
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.oldLayout = oldLayout;
+	barrier.newLayout = newLayout;
+	barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	barrier.image = image;
+	barrier.subresourceRange.aspectMask = barrierAspectMask;
+	barrier.subresourceRange.baseMipLevel = 0;
+	barrier.subresourceRange.levelCount = 1;
+	barrier.subresourceRange.baseArrayLayer = 0;
+	barrier.subresourceRange.layerCount = 1;
+	barrier.srcAccessMask = srcAccessMask;
+	barrier.dstAccessMask = dstAccessMask;
+
+	vkCmdPipelineBarrier(
+			cmdPass.commandBuffer(),
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+			0, 
+			0, 
+			nullptr, 
+			0, 
+			nullptr, 
+			1, 
+			&barrier);
 }
 
 void VulkanImageCreator::copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height) const
 {
-	CmdPass cmdPass(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue);
+	CmdPass cmd(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue);
 
 	VkImageSubresourceLayers subRes = {};
 	subRes.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -157,7 +209,7 @@ void VulkanImageCreator::copyImage(VkImage srcImage, VkImage dstImage, uint32_t 
 	copy.extent.depth = 1;
 
 	vkCmdCopyImage(
-			cmdPass.commandBuffer(), 
+			cmd.commandBuffer(), 
 			srcImage, 
 			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 			dstImage, 

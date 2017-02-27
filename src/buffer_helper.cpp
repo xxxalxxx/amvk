@@ -45,10 +45,15 @@ uint32_t BufferHelper::getMemoryType(
 
 void BufferHelper::mapMemory(const VulkanState& state, BufferInfo& bufferInfo, const void* src) 
 {
+	mapMemory(state, bufferInfo.memory, bufferInfo.size, src);
+}
+
+void BufferHelper::mapMemory(const VulkanState& state, VkDeviceMemory& memory, VkDeviceSize size, const void* src) 
+{
 	void* data;
-	vkMapMemory(state.device, bufferInfo.memory, 0, bufferInfo.size, 0 , &data);
-	memcpy(data, src, (size_t) bufferInfo.size);
-	vkUnmapMemory(state.device, bufferInfo.memory);
+	vkMapMemory(state.device, memory, 0, size, 0 , &data);
+	memcpy(data, src, (size_t) size);
+	vkUnmapMemory(state.device, memory);
 }
 
 void BufferHelper::createBuffer(

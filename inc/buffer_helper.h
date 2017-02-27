@@ -24,6 +24,7 @@ class BufferHelper {
 public:	
 
 	static void mapMemory(const VulkanState& state, BufferInfo& bufferInfo, const void* src);
+	static void mapMemory(const VulkanState& state, VkDeviceMemory& memory, VkDeviceSize size, const void* src); 
 
 	static uint32_t getMemoryType(
 			const VkPhysicalDevice& physicalDevice, 
