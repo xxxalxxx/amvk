@@ -1,6 +1,8 @@
 #include "vulkan_image_creator.h"
 
 VulkanImageDesc::VulkanImageDesc(const VkDevice& vkDevice):
+	width(0),
+	height(0),
 	image(VK_NULL_HANDLE),
 	imageView(VK_NULL_HANDLE),
 	memory(VK_NULL_HANDLE),
@@ -66,6 +68,46 @@ void VulkanImageCreator::createImage(
 
 	vkBindImageMemory(mVulkanState.device, image, imageMemory, 0);
 }
+
+void VulkanImageCreator::createImage(
+		const VulkanState& state,
+		VulkanImageDesc& imageDesc, 
+		VkFormat format, 
+		VkImageTiling tiling,
+		VkImageUsageFlags usage, 
+		VkMemoryPropertyFlags properties)
+{
+
+	VkImageCreateInfo imageInfo = {};
+	imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+	imageInfo.imageType = VK_IMAGE_TYPE_2D;
+	imageInfo.extent.width = imageDesc.width;
+	imageInfo.extent.height = imageDesc.height;
+	imageInfo.extent.depth = 1;
+	imageInfo.mipLevels = 1;
+	imageInfo.arrayLayers = 1;
+	imageInfo.format = format;
+	imageInfo.tiling = tiling;
+	imageInfo.initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
+	imageInfo.usage = usage;
+	imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+	imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+	VK_CHECK_RESULT(vkCreateImage(state.device, &imageInfo, nullptr, &imageDesc.image));
+
+	VkMemoryRequirements memReqs;
+	vkGetImageMemoryRequirements(state.device, imageDesc.image, &memReqs);
+
+	VkMemoryAllocateInfo allocInfo = {};
+	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	allocInfo.allocationSize = memReqs.size;
+	allocInfo.memoryTypeIndex = BufferHelper::getMemoryType(state.physicalDevice, memReqs.memoryTypeBits, properties);
+
+	VK_CHECK_RESULT(vkAllocateMemory(state.device, &allocInfo, nullptr, &imageDesc.memory));
+
+	vkBindImageMemory(state.device, imageDesc.image, imageDesc.memory, 0);
+}
+
 
 void VulkanImageCreator::createImageView(
 		VkImage image, 

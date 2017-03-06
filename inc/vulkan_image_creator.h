@@ -14,6 +14,7 @@ class VulkanImageDesc {
 public:
 	VulkanImageDesc(const VkDevice& vkDevice);
 	~VulkanImageDesc();
+	uint32_t width, height;
 	VkImage image;
 	VkImageView imageView;
 	VkDeviceMemory memory;
@@ -45,6 +46,16 @@ public:
 			VkMemoryPropertyFlags properties, 
 			VkImage& image, 
 			VkDeviceMemory& imageMemory) const;
+
+
+	static void createImage(
+			const VulkanState& state,
+			VulkanImageDesc& imageDesc, 
+			VkFormat format, 
+			VkImageTiling tiling,
+			VkImageUsageFlags usage, 
+			VkMemoryPropertyFlags properties);
+
 
 	void transitionImageLayout(
 			VkImage image, 

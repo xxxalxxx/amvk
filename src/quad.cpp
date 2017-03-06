@@ -213,6 +213,8 @@ void Quad::createTextureImage(const VulkanImageCreator& vic)
 			VK_FORMAT_R8G8B8A8_UNORM,
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
 			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+	//vic.createImageView(mTextureDesc.image, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, mTextureDesc.imageView);
 }
 
 VkVertexInputBindingDescription Quad::getBindingDesc() const
