@@ -19,7 +19,7 @@ Quad::~Quad()
 void Quad::init()
 {
 
-	VulkanImageCreator vic(mVulkanState);
+	ImageHelper vic(mVulkanState);
 
 	//createRenderPass(vic);
 
@@ -157,7 +157,7 @@ void Quad::createUniformBuffer()
 	BufferHelper::createUniformBuffer(mVulkanState, mUniformBufferDesc);
 }
 
-void Quad::createTextureImage(const VulkanImageCreator& vic)
+void Quad::createTextureImage(const ImageHelper& vic)
 {
 	TextureData textureData;
 	textureData.load("texture/statue.jpg", STBI_rgb_alpha);
@@ -167,54 +167,60 @@ void Quad::createTextureImage(const VulkanImageCreator& vic)
 	VkDeviceSize imageSize = textureData.getSize();
 	stbi_uc* pixels = textureData.getPixels(); 
 
-	VulkanImageDesc stagingDesc(mVulkanState.device);
+	mTextureDesc.width = w;
+	mTextureDesc.height = h;
+	
+	VulkanImageDesc stagingDesc(mVulkanState.device, w, h);
 
-	vic.createImage(
-			w, 
-			h, 
-			VK_FORMAT_R8G8B8A8_UNORM, 
-			VK_IMAGE_TILING_LINEAR,
+	ImageHelper::createImage(
+			mVulkanState, 
+			stagingDesc, 
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_TILING_LINEAR, 
 			VK_IMAGE_USAGE_TRANSFER_SRC_BIT, 
-			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
-			stagingDesc.image, 
-			stagingDesc.memory);
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT); 
+	
+	BufferHelper::mapMemory(mVulkanState, stagingDesc.memory, imageSize, pixels);
 
-	void* data;
-	vkMapMemory(mVulkanState.device, stagingDesc.memory, 0, imageSize, 0, &data);
-	memcpy(data, pixels, (size_t) imageSize);
-	vkUnmapMemory(mVulkanState.device, stagingDesc.memory);
-
-    vic.createImage(
-			w, 
-			h, 
-			VK_FORMAT_R8G8B8A8_UNORM, 
+	ImageHelper::createImage(
+			mVulkanState, 
+			mTextureDesc, 
+			VK_FORMAT_R8G8B8A8_UNORM,
 			VK_IMAGE_TILING_OPTIMAL, 
 			VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
-			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
-			mTextureDesc.image, 
-			mTextureDesc.memory);
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-	vic.transitionImageLayout(
+	ImageHelper::transitionLayout(
+			mVulkanState,
 			stagingDesc.image,
 			VK_FORMAT_R8G8B8A8_UNORM,
 			VK_IMAGE_LAYOUT_PREINITIALIZED, 
-			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			VK_ACCESS_HOST_WRITE_BIT,
+			VK_ACCESS_TRANSFER_READ_BIT);
 
-	vic.transitionImageLayout(
-			mTextureDesc.image, 
+	ImageHelper::transitionLayout(
+			mVulkanState,
+			mTextureDesc.image,
 			VK_FORMAT_R8G8B8A8_UNORM,
 			VK_IMAGE_LAYOUT_PREINITIALIZED, 
-			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-	
-	vic.copyImage(stagingDesc.image, mTextureDesc.image, w, h);
+			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			VK_ACCESS_HOST_WRITE_BIT,
+			VK_ACCESS_TRANSFER_WRITE_BIT);
 
-	vic.transitionImageLayout(
-			mTextureDesc.image, 
-			VK_FORMAT_R8G8B8A8_UNORM,
-			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+	ImageHelper::copyImage(mVulkanState, stagingDesc, mTextureDesc);
 
-	//vic.createImageView(mTextureDesc.image, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, mTextureDesc.imageView);
+	ImageHelper::transitionLayout(
+			mVulkanState,
+			mTextureDesc.image,
+			VK_FORMAT_R8G8B8A8_UNORM, 
+			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			VK_ACCESS_TRANSFER_WRITE_BIT,
+			VK_ACCESS_SHADER_READ_BIT);
 }
 
 VkVertexInputBindingDescription Quad::getBindingDesc() const
@@ -352,18 +358,12 @@ void Quad::createPipeline()
 	
 	VkPhysicalDeviceProperties physicalDeviceProperties;
 	vkGetPhysicalDeviceProperties(mVulkanState.physicalDevice, &physicalDeviceProperties);
-	uint32_t maxPushConstantsSize = physicalDeviceProperties.limits.maxPushConstantsSize;
-	LOG("MAX PUSH CONST SIZE max:" << maxPushConstantsSize << " curr:" << sizeof(PushConstants));
 
-	if (sizeof(PushConstants) > maxPushConstantsSize)
-		throw std::runtime_error("Push Constants exceed max size. Use uniform buffer.");
-	if (sizeof(PushConstants) % 4 != 0)
-		throw std::runtime_error("Push Constants size must be a multiple of 4");
-
-	VkPushConstantRange pushConstantRange;
-	pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-	pushConstantRange.offset = 0;
-	pushConstantRange.size = sizeof(PushConstants); 
+	VkPushConstantRange pushConstantRange = PipelineCreator::pushConstantRange(
+			mVulkanState,
+			VK_SHADER_STAGE_VERTEX_BIT, 
+			0,
+			sizeof(PushConstants));
 
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(setLayouts, 1, &pushConstantRange, 1);
 
@@ -390,7 +390,7 @@ void Quad::createPipeline()
 	LOG("PIPELINE CREATED");
 }
 
-void Quad::createTextureImageView(const VulkanImageCreator& vic)
+void Quad::createTextureImageView(const ImageHelper& vic)
 {
 	vic.createImageView(mTextureDesc.image, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, mTextureDesc.imageView);
 }
@@ -415,7 +415,7 @@ void Quad::createTextureSampler()
 	VK_CHECK_RESULT(vkCreateSampler(mVulkanState.device, &samplerInfo, nullptr, &mTextureSampler));
 }
 
-void Quad::createRenderPass(const VulkanImageCreator& vic)
+void Quad::createRenderPass(const ImageHelper& vic)
 {
 	VulkanRenderPassCreator renderPassCreator;
 

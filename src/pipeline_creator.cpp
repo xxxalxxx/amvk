@@ -116,6 +116,22 @@ VkPipelineColorBlendStateCreateInfo PipelineCreator::blendStateDisabled(
 	return blendState;
 }
 
+
+VkPushConstantRange PipelineCreator::pushConstantRange(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)
+{
+	if (size > state.deviceInfo.maxPushConstantsSize)
+		throw std::runtime_error("Push Constants exceed max size. Use uniform buffer.");
+	if (size % 4 != 0)
+		throw std::runtime_error("Push Constants size must be a multiple of 4");
+
+	VkPushConstantRange pushConstantRange = {};
+	pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+	pushConstantRange.offset = offset;
+	pushConstantRange.size = size; 
+
+	return pushConstantRange;
+} 
+
 VkPipelineInputAssemblyStateCreateInfo PipelineCreator::inputAssemblyNoRestart(VkPrimitiveTopology topology) 
 {
 	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = {};

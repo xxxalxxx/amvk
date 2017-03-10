@@ -75,12 +75,12 @@ private:
 	void createDescriptorSetLayout();
 	void createPipeline();
 
-	void createTextureImage(const VulkanImageCreator& vic);
-	void createTextureImageView(const VulkanImageCreator& vic);
+	void createTextureImage(const ImageHelper& vic);
+	void createTextureImageView(const ImageHelper& vic);
 	void createTextureSampler();
 	void createDescriptorPool();
 	void createDescriptorSet();
-	void createRenderPass(const VulkanImageCreator& vic);
+	void createRenderPass(const ImageHelper& vic);
 
 	std::array<VkVertexInputAttributeDescription, 3> getAttrDesc() const;
 	VkVertexInputBindingDescription getBindingDesc() const;

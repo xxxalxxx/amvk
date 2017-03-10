@@ -5,6 +5,7 @@
 #include "macro.h"
 #include "file_manager.h"
 #include "vulkan_utils.h"
+#include "vulkan_state.h"
 
 class PipelineCreator {
 public:
@@ -16,7 +17,13 @@ public:
 
 	static VkPipelineShaderStageCreateInfo shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage);
 	static VkPipelineShaderStageCreateInfo shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage);
-	static 	VkPipelineColorBlendAttachmentState blendAttachmentStateDisabled();
+	static VkPipelineColorBlendAttachmentState blendAttachmentStateDisabled();
+
+	static VkPushConstantRange pushConstantRange(
+			const VulkanState& state, 
+			VkShaderStageFlags stageFlags, 
+			uint32_t offset, 
+			uint32_t size); 
 
 	static VkPipelineColorBlendStateCreateInfo blendStateDisabled(
 			VkPipelineColorBlendAttachmentState* attachmentStates,

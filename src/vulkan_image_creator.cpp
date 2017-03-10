@@ -11,6 +11,20 @@ VulkanImageDesc::VulkanImageDesc(const VkDevice& vkDevice):
 
 }
 
+
+VulkanImageDesc::VulkanImageDesc(const VkDevice& vkDevice, uint32_t width, uint32_t height):
+	width(width),
+	height(height),
+	image(VK_NULL_HANDLE),
+	imageView(VK_NULL_HANDLE),
+	memory(VK_NULL_HANDLE),
+	mVkDevice(vkDevice)
+
+
+{
+
+}
+
 VulkanImageDesc::~VulkanImageDesc() 
 {
 	if (imageView != VK_NULL_HANDLE)
@@ -22,13 +36,13 @@ VulkanImageDesc::~VulkanImageDesc()
 }
 
 
-VulkanImageCreator::VulkanImageCreator(const VulkanState& vulkanState):
+ImageHelper::ImageHelper(const VulkanState& vulkanState):
 	mVulkanState(vulkanState) 
 {
 
 }
 
-void VulkanImageCreator::createImage(
+void ImageHelper::createImage(
 		uint32_t w, 
 		uint32_t h, 
 		VkFormat format, 
@@ -38,7 +52,6 @@ void VulkanImageCreator::createImage(
 		VkImage& image, 
 		VkDeviceMemory& imageMemory) const
 {
-
 	VkImageCreateInfo imageInfo = {};
 	imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -69,7 +82,7 @@ void VulkanImageCreator::createImage(
 	vkBindImageMemory(mVulkanState.device, image, imageMemory, 0);
 }
 
-void VulkanImageCreator::createImage(
+void ImageHelper::createImage(
 		const VulkanState& state,
 		VulkanImageDesc& imageDesc, 
 		VkFormat format, 
@@ -109,7 +122,7 @@ void VulkanImageCreator::createImage(
 }
 
 
-void VulkanImageCreator::createImageView(
+void ImageHelper::createImageView(
 		VkImage image, 
 		VkFormat format, 
 		VkImageAspectFlags aspectFlags, 
@@ -131,7 +144,7 @@ void VulkanImageCreator::createImageView(
 	VK_CHECK_RESULT(vkCreateImageView(mVulkanState.device, &viewInfo, nullptr, &imageView));
 }
 
-void VulkanImageCreator::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) const
+void ImageHelper::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) const
 {
 	CmdPass cmdPass(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue);
 
@@ -191,8 +204,8 @@ void VulkanImageCreator::transitionImageLayout(VkImage image, VkFormat format, V
 			&barrier);
 }
 
-void VulkanImageCreator::transitionImageLayout(
-		VulkanState state,
+void ImageHelper::transitionLayout(
+		const VulkanState& state,
 		VkImage image, 
 		VkFormat format, 
 		VkImageLayout oldLayout, 
@@ -231,7 +244,7 @@ void VulkanImageCreator::transitionImageLayout(
 			&barrier);
 }
 
-void VulkanImageCreator::copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height) const
+void ImageHelper::copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height) const
 {
 	CmdPass cmd(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue);
 
@@ -260,7 +273,49 @@ void VulkanImageCreator::copyImage(VkImage srcImage, VkImage dstImage, uint32_t 
 			&copy);
 }
 
-VkFormat VulkanImageCreator::findDepthFormat() const
+
+void ImageHelper::copyImage(const VulkanState& state, VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height)
+{
+	CmdPass cmd(state.device, state.commandPool, state.graphicsQueue);
+
+	VkImageSubresourceLayers subRes = {};
+	subRes.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	subRes.baseArrayLayer = 0;
+	subRes.mipLevel = 0;
+	subRes.layerCount = 1;
+
+	VkImageCopy copy = {};
+	copy.srcSubresource = subRes;
+	copy.dstSubresource = subRes;
+	copy.srcOffset = {0, 0, 0};
+	copy.dstOffset = {0, 0, 0};
+	copy.extent.width = width;
+	copy.extent.height = height;
+	copy.extent.depth = 1;
+
+	vkCmdCopyImage(
+			cmd.commandBuffer(), 
+			srcImage, 
+			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+			dstImage, 
+			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			1, 
+			&copy);
+}
+
+
+	
+void ImageHelper::copyImage(
+			const VulkanState& state, 
+			VulkanImageDesc& srcImage, 
+			VulkanImageDesc& dstImage) 
+{
+	copyImage(state, srcImage.image, dstImage.image, srcImage.width, srcImage.height);
+}
+
+
+
+VkFormat ImageHelper::findDepthFormat() const
 {
 	return findSupportedFormat(
 			{VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
@@ -268,7 +323,7 @@ VkFormat VulkanImageCreator::findDepthFormat() const
 			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
 }
 
-VkFormat VulkanImageCreator::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
+VkFormat ImageHelper::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
 {
 	for (VkFormat format : candidates) {
 		VkFormatProperties props;

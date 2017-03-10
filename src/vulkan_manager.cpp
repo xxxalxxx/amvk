@@ -277,6 +277,12 @@ void VulkanManager::createLogicalDevice()
 	VK_CHECK_RESULT(vkCreateDevice(mVulkanState.physicalDevice, &createInfo, nullptr, &mVulkanState.device));
 	vkGetDeviceQueue(mVulkanState.device, mDeviceQueueIndices.getGraphicsQueueIndex(), 0, &mVulkanState.graphicsQueue);
 	vkGetDeviceQueue(mVulkanState.device, mDeviceQueueIndices.getSupportedQueueIndex(), 0, &mVulkanState.presentQueue);
+
+	VkPhysicalDeviceProperties physicalDeviceProperties;
+	vkGetPhysicalDeviceProperties(mVulkanState.physicalDevice, &physicalDeviceProperties); 
+	mVulkanState.deviceInfo.maxPushConstantsSize = physicalDeviceProperties.limits.maxPushConstantsSize;
+	LOG("MAX PUSH CONST SIZE max:" << mVulkanState.deviceInfo.maxPushConstantsSize);
+
 	LOG("LOGICAL DEVICE CREATED");
 }
 

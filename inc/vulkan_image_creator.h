@@ -13,6 +13,7 @@
 class VulkanImageDesc {
 public:
 	VulkanImageDesc(const VkDevice& vkDevice);
+	VulkanImageDesc(const VkDevice& vkDevice, uint32_t width, uint32_t height);
 	~VulkanImageDesc();
 	uint32_t width, height;
 	VkImage image;
@@ -34,9 +35,9 @@ struct VulkanTexture {
 	VkDescriptorImageInfo descriptor;
 };
 
-class VulkanImageCreator {
+class ImageHelper {
 public:
-	VulkanImageCreator(const VulkanState& vulkanState);
+	ImageHelper(const VulkanState& vulkanState);
 	void createImage(
 			uint32_t w, 
 			uint32_t h, 
@@ -56,6 +57,17 @@ public:
 			VkImageUsageFlags usage, 
 			VkMemoryPropertyFlags properties);
 
+	static void copyImage(
+			const VulkanState& state, 
+			VkImage srcImage, 
+			VkImage dstImage, 
+			uint32_t width, 
+			uint32_t height);
+	
+	static void copyImage(
+			const VulkanState& state, 
+			VulkanImageDesc& srcImage, 
+			VulkanImageDesc& dstImage);
 
 	void transitionImageLayout(
 			VkImage image, 
@@ -82,8 +94,8 @@ public:
 
 	VkFormat findDepthFormat() const;
 
-	static void transitionImageLayout(
-		VulkanState state,
+	static void transitionLayout(
+		const VulkanState& state,
 		VkImage image, 
 		VkFormat format, 
 		VkImageLayout oldLayout, 
