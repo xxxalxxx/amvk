@@ -48,7 +48,6 @@ public:
 			VkImage& image, 
 			VkDeviceMemory& imageMemory) const;
 
-
 	static void createImage(
 			const VulkanState& state,
 			VulkanImageDesc& imageDesc, 
