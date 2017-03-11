@@ -57,23 +57,6 @@ public:
 	VulkanManager(Window& window);
 	virtual ~VulkanManager();
 	void init();
-	void createVkInstance();
-	void createVkSurface(GLFWwindow& glfwWindow);
-	void enableDebug();
-	void createPhysicalDevice();
-	void createLogicalDevice();
-	void createSwapChain(const Window& window);
-	void createImageViews();
-	void createRenderPass();
-	void createDescriptorSetLayout();
-
-
-	void createDepthResources();
-	void createFramebuffers();
-	void createCommandPool();
-	void createCommandBuffers();
-	void createSemaphores();
-	
 
 	void updateCommandBuffers(const Timer& timer, Camera& camera);
 	void draw();
@@ -83,97 +66,13 @@ public:
 
 	const VkDevice& getVkDevice() const;
 
-	uint32_t getMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags& flags);
-	void createBuffer(VkBuffer& buffer, 
-					  VkDeviceSize size, 
-					  VkDeviceMemory& memory,  
-					  VkBufferUsageFlags usage,
-					  VkMemoryPropertyFlags prop);
-
-	void copyBuffer(VkBuffer src, VkBuffer dst, VkDeviceSize size);
-	
-	std::vector<VkExtensionProperties> getVkExtensionProperties();
-	std::vector<std::string> getVkExtensionPropertyNames(std::vector<VkExtensionProperties>& extensionProperties);
-	std::vector<const char*> getExtensionNames();
 
 private:
 	void updateUniformBuffer(const Timer& timer);
 
-	DeviceQueueIndicies getDeviceQueueFamilyIndices(const VkPhysicalDevice& physicalDevice);
-	bool deviceExtensionsSupported(const VkPhysicalDevice& physicalDevice); 
-	
-	SwapChainDesc getSwapChainDesc(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface);
-	VkExtent2D getExtent(VkSurfaceCapabilitiesKHR& surfaceCapabilities, const Window& window);
-	VkPresentModeKHR getPresentMode(const std::vector<VkPresentModeKHR>& presentModes);
-	VkSurfaceFormatKHR getSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surfaceFormats);
-	
-
-
-	DeviceQueueIndicies mDeviceQueueIndices;
-
-
-	struct SwapChainDesc {
-		VkSurfaceCapabilitiesKHR mSurfaceCapabilities;
-		std::vector<VkSurfaceFormatKHR> mSurfaceFormats;
-		std::vector<VkPresentModeKHR> mPresentModes;
-	};
-
-	SwapChainDesc mSwapChainDesc;
-	//VkSwapchainKHR mVkSwapChain;
-	std::vector<VkImage> mSwapChainImages;
-	std::vector<VkImageView> mSwapChainImageViews;
-	std::vector<VkFramebuffer> mSwapChainFramebuffers;
-	VkFormat mSwapChainImageFormat;
-	VkExtent2D mSwapChainExtent;
-
-
-
-	std::vector<VkCommandBuffer> mVkCommandBuffers;
-
-	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;
-	VkDebugReportCallbackEXT mDebugReportCallback; 
 
 
 	Window& mWindow;
-	
-	static const std::vector<const char*> sDeviceExtensions;
-	static const std::vector<const char*> sValidationLayers;
-
-	void createImage(uint32_t w, uint32_t h, VkFormat format, VkImageTiling tiling,
-			VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
-	void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
-
-	void createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkImageView& imageView);
-
-	VkCommandBuffer beginSingleTimeCommands();
-	void endSingleTimeCommands(VkCommandBuffer commandBuf);
-	
-	VkImage mTextureImage;
-	VkDeviceMemory mTextureImageMem;
-	VkImageView mTextureImageView;
-	VkSampler mTextureSampler;
-
-
-
-
-	size_t mNumIndices;
-	VkBuffer vertexBuffer, indexBuffer, uniformBuffer, uniformStagingBuffer;
-	VkDeviceMemory vertexBufferMem, indexBufferMem, uniformBufferMem, uniformStagingBufferMem;
-	
-
-	VkDescriptorSetLayout mVkDescriptorSetLayout;
-	VkDescriptorPool mVkDescriptorPool;
-	VkDescriptorSet mVkDescriptorSet;
-
-	
-	VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
-	VkFormat findDepthFormat();
-	bool hasStencilComponent(VkFormat format);
-
-	VkImage mDepthImage;
-	VkDeviceMemory mDepthImageMem;
-	VkImageView mDepthImageView;
-
 	VulkanState mVulkanState;
 	DeviceManager mDeviceManager;
 	SwapchainManager mSwapChainManager;
