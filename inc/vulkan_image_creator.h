@@ -85,7 +85,20 @@ public:
 			VkFormat format, 
 			VkImageAspectFlags aspectFlags, 
 			VkImageView& imageView) const;
-	
+
+	static void createImageView(
+			const VkDevice& device,
+			VkImage image, 
+			VkFormat format, 
+			VkImageAspectFlags aspectFlags, 
+			VkImageView& imageView);
+
+	static void createImageView(
+			const VkDevice& device,
+			VulkanImageDesc& imageDesc, 
+			VkFormat format, 
+			VkImageAspectFlags aspectFlags);
+		
 	VkFormat findSupportedFormat(
 			const std::vector<VkFormat>& candidates, 
 			VkImageTiling tiling, 

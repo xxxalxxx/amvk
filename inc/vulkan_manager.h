@@ -70,8 +70,6 @@ public:
 private:
 	void updateUniformBuffer(const Timer& timer);
 
-
-
 	Window& mWindow;
 	VulkanState mVulkanState;
 	DeviceManager mDeviceManager;

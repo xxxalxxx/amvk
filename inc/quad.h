@@ -75,8 +75,8 @@ private:
 	void createDescriptorSetLayout();
 	void createPipeline();
 
-	void createTextureImage(const ImageHelper& vic);
-	void createTextureImageView(const ImageHelper& vic);
+	void createTextureImage();
+	void createTextureImageView();
 	void createTextureSampler();
 	void createDescriptorPool();
 	void createDescriptorSet();
@@ -88,4 +88,5 @@ private:
 };
 
 #endif
+
 

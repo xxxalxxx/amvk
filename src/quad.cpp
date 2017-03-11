@@ -19,15 +19,15 @@ Quad::~Quad()
 void Quad::init()
 {
 
-	ImageHelper vic(mVulkanState);
+	//ImageHelper vic(mVulkanState);
 
 	//createRenderPass(vic);
 
 	createDescriptorSetLayout();
 	createPipeline();
 
-	createTextureImage(vic);
-	createTextureImageView(vic);
+	createTextureImage();
+	createTextureImageView();
 	createTextureSampler();
 
 	createVertexBuffer();
@@ -157,7 +157,7 @@ void Quad::createUniformBuffer()
 	BufferHelper::createUniformBuffer(mVulkanState, mUniformBufferDesc);
 }
 
-void Quad::createTextureImage(const ImageHelper& vic)
+void Quad::createTextureImage()
 {
 	TextureData textureData;
 	textureData.load("texture/statue.jpg", STBI_rgb_alpha);
@@ -390,9 +390,14 @@ void Quad::createPipeline()
 	LOG("PIPELINE CREATED");
 }
 
-void Quad::createTextureImageView(const ImageHelper& vic)
+void Quad::createTextureImageView()
 {
-	vic.createImageView(mTextureDesc.image, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, mTextureDesc.imageView);
+	ImageHelper::createImageView(
+			mVulkanState.device,
+			mTextureDesc.image, 
+			VK_FORMAT_R8G8B8A8_UNORM, 
+			VK_IMAGE_ASPECT_COLOR_BIT, 
+			mTextureDesc.imageView);
 }
 
 void Quad::createTextureSampler()

@@ -144,6 +144,39 @@ void ImageHelper::createImageView(
 	VK_CHECK_RESULT(vkCreateImageView(mVulkanState.device, &viewInfo, nullptr, &imageView));
 }
 
+
+void ImageHelper::createImageView(
+		const VkDevice& device,
+		VkImage image, 
+		VkFormat format, 
+		VkImageAspectFlags aspectFlags, 
+		VkImageView& imageView)
+{
+	VkImageViewCreateInfo viewInfo = {};
+	viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+	viewInfo.image = image;
+	viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	viewInfo.format = format;
+
+	viewInfo.subresourceRange.aspectMask = aspectFlags;
+
+	viewInfo.subresourceRange.baseMipLevel = 0;
+	viewInfo.subresourceRange.levelCount = 1;
+	viewInfo.subresourceRange.baseArrayLayer = 0;
+	viewInfo.subresourceRange.layerCount = 1;
+	
+	VK_CHECK_RESULT(vkCreateImageView(device, &viewInfo, nullptr, &imageView));
+}
+
+void ImageHelper::createImageView(
+		const VkDevice& device,
+		VulkanImageDesc& imageDesc, 
+		VkFormat format, 
+		VkImageAspectFlags aspectFlags)
+{
+	ImageHelper::createImageView(device, imageDesc.image, format, aspectFlags, imageDesc.imageView);
+}
+
 void ImageHelper::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) const
 {
 	CmdPass cmdPass(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue);
@@ -343,7 +376,7 @@ VkFormat ImageHelper::findDepthFormat(const VkPhysicalDevice& physicalDevice)
 {
 	return ImageHelper::findSupportedFormat(
 			physicalDevice,
-			{VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
+			{VK_FORMAT_D24_UNORM_S8_UINT},
 			VK_IMAGE_TILING_OPTIMAL,
 			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
 }

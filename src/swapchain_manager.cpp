@@ -3,7 +3,6 @@
 SwapchainManager::SwapchainManager(VulkanState& vulkanState, Window& window):
 	mVulkanState(vulkanState), 
 	mWindow(window),
-	mVulkanImageCreator(vulkanState),
 	mDepthImageDesc(vulkanState.device)
 {
 
@@ -79,39 +78,53 @@ void SwapchainManager::createSwapChain()
 
 void SwapchainManager::createImageViews() 
 {
-	ImageHelper vic(mVulkanState);
 	mSwapChainImageViews.resize(mSwapChainImages.size());
 	for (size_t i = 0; i < mSwapChainImages.size(); ++i) {
-		vic.createImageView(mSwapChainImages[i], mVulkanState.swapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, mSwapChainImageViews[i]);
+		ImageHelper::createImageView(
+				mVulkanState.device, 
+				mSwapChainImages[i], 
+				mVulkanState.swapChainImageFormat, 
+				VK_IMAGE_ASPECT_COLOR_BIT,
+				mSwapChainImageViews[i]);
+
 		LOG("IMAGE VIEW CREATED");
 	}
 }
 
 void SwapchainManager::createDepthResources() 
 {
-	VkFormat depthFormat = mVulkanImageCreator.findDepthFormat();
+	VkFormat depthFormat = ImageHelper::findSupportedFormat(
+			mVulkanState.physicalDevice,
+			{VK_FORMAT_D24_UNORM_S8_UINT},
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
 
-	mVulkanImageCreator.createImage(
-			mVulkanState.swapChainExtent.width, 
-			mVulkanState.swapChainExtent.height, 
+	mDepthImageDesc.width = mVulkanState.swapChainExtent.width;
+	mDepthImageDesc.height = mVulkanState.swapChainExtent.height;
+
+	ImageHelper::createImage(
+			mVulkanState, 
+			mDepthImageDesc, 
 			depthFormat, 
-			VK_IMAGE_TILING_OPTIMAL, 
-			VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-			mDepthImageDesc.image,
-			mDepthImageDesc.memory);
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, 
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-	mVulkanImageCreator.createImageView(
-			mDepthImageDesc.image, 
-			depthFormat, 
-			VK_IMAGE_ASPECT_DEPTH_BIT,
-			mDepthImageDesc.imageView);
+	ImageHelper::createImageView(
+			mVulkanState.device,
+			mDepthImageDesc,
+			depthFormat,
+			VK_IMAGE_ASPECT_DEPTH_BIT);
 
-	mVulkanImageCreator.transitionImageLayout(
+	ImageHelper::transitionLayout(
+			mVulkanState, 
 			mDepthImageDesc.image, 
 			depthFormat, 
 			VK_IMAGE_LAYOUT_UNDEFINED, 
-			VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+			VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, 
+			VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 
+			0, 
+			VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT);
 }
 
 
@@ -271,7 +284,6 @@ void SwapchainManager::createRenderPass()
 
 	VK_CHECK_RESULT(vkCreateRenderPass(mVulkanState.device, &createInfo, nullptr, &mVulkanState.renderPass));
 	LOG("RENDER PASS CREATED");
-
 }
 
 
