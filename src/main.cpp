@@ -15,6 +15,7 @@ int main() {
 	VulkanManager& vulkanManager = engine.getVulkanManager();
 	Timer& timer = engine.getTimer();
 	Camera& camera = engine.getCamera();
+	
 	while (window.isOpen()) {
 		inputManager.pollEvents();
 		double dt = timer.tick();

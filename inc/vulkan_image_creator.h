@@ -93,6 +93,14 @@ public:
 
 	VkFormat findDepthFormat() const;
 
+	static VkFormat findDepthFormat(const VkPhysicalDevice& physicalDevice);
+
+	static VkFormat findSupportedFormat(
+			const VkPhysicalDevice& physicalDevice, 
+			const std::vector<VkFormat>& candidates, 
+			VkImageTiling tiling, 
+			VkFormatFeatureFlags features);
+
 	static void transitionLayout(
 		const VulkanState& state,
 		VkImage image, 

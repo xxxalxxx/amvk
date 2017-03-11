@@ -51,7 +51,7 @@ void VulkanManager::init()
 	mSwapChainManager.createSwapChain();
 	mSwapChainManager.createImageViews();
 	
-	createRenderPass();
+	mSwapChainManager.createRenderPass();
 	mSwapChainManager.createCommandPool();
 	
 	mQuad.init();
@@ -492,68 +492,6 @@ void VulkanManager::createImageViews()
 
 void VulkanManager::createRenderPass()
 {
-	VkAttachmentDescription att = {};
-	att.format = mVulkanState.swapChainImageFormat;
-	att.samples = VK_SAMPLE_COUNT_1_BIT;
-	att.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	att.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	att.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	att.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	att.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	att.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-	VkAttachmentDescription depthAtt = {};
-	depthAtt.format = findDepthFormat();
-	depthAtt.samples = VK_SAMPLE_COUNT_1_BIT;
-	depthAtt.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	depthAtt.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	depthAtt.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	depthAtt.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	depthAtt.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-	depthAtt.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-	VkAttachmentReference attRef = {};
-	attRef.attachment = 0;
-	attRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-
-	VkAttachmentReference depthAttRef = {};
-	depthAttRef.attachment = 1;
-	depthAttRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-	VkSubpassDescription sub = {};
-	sub.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-	sub.colorAttachmentCount = 1;
-
-	sub.pColorAttachments = &attRef;
-
-	sub.pDepthStencilAttachment = &depthAttRef;
-	
-	VkSubpassDependency dependancy = {};
-	dependancy.srcSubpass = VK_SUBPASS_EXTERNAL;
-	dependancy.dstSubpass = 0;
-	dependancy.srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-	dependancy.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
-	dependancy.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dependancy.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT 
-							 | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-
-	std::array<VkAttachmentDescription, 2> attachments = {
-		att, 
-		depthAtt
-	};
-	
-	VkRenderPassCreateInfo createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-	createInfo.attachmentCount = attachments.size();
-	createInfo.pAttachments = attachments.data();
-	createInfo.subpassCount = 1;
-	createInfo.pSubpasses = &sub;
-	createInfo.dependencyCount = 1;
-	createInfo.pDependencies = &dependancy;
-
-	VK_CHECK_RESULT(vkCreateRenderPass(mVulkanState.device, &createInfo, nullptr, &mVulkanState.renderPass));
-	LOG("RENDER PASS CREATED");
 }
 
 void VulkanManager::createFramebuffers()
@@ -604,8 +542,6 @@ void VulkanManager::createCommandBuffers()
 	VK_CHECK_RESULT(vkAllocateCommandBuffers(mVulkanState.device, &allocInfo, mVkCommandBuffers.data()));
 
 	LOG("COMMAND POOL ALLOCATED");
-
-//	updateCommandBuffers();
 }
 
 void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera) 

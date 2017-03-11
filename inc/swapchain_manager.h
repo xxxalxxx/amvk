@@ -26,6 +26,7 @@ public:
 	void createCommandPool();
 	void createCommandBuffers();
 	void createSemaphores();
+	void createRenderPass();
 
 	VkSurfaceFormatKHR getSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surfaceFormats) const; 
 	VkPresentModeKHR getPresentMode(const std::vector<VkPresentModeKHR>& presentModes) const;
