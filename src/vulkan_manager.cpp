@@ -10,7 +10,7 @@ const std::vector<const char*> VulkanManager::sValidationLayers = {
 	"VK_LAYER_LUNARG_standard_validation",
 };
 
-VulkanManager::VulkanManager(const Window& window):
+VulkanManager::VulkanManager(Window& window):
 	//mVulkanState.physicalDevice(VK_NULL_HANDLE),
 	//mVulkanState.swapChain(VK_NULL_HANDLE),
 	mWindow(window),
@@ -26,6 +26,8 @@ VulkanManager::VulkanManager(const Window& window):
 	mDepthImage(VK_NULL_HANDLE),
 	mDepthImageMem(VK_NULL_HANDLE),
 	mDepthImageView(VK_NULL_HANDLE),
+	mDeviceManager(mVulkanState),
+	mSwapChainManager(mVulkanState, mWindow),
 	mQuad(mVulkanState)
 {
 	
@@ -37,6 +39,30 @@ VulkanManager::~VulkanManager()
 
 void VulkanManager::init() 
 {
+
+	mDeviceManager.createVkInstance();
+#ifdef AMVK_DEBUG
+	mDeviceManager.enableDebug();
+#endif
+	mSwapChainManager.createSurface();
+	mDeviceManager.createPhysicalDevice(mSwapChainManager);
+	mDeviceManager.createLogicalDevice();
+
+	mSwapChainManager.createSwapChain();
+	mSwapChainManager.createImageViews();
+	
+	createRenderPass();
+	mSwapChainManager.createCommandPool();
+	
+	mQuad.init();
+	
+	mSwapChainManager.createDepthResources();
+	mSwapChainManager.createFramebuffers(mVulkanState.renderPass);
+
+	mSwapChainManager.createCommandBuffers();
+	mSwapChainManager.createSemaphores();
+
+	/*
 
 	createVkInstance();
 
@@ -63,6 +89,8 @@ void VulkanManager::init()
 
 	createCommandBuffers();
 	createSemaphores();
+	
+	*/
 	LOG("INIT SUCCESSFUL");
 
 	//glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
@@ -465,7 +493,7 @@ void VulkanManager::createImageViews()
 void VulkanManager::createRenderPass()
 {
 	VkAttachmentDescription att = {};
-	att.format = mSwapChainImageFormat;
+	att.format = mVulkanState.swapChainImageFormat;
 	att.samples = VK_SAMPLE_COUNT_1_BIT;
 	att.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	att.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -598,41 +626,39 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 	renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	renderPassBeginInfo.renderPass = mVulkanState.renderPass;
 	renderPassBeginInfo.renderArea.offset = {0, 0};
-	renderPassBeginInfo.renderArea.extent = mSwapChainExtent;
+	renderPassBeginInfo.renderArea.extent = mVulkanState.swapChainExtent;
 	renderPassBeginInfo.clearValueCount = ARRAY_SIZE(clearValues);
 	renderPassBeginInfo.pClearValues = clearValues;
 	
-	for (size_t i = 0; i < mVkCommandBuffers.size(); ++i) {
-		VK_CHECK_RESULT(vkBeginCommandBuffer(mVkCommandBuffers[i], &beginInfo));
+	for (size_t i = 0; i < mSwapChainManager.mVkCommandBuffers.size(); ++i) {
 
-		renderPassBeginInfo.framebuffer = mSwapChainFramebuffers[i];
+		VK_CHECK_RESULT(vkBeginCommandBuffer(mSwapChainManager.mVkCommandBuffers[i], &beginInfo));
 		
-		vkCmdBeginRenderPass(mVkCommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-		vkCmdBindPipeline(mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mQuad.mVkPipeline);
-		mQuad.update(mVkCommandBuffers[i], timer, camera);
+		renderPassBeginInfo.framebuffer = mSwapChainManager.mSwapChainFramebuffers[i];
+		
+		vkCmdBeginRenderPass( mSwapChainManager.mVkCommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+		vkCmdBindPipeline( mSwapChainManager.mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mQuad.mVkPipeline);
+		mQuad.update( mSwapChainManager.mVkCommandBuffers[i], timer, camera);
 
 		VkViewport viewport;
 		viewport.x = 0.0f;
 		viewport.y = 0.0f;
-		viewport.width = (float) mSwapChainExtent.width;
-		viewport.height = (float) mSwapChainExtent.height;
+		viewport.width = (float) mVulkanState.swapChainExtent.width;
+		viewport.height = (float) mVulkanState.swapChainExtent.height;
 		viewport.minDepth = 0.0f;
 		viewport.maxDepth = 1.0f;
 		
 		VkRect2D scissor = {};
 		scissor.offset = {0, 0};
-		scissor.extent = mSwapChainExtent;
+		scissor.extent = mVulkanState.swapChainExtent;
 
-		vkCmdSetViewport(mVkCommandBuffers[i], 0, 1, &viewport);
-		vkCmdSetScissor(mVkCommandBuffers[i], 0, 1, &scissor);
+		vkCmdSetViewport( mSwapChainManager.mVkCommandBuffers[i], 0, 1, &viewport);
+		vkCmdSetScissor( mSwapChainManager.mVkCommandBuffers[i], 0, 1, &scissor);
 		
+		mQuad.draw( mSwapChainManager.mVkCommandBuffers[i]);
 
-
-		mQuad.draw(mVkCommandBuffers[i]);
-
-		vkCmdEndRenderPass(mVkCommandBuffers[i]);
-
-		VK_CHECK_RESULT(vkEndCommandBuffer(mVkCommandBuffers[i]));
+		vkCmdEndRenderPass( mSwapChainManager.mVkCommandBuffers[i]);
+		VK_CHECK_RESULT(vkEndCommandBuffer(mSwapChainManager.mVkCommandBuffers[i]));
 	}
 }
 
@@ -652,7 +678,7 @@ void VulkanManager::draw()
 	VkResult result = vkAcquireNextImageKHR(mVulkanState.device, 
 										  mVulkanState.swapChain, 
 										  std::numeric_limits<uint64_t>::max(), 
-										  mImageAvailableSemaphore, 
+										  mSwapChainManager.mImageAvailableSemaphore, 
 										  VK_NULL_HANDLE, 
 										  &imageIndex);
 
@@ -662,15 +688,15 @@ void VulkanManager::draw()
 		VkSubmitInfo submitInfo = {};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 		
-		VkSemaphore waitSemaphores[] = { mImageAvailableSemaphore };
-		VkSemaphore signalSemaphores[] = { mRenderFinishedSemaphore };
+		VkSemaphore waitSemaphores[] = { mSwapChainManager.mImageAvailableSemaphore };
+		VkSemaphore signalSemaphores[] = { mSwapChainManager.mRenderFinishedSemaphore };
 		VkSwapchainKHR swapChains[] = { mVulkanState.swapChain };
 		VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 		submitInfo.waitSemaphoreCount = 1;
 		submitInfo.pWaitSemaphores = waitSemaphores;
 		submitInfo.pWaitDstStageMask = stageFlags;
 		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &mVkCommandBuffers[imageIndex];
+		submitInfo.pCommandBuffers = &mSwapChainManager.mVkCommandBuffers[imageIndex];
 		submitInfo.signalSemaphoreCount = 1;
 		submitInfo.pSignalSemaphores = signalSemaphores;
 

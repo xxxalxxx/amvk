@@ -122,7 +122,7 @@ void SwapchainManager::createFramebuffers(VkRenderPass renderPass)
 
 	VkFramebufferCreateInfo createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-	createInfo.renderPass = renderPass;
+	createInfo.renderPass = mVulkanState.renderPass;
 	createInfo.width = mVulkanState.swapChainExtent.width;
 	createInfo.height = mVulkanState.swapChainExtent.height;
 	createInfo.layers = 1;

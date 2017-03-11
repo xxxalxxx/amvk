@@ -45,6 +45,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
 #include "texture_manager.h"
+#include "device_manager.h"
+#include "swapchain_manager.h"
 #include "quad.h"
 
 class VulkanManager { 
@@ -52,7 +54,7 @@ class VulkanManager {
 	struct SwapChainDesc;
 public:
 
-	VulkanManager(const Window& window);
+	VulkanManager(Window& window);
 	virtual ~VulkanManager();
 	void init();
 	void createVkInstance();
@@ -132,7 +134,7 @@ private:
 	VkDebugReportCallbackEXT mDebugReportCallback; 
 
 
-	const Window& mWindow;
+	Window& mWindow;
 	
 	static const std::vector<const char*> sDeviceExtensions;
 	static const std::vector<const char*> sValidationLayers;
@@ -173,6 +175,8 @@ private:
 	VkImageView mDepthImageView;
 
 	VulkanState mVulkanState;
+	DeviceManager mDeviceManager;
+	SwapchainManager mSwapChainManager;
 	Quad mQuad;
 };
 
