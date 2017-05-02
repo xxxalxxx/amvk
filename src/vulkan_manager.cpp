@@ -40,7 +40,7 @@ void VulkanManager::init()
 
 	mSwapChainManager.createCommandBuffers();
 	mSwapChainManager.createSemaphores();
-
+	
 	LOG("INIT SUCCESSFUL");
 }
 
@@ -50,10 +50,11 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 
 	mQuad.updateUniformBuffers();
 
-	VkClearValue clearValues[] = {
-		{0.4f, 0.1f, 0.1f, 1.0f}, // VkClearColorValue color; 
-		{1.0f, 0}				  // VkClearDepthStencilValue depthStencil 
+	VkClearValue clearValues[] ={
+		{{0.4f, 0.1f, 0.1f, 1.0f}},	// VkClearColorValue color; 
+		{{1.0f, 0}} // VkClearDepthStencilValue depthStencil 
 	};
+
 
 	VkCommandBufferBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -109,7 +110,6 @@ void VulkanManager::draw()
 										  mSwapChainManager.mImageAvailableSemaphore, 
 										  VK_NULL_HANDLE, 
 										  &imageIndex);
-
 	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 		recreateSwapChain();
 	} else if (result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR) {

@@ -264,7 +264,7 @@ namespace glm
 		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
 		Result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
 # ifdef GLM_VULKAN_PERSPECTIVE
-		Result[1][1] = - static_cast<T>(1) / (tanHalfFovy);
+		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
 # else
  		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
 #endif
@@ -291,7 +291,7 @@ namespace glm
 		mat<4, 4, T, defaultp> Result(static_cast<T>(0));
 		Result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
 #ifdef GLM_VULKAN_PERSPECTIVE
-		Result[1][1] = - static_cast<T>(1) / (tanHalfFovy);
+		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
 #else 
 		Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
 #endif

@@ -25,13 +25,13 @@ all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	@echo DEPS $(DEPS)
-	@echo AT $@
-	@echo DOLLAR $^
+	@echo @ $@
+	@echo \^ $^
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS) 
 
 $(OBJ_DIR)/%.o : %.cpp
-	@echo ARROW $<
-	@echo AT $@
+	@echo \< $<
+	@echo @ $@
 	$(CXX) $(CXXFLAGS) -MMD -MP -c -o $@ $< $(LDLIBS) 
 
 .PHONY : clean

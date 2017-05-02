@@ -11,13 +11,21 @@ const float Camera::MIN_FOV_RADIANS = M_PI_4;
 Camera::Camera():
 	mNear(0.1f), mFar(1000.0f), 
 	mFOV(0.5f * (MAX_FOV_RADIANS + MIN_FOV_RADIANS)), mAspect(1.0f),
-	mPitch(0.0f), mYaw(0.0f),
+	mPitch(0.0f), mYaw(3.0f),
 	mForwardMovementScalar(20.0f), mSidewaysMovementScalar(20.0f), mMouseSensitivityScalar(0.003f), mScrollSensitivityScalar(0.05f),
-	mEye(0.0f, 0.0f, 4.0f),
+	mEye(0.0f, 0.0f, -4.0f),
 	initPrevPos(true)
 {
+	updateViewAngles();
 	rebuildView();
 	rebuildPerspective();
+}
+
+
+void Camera::updateViewAngles()
+{
+	glm::quat orientation = glm::angleAxis(mPitch, RIGHT) * glm::angleAxis(mYaw, UP);
+    mView = glm::mat4_cast(orientation);
 }
 
 void Camera::updateOrientation(double mouseX, double mouseY)
@@ -41,10 +49,7 @@ void Camera::updateOrientation(double mouseX, double mouseY)
         mPrevMouseY = mouseY;
     }
     
-    glm::quat orientation = glm::angleAxis(mPitch, RIGHT) 
-                          * glm::angleAxis(mYaw, UP);
-    mView = glm::mat4_cast(orientation);
-
+	updateViewAngles();
     rebuildView();
 }
 

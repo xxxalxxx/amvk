@@ -41,8 +41,6 @@
 #include "file_manager.h"
 #include "vulkan_utils.h"
 #include "pipeline_creator.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
 #include "texture_manager.h"
 #include "device_manager.h"

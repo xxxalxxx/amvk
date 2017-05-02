@@ -242,29 +242,26 @@ void SwapchainManager::createRenderPass()
 	depthAtt.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	depthAtt.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-	VkAttachmentReference attRef = {};
-	attRef.attachment = 0;
-	attRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+	// uint32_t      attachment;
+    // VkImageLayout layout;
 
-	VkAttachmentReference depthAttRef = {};
-	depthAttRef.attachment = 1;
-	depthAttRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	VkAttachmentReference attRef = { 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
+	VkAttachmentReference depthAttRef = { 1, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
 	VkSubpassDescription sub = {};
 	sub.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 	sub.colorAttachmentCount = 1;
-
 	sub.pColorAttachments = &attRef;
-
 	sub.pDepthStencilAttachment = &depthAttRef;
 	
 	VkSubpassDependency dependancy = {};
 	dependancy.srcSubpass = VK_SUBPASS_EXTERNAL;
 	dependancy.dstSubpass = 0;
 	dependancy.srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-	dependancy.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
 	dependancy.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
+	dependancy.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
 	dependancy.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT 
 							 | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 

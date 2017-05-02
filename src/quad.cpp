@@ -19,6 +19,7 @@ Quad::~Quad()
 void Quad::init()
 {
 
+
 	//ImageHelper vic(mVulkanState);
 
 	//createRenderPass(vic);
@@ -61,7 +62,7 @@ void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& ca
 	pushConstants.model = glm::mat4();//glm::rotate(glm::mat4(), (float) (10.f * timer.total() * glm::radians(90.0f)), glm::vec3(0.0f, 0.0f, 1.0f));
 	pushConstants.view = camera.view();//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	pushConstants.proj = camera.proj(); //glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
-
+	
 	vkCmdPushConstants(
 			commandBuffer, 
 			mVkPipelineLayout, 

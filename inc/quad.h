@@ -1,17 +1,14 @@
 #ifndef AMVK_QUAD_H
 #define AMVK_QUAD_H
+#include "macro.h"
 
 #include <vulkan/vulkan.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 #include <cstring>
 #include <cstddef>
 #include <string.h>
 #include <array>
 #include <vector>
 
-#include "macro.h"
 #include "buffer_helper.h"
 #include "vulkan_image_creator.h"
 #include "vulkan_render_pass_creator.h"

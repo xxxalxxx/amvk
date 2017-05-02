@@ -13,6 +13,7 @@ public:
 	Camera();
 	void updateOrientation(double mouseX, double mouseY);
 	void updateFOV(float scrollDirection);
+	void updateViewAngles();
 	void rebuildView();
 	void rebuildPerspective();
 	void setAspect(double aspect);
