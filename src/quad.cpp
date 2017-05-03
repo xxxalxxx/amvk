@@ -2,6 +2,8 @@
 
 Quad::Quad(const VulkanState& vulkanState):
 	mVulkanState(vulkanState), 
+	mCommonBufferInfo(vulkanState.device),
+	mCommonStagingBufferInfo(vulkanState.device),
 	mVertexBufferDesc(vulkanState.device),
 	mIndexBufferDesc(vulkanState.device),
 	mUniformBufferDesc(vulkanState.device),
@@ -18,12 +20,6 @@ Quad::~Quad()
 
 void Quad::init()
 {
-
-
-	//ImageHelper vic(mVulkanState);
-
-	//createRenderPass(vic);
-
 	createDescriptorSetLayout();
 	createPipeline();
 
@@ -31,8 +27,10 @@ void Quad::init()
 	createTextureImageView();
 	createTextureSampler();
 
-	createVertexBuffer();
-	createIndexBuffer();
+	createBuffers();
+
+	//createVertexBuffer();
+	//createIndexBuffer();
 	createUniformBuffer();
 
 	createDescriptorPool();
@@ -49,20 +47,43 @@ void Quad::updateUniformBuffers()
 	vkUnmapMemory(mVulkanState.device, mUniformStagingBufferDesc.memory);
 
 	BufferHelper::copyBuffer(
-			mVulkanState,	
+			mVulkanState,
 			mUniformStagingBufferDesc.buffer, 
 			mUniformBufferDesc.buffer, 
 			sizeof(ubo));
+}
 
+void Quad::updateUniformBuffers(const Timer& timer, Camera& camera) 
+{
+	UBO ubo = {};
+	ubo.model = glm::mat4();
+	ubo.view = camera.view();
+	ubo.proj = camera.proj();
+	void* data;
+	vkMapMemory(mVulkanState.device, mUniformStagingBufferDesc.memory, 0, sizeof(ubo), 0, &data);
+	memcpy(data, &ubo, sizeof(ubo));
+	vkUnmapMemory(mVulkanState.device, mUniformStagingBufferDesc.memory);
+
+	BufferHelper::copyBuffer(
+			mVulkanState,
+			mUniformStagingBufferDesc.buffer, 
+			mUniformBufferDesc.buffer, 
+			sizeof(ubo));
 }
 
 void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera) 
 {
+	//glm::rotate(glm::mat4(), (float) (10.f * timer.total() * glm::radians(90.0f)), glm::vec3(0.0f, 0.0f, 1.0f));
+	updatePushConstants(commandBuffer, timer, camera);
+	updateUniformBuffers(timer, camera);
+} 
+
+void Quad::updatePushConstants(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera) 
+{
 	PushConstants pushConstants;
-	pushConstants.model = glm::mat4();//glm::rotate(glm::mat4(), (float) (10.f * timer.total() * glm::radians(90.0f)), glm::vec3(0.0f, 0.0f, 1.0f));
-	pushConstants.view = camera.view();//glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	pushConstants.proj = camera.proj(); //glm::perspective(glm::radians(45.0f), mSwapChainExtent.width / (float) mSwapChainExtent.height, 0.1f, 10.0f);
-	
+	pushConstants.model = glm::mat4();
+	pushConstants.view = camera.view();
+	pushConstants.proj = camera.proj();
 	vkCmdPushConstants(
 			commandBuffer, 
 			mVkPipelineLayout, 
@@ -70,16 +91,18 @@ void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& ca
 			0,
 			sizeof(PushConstants),
 			&pushConstants);
-} 
+}
 
 void Quad::draw(VkCommandBuffer& commandBuffer) 
 {
-
-	VkBuffer vertBuf[] = {mVertexBufferDesc.buffer};
+	//VkBuffer vertBuf[] = {mVertexBufferDesc.buffer};
 	VkDeviceSize offsets[] = {0};
+	VkBuffer commonBuf[] = {mCommonBufferInfo.buffer};
+	vkCmdBindVertexBuffers(commandBuffer, 0, 1, commonBuf, offsets);
+	vkCmdBindIndexBuffer(commandBuffer, mCommonBufferInfo.buffer, mIndexBufferOffset, VK_INDEX_TYPE_UINT32);
 
-	vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertBuf, offsets);
-	vkCmdBindIndexBuffer(commandBuffer, mIndexBufferDesc.buffer, 0, VK_INDEX_TYPE_UINT32);
+	//vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertBuf, offsets);
+	//vkCmdBindIndexBuffer(commandBuffer, mIndexBufferDesc.buffer, 0, VK_INDEX_TYPE_UINT32);
 	
 	vkCmdBindDescriptorSets(
 			commandBuffer, 
@@ -92,6 +115,60 @@ void Quad::draw(VkCommandBuffer& commandBuffer)
 			nullptr);
 
 	vkCmdDrawIndexed(commandBuffer, numIndices, 1, 0, 0, 0);
+}
+
+void Quad::createBuffers() 
+{
+	// Vertex
+
+	const std::vector<Vertex> vertices = {
+	    {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+		{{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+		{{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+
+	    {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+
+		{{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+		{{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+	};
+
+	VkDeviceSize vertexBufferSize = sizeof(vertices[0]) * vertices.size();
+
+	// Index
+
+	const std::vector<uint32_t> indices = {
+	    0, 1, 2, 2, 3, 0,
+		4, 5, 6, 6, 7, 4
+	};
+	
+	numIndices = indices.size(); 
+	VkDeviceSize indexBufferSize = sizeof(indices[0]) * indices.size();
+	
+	// Uniform
+	
+	// VkDeviceSize uniformBufferSize = sizeof(UBO);
+
+	//TODO: check how to add uniform without recopying same buffer
+
+	mVertexBufferOffset = 0;
+	mIndexBufferOffset = vertexBufferSize;
+	mUniformBufferOffset = vertexBufferSize + indexBufferSize;
+	mCommonBufferInfo.size = vertexBufferSize + indexBufferSize;
+	mCommonStagingBufferInfo.size = mCommonBufferInfo.size;
+	//BufferInfo stagingDesc(mVulkanState.device, mCommonBufferInfo.size);
+	BufferHelper::createStagingBuffer(mVulkanState, mCommonStagingBufferInfo);
+	BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, 0, vertexBufferSize, vertices.data());
+	BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mIndexBufferOffset, indexBufferSize, indices.data());
+
+	BufferHelper::createCommonBuffer(mVulkanState, mCommonBufferInfo);
+
+	BufferHelper::copyBuffer(
+			mVulkanState,
+			mCommonStagingBufferInfo.buffer, 
+			mCommonBufferInfo.buffer, 
+			mCommonBufferInfo.size);
 }
 
 void Quad::createVertexBuffer() 

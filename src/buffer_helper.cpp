@@ -26,8 +26,6 @@ BufferInfo::~BufferInfo()
 	vkFreeMemory(mVkDevice, memory, nullptr);
 }
 
-
-
 uint32_t BufferHelper::getMemoryType(
 		const VkPhysicalDevice& physicalDevice, 
 		uint32_t typeFilter, 
@@ -45,13 +43,23 @@ uint32_t BufferHelper::getMemoryType(
 
 void BufferHelper::mapMemory(const VulkanState& state, BufferInfo& bufferInfo, const void* src) 
 {
-	mapMemory(state, bufferInfo.memory, bufferInfo.size, src);
+	mapMemory(state, bufferInfo.memory, 0, bufferInfo.size, src);
 }
 
 void BufferHelper::mapMemory(const VulkanState& state, VkDeviceMemory& memory, VkDeviceSize size, const void* src) 
 {
+	mapMemory(state, memory, 0, size, src);
+} 
+
+void BufferHelper::mapMemory(
+		const VulkanState& state, 
+		VkDeviceMemory& memory, 
+		VkDeviceSize offset, 
+		VkDeviceSize size, 
+		const void* src) 
+{
 	void* data;
-	vkMapMemory(state.device, memory, 0, size, 0 , &data);
+	vkMapMemory(state.device, memory, offset, size, 0 , &data);
 	memcpy(data, src, (size_t) size);
 	vkUnmapMemory(state.device, memory);
 }
@@ -131,6 +139,22 @@ void BufferHelper::createVertexBuffer(const VulkanState& state, BufferInfo& buff
 			bufferInfo.memory,
 			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+}
+
+void BufferHelper::createCommonBuffer(const VulkanState& state, BufferInfo& bufferInfo)
+{
+	createBuffer(
+		state.physicalDevice,
+		state.device,
+		bufferInfo.buffer,
+		bufferInfo.size,
+		bufferInfo.memory,
+		VK_BUFFER_USAGE_TRANSFER_DST_BIT 
+		| VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT 
+		| VK_BUFFER_USAGE_INDEX_BUFFER_BIT
+		| VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
 }
 
 void BufferHelper::createIndexBuffer(const VulkanState& state, BufferInfo& bufferInfo)

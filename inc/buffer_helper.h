@@ -26,6 +26,13 @@ public:
 	static void mapMemory(const VulkanState& state, BufferInfo& bufferInfo, const void* src);
 	static void mapMemory(const VulkanState& state, VkDeviceMemory& memory, VkDeviceSize size, const void* src); 
 
+	static void mapMemory(
+			const VulkanState& state, 
+			VkDeviceMemory& memory, 
+			VkDeviceSize offset, 
+			VkDeviceSize size, 
+			const void* src); 
+	
 	static uint32_t getMemoryType(
 			const VkPhysicalDevice& physicalDevice, 
 			uint32_t typeFilter, 
@@ -54,6 +61,7 @@ public:
 			VkBufferUsageFlags usage,
 			VkMemoryPropertyFlags prop);
 
+	static void createCommonBuffer(const VulkanState& state, BufferInfo& bufferInfo);
 	static void createVertexBuffer(const VulkanState& state, BufferInfo& bufferInfo);
 	static void createIndexBuffer(const VulkanState& state, BufferInfo& bufferInfo);
 	static void createUniformBuffer(const VulkanState& state, BufferInfo& bufferInfo);

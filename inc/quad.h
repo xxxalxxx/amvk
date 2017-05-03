@@ -42,6 +42,9 @@ public:
 	void draw(VkCommandBuffer& commandBuffer); 
 	void init();
 	void update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera);
+	void updateUniformBuffers(const Timer& timer, Camera& camera); 
+	void updatePushConstants(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera);
+
 	void updateUniformBuffers(); 
 
 	VkPipelineVertexInputStateCreateInfo getVertexInputStateCreateInfo(
@@ -49,11 +52,17 @@ public:
 		std::array<VkVertexInputAttributeDescription, 3>& attrDesc) const;
 
 	uint32_t numIndices;
+	
+	VkDeviceSize mVertexBufferOffset, 
+				 mIndexBufferOffset, 
+				 mUniformBufferOffset;
+
 	VkPipeline mVkPipeline;
 	VkRenderPass renderPass;
 
-
 	const VulkanState& mVulkanState;
+	BufferInfo mCommonBufferInfo;
+	BufferInfo mCommonStagingBufferInfo;
 	BufferInfo mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;
 	VulkanImageDesc mTextureDesc;
 	VkDescriptorSetLayout mVkDescriptorSetLayout;
@@ -64,7 +73,7 @@ public:
 	VkDescriptorSet mVkDescriptorSet;
 
 private:
-
+	void createBuffers();
 	void createVertexBuffer();
 	void createIndexBuffer();
 	void createUniformBuffer();
