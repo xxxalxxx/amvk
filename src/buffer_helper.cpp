@@ -22,8 +22,10 @@ BufferInfo::BufferInfo(const VkDevice& device, VkDeviceSize size):
 
 BufferInfo::~BufferInfo() 
 {
-	vkDestroyBuffer(mVkDevice, buffer, nullptr);
-	vkFreeMemory(mVkDevice, memory, nullptr);
+	if (buffer != VK_NULL_HANDLE)
+		vkDestroyBuffer(mVkDevice, buffer, nullptr);
+	if (memory != VK_NULL_HANDLE)
+		vkFreeMemory(mVkDevice, memory, nullptr);
 }
 
 uint32_t BufferHelper::getMemoryType(
