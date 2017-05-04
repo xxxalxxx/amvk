@@ -8,8 +8,8 @@ public:
 	CmdPass(const VkDevice& vkDevice, const VkCommandPool& vkCommandPool, const VkQueue& vkQueue);
 	~CmdPass();
 	VkCommandBuffer commandBuffer();
+	VkCommandBuffer cmdBuffer;
 private:
-	VkCommandBuffer mCmdBuff;
 	const VkDevice& mVkDevice;
 	const VkCommandPool& mVkCommandPool;
 	const VkQueue mVkQueue;

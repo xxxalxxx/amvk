@@ -226,21 +226,35 @@ void BufferHelper::createStagingBuffer(
 			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
+void BufferHelper::copyBuffer(
+		const VkDevice& device,
+		const VkCommandPool& commandPool,
+		const VkQueue& queue,
+		VkBuffer src, 
+		VkBuffer dst, 
+		VkDeviceSize size) 
+{
+	CmdPass cmdPass(device, commandPool, queue);
+	VkBufferCopy bufferCopy = {};
+	bufferCopy.size = size;
+	vkCmdCopyBuffer(cmdPass.commandBuffer(), src, dst, 1, &bufferCopy);
+}
 
 void BufferHelper::copyBuffer(
 		const VkDevice& device,
 		const VkCommandPool& commandPool,
-		const VkQueue& queue,	
+		const VkQueue& queue,
 		VkBuffer src, 
 		VkBuffer dst, 
+		VkDeviceSize offset,
 		VkDeviceSize size)
 {
 	CmdPass cmdPass(device, commandPool, queue);
-
 	VkBufferCopy bufferCopy = {};
 	bufferCopy.size = size;
-
-	vkCmdCopyBuffer(cmdPass.commandBuffer(), src, dst, 1, &bufferCopy);
+	bufferCopy.dstOffset = offset;
+	bufferCopy.srcOffset = offset;
+	vkCmdCopyBuffer(cmdPass.cmdBuffer, src, dst, 1, &bufferCopy);
 }
 
 void BufferHelper::copyBuffer(

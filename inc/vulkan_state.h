@@ -7,9 +7,11 @@
 
 struct DeviceInfo {
 	DeviceInfo():
-	maxPushConstantsSize(0)
+	maxPushConstantsSize(0),
+	minUniformBufferOffsetAlignment(0)
 	{}
 	uint32_t maxPushConstantsSize;
+	VkDeviceSize minUniformBufferOffsetAlignment;
 };
 
 struct VulkanState {

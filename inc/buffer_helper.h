@@ -89,6 +89,15 @@ public:
 			VkDeviceSize size);
 
 	static void copyBuffer(
+			const VkDevice& device,
+			const VkCommandPool& commandPool,
+			const VkQueue& queue,
+			VkBuffer src, 
+			VkBuffer dst, 
+			VkDeviceSize offset,
+			VkDeviceSize size);
+
+	static void copyBuffer(
 			const VulkanState& state,
 			VkBuffer src, 
 			VkBuffer dst, 

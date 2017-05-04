@@ -45,8 +45,6 @@ public:
 	void updateUniformBuffers(const Timer& timer, Camera& camera); 
 	void updatePushConstants(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera);
 
-	void updateUniformBuffers(); 
-
 	VkPipelineVertexInputStateCreateInfo getVertexInputStateCreateInfo(
 		VkVertexInputBindingDescription& bindingDesc, 
 		std::array<VkVertexInputAttributeDescription, 3>& attrDesc) const;

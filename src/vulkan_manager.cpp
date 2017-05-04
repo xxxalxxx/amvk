@@ -48,7 +48,7 @@ void VulkanManager::init()
 void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera) 
 {
 
-	mQuad.updateUniformBuffers();
+	mQuad.updateUniformBuffers(timer, camera);
 
 	VkClearValue clearValues[] ={
 		{{0.4f, 0.1f, 0.1f, 1.0f}},	// VkClearColorValue color; 

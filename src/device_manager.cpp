@@ -181,6 +181,7 @@ void DeviceManager::createLogicalDevice()
 	VkPhysicalDeviceProperties physicalDeviceProperties;
 	vkGetPhysicalDeviceProperties(mVulkanState.physicalDevice, &physicalDeviceProperties); 
 	mVulkanState.deviceInfo.maxPushConstantsSize = physicalDeviceProperties.limits.maxPushConstantsSize;
+	mVulkanState.deviceInfo.minUniformBufferOffsetAlignment = physicalDeviceProperties.limits.minUniformBufferOffsetAlignment;
 	LOG("MAX PUSH CONST SIZE max:" << mVulkanState.deviceInfo.maxPushConstantsSize);
 
 	LOG("LOGICAL DEVICE CREATED");
