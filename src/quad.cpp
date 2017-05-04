@@ -156,11 +156,18 @@ void Quad::createBuffers()
 	//mUniformBufferOffset = vertexBufferSize + indexBufferSize;
 	mCommonBufferInfo.size = vertexBufferSize + indexBufferSize + uniformBufferSize;
 	mCommonStagingBufferInfo.size = mCommonBufferInfo.size;
-	//BufferInfo stagingDesc(mVulkanState.device, mCommonBufferInfo.size);
 	BufferHelper::createStagingBuffer(mVulkanState, mCommonStagingBufferInfo);
-	BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mUniformBufferOffset, uniformBufferSize, &ubo);
-	BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mVertexBufferOffset, vertexBufferSize, vertices.data());
-	BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mIndexBufferOffset, indexBufferSize, indices.data());
+	
+	char* data;
+	vkMapMemory(mVulkanState.device, mCommonStagingBufferInfo.memory, 0, mCommonStagingBufferInfo.size, 0, (void**) &data);
+	memcpy(data + mUniformBufferOffset, &ubo, (size_t) uniformBufferSize);
+	memcpy(data + mVertexBufferOffset, vertices.data(), vertexBufferSize);
+	memcpy(data + mIndexBufferOffset, indices.data(), indexBufferSize);
+	vkUnmapMemory(mVulkanState.device, mCommonStagingBufferInfo.memory);
+
+	// BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mUniformBufferOffset, uniformBufferSize, &ubo);
+	// BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mVertexBufferOffset, vertexBufferSize, vertices.data());
+	// BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mIndexBufferOffset, indexBufferSize, indices.data());
 
 	BufferHelper::createCommonBuffer(mVulkanState, mCommonBufferInfo);
 
