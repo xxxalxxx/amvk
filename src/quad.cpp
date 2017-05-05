@@ -43,6 +43,9 @@ void Quad::updateUniformBuffers(const Timer& timer, Camera& camera)
 	ubo.model = glm::mat4();
 	ubo.view = camera.view();
 	ubo.proj = camera.proj();
+	/*
+	Buffer update via copy
+	   
 	BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mUniformBufferOffset, sizeof(ubo), &ubo);
 	BufferHelper::copyBuffer(
 			mVulkanState.device,
@@ -52,7 +55,16 @@ void Quad::updateUniformBuffers(const Timer& timer, Camera& camera)
 			mCommonBufferInfo.buffer,
 			mUniformBufferOffset,
 			sizeof(ubo));
+	*/
 
+	CmdPass cmdPass(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue); 
+
+	vkCmdUpdateBuffer(
+			cmdPass.cmdBuffer,
+			mCommonBufferInfo.buffer,
+			mUniformBufferOffset,
+			sizeof(UBO),
+			&ubo);
 	/*
 	void* data;
 	vkMapMemory(mVulkanState.device, mUniformStagingBufferDesc.memory, 0, sizeof(ubo), 0, &data);
