@@ -1,40 +1,5 @@
 #include "vulkan_image_creator.h"
 
-VulkanImageDesc::VulkanImageDesc(const VkDevice& vkDevice):
-	width(0),
-	height(0),
-	image(VK_NULL_HANDLE),
-	imageView(VK_NULL_HANDLE),
-	memory(VK_NULL_HANDLE),
-	mVkDevice(vkDevice)
-{
-
-}
-
-
-VulkanImageDesc::VulkanImageDesc(const VkDevice& vkDevice, uint32_t width, uint32_t height):
-	width(width),
-	height(height),
-	image(VK_NULL_HANDLE),
-	imageView(VK_NULL_HANDLE),
-	memory(VK_NULL_HANDLE),
-	mVkDevice(vkDevice)
-
-
-{
-
-}
-
-VulkanImageDesc::~VulkanImageDesc() 
-{
-	if (imageView != VK_NULL_HANDLE)
-		vkDestroyImageView(mVkDevice, imageView, nullptr);
-	if (image != VK_NULL_HANDLE)
-		vkDestroyImage(mVkDevice, image, nullptr);
-	if (memory != VK_NULL_HANDLE)
-		vkFreeMemory(mVkDevice, memory, nullptr);
-}
-
 
 ImageHelper::ImageHelper(const VulkanState& vulkanState):
 	mVulkanState(vulkanState) 
@@ -84,7 +49,7 @@ void ImageHelper::createImage(
 
 void ImageHelper::createImage(
 		const VulkanState& state,
-		VulkanImageDesc& imageDesc, 
+		ImageInfo& imageDesc, 
 		VkFormat format, 
 		VkImageTiling tiling,
 		VkImageUsageFlags usage, 
@@ -170,7 +135,7 @@ void ImageHelper::createImageView(
 
 void ImageHelper::createImageView(
 		const VkDevice& device,
-		VulkanImageDesc& imageDesc, 
+		ImageInfo& imageDesc, 
 		VkFormat format, 
 		VkImageAspectFlags aspectFlags)
 {
@@ -249,6 +214,27 @@ void ImageHelper::transitionLayout(
 {
 	CmdPass cmdPass(state.device, state.commandPool, state.graphicsQueue);
 
+	ImageHelper::transitionLayout(
+			cmdPass.cmdBuffer, 
+			image, format, 
+			oldLayout, 
+			newLayout, 
+			barrierAspectMask, 
+			srcAccessMask, 
+			dstAccessMask);
+}
+
+void ImageHelper::transitionLayout(
+		VkCommandBuffer& cmdBuffer,	
+		VkImage image, 
+		VkFormat format, 
+		VkImageLayout oldLayout, 
+		VkImageLayout newLayout,
+		VkImageAspectFlags barrierAspectMask,
+		VkAccessFlags srcAccessMask,
+		VkAccessFlags dstAccessMask)
+{
+
 	VkImageMemoryBarrier barrier = {};
 	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	barrier.oldLayout = oldLayout;
@@ -265,7 +251,7 @@ void ImageHelper::transitionLayout(
 	barrier.dstAccessMask = dstAccessMask;
 
 	vkCmdPipelineBarrier(
-			cmdPass.commandBuffer(),
+			cmdBuffer,
 			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 
 			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
 			0, 
@@ -310,7 +296,11 @@ void ImageHelper::copyImage(VkImage srcImage, VkImage dstImage, uint32_t width, 
 void ImageHelper::copyImage(const VulkanState& state, VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height)
 {
 	CmdPass cmd(state.device, state.commandPool, state.graphicsQueue);
+	copyImage(cmd.cmdBuffer, srcImage, dstImage, width, height);
+}
 
+void ImageHelper::copyImage(VkCommandBuffer& cmdBuffer, VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height)
+{
 	VkImageSubresourceLayers subRes = {};
 	subRes.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	subRes.baseArrayLayer = 0;
@@ -327,7 +317,7 @@ void ImageHelper::copyImage(const VulkanState& state, VkImage srcImage, VkImage 
 	copy.extent.depth = 1;
 
 	vkCmdCopyImage(
-			cmd.commandBuffer(), 
+			cmdBuffer, 
 			srcImage, 
 			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 			dstImage, 
@@ -335,13 +325,11 @@ void ImageHelper::copyImage(const VulkanState& state, VkImage srcImage, VkImage 
 			1, 
 			&copy);
 }
-
-
 	
 void ImageHelper::copyImage(
 			const VulkanState& state, 
-			VulkanImageDesc& srcImage, 
-			VulkanImageDesc& dstImage) 
+			ImageInfo& srcImage, 
+			ImageInfo& dstImage) 
 {
 	copyImage(state, srcImage.image, dstImage.image, srcImage.width, srcImage.height);
 }
@@ -399,5 +387,117 @@ VkFormat ImageHelper::findSupportedFormat(
 			return format;
 	}
 	throw new std::runtime_error("failed to find supported format");
+}
+
+
+void ImageHelper::createStagedImage(
+		ImageInfo& imageInfo, 
+		const TextureData& textureData,
+		VulkanState& state,  
+		const VkCommandPool& cmdPool, 
+		const VkQueue& cmdQueue) 
+ 
+{
+	CmdPass cmd(state.device, cmdPool, cmdQueue);
+	
+	// Create staging image
+
+	ImageInfo stagingDesc(state.device, textureData.width, textureData.height);
+
+	ImageHelper::createImage(
+			state, 
+			stagingDesc, 
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_TILING_LINEAR, 
+			VK_IMAGE_USAGE_TRANSFER_SRC_BIT, 
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT); 
+	
+	BufferHelper::mapMemory(state, stagingDesc.memory, textureData.size, textureData.pixels);
+
+	ImageHelper::createImage(
+			state, 
+			imageInfo, 
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_TILING_OPTIMAL, 
+			VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+	ImageHelper::transitionLayout(
+			cmd.cmdBuffer,
+			stagingDesc.image,
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_LAYOUT_PREINITIALIZED, 
+			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			VK_ACCESS_HOST_WRITE_BIT,
+			VK_ACCESS_TRANSFER_READ_BIT);
+
+	ImageHelper::transitionLayout(
+			cmd.cmdBuffer,
+			imageInfo.image,
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_LAYOUT_PREINITIALIZED, 
+			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			VK_ACCESS_HOST_WRITE_BIT,
+			VK_ACCESS_TRANSFER_WRITE_BIT);
+
+	// copy staging buffer to image
+
+	ImageHelper::copyImage(cmd.cmdBuffer, stagingDesc.image, imageInfo.image, imageInfo.width, imageInfo.height);
+
+
+	ImageHelper::transitionLayout(
+			cmd.cmdBuffer,
+			imageInfo.image,
+			VK_FORMAT_R8G8B8A8_UNORM, 
+			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			VK_ACCESS_TRANSFER_WRITE_BIT,
+			VK_ACCESS_SHADER_READ_BIT);
+
+	ImageHelper::createImageView(
+			state.device,
+			imageInfo.image, 
+			VK_FORMAT_R8G8B8A8_UNORM, 
+			VK_IMAGE_ASPECT_COLOR_BIT, 
+			imageInfo.imageView);
+
+	// Create ImageView
+
+	VkImageViewCreateInfo viewInfo = {};
+	viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+	viewInfo.image = imageInfo.image;
+	viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	viewInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+
+	viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	viewInfo.subresourceRange.baseMipLevel = 0;
+	viewInfo.subresourceRange.levelCount = 1;
+	viewInfo.subresourceRange.baseArrayLayer = 0;
+	viewInfo.subresourceRange.layerCount = 1;
+	
+	VK_CHECK_RESULT(vkCreateImageView(state.device, &viewInfo, nullptr, &imageInfo.imageView));
+
+
+	// Create Sampler
+
+	VkSamplerCreateInfo samplerInfo = {};
+	samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+	samplerInfo.magFilter = VK_FILTER_LINEAR;
+	samplerInfo.minFilter = VK_FILTER_LINEAR;
+	samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	samplerInfo.anisotropyEnable = VK_TRUE;
+	samplerInfo.maxAnisotropy = 16;
+	samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+	samplerInfo.unnormalizedCoordinates = VK_FALSE;
+	samplerInfo.compareEnable = VK_FALSE;
+	samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	
+	VK_CHECK_RESULT(vkCreateSampler(state.device, &samplerInfo, nullptr, &imageInfo.sampler));
 }
 

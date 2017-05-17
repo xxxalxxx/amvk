@@ -2,7 +2,10 @@
 
 function tag()
 {
-	ctags -R .
+	echo "*********************"
+	echo "TAGGING"
+	echo "*********************"
+	ctags --fields=+iaS --extra=+q -R *
 }
 
 function compile_shaders()
@@ -10,7 +13,6 @@ function compile_shaders()
 	./glslangValidator -V shader/shader.frag -o shader/spv/shader.frag.spv
 	./glslangValidator -V shader/shader.vert -o shader/spv/shader.vert.spv
 }
-
 
 make_clean=false; compile_shaders=true
 
@@ -32,22 +34,34 @@ do
 	esac
 done
 
+
+
 pushd /home/al/code/amvk
+
+tag
+
 pwd
 if $compile_shaders; then
+	echo "*********************"
 	echo "Compile shaders"
+	echo "*********************"
 	compile_shaders
 fi
 
 if $make_clean
 then
+	echo "*********************"
 	echo "Make clean"
-	make clean
+	echo "*********************"
+
+	make -j3 clean
 	compile_shaders
 	make
 else
+	echo "*********************"
 	echo "Make"
-	make
+	echo "*********************"
+	make -j3
 fi
 
 popd

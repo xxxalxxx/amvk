@@ -46,6 +46,7 @@
 #include "device_manager.h"
 #include "swapchain_manager.h"
 #include "quad.h"
+#include "model.h"
 
 class VulkanManager { 
 	friend class Engine;
@@ -73,6 +74,7 @@ private:
 	DeviceManager mDeviceManager;
 	SwapchainManager mSwapChainManager;
 	Quad mQuad;
+	Model mSuit;
 };
 
 #endif

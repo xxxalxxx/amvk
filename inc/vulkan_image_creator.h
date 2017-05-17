@@ -8,36 +8,14 @@
 #include "vulkan_state.h"
 #include "vulkan_utils.h"
 #include "buffer_helper.h"
+#include "vulkan_image_info.h"
+#include "texture_data.h"
 #include "macro.h"
-
-class VulkanImageDesc {
-public:
-	VulkanImageDesc(const VkDevice& vkDevice);
-	VulkanImageDesc(const VkDevice& vkDevice, uint32_t width, uint32_t height);
-	~VulkanImageDesc();
-	uint32_t width, height;
-	VkImage image;
-	VkImageView imageView;
-	VkDeviceMemory memory;
-private:
-	const VkDevice& mVkDevice;
-};
-
-struct VulkanTexture {
-	VkSampler sampler;
-	VkImage image;
-	VkImageLayout imageLayout;
-	VkDeviceMemory deviceMemory;
-	VkImageView view;
-	uint32_t width, height;
-	uint32_t mipLevels;
-	uint32_t layerCount;
-	VkDescriptorImageInfo descriptor;
-};
 
 class ImageHelper {
 public:
 	ImageHelper(const VulkanState& vulkanState);
+
 	void createImage(
 			uint32_t w, 
 			uint32_t h, 
@@ -50,7 +28,7 @@ public:
 
 	static void createImage(
 			const VulkanState& state,
-			VulkanImageDesc& imageDesc, 
+			ImageInfo& imageDesc, 
 			VkFormat format, 
 			VkImageTiling tiling,
 			VkImageUsageFlags usage, 
@@ -65,8 +43,15 @@ public:
 	
 	static void copyImage(
 			const VulkanState& state, 
-			VulkanImageDesc& srcImage, 
-			VulkanImageDesc& dstImage);
+			ImageInfo& srcImage, 
+			ImageInfo& dstImage);
+
+	static void copyImage(
+			VkCommandBuffer& cmdBuffer, 
+			VkImage srcImage, 
+			VkImage dstImage, 
+			uint32_t width, 
+			uint32_t height);
 
 	void transitionImageLayout(
 			VkImage image, 
@@ -95,7 +80,7 @@ public:
 
 	static void createImageView(
 			const VkDevice& device,
-			VulkanImageDesc& imageDesc, 
+			ImageInfo& imageDesc, 
 			VkFormat format, 
 			VkImageAspectFlags aspectFlags);
 		
@@ -123,6 +108,23 @@ public:
 		VkImageAspectFlags barrierAspectMask,
 		VkAccessFlags srcAccessMask,
 		VkAccessFlags dstAccessMask);
+
+	static void transitionLayout(
+		VkCommandBuffer& cmdBuffer,
+		VkImage image, 
+		VkFormat format, 
+		VkImageLayout oldLayout, 
+		VkImageLayout newLayout,
+		VkImageAspectFlags barrierAspectMask,
+		VkAccessFlags srcAccessMask,
+		VkAccessFlags dstAccessMask);
+
+	static void createStagedImage(
+		ImageInfo& imageInfo, 
+		const TextureData& textureData,
+		VulkanState& state,  
+		const VkCommandPool& cmdPool, 
+		const VkQueue& cmdQueue); 
 
 private:
 	const VulkanState& mVulkanState;

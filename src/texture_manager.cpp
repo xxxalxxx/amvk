@@ -1,62 +1,33 @@
 #include "texture_manager.h"
 
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
-
-TextureData::TextureData():
-   mWidth(0), mHeight(0), mChannels(0), mSize(0), mPixels(nullptr)
+TextureManager& TextureManager::getInstance() 
 {
-
+	static TextureManager textureManager;
+	return textureManager;
 }
 
-TextureData::~TextureData()
-{
-	if (mPixels)
-		stbi_image_free(mPixels);
-}
+ImageInfo* TextureManager::load(
+			VulkanState& state, 
+			const VkCommandPool& cmdPool, 
+			const VkQueue& cmdQueue,
+			const TextureDesc& textureDesc)
 
-stbi_uc* TextureData::load(const char* resource, int reqComp)
 {
-	std::string filenameStr = FileManager::getInstance().getResourcePath(resource);
-	const char* filename = filenameStr.c_str();
-	mPixels = stbi_load(filename, &mWidth, &mHeight, &mChannels, reqComp); 
-	mSize = mWidth * mHeight * reqComp;
-	if (!mPixels || !mSize) {
-		char err[256];
-		sprintf(err, "TEXTURE ERROR reason: %s path:\"%s\" w:%d h:%d channels:%d reqComp:%d ", stbi_failure_reason(), filename, mWidth, mHeight, mChannels, reqComp); 
-		throw std::runtime_error(err);
-	}
-	
-	LOG("TEXTURE LOADED path:\""<< filename << "\" w:" << mWidth << " h:" << mHeight << " channels:" << mChannels << " reqComp:"<< reqComp << " size:" << mSize);
-	return mPixels;
-}
+	TextureManager& tm = getInstance();
+	std::lock_guard<std::mutex> guard(tm.lock);
+	// Check map, load image thread safely
+	TextureData textureData;
+	textureData.load(textureDesc.filename.c_str(), textureDesc.reqComp);
 
-int TextureData::getWidth() const 
-{
-	return mWidth;
-}
+	auto it = tm.mPool.find(textureDesc);
+	if (it != tm.mPool.end())
+		return it->second;	
 
-int TextureData::getHeight() const 
-{
-	return mHeight;
+	ImageInfo* info = new ImageInfo(state.device, textureData.width, textureData.height);
+	ImageHelper::createStagedImage(*info, textureData, state, cmdPool, cmdQueue);
+	tm.mPool[textureDesc] = info;
+	return info;
 }
-
-int TextureData::getChannels() const
-{
-	return mChannels;
-}
-
-stbi_uc* TextureData::getPixels()
-{
-	return mPixels;
-}
-
-uint64_t TextureData::getSize() const 
-{
-	return mSize;
-}
-
 
 TextureManager::TextureManager()
 {
@@ -64,7 +35,15 @@ TextureManager::TextureManager()
 }
 
 TextureManager::~TextureManager()
-
 {
-
+/*	
+	for (auto it = mPool.begin(); it != mPool.end(); ++it) 
+        if (it->second)
+			delete it->second;
+    mPool.clear();
+*/
 }
+
+
+
+

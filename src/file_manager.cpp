@@ -6,6 +6,7 @@ FileManager::FileManager()
 	mEngineRoot = mBinPath + ENGINE_RELATIVE_ROOT;
 	mResourceDir = mEngineRoot + RESOURCE_DIR;
 	mShaderDir = mEngineRoot + SHADER_DIR;
+	mModelsDir = mEngineRoot + MODELS_DIR;
 	LOG("SHADER DIR:" << mShaderDir);
 }
 
@@ -15,15 +16,19 @@ FileManager& FileManager::getInstance()
 	return fileManager;
 }
 
-std::string FileManager::getResourcePath(std::string&& path) const 
+std::string FileManager::getResourcePath(std::string&& path) 
 {
-	return mResourceDir + path;
+	return FileManager::getInstance().mResourceDir + path;
 }
 
+std::string FileManager::getModelsPath(std::string&& path) 
+{
+	return FileManager::getInstance().mModelsDir + path;
+}
 
 std::vector<char> FileManager::readShader(const std::string& shaderName)
 {
-	std::string filename = mShaderDir + shaderName + ".spv";
+	std::string filename = FileManager::getInstance().mShaderDir + shaderName + ".spv";
 	LOG("SHADER FILE NAME:" << filename);
 	return readFile(filename);
 }

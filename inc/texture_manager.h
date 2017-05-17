@@ -2,29 +2,29 @@
 #define AMVK_TEXTURE_MANAGER_H
 #include "file_manager.h"
 #include "macro.h"
+#include "vulkan_image_creator.h"
+#include "vulkan_image_info.h"
+#include "vulkan_state.h"
+#include "texture_data.h"
 #include <stb/stb_image.h>
-
-class TextureData {
-public:
-	TextureData();
-	~TextureData();
-	stbi_uc* load(const char* filename, int reqComp);
-	int getWidth() const;
-	int getHeight() const;
-	int getChannels() const;
-	uint64_t getSize() const;
-	stbi_uc* getPixels();
-private:
-	int mWidth, mHeight, mChannels, mSize;
-	stbi_uc* mPixels; 
-};
+#include <unordered_map>
+#include <mutex> 
 
 class TextureManager {
 public:
-	TextureManager();
-	~TextureManager();
+	static TextureManager& getInstance();
+	static ImageInfo* load(	
+			VulkanState& state, 
+			const VkCommandPool& cmdPool, 
+			const VkQueue& cmdQueue,
+			const TextureDesc& textureDesc);
+	TextureManager(const TextureManager& textureManager) = delete;
+	void operator=(const TextureManager& textureManager) = delete;
+	virtual ~TextureManager();
 private:
-
+	TextureManager();
+	std::unordered_map<TextureDesc, ImageInfo*> mPool; 
+	std::mutex lock;
 };
 
 

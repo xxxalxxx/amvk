@@ -45,7 +45,7 @@ private:
 	std::vector<VkImage> mSwapChainImages;
 	std::vector<VkImageView> mSwapChainImageViews;
 
-	VulkanImageDesc mDepthImageDesc;
+	ImageInfo mDepthImageDesc;
 
 };
 

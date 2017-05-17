@@ -1,31 +1,33 @@
 #include "quad.h"
 
-Quad::Quad(const VulkanState& vulkanState):
+Quad::Quad(VulkanState& vulkanState):
 	mVulkanState(vulkanState), 
 	mCommonBufferInfo(vulkanState.device),
 	mCommonStagingBufferInfo(vulkanState.device),
 	mVertexBufferDesc(vulkanState.device),
 	mIndexBufferDesc(vulkanState.device),
 	mUniformBufferDesc(vulkanState.device),
-	mUniformStagingBufferDesc(vulkanState.device),
-	mTextureDesc(vulkanState.device)
+	mUniformStagingBufferDesc(vulkanState.device)
+	//mTextureDesc(vulkanState.device)
 {
 	
 }
 
 Quad::~Quad() 
 {
-
+	mTextureDesc = nullptr;
 }
 
 void Quad::init()
 {
 	createDescriptorSetLayout();
 	createPipeline();
+	TextureDesc textureDesc("texture/statue.jpg");
+	mTextureDesc = TextureManager::load(mVulkanState, mVulkanState.commandPool, mVulkanState.graphicsQueue, textureDesc);
 
-	createTextureImage();
-	createTextureImageView();
-	createTextureSampler();
+	//createTextureImage();
+	//createTextureImageView();
+	//createTextureSampler();
 
 	createBuffers();
 
@@ -45,7 +47,6 @@ void Quad::updateUniformBuffers(const Timer& timer, Camera& camera)
 	ubo.proj = camera.proj();
 	/*
 	Buffer update via copy
-	   
 	BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mUniformBufferOffset, sizeof(ubo), &ubo);
 	BufferHelper::copyBuffer(
 			mVulkanState.device,
@@ -177,10 +178,6 @@ void Quad::createBuffers()
 	memcpy(data + mIndexBufferOffset, indices.data(), indexBufferSize);
 	vkUnmapMemory(mVulkanState.device, mCommonStagingBufferInfo.memory);
 
-	// BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mUniformBufferOffset, uniformBufferSize, &ubo);
-	// BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mVertexBufferOffset, vertexBufferSize, vertices.data());
-	// BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mIndexBufferOffset, indexBufferSize, indices.data());
-
 	BufferHelper::createCommonBuffer(mVulkanState, mCommonBufferInfo);
 
 	BufferHelper::copyBuffer(
@@ -256,7 +253,7 @@ void Quad::createUniformBuffer()
 
 void Quad::createTextureImage()
 {
-	TextureData textureData;
+	/*TextureData textureData;
 	textureData.load("texture/statue.jpg", STBI_rgb_alpha);
 	
 	int w = textureData.getWidth();
@@ -267,7 +264,7 @@ void Quad::createTextureImage()
 	mTextureDesc.width = w;
 	mTextureDesc.height = h;
 	
-	VulkanImageDesc stagingDesc(mVulkanState.device, w, h);
+	ImageInfo stagingDesc(mVulkanState.device, w, h);
 
 	ImageHelper::createImage(
 			mVulkanState, 
@@ -318,6 +315,7 @@ void Quad::createTextureImage()
 			VK_IMAGE_ASPECT_COLOR_BIT,
 			VK_ACCESS_TRANSFER_WRITE_BIT,
 			VK_ACCESS_SHADER_READ_BIT);
+			*/
 }
 
 VkVertexInputBindingDescription Quad::getBindingDesc() const
@@ -397,8 +395,8 @@ void Quad::createDescriptorSet()
 
 	VkDescriptorImageInfo imageInfo = {};
 	imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-	imageInfo.imageView = mTextureDesc.imageView;
-	imageInfo.sampler = mTextureSampler;
+	imageInfo.imageView = mTextureDesc->imageView;
+	imageInfo.sampler = mTextureDesc->sampler;
 
 	std::array<VkWriteDescriptorSet, 2> writeSets = {};
 
@@ -491,16 +489,18 @@ void Quad::createPipeline()
 
 void Quad::createTextureImageView()
 {
-	ImageHelper::createImageView(
+/*	ImageHelper::createImageView(
 			mVulkanState.device,
 			mTextureDesc.image, 
 			VK_FORMAT_R8G8B8A8_UNORM, 
 			VK_IMAGE_ASPECT_COLOR_BIT, 
 			mTextureDesc.imageView);
+			*/
 }
 
 void Quad::createTextureSampler()
 {
+	/*
 	VkSamplerCreateInfo samplerInfo = {};
 	samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
 	samplerInfo.magFilter = VK_FILTER_LINEAR;
@@ -516,7 +516,8 @@ void Quad::createTextureSampler()
 	samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
 	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 
-	VK_CHECK_RESULT(vkCreateSampler(mVulkanState.device, &samplerInfo, nullptr, &mTextureSampler));
+	VK_CHECK_RESULT(vkCreateSampler(mVulkanState.device, &samplerInfo, nullptr, &mTextureDesc.sampler));
+	*/
 }
 
 void Quad::createRenderPass(const ImageHelper& vic)
@@ -584,7 +585,7 @@ void Quad::createDescriptorSetLayout()
 	samplerLayoutBinding.pImmutableSamplers = nullptr;
 	samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 	
-	std::array<VkDescriptorSetLayoutBinding, 2> bindings = {descSetBinding, samplerLayoutBinding};
+	std::array<VkDescriptorSetLayoutBinding, 2> bindings = {{descSetBinding, samplerLayoutBinding}};
 
 	VkDescriptorSetLayoutCreateInfo descSetLayoutInfo = {};
 	descSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;

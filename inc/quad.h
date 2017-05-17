@@ -11,6 +11,7 @@
 
 #include "buffer_helper.h"
 #include "vulkan_image_creator.h"
+#include "vulkan_image_info.h"
 #include "vulkan_render_pass_creator.h"
 #include "texture_manager.h"
 #include "pipeline_creator.h"
@@ -37,7 +38,8 @@ public:
 		glm::mat4 proj;
 	};
 
-	Quad(const VulkanState& vulkanState);
+
+	Quad(VulkanState& vulkanState);
 	~Quad();
 	void draw(VkCommandBuffer& commandBuffer); 
 	void init();
@@ -58,11 +60,11 @@ public:
 	VkPipeline mVkPipeline;
 	VkRenderPass renderPass;
 
-	const VulkanState& mVulkanState;
+	VulkanState& mVulkanState;
 	BufferInfo mCommonBufferInfo;
 	BufferInfo mCommonStagingBufferInfo;
 	BufferInfo mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;
-	VulkanImageDesc mTextureDesc;
+	ImageInfo *mTextureDesc;
 	VkDescriptorSetLayout mVkDescriptorSetLayout;
 	VkSampler mTextureSampler;
 	

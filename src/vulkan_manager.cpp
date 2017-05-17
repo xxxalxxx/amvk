@@ -7,7 +7,8 @@ VulkanManager::VulkanManager(Window& window):
 	mWindow(window),
 	mDeviceManager(mVulkanState),
 	mSwapChainManager(mVulkanState, mWindow),
-	mQuad(mVulkanState)
+	mQuad(mVulkanState),
+	mSuit(mVulkanState)
 {
 	
 }
@@ -33,6 +34,7 @@ void VulkanManager::init()
 	mSwapChainManager.createRenderPass();
 	mSwapChainManager.createCommandPool();
 	
+	mSuit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"));
 	mQuad.init();
 	
 	mSwapChainManager.createDepthResources();
