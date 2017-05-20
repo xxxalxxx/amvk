@@ -50,8 +50,9 @@ public:
 	}; 
 
 	struct Mesh {
-		uint32_t baseIndex, numIndices;
+		Mesh(): baseVertex(0), numVertices(0), baseIndex(0), numIndices(0), materialIndex(0) {}
 		uint32_t baseVertex, numVertices;
+		uint32_t baseIndex, numIndices;
 		uint32_t materialIndex;
 	};
 
@@ -81,10 +82,10 @@ private:
 	void throwError(const char* error);
 	void throwError(std::string& error);
 	
-	VulkanState mVulkanState;
+	VulkanState& mVulkanState;
 	uint32_t mVertexSize;
 
-	std::string mPath;
+	std::string mPath, mFolder;
 	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; 
 	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;	
 };

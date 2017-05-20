@@ -16,7 +16,7 @@ TextureData::~TextureData()
 
 stbi_uc* TextureData::load(const char* resource, int reqComp)
 {
-	std::string filenameStr = FileManager::getResourcePath(resource);
+	std::string filenameStr(resource);
 	const char* filename = filenameStr.c_str();
 	pixels = stbi_load(filename, &width, &height, &channels, reqComp); 
 	size = width * height * reqComp;

@@ -32,6 +32,8 @@ void ImageHelper::createImage(
 	imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 	imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
+	LOG("i1");
+
 	VK_CHECK_RESULT(vkCreateImage(mVulkanState.device, &imageInfo, nullptr, &image));
 
 	VkMemoryRequirements memReqs;
@@ -41,6 +43,8 @@ void ImageHelper::createImage(
 	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	allocInfo.allocationSize = memReqs.size;
 	allocInfo.memoryTypeIndex = BufferHelper::getMemoryType(mVulkanState.physicalDevice, memReqs.memoryTypeBits, properties);
+
+	LOG("i2");
 
 	VK_CHECK_RESULT(vkAllocateMemory(mVulkanState.device, &allocInfo, nullptr, &imageMemory));
 
@@ -70,9 +74,10 @@ void ImageHelper::createImage(
 	imageInfo.usage = usage;
 	imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 	imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	LOG("i0 " << imageDesc.height);
 
-	VK_CHECK_RESULT(vkCreateImage(state.device, &imageInfo, nullptr, &imageDesc.image));
-
+	vkCreateImage(state.device, &imageInfo, nullptr, &imageDesc.image);
+	LOG("i1 ");
 	VkMemoryRequirements memReqs;
 	vkGetImageMemoryRequirements(state.device, imageDesc.image, &memReqs);
 
@@ -82,7 +87,7 @@ void ImageHelper::createImage(
 	allocInfo.memoryTypeIndex = BufferHelper::getMemoryType(state.physicalDevice, memReqs.memoryTypeBits, properties);
 
 	VK_CHECK_RESULT(vkAllocateMemory(state.device, &allocInfo, nullptr, &imageDesc.memory));
-
+	LOG("i2 ");
 	vkBindImageMemory(state.device, imageDesc.image, imageDesc.memory, 0);
 }
 
@@ -398,12 +403,13 @@ void ImageHelper::createStagedImage(
 		const VkQueue& cmdQueue) 
  
 {
-	CmdPass cmd(state.device, cmdPool, cmdQueue);
-	
+	LOG("0");
+//	CmdPass cmd(state.device, cmdPool, cmdQueue);
+	LOG("0_1");	
 	// Create staging image
-
+	LOG("1");
 	ImageInfo stagingDesc(state.device, textureData.width, textureData.height);
-
+	LOG("a " << imageInfo.width << " " << imageInfo.height << " f" << textureData.pixels);
 	ImageHelper::createImage(
 			state, 
 			stagingDesc, 
@@ -411,9 +417,9 @@ void ImageHelper::createStagedImage(
 			VK_IMAGE_TILING_LINEAR, 
 			VK_IMAGE_USAGE_TRANSFER_SRC_BIT, 
 			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT); 
-	
+	LOG("aa");
 	BufferHelper::mapMemory(state, stagingDesc.memory, textureData.size, textureData.pixels);
-
+	LOG("b");
 	ImageHelper::createImage(
 			state, 
 			imageInfo, 
@@ -423,7 +429,7 @@ void ImageHelper::createStagedImage(
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
 	ImageHelper::transitionLayout(
-			cmd.cmdBuffer,
+			state,
 			stagingDesc.image,
 			VK_FORMAT_R8G8B8A8_UNORM,
 			VK_IMAGE_LAYOUT_PREINITIALIZED, 
@@ -433,7 +439,7 @@ void ImageHelper::createStagedImage(
 			VK_ACCESS_TRANSFER_READ_BIT);
 
 	ImageHelper::transitionLayout(
-			cmd.cmdBuffer,
+			state,
 			imageInfo.image,
 			VK_FORMAT_R8G8B8A8_UNORM,
 			VK_IMAGE_LAYOUT_PREINITIALIZED, 
@@ -444,11 +450,12 @@ void ImageHelper::createStagedImage(
 
 	// copy staging buffer to image
 
-	ImageHelper::copyImage(cmd.cmdBuffer, stagingDesc.image, imageInfo.image, imageInfo.width, imageInfo.height);
+	LOG("2");
+	ImageHelper::copyImage(state, stagingDesc.image, imageInfo.image, imageInfo.width, imageInfo.height);
 
 
 	ImageHelper::transitionLayout(
-			cmd.cmdBuffer,
+			state,
 			imageInfo.image,
 			VK_FORMAT_R8G8B8A8_UNORM, 
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -465,7 +472,7 @@ void ImageHelper::createStagedImage(
 			imageInfo.imageView);
 
 	// Create ImageView
-
+	LOG("3");
 	VkImageViewCreateInfo viewInfo = {};
 	viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 	viewInfo.image = imageInfo.image;

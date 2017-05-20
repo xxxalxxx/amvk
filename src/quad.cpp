@@ -22,8 +22,12 @@ void Quad::init()
 {
 	createDescriptorSetLayout();
 	createPipeline();
-	TextureDesc textureDesc("texture/statue.jpg");
-	mTextureDesc = TextureManager::load(mVulkanState, mVulkanState.commandPool, mVulkanState.graphicsQueue, textureDesc);
+	TextureDesc textureDesc(FileManager::getResourcePath("texture/statue.jpg"));//"texture/statue.jpg"));
+	mTextureDesc = TextureManager::load(
+			mVulkanState, 
+			mVulkanState.commandPool, 
+			mVulkanState.graphicsQueue, 
+			textureDesc);
 
 	//createTextureImage();
 	//createTextureImageView();

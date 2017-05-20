@@ -11,20 +11,24 @@ ImageInfo* TextureManager::load(
 			const VkCommandPool& cmdPool, 
 			const VkQueue& cmdQueue,
 			const TextureDesc& textureDesc)
-
 {
 	TextureManager& tm = getInstance();
 	std::lock_guard<std::mutex> guard(tm.lock);
 	// Check map, load image thread safely
+
+	auto it = tm.mPool.find(textureDesc);
+	if (it != tm.mPool.end()) {
+		LOG("TEXTURE FOUND: " << textureDesc.filename);
+		return it->second;	
+	}
+
 	TextureData textureData;
 	textureData.load(textureDesc.filename.c_str(), textureDesc.reqComp);
 
-	auto it = tm.mPool.find(textureDesc);
-	if (it != tm.mPool.end())
-		return it->second;	
-
 	ImageInfo* info = new ImageInfo(state.device, textureData.width, textureData.height);
+	LOG("CREATE INFO");
 	ImageHelper::createStagedImage(*info, textureData, state, cmdPool, cmdQueue);
+	LOG("IMAGE CREATED");
 	tm.mPool[textureDesc] = info;
 	return info;
 }

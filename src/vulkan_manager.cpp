@@ -33,10 +33,11 @@ void VulkanManager::init()
 	
 	mSwapChainManager.createRenderPass();
 	mSwapChainManager.createCommandPool();
-	
-	mSuit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"));
+
 	mQuad.init();
-	
+
+	mSuit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"));
+
 	mSwapChainManager.createDepthResources();
 	mSwapChainManager.createFramebuffers(mVulkanState.renderPass);
 

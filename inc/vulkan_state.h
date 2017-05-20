@@ -16,14 +16,19 @@ struct DeviceInfo {
 
 struct VulkanState {
 	VulkanState(): 
-	instance(VK_NULL_HANDLE), 
-	physicalDevice(VK_NULL_HANDLE), 
-	device(VK_NULL_HANDLE), 
-	swapChain(VK_NULL_HANDLE),
-	graphicsQueue(VK_NULL_HANDLE), 
-	presentQueue(VK_NULL_HANDLE),
-	commandPool(VK_NULL_HANDLE) 
+		instance(VK_NULL_HANDLE), 
+		physicalDevice(VK_NULL_HANDLE), 
+		device(VK_NULL_HANDLE), 
+		swapChain(VK_NULL_HANDLE),
+		graphicsQueue(VK_NULL_HANDLE), 
+		presentQueue(VK_NULL_HANDLE),
+		commandPool(VK_NULL_HANDLE) 
 	{};
+	
+	// Disallow copy constructor for VulkanState.
+	// Only references for VulkanState are allowed
+	VulkanState(VulkanState const& vulkanState) = delete;
+    VulkanState& operator=(VulkanState const& vulkanState) = delete;
 	
 	VkInstance instance;
 	VkSurfaceKHR surface;

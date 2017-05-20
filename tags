@@ -234,7 +234,7 @@ AMVK_ENGINE_H	inc/engine.h	2;"	d
 AMVK_FILE_MANAGER	inc/file_manager.h	2;"	d
 AMVK_INPUT_MANAGER_H	inc/input_manager.h	2;"	d
 AMVK_MACROS_H	inc/macro.h	3;"	d
-AMVK_MODEL_H	/home/al/code/amvk/inc/model.h	2;"	d
+AMVK_MODEL_H	inc/model.h	2;"	d
 AMVK_QUAD_H	inc/quad.h	2;"	d
 AMVK_SWAPCHAIN_MANAGER_H	inc/swapchain_manager.h	2;"	d
 AMVK_SWAP_CHAIN_DESC_H	inc/swap_chain_desc.h	2;"	d
@@ -508,7 +508,7 @@ CASE	lib/stb/stb_image.h	4114;"	d
 COMBO	lib/stb/stb_image.h	1359;"	d
 CURRENT_LOADER_ICD_INTERFACE_VERSION	lib/vulkan/vk_icd.h	31;"	d
 CXX	Makefile	/^CXX=g++$/;"	m
-CXXFLAGS	Makefile	/^CXXFLAGS=-Wall -std=c++14 -I. -Isrc -Iinc -Ilib$/;"	m
+CXXFLAGS	Makefile	/^CXXFLAGS=-Wall -g -std=c++14 -I. -Isrc -Iinc -Ilib$/;"	m
 C_ENUM	lib/assimp/defs.h	179;"	d
 C_ENUM	lib/assimp/defs.h	205;"	d
 C_ENUM	lib/assimp/defs.h	208;"	d
@@ -971,6 +971,7 @@ FileManager::SHADER_DIR	inc/file_manager.h	/^	static constexpr const char* SHADE
 FileManager::fileManager	inc/file_manager.h	/^	FileManager(const FileManager& fileManager) = delete;$/;"	m	class:FileManager	access:public
 FileManager::fileManager	inc/file_manager.h	/^	void operator=(const FileManager& fileManager) = delete;$/;"	m	class:FileManager	access:public
 FileManager::getBinPath	src/file_manager.cpp	/^std::string FileManager::getBinPath() $/;"	f	class:FileManager	signature:()
+FileManager::getFilePath	src/file_manager.cpp	/^std::string FileManager::getFilePath(const char* filename) $/;"	f	class:FileManager	signature:(const char* filename)
 FileManager::getFilePath	src/file_manager.cpp	/^std::string FileManager::getFilePath(const std::string& filename)$/;"	f	class:FileManager	signature:(const std::string& filename)
 FileManager::getInstance	src/file_manager.cpp	/^FileManager& FileManager::getInstance()$/;"	f	class:FileManager	signature:()
 FileManager::getModelsPath	src/file_manager.cpp	/^std::string FileManager::getModelsPath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
@@ -1960,7 +1961,7 @@ MIN_SUPPORTED_LOADER_ICD_INTERFACE_VERSION	lib/vulkan/vk_icd.h	32;"	d
 MODELS_DIR	inc/file_manager.h	/^	static constexpr const char* MODELS_DIR = "res\/model\/";$/;"	m	class:FileManager	access:private
 MagicNumber	lib/vulkan/spirv.hpp	/^static const unsigned int MagicNumber = 0x07230203;$/;"	m	namespace:spv
 MapMemory	lib/vulkan/vk_layer.h	/^    PFN_vkMapMemory MapMemory;$/;"	m	struct:VkLayerDispatchTable_	access:public
-Material	/home/al/code/amvk/inc/model.h	/^	struct Material {$/;"	s	class:Model	access:public
+Material	inc/model.h	/^	struct Material {$/;"	s	class:Model	access:public
 MatrixPropertyMap	lib/assimp/Exporter.hpp	/^    typedef std::map<KeyType, aiMatrix4x4> MatrixPropertyMap;$/;"	t	class:Assimp::ExportProperties	access:public
 MaxLenHint	lib/assimp/Importer.hpp	/^    static const unsigned int MaxLenHint = 200;$/;"	m	class:Assimp::Importer	access:public
 MemoryAccessAlignedMask	lib/vulkan/spirv.hpp	/^    MemoryAccessAlignedMask = 0x00000002,$/;"	e	enum:spv::MemoryAccessMask
@@ -2003,54 +2004,57 @@ MemorySemanticsUniformMemoryShift	lib/vulkan/spirv.hpp	/^    MemorySemanticsUnif
 MemorySemanticsWorkgroupMemoryMask	lib/vulkan/spirv.hpp	/^    MemorySemanticsWorkgroupMemoryMask = 0x00000100,$/;"	e	enum:spv::MemorySemanticsMask
 MemorySemanticsWorkgroupMemoryShift	lib/vulkan/spirv.hpp	/^    MemorySemanticsWorkgroupMemoryShift = 8,$/;"	e	enum:spv::MemorySemanticsShift
 MergePipelineCaches	lib/vulkan/vk_layer.h	/^    PFN_vkMergePipelineCaches MergePipelineCaches;$/;"	m	struct:VkLayerDispatchTable_	access:public
-Mesh	/home/al/code/amvk/inc/model.h	/^	struct Mesh {$/;"	s	class:Model	access:public
+Mesh	inc/model.h	/^		Mesh(): baseVertex(0), numVertices(0), baseIndex(0), numIndices(0), materialIndex(0) {}$/;"	f	struct:Model::Mesh	access:public	signature:()
+Mesh	inc/model.h	/^	struct Mesh {$/;"	s	class:Model	access:public
 MessageTask	inc/task_manager.h	/^	MessageTask(int id): mId(id) {}$/;"	f	class:MessageTask	access:public	signature:(int id)
 MessageTask	inc/task_manager.h	/^class MessageTask : public Task {$/;"	c	inherits:Task
 MessageTask::MessageTask	inc/task_manager.h	/^	MessageTask(int id): mId(id) {}$/;"	f	class:MessageTask	access:public	signature:(int id)
 MessageTask::execute	inc/task_manager.h	/^	void execute() {$/;"	f	class:MessageTask	access:public	signature:()
 MessageTask::mId	inc/task_manager.h	/^	int mId;$/;"	m	class:MessageTask	access:public
-Model	/home/al/code/amvk/inc/model.h	/^class Model {$/;"	c
-Model	/home/al/code/amvk/src/model.cpp	/^Model::Model(VulkanState& vulkanState):$/;"	f	class:Model	signature:(VulkanState& vulkanState)
-Model::Material	/home/al/code/amvk/inc/model.h	/^	struct Material {$/;"	s	class:Model	access:public
-Model::Material::ambientImages	/home/al/code/amvk/inc/model.h	/^			ambientImages; $/;"	m	struct:Model::Material	access:public
-Model::Material::diffuseImages	/home/al/code/amvk/inc/model.h	/^			diffuseImages, $/;"	m	struct:Model::Material	access:public
-Model::Material::heightImages	/home/al/code/amvk/inc/model.h	/^			heightImages, $/;"	m	struct:Model::Material	access:public
-Model::Material::specularImages	/home/al/code/amvk/inc/model.h	/^			specularImages, $/;"	m	struct:Model::Material	access:public
-Model::Mesh	/home/al/code/amvk/inc/model.h	/^	struct Mesh {$/;"	s	class:Model	access:public
-Model::Mesh::baseIndex	/home/al/code/amvk/inc/model.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Model::Mesh	access:public
-Model::Mesh::baseVertex	/home/al/code/amvk/inc/model.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Model::Mesh	access:public
-Model::Mesh::materialIndex	/home/al/code/amvk/inc/model.h	/^		uint32_t materialIndex;$/;"	m	struct:Model::Mesh	access:public
-Model::Mesh::numIndices	/home/al/code/amvk/inc/model.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Model::Mesh	access:public
-Model::Mesh::numVertices	/home/al/code/amvk/inc/model.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Model::Mesh	access:public
-Model::Model	/home/al/code/amvk/src/model.cpp	/^Model::Model(VulkanState& vulkanState):$/;"	f	class:Model	signature:(VulkanState& vulkanState)
-Model::UBO	/home/al/code/amvk/inc/model.h	/^	struct UBO {$/;"	s	class:Model	access:public
-Model::UBO::model	/home/al/code/amvk/inc/model.h	/^	    glm::mat4 model;$/;"	m	struct:Model::UBO	access:public
-Model::UBO::proj	/home/al/code/amvk/inc/model.h	/^		glm::mat4 proj;$/;"	m	struct:Model::UBO	access:public
-Model::UBO::view	/home/al/code/amvk/inc/model.h	/^		glm::mat4 view;$/;"	m	struct:Model::UBO	access:public
-Model::Vertex	/home/al/code/amvk/inc/model.h	/^	struct Vertex {$/;"	s	class:Model	access:public
-Model::Vertex::bitangent	/home/al/code/amvk/inc/model.h	/^		glm::vec3 bitangent;$/;"	m	struct:Model::Vertex	access:public
-Model::Vertex::normal	/home/al/code/amvk/inc/model.h	/^		glm::vec3 normal;$/;"	m	struct:Model::Vertex	access:public
-Model::Vertex::pos	/home/al/code/amvk/inc/model.h	/^		glm::vec3 pos;$/;"	m	struct:Model::Vertex	access:public
-Model::Vertex::tangent	/home/al/code/amvk/inc/model.h	/^		glm::vec3 tangent;$/;"	m	struct:Model::Vertex	access:public
-Model::Vertex::texCoord	/home/al/code/amvk/inc/model.h	/^		glm::vec2 texCoord;$/;"	m	struct:Model::Vertex	access:public
-Model::convertVector	/home/al/code/amvk/src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec2& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec2& dest)
-Model::convertVector	/home/al/code/amvk/src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec3& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec3& dest)
-Model::imageInfoAmbient	/home/al/code/amvk/inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
-Model::imageInfoDiffuse	/home/al/code/amvk/inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
-Model::imageInfoHeight	/home/al/code/amvk/inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
-Model::imageInfoSpecular	/home/al/code/amvk/inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
-Model::init	/home/al/code/amvk/src/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
-Model::init	/home/al/code/amvk/src/model.cpp	/^void Model::init(std::string modelPath, unsigned int pFlags) $/;"	f	class:Model	signature:(std::string modelPath, unsigned int pFlags)
-Model::mMaterialIndexToMaterial	/home/al/code/amvk/inc/model.h	/^	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;	$/;"	m	class:Model	access:private
-Model::mPath	/home/al/code/amvk/inc/model.h	/^	std::string mPath;$/;"	m	class:Model	access:private
-Model::mTextureTypes	/home/al/code/amvk/inc/model.h	/^	static const std::array<aiTextureType, 4> mTextureTypes;$/;"	m	class:Model	access:private
-Model::mTextureTypes	/home/al/code/amvk/src/model.cpp	/^const std::array<aiTextureType, 4> Model::mTextureTypes = {{$/;"	m	class:Model	file:
-Model::mVertexSize	/home/al/code/amvk/inc/model.h	/^	uint32_t mVertexSize;$/;"	m	class:Model	access:private
-Model::mVulkanState	/home/al/code/amvk/inc/model.h	/^	VulkanState mVulkanState;$/;"	m	class:Model	access:private
-Model::processModel	/home/al/code/amvk/src/model.cpp	/^void Model::processModel(const aiScene& scene) $/;"	f	class:Model	signature:(const aiScene& scene)
-Model::throwError	/home/al/code/amvk/src/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
-Model::throwError	/home/al/code/amvk/src/model.cpp	/^void Model::throwError(std::string& error) $/;"	f	class:Model	signature:(std::string& error)
-Model::~Model	/home/al/code/amvk/src/model.cpp	/^Model::~Model() $/;"	f	class:Model	signature:()
+Model	inc/model.h	/^class Model {$/;"	c
+Model	src/model.cpp	/^Model::Model(VulkanState& vulkanState):$/;"	f	class:Model	signature:(VulkanState& vulkanState)
+Model::Material	inc/model.h	/^	struct Material {$/;"	s	class:Model	access:public
+Model::Material::ambientImages	inc/model.h	/^			ambientImages; $/;"	m	struct:Model::Material	access:public
+Model::Material::diffuseImages	inc/model.h	/^			diffuseImages, $/;"	m	struct:Model::Material	access:public
+Model::Material::heightImages	inc/model.h	/^			heightImages, $/;"	m	struct:Model::Material	access:public
+Model::Material::specularImages	inc/model.h	/^			specularImages, $/;"	m	struct:Model::Material	access:public
+Model::Mesh	inc/model.h	/^	struct Mesh {$/;"	s	class:Model	access:public
+Model::Mesh::Mesh	inc/model.h	/^		Mesh(): baseVertex(0), numVertices(0), baseIndex(0), numIndices(0), materialIndex(0) {}$/;"	f	struct:Model::Mesh	access:public	signature:()
+Model::Mesh::baseIndex	inc/model.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Model::Mesh	access:public
+Model::Mesh::baseVertex	inc/model.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Model::Mesh	access:public
+Model::Mesh::materialIndex	inc/model.h	/^		uint32_t materialIndex;$/;"	m	struct:Model::Mesh	access:public
+Model::Mesh::numIndices	inc/model.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Model::Mesh	access:public
+Model::Mesh::numVertices	inc/model.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Model::Mesh	access:public
+Model::Model	src/model.cpp	/^Model::Model(VulkanState& vulkanState):$/;"	f	class:Model	signature:(VulkanState& vulkanState)
+Model::UBO	inc/model.h	/^	struct UBO {$/;"	s	class:Model	access:public
+Model::UBO::model	inc/model.h	/^	    glm::mat4 model;$/;"	m	struct:Model::UBO	access:public
+Model::UBO::proj	inc/model.h	/^		glm::mat4 proj;$/;"	m	struct:Model::UBO	access:public
+Model::UBO::view	inc/model.h	/^		glm::mat4 view;$/;"	m	struct:Model::UBO	access:public
+Model::Vertex	inc/model.h	/^	struct Vertex {$/;"	s	class:Model	access:public
+Model::Vertex::bitangent	inc/model.h	/^		glm::vec3 bitangent;$/;"	m	struct:Model::Vertex	access:public
+Model::Vertex::normal	inc/model.h	/^		glm::vec3 normal;$/;"	m	struct:Model::Vertex	access:public
+Model::Vertex::pos	inc/model.h	/^		glm::vec3 pos;$/;"	m	struct:Model::Vertex	access:public
+Model::Vertex::tangent	inc/model.h	/^		glm::vec3 tangent;$/;"	m	struct:Model::Vertex	access:public
+Model::Vertex::texCoord	inc/model.h	/^		glm::vec2 texCoord;$/;"	m	struct:Model::Vertex	access:public
+Model::convertVector	src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec2& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec2& dest)
+Model::convertVector	src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec3& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec3& dest)
+Model::imageInfoAmbient	inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
+Model::imageInfoDiffuse	inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
+Model::imageInfoHeight	inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
+Model::imageInfoSpecular	inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
+Model::init	src/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
+Model::init	src/model.cpp	/^void Model::init(std::string modelPath, unsigned int pFlags) $/;"	f	class:Model	signature:(std::string modelPath, unsigned int pFlags)
+Model::mFolder	inc/model.h	/^	std::string mPath, mFolder;$/;"	m	class:Model	access:private
+Model::mMaterialIndexToMaterial	inc/model.h	/^	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;	$/;"	m	class:Model	access:private
+Model::mPath	inc/model.h	/^	std::string mPath, mFolder;$/;"	m	class:Model	access:private
+Model::mTextureTypes	inc/model.h	/^	static const std::array<aiTextureType, 4> mTextureTypes;$/;"	m	class:Model	access:private
+Model::mTextureTypes	src/model.cpp	/^const std::array<aiTextureType, 4> Model::mTextureTypes = {{$/;"	m	class:Model	file:
+Model::mVertexSize	inc/model.h	/^	uint32_t mVertexSize;$/;"	m	class:Model	access:private
+Model::mVulkanState	inc/model.h	/^	VulkanState& mVulkanState;$/;"	m	class:Model	access:private
+Model::processModel	src/model.cpp	/^void Model::processModel(const aiScene& scene) $/;"	f	class:Model	signature:(const aiScene& scene)
+Model::throwError	src/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
+Model::throwError	src/model.cpp	/^void Model::throwError(std::string& error) $/;"	f	class:Model	signature:(std::string& error)
+Model::~Model	src/model.cpp	/^Model::~Model() $/;"	f	class:Model	signature:()
 NOMINMAX	lib/vulkan/vk_sdk_platform.h	26;"	d
 NORMAL	lib/assimp/Logger.hpp	/^        NORMAL,     \/\/!< Normal granularity of logging$/;"	e	enum:Assimp::Logger::LogSeverity
 NUM_DEVICE_QUEUE_INDICES	inc/device_queue_indices.h	6;"	d
@@ -3872,7 +3876,7 @@ Timer::mStartTime	inc/timer.h	/^	std::chrono::high_resolution_clock::time_point 
 Timer::mTotalTime	inc/timer.h	/^	double mTotalTime;$/;"	m	class:Timer	access:private
 Timer::tick	src/timer.cpp	/^double Timer::tick()$/;"	f	class:Timer	signature:()
 Timer::total	src/timer.cpp	/^double Timer::total() const $/;"	f	class:Timer	signature:() const
-UBO	/home/al/code/amvk/inc/model.h	/^	struct UBO {$/;"	s	class:Model	access:public
+UBO	inc/model.h	/^	struct UBO {$/;"	s	class:Model	access:public
 UBO	inc/quad.h	/^	struct UBO {$/;"	s	class:Quad	access:public
 UINT16_C	lib/assimp/Compiler/pstdint.h	311;"	d
 UINT16_C	lib/assimp/Compiler/pstdint.h	403;"	d
@@ -4890,7 +4894,7 @@ VULKAN_IMAGE_INFO	inc/vulkan_image_info.h	2;"	d
 VULKAN_LIB_PATH	Makefile	/^VULKAN_LIB_PATH := $(VULKAN_SDK_DIR)\/lib$/;"	m
 VULKAN_SDK_DIR	Makefile	/^VULKAN_SDK_DIR := \/home\/al\/VulkanSDK\/1.0.39.1\/x86_64$/;"	m
 Version	lib/vulkan/spirv.hpp	/^static const unsigned int Version = 0x00010100;$/;"	m	namespace:spv
-Vertex	/home/al/code/amvk/inc/model.h	/^	struct Vertex {$/;"	s	class:Model	access:public
+Vertex	inc/model.h	/^	struct Vertex {$/;"	s	class:Model	access:public
 Vertex	inc/quad.h	/^	struct Vertex {$/;"	s	class:Quad	access:public
 VkAccessFlagBits	lib/vulkan/vulkan.h	/^typedef enum VkAccessFlagBits {$/;"	g
 VkAccessFlagBits	lib/vulkan/vulkan.h	/^} VkAccessFlagBits;$/;"	t	typeref:enum:VkAccessFlagBits
@@ -6515,6 +6519,8 @@ VulkanState::swapChain	inc/vulkan_state.h	/^	VkSwapchainKHR swapChain;$/;"	m	str
 VulkanState::swapChainDesc	inc/vulkan_state.h	/^	SwapChainDesc swapChainDesc;$/;"	m	struct:VulkanState	access:public
 VulkanState::swapChainExtent	inc/vulkan_state.h	/^	VkExtent2D swapChainExtent;$/;"	m	struct:VulkanState	access:public
 VulkanState::swapChainImageFormat	inc/vulkan_state.h	/^	VkFormat swapChainImageFormat;$/;"	m	struct:VulkanState	access:public
+VulkanState::vulkanState	inc/vulkan_state.h	/^	VulkanState(VulkanState const& vulkanState) = delete;$/;"	m	struct:VulkanState	access:public
+VulkanState::vulkanState	inc/vulkan_state.h	/^    VulkanState& operator=(VulkanState const& vulkanState) = delete;$/;"	m	struct:VulkanState	access:public
 VulkanUtils	inc/vulkan_utils.h	/^class VulkanUtils {$/;"	c
 VulkanUtils::getVkResultString	src/vulkan_utils.cpp	/^const char* VulkanUtils::getVkResultString(VkResult result)$/;"	f	class:VulkanUtils	signature:(VkResult result)
 VulkanUtils::getVkResultString	src/vulkan_utils.cpp	/^const char* VulkanUtils::getVkResultString(int result)$/;"	f	class:VulkanUtils	signature:(int result)
@@ -7609,7 +7615,7 @@ alphaMode	lib/vulkan/vulkan.h	/^    VkDisplayPlaneAlphaFlagBitsKHR    alphaMode;
 alphaToCoverageEnable	lib/vulkan/vulkan.h	/^    VkBool32                                 alphaToCoverageEnable;$/;"	m	struct:VkPipelineMultisampleStateCreateInfo	access:public
 alphaToOne	lib/vulkan/vulkan.h	/^    VkBool32    alphaToOne;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 alphaToOneEnable	lib/vulkan/vulkan.h	/^    VkBool32                                 alphaToOneEnable;$/;"	m	struct:VkPipelineMultisampleStateCreateInfo	access:public
-ambientImages	/home/al/code/amvk/inc/model.h	/^			ambientImages; $/;"	m	struct:Model::Material	access:public
+ambientImages	inc/model.h	/^			ambientImages; $/;"	m	struct:Model::Material	access:public
 animations	lib/assimp/types.h	/^    unsigned int animations;$/;"	m	struct:aiMemoryInfo	access:public
 anisotropyEnable	lib/vulkan/vulkan.h	/^    VkBool32                anisotropyEnable;$/;"	m	struct:VkSamplerCreateInfo	access:public
 apiVersion	lib/vulkan/vulkan.h	/^    uint32_t                            apiVersion;$/;"	m	struct:VkPhysicalDeviceProperties	access:public
@@ -7669,13 +7675,13 @@ base	lib/vulkan/vk_icd.h	/^    VkIcdSurfaceBase base;$/;"	m	struct:__anon26	acce
 baseArrayLayer	lib/vulkan/vulkan.h	/^    uint32_t              baseArrayLayer;$/;"	m	struct:VkImageSubresourceLayers	access:public
 baseArrayLayer	lib/vulkan/vulkan.h	/^    uint32_t              baseArrayLayer;$/;"	m	struct:VkImageSubresourceRange	access:public
 baseArrayLayer	lib/vulkan/vulkan.h	/^    uint32_t    baseArrayLayer;$/;"	m	struct:VkClearRect	access:public
-baseIndex	/home/al/code/amvk/inc/model.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Model::Mesh	access:public
+baseIndex	inc/model.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Model::Mesh	access:public
 baseMipLevel	lib/vulkan/vulkan.h	/^    uint32_t              baseMipLevel;$/;"	m	struct:VkImageSubresourceRange	access:public
 basePipelineHandle	lib/vulkan/vulkan.h	/^    VkPipeline                                       basePipelineHandle;$/;"	m	struct:VkGraphicsPipelineCreateInfo	access:public
 basePipelineHandle	lib/vulkan/vulkan.h	/^    VkPipeline                         basePipelineHandle;$/;"	m	struct:VkComputePipelineCreateInfo	access:public
 basePipelineIndex	lib/vulkan/vulkan.h	/^    int32_t                                          basePipelineIndex;$/;"	m	struct:VkGraphicsPipelineCreateInfo	access:public
 basePipelineIndex	lib/vulkan/vulkan.h	/^    int32_t                            basePipelineIndex;$/;"	m	struct:VkComputePipelineCreateInfo	access:public
-baseVertex	/home/al/code/amvk/inc/model.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Model::Mesh	access:public
+baseVertex	inc/model.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Model::Mesh	access:public
 base_type	lib/glm/detail/_swizzle.hpp	/^		typedef _swizzle_base2<N, T, P, E0, E1, E2, E3, (E0 == E1 || E0 == E2 || E0 == E3 || E1 == E2 || E1 == E3 || E2 == E3)> base_type;$/;"	t	struct:glm::detail::_swizzle	access:public
 basic_format_saver	lib/glm/gtx/io.hpp	/^		class basic_format_saver$/;"	c	namespace:glm::io
 basic_state_saver	lib/glm/gtx/io.hpp	/^		class basic_state_saver {$/;"	c	namespace:glm::io
@@ -7689,7 +7695,7 @@ binding	lib/vulkan/vulkan.h	/^    uint32_t              binding;$/;"	m	struct:Vk
 binding	lib/vulkan/vulkan.h	/^    uint32_t             binding;$/;"	m	struct:VkVertexInputBindingDescription	access:public
 binding	lib/vulkan/vulkan.h	/^    uint32_t    binding;$/;"	m	struct:VkVertexInputAttributeDescription	access:public
 bindingCount	lib/vulkan/vulkan.h	/^    uint32_t                               bindingCount;$/;"	m	struct:VkDescriptorSetLayoutCreateInfo	access:public
-bitangent	/home/al/code/amvk/inc/model.h	/^		glm::vec3 bitangent;$/;"	m	struct:Model::Vertex	access:public
+bitangent	inc/model.h	/^		glm::vec3 bitangent;$/;"	m	struct:Model::Vertex	access:public
 blendAttachmentStateDisabled	src/pipeline_creator.cpp	/^VkPipelineColorBlendAttachmentState PipelineCreator::blendAttachmentStateDisabled() $/;"	f	class:PipelineCreator	signature:()
 blendConstants	lib/vulkan/vulkan.h	/^    float                                         blendConstants[4];$/;"	m	struct:VkPipelineColorBlendStateCreateInfo	access:public
 blendEnable	lib/vulkan/vulkan.h	/^    VkBool32                 blendEnable;$/;"	m	struct:VkPipelineColorBlendAttachmentState	access:public
@@ -7861,8 +7867,8 @@ const_pointer	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const * 
 const_pointer_const	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const * const const_pointer_const;$/;"	t	struct:glm::detail::genType	access:public
 const_reference	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const & const_reference;$/;"	t	struct:glm::detail::genType	access:public
 constantID	lib/vulkan/vulkan.h	/^    uint32_t    constantID;$/;"	m	struct:VkSpecializationMapEntry	access:public
-convertVector	/home/al/code/amvk/src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec2& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec2& dest)
-convertVector	/home/al/code/amvk/src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec3& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec3& dest)
+convertVector	src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec2& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec2& dest)
+convertVector	src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec3& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec3& dest)
 copyBuffer	src/buffer_helper.cpp	/^void BufferHelper::copyBuffer($/;"	f	class:BufferHelper	signature:( const VkDevice& device, const VkCommandPool& commandPool, const VkQueue& queue, VkBuffer src, VkBuffer dst, VkDeviceSize offset, VkDeviceSize size)
 copyBuffer	src/buffer_helper.cpp	/^void BufferHelper::copyBuffer($/;"	f	class:BufferHelper	signature:( const VkDevice& device, const VkCommandPool& commandPool, const VkQueue& queue, VkBuffer src, VkBuffer dst, VkDeviceSize size)
 copyBuffer	src/buffer_helper.cpp	/^void BufferHelper::copyBuffer($/;"	f	class:BufferHelper	signature:( const VulkanState& state, VkBuffer src, VkBuffer dst, VkDeviceSize size)
@@ -8048,7 +8054,7 @@ deviceInfo	inc/vulkan_state.h	/^	DeviceInfo deviceInfo;$/;"	m	struct:VulkanState
 deviceName	lib/vulkan/vulkan.h	/^    char                                deviceName[VK_MAX_PHYSICAL_DEVICE_NAME_SIZE];$/;"	m	struct:VkPhysicalDeviceProperties	access:public
 deviceType	lib/vulkan/vulkan.h	/^    VkPhysicalDeviceType                deviceType;$/;"	m	struct:VkPhysicalDeviceProperties	access:public
 device_info	lib/vulkan/vk_layer.h	/^    void *device_info;$/;"	m	struct:VkLayerDeviceInfo_	access:public
-diffuseImages	/home/al/code/amvk/inc/model.h	/^			diffuseImages, $/;"	m	struct:Model::Material	access:public
+diffuseImages	inc/model.h	/^			diffuseImages, $/;"	m	struct:Model::Material	access:public
 dir	lib/assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	access:public
 discreteQueuePriorities	lib/vulkan/vulkan.h	/^    uint32_t              discreteQueuePriorities;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 display	lib/vulkan/vk_icd.h	/^    struct wl_display *display;$/;"	m	struct:__anon22	typeref:struct:__anon22::wl_display	access:public
@@ -8586,6 +8592,7 @@ getCurrentDir	inc/file_manager.h	18;"	d
 getDeviceQueueFamilyIndices	src/device_manager.cpp	/^DeviceQueueIndicies DeviceManager::getDeviceQueueFamilyIndices(const VkPhysicalDevice& physicalDevice) const$/;"	f	class:DeviceManager	signature:(const VkPhysicalDevice& physicalDevice) const
 getExtensionNames	src/device_manager.cpp	/^std::vector<const char*> DeviceManager::getExtensionNames() $/;"	f	class:DeviceManager	signature:()
 getExtent	src/swapchain_manager.cpp	/^VkExtent2D SwapchainManager::getExtent(VkSurfaceCapabilitiesKHR& surfaceCapabilities) const$/;"	f	class:SwapchainManager	signature:(VkSurfaceCapabilitiesKHR& surfaceCapabilities) const
+getFilePath	src/file_manager.cpp	/^std::string FileManager::getFilePath(const char* filename) $/;"	f	class:FileManager	signature:(const char* filename)
 getFilePath	src/file_manager.cpp	/^std::string FileManager::getFilePath(const std::string& filename)$/;"	f	class:FileManager	signature:(const std::string& filename)
 getGraphicsQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getGraphicsQueueIndex()$/;"	f	class:DeviceQueueIndicies	signature:()
 getHeight	src/texture_data.cpp	/^int TextureData::getHeight() const $/;"	f	class:TextureData	signature:() const
@@ -11408,7 +11415,7 @@ height	lib/vulkan/vulkan.h	/^    float    height;$/;"	m	struct:VkViewport	access
 height	lib/vulkan/vulkan.h	/^    uint32_t                    height;$/;"	m	struct:VkFramebufferCreateInfo	access:public
 height	lib/vulkan/vulkan.h	/^    uint32_t    height;$/;"	m	struct:VkExtent2D	access:public
 height	lib/vulkan/vulkan.h	/^    uint32_t    height;$/;"	m	struct:VkExtent3D	access:public
-heightImages	/home/al/code/amvk/inc/model.h	/^			heightImages, $/;"	m	struct:Model::Material	access:public
+heightImages	inc/model.h	/^			heightImages, $/;"	m	struct:Model::Material	access:public
 highp	lib/glm/detail/precision.hpp	/^		highp = packed_highp,$/;"	e	enum:glm::precision
 highp_bvec1	lib/glm/gtc/vec1.hpp	/^	typedef highp_bvec1_t			highp_bvec1;$/;"	t	namespace:glm
 highp_bvec1_t	lib/glm/detail/type_vec.hpp	/^	typedef vec<1, bool, highp>		highp_bvec1_t;$/;"	t	namespace:glm
@@ -11748,10 +11755,10 @@ imageExtent	lib/vulkan/vulkan.h	/^    VkExtent2D                       imageExte
 imageExtent	lib/vulkan/vulkan.h	/^    VkExtent3D                  imageExtent;$/;"	m	struct:VkBufferImageCopy	access:public
 imageFormat	lib/vulkan/vulkan.h	/^    VkFormat                         imageFormat;$/;"	m	struct:VkSwapchainCreateInfoKHR	access:public
 imageGranularity	lib/vulkan/vulkan.h	/^    VkExtent3D                  imageGranularity;$/;"	m	struct:VkSparseImageFormatProperties	access:public
-imageInfoAmbient	/home/al/code/amvk/inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
-imageInfoDiffuse	/home/al/code/amvk/inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
-imageInfoHeight	/home/al/code/amvk/inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
-imageInfoSpecular	/home/al/code/amvk/inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
+imageInfoAmbient	inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
+imageInfoDiffuse	inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
+imageInfoHeight	inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
+imageInfoSpecular	inc/model.h	/^	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; $/;"	m	class:Model	access:private
 imageLayout	lib/vulkan/vulkan.h	/^    VkImageLayout    imageLayout;$/;"	m	struct:VkDescriptorImageInfo	access:public
 imageMipTailFirstLod	lib/vulkan/vulkan.h	/^    uint32_t                         imageMipTailFirstLod;$/;"	m	struct:VkSparseImageMemoryRequirements	access:public
 imageMipTailOffset	lib/vulkan/vulkan.h	/^    VkDeviceSize                     imageMipTailOffset;$/;"	m	struct:VkSparseImageMemoryRequirements	access:public
@@ -11822,9 +11829,9 @@ index	lib/vulkan/libspirv.h	/^  size_t index;$/;"	m	struct:spv_position_t	access
 indexCount	lib/vulkan/vulkan.h	/^    uint32_t    indexCount;$/;"	m	struct:VkDrawIndexedIndirectCommand	access:public
 info	lib/assimp/Logger.hpp	/^inline void Logger::info(const std::string &message)$/;"	f	class:Assimp::Logger	signature:(const std::string &message)
 inheritedQueries	lib/vulkan/vulkan.h	/^    VkBool32    inheritedQueries;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
-init	/home/al/code/amvk/src/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
-init	/home/al/code/amvk/src/model.cpp	/^void Model::init(std::string modelPath, unsigned int pFlags) $/;"	f	class:Model	signature:(std::string modelPath, unsigned int pFlags)
 init	src/engine.cpp	/^void Engine::init() $/;"	f	class:Engine	signature:()
+init	src/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
+init	src/model.cpp	/^void Model::init(std::string modelPath, unsigned int pFlags) $/;"	f	class:Model	signature:(std::string modelPath, unsigned int pFlags)
 init	src/quad.cpp	/^void Quad::init()$/;"	f	class:Quad	signature:()
 init	src/vulkan_manager.cpp	/^void VulkanManager::init() $/;"	f	class:VulkanManager	signature:()
 initBinPath	src/file_manager.cpp	/^void FileManager::initBinPath()$/;"	f	class:FileManager	signature:()
@@ -12314,6 +12321,7 @@ mFilename	lib/assimp/DefaultIOStream.h	/^    std::string mFilename;$/;"	m	class:
 mFlags	lib/assimp/importerdesc.h	/^    unsigned int mFlags;$/;"	m	struct:aiImporterDesc	access:public
 mFlags	lib/assimp/scene.h	/^    unsigned int mFlags;$/;"	m	struct:aiScene	access:public
 mFloatProperties	lib/assimp/Exporter.hpp	/^    FloatPropertyMap mFloatProperties;$/;"	m	class:Assimp::ExportProperties	access:protected
+mFolder	inc/model.h	/^	std::string mPath, mFolder;$/;"	m	class:Model	access:private
 mForwardMovementScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera	access:private
 mFrameTime	inc/timer.h	/^	double mFrameTime;$/;"	m	class:Timer	access:private
 mGlfwWindow	inc/input_manager.h	/^	GLFWwindow* mGlfwWindow;$/;"	m	class:InputManager	access:private
@@ -12338,7 +12346,7 @@ mLights	lib/assimp/scene.h	/^    C_STRUCT aiLight** mLights;$/;"	m	struct:aiScen
 mLookAt	lib/assimp/camera.h	/^    C_STRUCT aiVector3D mLookAt;$/;"	m	struct:aiCamera	access:public
 mMaintainer	lib/assimp/importerdesc.h	/^    const char* mMaintainer;$/;"	m	struct:aiImporterDesc	access:public
 mMaterialIndex	lib/assimp/mesh.h	/^    unsigned int mMaterialIndex;$/;"	m	struct:aiMesh	access:public
-mMaterialIndexToMaterial	/home/al/code/amvk/inc/model.h	/^	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;	$/;"	m	class:Model	access:private
+mMaterialIndexToMaterial	inc/model.h	/^	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;	$/;"	m	class:Model	access:private
 mMaterials	lib/assimp/scene.h	/^    C_STRUCT aiMaterial** mMaterials;$/;"	m	struct:aiScene	access:public
 mMatrixProperties	lib/assimp/Exporter.hpp	/^    MatrixPropertyMap mMatrixProperties;$/;"	m	class:Assimp::ExportProperties	access:protected
 mMaxMajor	lib/assimp/importerdesc.h	/^    unsigned int mMaxMajor;$/;"	m	struct:aiImporterDesc	access:public
@@ -12399,7 +12407,7 @@ mNumVertices	lib/assimp/mesh.h	/^    unsigned int mNumVertices;$/;"	m	struct:aiM
 mNumWeights	lib/assimp/mesh.h	/^    unsigned int mNumWeights;$/;"	m	struct:aiBone	access:public
 mOffsetMatrix	lib/assimp/mesh.h	/^    C_STRUCT aiMatrix4x4 mOffsetMatrix;$/;"	m	struct:aiBone	access:public
 mParent	lib/assimp/scene.h	/^    C_STRUCT aiNode* mParent;$/;"	m	struct:aiNode	access:public
-mPath	/home/al/code/amvk/inc/model.h	/^	std::string mPath;$/;"	m	class:Model	access:private
+mPath	inc/model.h	/^	std::string mPath, mFolder;$/;"	m	class:Model	access:private
 mPitch	inc/camera.h	/^    float mPitch, mYaw;$/;"	m	class:Camera	access:private
 mPool	inc/task_manager.h	/^	std::vector<std::thread> mPool;$/;"	m	class:TaskManager	access:private
 mPool	inc/texture_manager.h	/^	std::unordered_map<TextureDesc, ImageInfo*> mPool; $/;"	m	class:TextureManager	access:private
@@ -12446,8 +12454,8 @@ mTextureCoords	lib/assimp/mesh.h	/^    C_STRUCT aiVector3D* mTextureCoords[AI_MA
 mTextureCoords	lib/assimp/mesh.h	/^    C_STRUCT aiVector3D* mTextureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];$/;"	m	struct:aiMesh	access:public
 mTextureDesc	inc/quad.h	/^	ImageInfo *mTextureDesc;$/;"	m	class:Quad	access:public
 mTextureSampler	inc/quad.h	/^	VkSampler mTextureSampler;$/;"	m	class:Quad	access:public
-mTextureTypes	/home/al/code/amvk/inc/model.h	/^	static const std::array<aiTextureType, 4> mTextureTypes;$/;"	m	class:Model	access:private
-mTextureTypes	/home/al/code/amvk/src/model.cpp	/^const std::array<aiTextureType, 4> Model::mTextureTypes = {{$/;"	m	class:Model	file:
+mTextureTypes	inc/model.h	/^	static const std::array<aiTextureType, 4> mTextureTypes;$/;"	m	class:Model	access:private
+mTextureTypes	src/model.cpp	/^const std::array<aiTextureType, 4> Model::mTextureTypes = {{$/;"	m	class:Model	file:
 mTextures	lib/assimp/scene.h	/^    C_STRUCT aiTexture** mTextures;$/;"	m	struct:aiScene	access:public
 mTicksPerSecond	lib/assimp/anim.h	/^    double mTicksPerSecond;$/;"	m	struct:aiAnimation	access:public
 mTime	lib/assimp/anim.h	/^    double mTime;$/;"	m	struct:aiMeshKey	access:public
@@ -12475,7 +12483,7 @@ mValues	lib/assimp/metadata.h	/^    C_STRUCT aiMetadataEntry* mValues;$/;"	m	str
 mVertexBufferDesc	inc/quad.h	/^	BufferInfo mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;$/;"	m	class:Quad	access:public
 mVertexBufferOffset	inc/quad.h	/^	VkDeviceSize mVertexBufferOffset, $/;"	m	class:Quad	access:public
 mVertexId	lib/assimp/mesh.h	/^    unsigned int mVertexId;$/;"	m	struct:aiVertexWeight	access:public
-mVertexSize	/home/al/code/amvk/inc/model.h	/^	uint32_t mVertexSize;$/;"	m	class:Model	access:private
+mVertexSize	inc/model.h	/^	uint32_t mVertexSize;$/;"	m	class:Model	access:private
 mVertices	lib/assimp/mesh.h	/^    C_STRUCT aiVector3D* mVertices;$/;"	m	struct:aiAnimMesh	access:public
 mVertices	lib/assimp/mesh.h	/^    C_STRUCT aiVector3D* mVertices;$/;"	m	struct:aiMesh	access:public
 mView	inc/camera.h	/^    glm::mat4 mProj, mView;$/;"	m	class:Camera	access:private
@@ -12491,8 +12499,8 @@ mVkPipeline	inc/quad.h	/^	VkPipeline mVkPipeline;$/;"	m	class:Quad	access:public
 mVkPipelineLayout	inc/quad.h	/^	VkPipelineLayout mVkPipelineLayout;$/;"	m	class:Quad	access:public
 mVkQueue	inc/cmd_pass.h	/^	const VkQueue mVkQueue;$/;"	m	class:CmdPass	access:private
 mVulkanManager	inc/engine.h	/^	VulkanManager mVulkanManager;$/;"	m	class:Engine	access:private
-mVulkanState	/home/al/code/amvk/inc/model.h	/^	VulkanState mVulkanState;$/;"	m	class:Model	access:private
 mVulkanState	inc/device_manager.h	/^	VulkanState& mVulkanState;$/;"	m	class:DeviceManager	access:private
+mVulkanState	inc/model.h	/^	VulkanState& mVulkanState;$/;"	m	class:Model	access:private
 mVulkanState	inc/quad.h	/^	VulkanState& mVulkanState;$/;"	m	class:Quad	access:public
 mVulkanState	inc/swapchain_manager.h	/^	VulkanState& mVulkanState;$/;"	m	class:SwapchainManager	access:private
 mVulkanState	inc/vulkan_image_creator.h	/^	const VulkanState& mVulkanState;$/;"	m	class:ImageHelper	access:private
@@ -12561,7 +12569,7 @@ mat4x3	lib/glm/detail/type_mat.hpp	/^	typedef mediump_mat4x3		mat4x3;$/;"	t	name
 mat4x4	lib/glm/detail/type_mat.hpp	/^	typedef highp_mat4x4			mat4x4;$/;"	t	namespace:glm
 mat4x4	lib/glm/detail/type_mat.hpp	/^	typedef lowp_mat4x4			mat4x4;$/;"	t	namespace:glm
 mat4x4	lib/glm/detail/type_mat.hpp	/^	typedef mediump_mat4x4		mat4x4;$/;"	t	namespace:glm
-materialIndex	/home/al/code/amvk/inc/model.h	/^		uint32_t materialIndex;$/;"	m	struct:Model::Mesh	access:public
+materialIndex	inc/model.h	/^		uint32_t materialIndex;$/;"	m	struct:Model::Mesh	access:public
 materials	lib/assimp/types.h	/^    unsigned int materials;$/;"	m	struct:aiMemoryInfo	access:public
 max	lib/glm/detail/_fixes.hpp	8;"	d
 maxAnisotropy	lib/vulkan/vulkan.h	/^    float                   maxAnisotropy;$/;"	m	struct:VkSamplerCreateInfo	access:public
@@ -12940,7 +12948,7 @@ mipmapPrecisionBits	lib/vulkan/vulkan.h	/^    uint32_t              mipmapPrecis
 mirSurface	lib/vulkan/vk_icd.h	/^    MirSurface *mirSurface;$/;"	m	struct:__anon21	access:public
 mirSurface	lib/vulkan/vulkan.h	/^    MirSurface*                   mirSurface;$/;"	m	struct:VkMirSurfaceCreateInfoKHR	access:public
 mod289	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER T mod289(T const & x)$/;"	f	namespace:glm::detail	signature:(T const & x)
-model	/home/al/code/amvk/inc/model.h	/^	    glm::mat4 model;$/;"	m	struct:Model::UBO	access:public
+model	inc/model.h	/^	    glm::mat4 model;$/;"	m	struct:Model::UBO	access:public
 model	inc/quad.h	/^	    glm::mat4 model;$/;"	m	struct:Quad::PushConstants	access:public
 model	inc/quad.h	/^	    glm::mat4 model;$/;"	m	struct:Quad::UBO	access:public
 module	lib/vulkan/vulkan.h	/^    VkShaderModule                      module;$/;"	m	struct:VkPipelineShaderStageCreateInfo	access:public
@@ -12960,11 +12968,11 @@ noRepeatMsg	lib/assimp/DefaultLogger.hpp	/^    bool noRepeatMsg;$/;"	m	class:Ass
 nodes	lib/assimp/types.h	/^    unsigned int nodes;$/;"	m	struct:aiMemoryInfo	access:public
 nomore	lib/stb/stb_image.h	/^   int            nomore;      \/\/ flag if we saw a marker so must stop$/;"	m	struct:__anon6	access:public
 nonCoherentAtomSize	lib/vulkan/vulkan.h	/^    VkDeviceSize          nonCoherentAtomSize;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
-normal	/home/al/code/amvk/inc/model.h	/^		glm::vec3 normal;$/;"	m	struct:Model::Vertex	access:public
+normal	inc/model.h	/^		glm::vec3 normal;$/;"	m	struct:Model::Vertex	access:public
 null	lib/glm/detail/type_gentype.hpp	/^		enum ctor{null};$/;"	e	enum:glm::detail::genType::ctor
-numIndices	/home/al/code/amvk/inc/model.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Model::Mesh	access:public
+numIndices	inc/model.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Model::Mesh	access:public
 numIndices	inc/quad.h	/^	uint32_t numIndices;$/;"	m	class:Quad	access:public
-numVertices	/home/al/code/amvk/inc/model.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Model::Mesh	access:public
+numVertices	inc/model.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Model::Mesh	access:public
 num_bits	lib/stb/stb_image.h	/^   int num_bits;$/;"	m	struct:__anon10	access:public
 num_operands	lib/vulkan/libspirv.h	/^  uint16_t num_operands;$/;"	m	struct:spv_parsed_instruction_t	access:public
 num_words	lib/vulkan/libspirv.h	/^  uint16_t num_words;$/;"	m	struct:spv_parsed_instruction_t	access:public
@@ -13297,7 +13305,7 @@ pointer_const	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> * const 
 pollEvents	inc/input_manager.h	/^	inline void pollEvents() { glfwPollEvents(); }$/;"	f	class:InputManager	access:public	signature:()
 polygonMode	lib/vulkan/vulkan.h	/^    VkPolygonMode                              polygonMode;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo	access:public
 poolSizeCount	lib/vulkan/vulkan.h	/^    uint32_t                       poolSizeCount;$/;"	m	struct:VkDescriptorPoolCreateInfo	access:public
-pos	/home/al/code/amvk/inc/model.h	/^		glm::vec3 pos;$/;"	m	struct:Model::Vertex	access:public
+pos	inc/model.h	/^		glm::vec3 pos;$/;"	m	struct:Model::Vertex	access:public
 pos	inc/quad.h	/^		glm::vec3 pos;$/;"	m	struct:Quad::Vertex	access:public
 pos	lib/assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	access:public
 position	lib/vulkan/libspirv.h	/^  spv_position_t position;$/;"	m	struct:spv_diagnostic_t	access:public
@@ -13317,10 +13325,10 @@ presentQueue	inc/vulkan_state.h	/^	VkQueue presentQueue; $/;"	m	struct:VulkanSta
 presentQueueIndex	inc/vulkan_state.h	/^	uint32_t presentQueueIndex;$/;"	m	struct:VulkanState	access:public
 preserveAttachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                        preserveAttachmentCount;$/;"	m	struct:VkSubpassDescription	access:public
 primitiveRestartEnable	lib/vulkan/vulkan.h	/^    VkBool32                                   primitiveRestartEnable;$/;"	m	struct:VkPipelineInputAssemblyStateCreateInfo	access:public
-processModel	/home/al/code/amvk/src/model.cpp	/^void Model::processModel(const aiScene& scene) $/;"	f	class:Model	signature:(const aiScene& scene)
+processModel	src/model.cpp	/^void Model::processModel(const aiScene& scene) $/;"	f	class:Model	signature:(const aiScene& scene)
 profile	lib/glm/detail/type_gentype.hpp	/^	enum profile$/;"	g	namespace:glm
 progressive	lib/stb/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon6	access:public
-proj	/home/al/code/amvk/inc/model.h	/^		glm::mat4 proj;$/;"	m	struct:Model::UBO	access:public
+proj	inc/model.h	/^		glm::mat4 proj;$/;"	m	struct:Model::UBO	access:public
 proj	inc/quad.h	/^		glm::mat4 proj;$/;"	m	struct:Quad::PushConstants	access:public
 proj	inc/quad.h	/^		glm::mat4 proj;$/;"	m	struct:Quad::UBO	access:public
 proj	src/camera.cpp	/^glm::mat4& Camera::proj()$/;"	f	class:Camera	signature:()
@@ -13614,7 +13622,7 @@ specVersion	lib/vulkan/vulkan.h	/^    uint32_t    specVersion;$/;"	m	struct:VkEx
 specVersion	lib/vulkan/vulkan.h	/^    uint32_t    specVersion;$/;"	m	struct:VkLayerProperties	access:public
 spec_end	lib/stb/stb_image.h	/^   int            spec_end;$/;"	m	struct:__anon6	access:public
 spec_start	lib/stb/stb_image.h	/^   int            spec_start;$/;"	m	struct:__anon6	access:public
-specularImages	/home/al/code/amvk/inc/model.h	/^			specularImages, $/;"	m	struct:Model::Material	access:public
+specularImages	inc/model.h	/^			specularImages, $/;"	m	struct:Model::Material	access:public
 spirv_H	lib/vulkan/spirv.h	49;"	d
 spirv_HPP	lib/vulkan/spirv.hpp	43;"	d
 spv	lib/vulkan/spirv.hpp	/^namespace spv {$/;"	n
@@ -14843,14 +14851,14 @@ t	lib/glm/detail/type_vec4.hpp	/^			union { T y, g, t; };$/;"	m	union:glm::vec::
 tag	script/vkrun.sh	/^function tag()$/;"	f
 tagName	lib/vulkan/vulkan.h	/^    uint64_t                      tagName;$/;"	m	struct:VkDebugMarkerObjectTagInfoEXT	access:public
 tagSize	lib/vulkan/vulkan.h	/^    size_t                        tagSize;$/;"	m	struct:VkDebugMarkerObjectTagInfoEXT	access:public
-tangent	/home/al/code/amvk/inc/model.h	/^		glm::vec3 tangent;$/;"	m	struct:Model::Vertex	access:public
+tangent	inc/model.h	/^		glm::vec3 tangent;$/;"	m	struct:Model::Vertex	access:public
 taylorInvSqrt	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER T taylorInvSqrt(T const & r)$/;"	f	namespace:glm::detail	signature:(T const & r)
 taylorInvSqrt	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER vec<2, T, P> taylorInvSqrt(vec<2, T, P> const & r)$/;"	f	namespace:glm::detail	signature:(vec<2, T, P> const & r)
 taylorInvSqrt	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER vec<3, T, P> taylorInvSqrt(vec<3, T, P> const & r)$/;"	f	namespace:glm::detail	signature:(vec<3, T, P> const & r)
 taylorInvSqrt	lib/glm/detail/_noise.hpp	/^	GLM_FUNC_QUALIFIER vec<4, T, P> taylorInvSqrt(vec<4, T, P> const & r)$/;"	f	namespace:glm::detail	signature:(vec<4, T, P> const & r)
 tdualquat	lib/glm/gtx/dual_quaternion.hpp	/^	struct tdualquat$/;"	s	namespace:glm
 tessellationShader	lib/vulkan/vulkan.h	/^    VkBool32    tessellationShader;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
-texCoord	/home/al/code/amvk/inc/model.h	/^		glm::vec2 texCoord;$/;"	m	struct:Model::Vertex	access:public
+texCoord	inc/model.h	/^		glm::vec2 texCoord;$/;"	m	struct:Model::Vertex	access:public
 texCoord	inc/quad.h	/^		glm::vec2 texCoord;$/;"	m	struct:Quad::Vertex	access:public
 textureCompressionASTC_LDR	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionASTC_LDR;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 textureCompressionBC	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionBC;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
@@ -14858,8 +14866,8 @@ textureCompressionETC2	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionE
 textureManager	inc/texture_manager.h	/^	TextureManager(const TextureManager& textureManager) = delete;$/;"	m	class:TextureManager	access:public
 textureManager	inc/texture_manager.h	/^	void operator=(const TextureManager& textureManager) = delete;$/;"	m	class:TextureManager	access:public
 textures	lib/assimp/types.h	/^    unsigned int textures;$/;"	m	struct:aiMemoryInfo	access:public
-throwError	/home/al/code/amvk/src/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
-throwError	/home/al/code/amvk/src/model.cpp	/^void Model::throwError(std::string& error) $/;"	f	class:Model	signature:(std::string& error)
+throwError	src/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
+throwError	src/model.cpp	/^void Model::throwError(std::string& error) $/;"	f	class:Model	signature:(std::string& error)
 tick	src/timer.cpp	/^double Timer::tick()$/;"	f	class:Timer	signature:()
 tiling	lib/vulkan/vulkan.h	/^    VkImageTiling            tiling;$/;"	m	struct:VkImageCreateInfo	access:public
 timestampComputeAndGraphics	lib/vulkan/vulkan.h	/^    VkBool32              timestampComputeAndGraphics;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
@@ -15200,7 +15208,7 @@ vertexBindingDescriptionCount	lib/vulkan/vulkan.h	/^    uint32_t                
 vertexCount	lib/vulkan/vulkan.h	/^    uint32_t    vertexCount;$/;"	m	struct:VkDrawIndirectCommand	access:public
 vertexOffset	lib/vulkan/vulkan.h	/^    int32_t     vertexOffset;$/;"	m	struct:VkDrawIndexedIndirectCommand	access:public
 vertexPipelineStoresAndAtomics	lib/vulkan/vulkan.h	/^    VkBool32    vertexPipelineStoresAndAtomics;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
-view	/home/al/code/amvk/inc/model.h	/^		glm::mat4 view;$/;"	m	struct:Model::UBO	access:public
+view	inc/model.h	/^		glm::mat4 view;$/;"	m	struct:Model::UBO	access:public
 view	inc/quad.h	/^		glm::mat4 view;$/;"	m	struct:Quad::PushConstants	access:public
 view	inc/quad.h	/^		glm::mat4 view;$/;"	m	struct:Quad::UBO	access:public
 view	src/camera.cpp	/^glm::mat4& Camera::view()$/;"	f	class:Camera	signature:()
@@ -15212,6 +15220,8 @@ viewportStateDynamic	src/pipeline_creator.cpp	/^VkPipelineViewportStateCreateInf
 viewportSubPixelBits	lib/vulkan/vulkan.h	/^    uint32_t              viewportSubPixelBits;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 visibleRegion	lib/vulkan/vulkan.h	/^    VkExtent2D    visibleRegion;$/;"	m	struct:VkDisplayModeParametersKHR	access:public
 vs	lib/stb/stb_image.h	/^   int hs,vs;   \/\/ expansion factor in each axis$/;"	m	struct:__anon8	access:public
+vulkanState	inc/vulkan_state.h	/^	VulkanState(VulkanState const& vulkanState) = delete;$/;"	m	struct:VulkanState	access:public
+vulkanState	inc/vulkan_state.h	/^    VulkanState& operator=(VulkanState const& vulkanState) = delete;$/;"	m	struct:VulkanState	access:public
 w	lib/assimp/quaternion.h	/^    TReal w, x, y, z;$/;"	m	class:aiQuaterniont	access:public
 w	lib/assimp/quaternion.h	/^    ai_real w, x, y, z;$/;"	m	struct:aiQuaternion	access:public
 w	lib/glm/detail/type_vec4.hpp	/^				struct { T x, y, z, w;};$/;"	m	struct:glm::vec::__anon59::__anon60	access:public
@@ -15814,7 +15824,7 @@ zzzz	lib/glm/gtx/vec_swizzle.hpp	/^	GLM_INLINE glm::vec<4, T, P> zzzz(const glm:
 ~InputManager	src/input_manager.cpp	/^InputManager::~InputManager()$/;"	f	class:InputManager	signature:()
 ~LogStream	lib/assimp/LogStream.hpp	/^    virtual ~LogStream() {$/;"	f	class:Assimp::LogStream	access:public	signature:()
 ~Logger	lib/assimp/Logger.hpp	/^inline  Logger::~Logger()$/;"	f	class:Assimp::Logger	signature:()
-~Model	/home/al/code/amvk/src/model.cpp	/^Model::~Model() $/;"	f	class:Model	signature:()
+~Model	src/model.cpp	/^Model::~Model() $/;"	f	class:Model	signature:()
 ~ProgressHandler	lib/assimp/ProgressHandler.hpp	/^    virtual ~ProgressHandler () {$/;"	f	class:Assimp::ProgressHandler	access:public	signature:()
 ~Quad	src/quad.cpp	/^Quad::~Quad() $/;"	f	class:Quad	signature:()
 ~SwapchainManager	src/swapchain_manager.cpp	/^SwapchainManager::~SwapchainManager() $/;"	f	class:SwapchainManager	signature:()

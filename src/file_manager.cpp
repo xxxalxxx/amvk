@@ -16,6 +16,17 @@ FileManager& FileManager::getInstance()
 	return fileManager;
 }
 
+std::string FileManager::getFilePath(const char* filename) 
+{
+	std::string s(filename);
+	return FileManager::getFilePath(s);
+}
+
+std::string FileManager::getFilePath(const std::string& filename)
+{
+	return filename.substr(0, filename.find_last_of("\\/"));
+}
+
 std::string FileManager::getResourcePath(std::string&& path) 
 {
 	return FileManager::getInstance().mResourceDir + path;
@@ -51,18 +62,12 @@ std::vector<char> FileManager::readFile(const std::string& filename)
 	return buffer;
 }
 
-
-std::string FileManager::getFilePath(const std::string& filename)
-{
-	return filename.substr(0, filename.find_last_of("\\/"));
-}
-
 void FileManager::initBinPath()
 {
 	#ifdef WINDOWS
-	char buff[MAX_PATH];
+		char buff[MAX_PATH];
 	#else
-	char buff[PATH_MAX];
+		char buff[PATH_MAX];
 	#endif
     size_t sz = sizeof(buff)-1;
     LOG("IN BIN ABS PATH");

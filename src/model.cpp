@@ -11,8 +11,11 @@ Model::Model(VulkanState& vulkanState):
 	mVulkanState(vulkanState),
 	mVertexSize(sizeof(Vertex)),
 	mPath(""),
+	mFolder(""),
 	imageInfoDiffuse(nullptr), imageInfoSpecular(nullptr), imageInfoHeight(nullptr), imageInfoAmbient(nullptr) 
 {
+
+
 }
 
 
@@ -22,12 +25,16 @@ Model::~Model()
 
 void Model::init(std::string modelPath, unsigned int pFlags) 
 {
+
+
 	init(modelPath.c_str(), pFlags);	
 }
 
 void Model::init(const char* modelPath, unsigned int pFlags)
 {
 	mPath = modelPath;
+	mFolder = FileManager::getFilePath(std::string(modelPath));
+	LOG("FOLDER:" << mFolder);
 	Assimp::Importer importer;
 	  // And have it read the given file with some example postprocessing
 	  // Usually - if speed is not the most important aspect for you - you'll 
@@ -39,8 +46,12 @@ void Model::init(const char* modelPath, unsigned int pFlags)
 		throwError(importer.GetErrorString());	
 	if (!scene->HasMeshes())
 		throwError("No meshes found");
+
+
+
 	processModel(*scene);
 }
+
 
 
 void Model::processModel(const aiScene& scene) 
@@ -85,10 +96,8 @@ void Model::processModel(const aiScene& scene)
 
 		
 		// Textures
-
 		meshInfo.materialIndex = mesh.mMaterialIndex;
-		aiMaterial& material = *scene.mMaterials[mesh.mMaterialIndex];	
-	
+		aiMaterial& material = *scene.mMaterials[mesh.mMaterialIndex];		
 		auto it = mMaterialIndexToMaterial.find(mesh.mMaterialIndex);
 		if (it == mMaterialIndexToMaterial.end()) {
 			Material materialInfo;
@@ -97,14 +106,21 @@ void Model::processModel(const aiScene& scene)
 				size_t numMaterials = material.GetTextureCount(textureType); 
 				for (size_t k = 0; k < numMaterials; ++k) {
 					aiString texturePath;
-					material.GetTexture(textureType, k, &texturePath);
-					TextureDesc textureDesc(texturePath.C_Str());
+				
+					material.GetTexture(textureType, k, &texturePath);	
+					std::string fullTexturePath = mFolder + "/";
+					fullTexturePath += texturePath.C_Str();
+
+					TextureDesc textureDesc(FileManager::getResourcePath("texture/statue.jpg"));
+					//LOG("BEFORE LOAD:" << textureDesc.filename);
 					ImageInfo* imageInfo = TextureManager::load(
 							mVulkanState, 
 							mVulkanState.commandPool, 
 							mVulkanState.graphicsQueue, 
-							textureDesc); 
+							textureDesc);
 
+
+					LOG("AFTER LOAD");
 					switch(textureType) {
 						case aiTextureType_DIFFUSE:
 							materialInfo.diffuseImages.push_back(imageInfo);	
@@ -120,7 +136,7 @@ void Model::processModel(const aiScene& scene)
 							break;
 						default:
 							break;
-					}
+					}	
 				}
 			}
 			mMaterialIndexToMaterial[mesh.mMaterialIndex] = materialInfo;
