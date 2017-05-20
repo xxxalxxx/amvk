@@ -7,12 +7,11 @@ class CmdPass {
 public:
 	CmdPass(const VkDevice& vkDevice, const VkCommandPool& vkCommandPool, const VkQueue& vkQueue);
 	~CmdPass();
-	VkCommandBuffer commandBuffer();
-	VkCommandBuffer cmdBuffer;
+	VkCommandBuffer buffer;
 private:
 	const VkDevice& mVkDevice;
 	const VkCommandPool& mVkCommandPool;
-	const VkQueue mVkQueue;
+	const VkQueue& mVkQueue;
 };
 
 #endif

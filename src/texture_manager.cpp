@@ -15,7 +15,6 @@ ImageInfo* TextureManager::load(
 	TextureManager& tm = getInstance();
 	std::lock_guard<std::mutex> guard(tm.lock);
 	// Check map, load image thread safely
-
 	auto it = tm.mPool.find(textureDesc);
 	if (it != tm.mPool.end()) {
 		LOG("TEXTURE FOUND: " << textureDesc.filename);
@@ -26,7 +25,7 @@ ImageInfo* TextureManager::load(
 	textureData.load(textureDesc.filename.c_str(), textureDesc.reqComp);
 
 	ImageInfo* info = new ImageInfo(state.device, textureData.width, textureData.height);
-	LOG("CREATE INFO");
+	LOG("CREATE IMAGE INFO");
 	ImageHelper::createStagedImage(*info, textureData, state, cmdPool, cmdQueue);
 	LOG("IMAGE CREATED");
 	tm.mPool[textureDesc] = info;

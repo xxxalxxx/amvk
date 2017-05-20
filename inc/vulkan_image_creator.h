@@ -16,21 +16,12 @@ class ImageHelper {
 public:
 	ImageHelper(const VulkanState& vulkanState);
 
-	void createImage(
-			uint32_t w, 
-			uint32_t h, 
-			VkFormat format, 
-			VkImageTiling tiling,
-			VkImageUsageFlags usage, 
-			VkMemoryPropertyFlags properties, 
-			VkImage& image, 
-			VkDeviceMemory& imageMemory) const;
-
 	static void createImage(
 			const VulkanState& state,
 			ImageInfo& imageDesc, 
-			VkFormat format, 
+			VkFormat format,
 			VkImageTiling tiling,
+			VkImageLayout initialLayout,
 			VkImageUsageFlags usage, 
 			VkMemoryPropertyFlags properties);
 
@@ -58,18 +49,7 @@ public:
 			VkFormat format, 
 			VkImageLayout oldLayout, 
 			VkImageLayout newLayout) const;
-
-	void copyImage(
-			VkImage srcImage, 
-			VkImage dstImage, 
-			uint32_t width, 
-			uint32_t height) const;
 	
-	void createImageView(
-			VkImage image, 
-			VkFormat format, 
-			VkImageAspectFlags aspectFlags, 
-			VkImageView& imageView) const;
 
 	static void createImageView(
 			const VkDevice& device,

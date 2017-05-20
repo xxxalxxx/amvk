@@ -65,7 +65,7 @@ void Quad::updateUniformBuffers(const Timer& timer, Camera& camera)
 	CmdPass cmdPass(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue); 
 
 	vkCmdUpdateBuffer(
-			cmdPass.cmdBuffer,
+			cmdPass.buffer,
 			mCommonBufferInfo.buffer,
 			mUniformBufferOffset,
 			sizeof(UBO),

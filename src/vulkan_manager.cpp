@@ -2,8 +2,6 @@
 
 
 VulkanManager::VulkanManager(Window& window):
-	//mVulkanState.physicalDevice(VK_NULL_HANDLE),
-	//mVulkanState.swapChain(VK_NULL_HANDLE),
 	mWindow(window),
 	mDeviceManager(mVulkanState),
 	mSwapChainManager(mVulkanState, mWindow),
@@ -33,10 +31,9 @@ void VulkanManager::init()
 	
 	mSwapChainManager.createRenderPass();
 	mSwapChainManager.createCommandPool();
-
 	mQuad.init();
 
-	mSuit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"));
+//	mSuit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"));
 
 	mSwapChainManager.createDepthResources();
 	mSwapChainManager.createFramebuffers(mVulkanState.renderPass);

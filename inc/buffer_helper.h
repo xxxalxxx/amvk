@@ -32,7 +32,14 @@ public:
 			VkDeviceSize offset, 
 			VkDeviceSize size, 
 			const void* src); 
-	
+
+	static void mapMemory(
+			const VkDevice& device, 
+			VkDeviceMemory& memory, 
+			VkDeviceSize offset, 
+			VkDeviceSize size, 
+			const void* src);
+
 	static uint32_t getMemoryType(
 			const VkPhysicalDevice& physicalDevice, 
 			uint32_t typeFilter, 

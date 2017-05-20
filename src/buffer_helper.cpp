@@ -66,6 +66,20 @@ void BufferHelper::mapMemory(
 	vkUnmapMemory(state.device, memory);
 }
 
+
+void BufferHelper::mapMemory(
+		const VkDevice& device, 
+		VkDeviceMemory& memory, 
+		VkDeviceSize offset, 
+		VkDeviceSize size, 
+		const void* src) 
+{
+	void* data;
+	vkMapMemory(device, memory, offset, size, 0 , &data);
+	memcpy(data, src, (size_t) size);
+	vkUnmapMemory(device, memory);
+}
+
 void BufferHelper::createBuffer(
 		const VkPhysicalDevice& physicalDevice,
 		const VkDevice& device,
@@ -239,7 +253,7 @@ void BufferHelper::copyBuffer(
 	CmdPass cmdPass(device, commandPool, queue);
 	VkBufferCopy bufferCopy = {};
 	bufferCopy.size = size;
-	vkCmdCopyBuffer(cmdPass.commandBuffer(), src, dst, 1, &bufferCopy);
+	vkCmdCopyBuffer(cmdPass.buffer, src, dst, 1, &bufferCopy);
 }
 
 void BufferHelper::copyBuffer(
@@ -256,7 +270,7 @@ void BufferHelper::copyBuffer(
 	bufferCopy.size = size;
 	bufferCopy.dstOffset = offset;
 	bufferCopy.srcOffset = offset;
-	vkCmdCopyBuffer(cmdPass.cmdBuffer, src, dst, 1, &bufferCopy);
+	vkCmdCopyBuffer(cmdPass.buffer, src, dst, 1, &bufferCopy);
 }
 
 void BufferHelper::copyBuffer(

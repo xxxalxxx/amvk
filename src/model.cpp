@@ -24,9 +24,7 @@ Model::~Model()
 }
 
 void Model::init(std::string modelPath, unsigned int pFlags) 
-{
-
-
+{	
 	init(modelPath.c_str(), pFlags);	
 }
 
@@ -46,8 +44,6 @@ void Model::init(const char* modelPath, unsigned int pFlags)
 		throwError(importer.GetErrorString());	
 	if (!scene->HasMeshes())
 		throwError("No meshes found");
-
-
 
 	processModel(*scene);
 }
@@ -111,7 +107,7 @@ void Model::processModel(const aiScene& scene)
 					std::string fullTexturePath = mFolder + "/";
 					fullTexturePath += texturePath.C_Str();
 
-					TextureDesc textureDesc(FileManager::getResourcePath("texture/statue.jpg"));
+					TextureDesc textureDesc(fullTexturePath);
 					//LOG("BEFORE LOAD:" << textureDesc.filename);
 					ImageInfo* imageInfo = TextureManager::load(
 							mVulkanState, 

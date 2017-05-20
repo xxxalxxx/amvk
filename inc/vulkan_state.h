@@ -14,6 +14,14 @@ struct DeviceInfo {
 	VkDeviceSize minUniformBufferOffsetAlignment;
 };
 
+struct Pipelines {
+
+};
+
+struct DescriptorSets {
+
+};
+
 struct VulkanState {
 	VulkanState(): 
 		instance(VK_NULL_HANDLE), 
@@ -51,7 +59,8 @@ struct VulkanState {
 	VkFormat depthFormat;
 
 	DeviceInfo deviceInfo;
-
+	Pipelines pipelines;
+	DescriptorSets descriptorSets;
 };
 
 #endif
