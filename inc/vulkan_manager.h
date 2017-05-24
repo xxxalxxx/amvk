@@ -67,6 +67,10 @@ public:
 
 
 private:
+	void createShaders();
+	void createPipelines();
+	void createDescriptorPool();
+
 	void updateUniformBuffer(const Timer& timer);
 
 	Window& mWindow;

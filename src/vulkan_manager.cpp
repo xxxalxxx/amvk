@@ -17,7 +17,6 @@ VulkanManager::~VulkanManager()
 
 void VulkanManager::init() 
 {
-
 	mDeviceManager.createVkInstance();
 #ifdef AMVK_DEBUG
 	mDeviceManager.enableDebug();
@@ -25,6 +24,11 @@ void VulkanManager::init()
 	mSwapChainManager.createSurface();
 	mDeviceManager.createPhysicalDevice(mSwapChainManager);
 	mDeviceManager.createLogicalDevice();
+
+	createShaders();
+	createDescriptorPool();
+	createPipelines();
+
 
 	mSwapChainManager.createSwapChain();
 	mSwapChainManager.createImageViews();
@@ -42,6 +46,22 @@ void VulkanManager::init()
 	mSwapChainManager.createSemaphores();
 	
 	LOG("INIT SUCCESSFUL");
+}
+
+void VulkanManager::createShaders() 
+{
+	mVulkanState.shaders.quad.vertex = PipelineCreator::shaderStage(mVulkanState.device, "shader.vert", VK_SHADER_STAGE_VERTEX_BIT);
+	mVulkanState.shaders.quad.fragment = PipelineCreator::shaderStage(mVulkanState.device, "shader.frag", VK_SHADER_STAGE_VERTEX_BIT);
+}
+
+void VulkanManager::createPipelines() 
+{
+
+}
+
+void VulkanManager::createDescriptorPool() 
+{
+
 }
 
 

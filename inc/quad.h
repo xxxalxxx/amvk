@@ -38,6 +38,11 @@ public:
 		glm::mat4 proj;
 	};
 
+	static uint32_t const VERTEX_SIZE = sizeof(Vertex);
+	static uint32_t const UBO_SIZE = sizeof(UBO);
+	static uint32_t const PUSH_CONST_SIZE = sizeof(PushConstants);
+
+	static void createPipeline(VulkanState& state, PipelineInfo& info);
 
 	Quad(VulkanState& vulkanState);
 	~Quad();
@@ -81,9 +86,7 @@ private:
 	void createDescriptorSetLayout();
 	void createPipeline();
 
-	void createTextureImage();
-	void createTextureImageView();
-	void createTextureSampler();
+
 	void createDescriptorPool();
 	void createDescriptorSet();
 	void createRenderPass(const ImageHelper& vic);

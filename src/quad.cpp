@@ -29,15 +29,7 @@ void Quad::init()
 			mVulkanState.graphicsQueue, 
 			textureDesc);
 
-	//createTextureImage();
-	//createTextureImageView();
-	//createTextureSampler();
-
 	createBuffers();
-
-	//createVertexBuffer();
-	//createIndexBuffer();
-	//createUniformBuffer();
 
 	createDescriptorPool();
 	createDescriptorSet();
@@ -68,7 +60,7 @@ void Quad::updateUniformBuffers(const Timer& timer, Camera& camera)
 			cmdPass.buffer,
 			mCommonBufferInfo.buffer,
 			mUniformBufferOffset,
-			sizeof(UBO),
+			UBO_SIZE,
 			&ubo);
 	/*
 	void* data;
@@ -161,7 +153,7 @@ void Quad::createBuffers()
 	
 	// Uniform
 	//TODO: check how to add uniform without recopying same buffer
-	VkDeviceSize uniformBufferSize = sizeof(UBO);
+	VkDeviceSize uniformBufferSize = UBO_SIZE;
 	UBO ubo = {};
 	
 	mUniformBufferOffset = 0;
@@ -246,7 +238,7 @@ void Quad::createIndexBuffer()
 
 void Quad::createUniformBuffer()
 {	
-	VkDeviceSize bufSize = sizeof(UBO);
+	VkDeviceSize bufSize = UBO_SIZE;
 
 	mUniformStagingBufferDesc.size = bufSize;
 	mUniformBufferDesc.size = bufSize;
@@ -255,78 +247,13 @@ void Quad::createUniformBuffer()
 	BufferHelper::createUniformBuffer(mVulkanState, mUniformBufferDesc);
 }
 
-void Quad::createTextureImage()
-{
-	/*TextureData textureData;
-	textureData.load("texture/statue.jpg", STBI_rgb_alpha);
-	
-	int w = textureData.getWidth();
-	int h = textureData.getHeight(); 
-	VkDeviceSize imageSize = textureData.getSize();
-	stbi_uc* pixels = textureData.getPixels(); 
 
-	mTextureDesc.width = w;
-	mTextureDesc.height = h;
-	
-	ImageInfo stagingDesc(mVulkanState.device, w, h);
-
-	ImageHelper::createImage(
-			mVulkanState, 
-			stagingDesc, 
-			VK_FORMAT_R8G8B8A8_UNORM,
-			VK_IMAGE_TILING_LINEAR, 
-			VK_IMAGE_USAGE_TRANSFER_SRC_BIT, 
-			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT); 
-	
-	BufferHelper::mapMemory(mVulkanState, stagingDesc.memory, imageSize, pixels);
-
-	ImageHelper::createImage(
-			mVulkanState, 
-			mTextureDesc, 
-			VK_FORMAT_R8G8B8A8_UNORM,
-			VK_IMAGE_TILING_OPTIMAL, 
-			VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
-			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-	ImageHelper::transitionLayout(
-			mVulkanState,
-			stagingDesc.image,
-			VK_FORMAT_R8G8B8A8_UNORM,
-			VK_IMAGE_LAYOUT_PREINITIALIZED, 
-			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-			VK_IMAGE_ASPECT_COLOR_BIT,
-			VK_ACCESS_HOST_WRITE_BIT,
-			VK_ACCESS_TRANSFER_READ_BIT);
-
-	ImageHelper::transitionLayout(
-			mVulkanState,
-			mTextureDesc.image,
-			VK_FORMAT_R8G8B8A8_UNORM,
-			VK_IMAGE_LAYOUT_PREINITIALIZED, 
-			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-			VK_IMAGE_ASPECT_COLOR_BIT,
-			VK_ACCESS_HOST_WRITE_BIT,
-			VK_ACCESS_TRANSFER_WRITE_BIT);
-
-	ImageHelper::copyImage(mVulkanState, stagingDesc, mTextureDesc);
-
-	ImageHelper::transitionLayout(
-			mVulkanState,
-			mTextureDesc.image,
-			VK_FORMAT_R8G8B8A8_UNORM, 
-			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			VK_IMAGE_ASPECT_COLOR_BIT,
-			VK_ACCESS_TRANSFER_WRITE_BIT,
-			VK_ACCESS_SHADER_READ_BIT);
-			*/
-}
 
 VkVertexInputBindingDescription Quad::getBindingDesc() const
 {
 	VkVertexInputBindingDescription bindDesc = {};
 	bindDesc.binding = 0;
-	bindDesc.stride = sizeof(Vertex);
+	bindDesc.stride = VERTEX_SIZE;
 	bindDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
 	return bindDesc;
@@ -391,11 +318,9 @@ void Quad::createDescriptorSet()
 	VK_CHECK_RESULT(vkAllocateDescriptorSets(mVulkanState.device, &allocInfo, &mVkDescriptorSet));
 
 	VkDescriptorBufferInfo buffInfo = {};
-	//buffInfo.buffer = mUniformBufferDesc.buffer;
 	buffInfo.buffer = mCommonBufferInfo.buffer;
-	//buffInfo.offset = 0;
 	buffInfo.offset = mUniformBufferOffset;
-	buffInfo.range = sizeof(UBO);
+	buffInfo.range = UBO_SIZE;
 
 	VkDescriptorImageInfo imageInfo = {};
 	imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -491,88 +416,6 @@ void Quad::createPipeline()
 	LOG("PIPELINE CREATED");
 }
 
-void Quad::createTextureImageView()
-{
-/*	ImageHelper::createImageView(
-			mVulkanState.device,
-			mTextureDesc.image, 
-			VK_FORMAT_R8G8B8A8_UNORM, 
-			VK_IMAGE_ASPECT_COLOR_BIT, 
-			mTextureDesc.imageView);
-			*/
-}
-
-void Quad::createTextureSampler()
-{
-	/*
-	VkSamplerCreateInfo samplerInfo = {};
-	samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-	samplerInfo.magFilter = VK_FILTER_LINEAR;
-	samplerInfo.minFilter = VK_FILTER_LINEAR;
-	samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	samplerInfo.anisotropyEnable = VK_TRUE;
-	samplerInfo.maxAnisotropy = 16;
-	samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
-	samplerInfo.unnormalizedCoordinates = VK_FALSE;
-	samplerInfo.compareEnable = VK_FALSE;
-	samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
-	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-
-	VK_CHECK_RESULT(vkCreateSampler(mVulkanState.device, &samplerInfo, nullptr, &mTextureDesc.sampler));
-	*/
-}
-
-void Quad::createRenderPass(const ImageHelper& vic)
-{
-	VulkanRenderPassCreator renderPassCreator;
-
-	VkAttachmentDescription att = renderPassCreator.attachmentDescColor(mVulkanState.swapChainImageFormat);
-	VkAttachmentDescription depthAtt = renderPassCreator.attachmentDescDepthNoStencil(vic.findDepthFormat());
-
-	VkAttachmentReference attRef = {};
-	attRef.attachment = 0;
-	attRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-	VkAttachmentReference depthAttRef = {};
-	depthAttRef.attachment = 1;
-	depthAttRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-	VkSubpassDescription sub = {};
-	sub.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-	sub.colorAttachmentCount = 1;
-	sub.pColorAttachments = &attRef;
-	sub.pDepthStencilAttachment = &depthAttRef;
-
-	VkSubpassDependency dependancy = {};
-	dependancy.srcSubpass = VK_SUBPASS_EXTERNAL;
-	dependancy.dstSubpass = 0;
-	dependancy.srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-	dependancy.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
-	dependancy.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dependancy.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT 
-							 | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-
-	std::array<VkAttachmentDescription, 2> attachments = {
-		att, 
-		depthAtt
-	};
-	
-	VkRenderPassCreateInfo createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-	createInfo.attachmentCount = attachments.size();
-	createInfo.pAttachments = attachments.data();
-	createInfo.subpassCount = 1;
-	createInfo.pSubpasses = &sub;
-	createInfo.dependencyCount = 1;
-	createInfo.pDependencies = &dependancy;
-
-	VK_CHECK_RESULT(vkCreateRenderPass(mVulkanState.device, &createInfo, nullptr, &renderPass));
-
-	LOG("RENDER PASS CREATED");
-}
-
 void Quad::createDescriptorSetLayout()
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
@@ -600,4 +443,81 @@ void Quad::createDescriptorSetLayout()
 	LOG("DESC LAYOUT CREATED");
 }
 
+void Quad::createPipeline(VulkanState& state, PipelineInfo& info)
+{
+	VkPipelineShaderStageCreateInfo stages[] = {
+		state.shaders.quad.vertex,
+		state.shaders.quad.fragment
+	};
+
+	VkVertexInputBindingDescription bindDesc = {};
+	bindDesc.binding = 0;
+	bindDesc.stride = VERTEX_SIZE;
+	bindDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+	// uint32_t    location;
+    // uint32_t    binding;
+    // VkFormat    format;
+    // uint32_t    offset;
+
+	std::array<VkVertexInputAttributeDescription, 3> attrDesc = {{
+		{ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos) },
+		{ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) },
+		{ 2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCoord) }
+	}};
+
+	auto vertexInputInfo = getVertexInputStateCreateInfo(bindingDesc, attrDesc);
+
+	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = PipelineCreator::inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+	VkPipelineViewportStateCreateInfo viewportState = PipelineCreator::viewportStateDynamic();
+
+	VkDynamicState dynamicStates[] = {
+		VK_DYNAMIC_STATE_VIEWPORT,
+		VK_DYNAMIC_STATE_SCISSOR
+	};
+
+	VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
+	VkPipelineRasterizationStateCreateInfo rasterizationState = PipelineCreator::rasterizationStateCullBackCCW();
+	VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessNoStencil();
+	VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
+	VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
+
+	VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1); 
+
+	VkDescriptorSetLayout setLayouts[] = { mVkDescriptorSetLayout };
+	
+	VkPhysicalDeviceProperties physicalDeviceProperties;
+	vkGetPhysicalDeviceProperties(state.physicalDevice, &physicalDeviceProperties);
+
+	VkPushConstantRange pushConstantRange = PipelineCreator::pushConstantRange(
+			state,
+			VK_SHADER_STAGE_VERTEX_BIT, 
+			0,
+			PUSH_CONST_SIZE);
+
+	VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(setLayouts, 1, &pushConstantRange, 1);
+
+	VK_CHECK_RESULT(vkCreatePipelineLayout(state.device, &pipelineLayoutInfo, nullptr, &state.pipelines.quad.pipelineLayout));
+
+	VkGraphicsPipelineCreateInfo pipelineInfo = {};
+	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+	pipelineInfo.stageCount = ARRAY_SIZE(stages);
+	pipelineInfo.pStages = stages;
+	pipelineInfo.pVertexInputState = &vertexInputInfo;
+	pipelineInfo.pInputAssemblyState = &assemblyInfo;
+	pipelineInfo.pViewportState = &viewportState;
+	pipelineInfo.pRasterizationState = &rasterizationState;
+	pipelineInfo.pMultisampleState = &multisampleState;
+	pipelineInfo.pDepthStencilState = &depthStencil;
+	pipelineInfo.pColorBlendState = &blendState;
+	pipelineInfo.pDynamicState = &dynamicInfo;
+	pipelineInfo.layout = state.pipelines.quad.pipelineLayout;
+	pipelineInfo.renderPass = state.renderPass;
+	pipelineInfo.subpass = 0;
+	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+	VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &state.pipelines.quad.pipeline));
+	LOG("PIPELINE CREATED");
+
+}
 

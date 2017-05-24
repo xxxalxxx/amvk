@@ -65,8 +65,7 @@ VkPipelineShaderStageCreateInfo PipelineCreator::shaderStage(VkShaderModule& sha
 
 VkPipelineShaderStageCreateInfo PipelineCreator::shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)
 {
-	FileManager& fm = FileManager::getInstance();
-	auto shaderSpvCode = fm.readShader(path);
+	auto shaderSpvCode = FileManager::getInstance().readShader(path);
 
 	VkShaderModuleCreateInfo createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;

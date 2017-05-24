@@ -4,22 +4,47 @@
 #include <vulkan/vulkan.h>
 #include "swap_chain_desc.h"
 
-
 struct DeviceInfo {
 	DeviceInfo():
-	maxPushConstantsSize(0),
-	minUniformBufferOffsetAlignment(0)
+		maxPushConstantsSize(0),
+		minUniformBufferOffsetAlignment(0)
 	{}
+
 	uint32_t maxPushConstantsSize;
 	VkDeviceSize minUniformBufferOffsetAlignment;
 };
 
-struct Pipelines {
+struct PipelineInfo {
+	PipelineInfo(): 
+		pipeline(VK_NULL_HANDLE),
+		pipelineLayout(VK_NULL_HANDLE) 
+	{}
 
+	VkPipeline pipeline;
+	VkPipelineLayout pipelineLayout;
+};
+
+struct ShaderInfo {
+	ShaderInfo()	
+	{}
+
+	VkPipelineShaderStageCreateInfo vertex;
+	VkPipelineShaderStageCreateInfo fragment;
+	VkPipelineShaderStageCreateInfo geometry;
+};
+
+struct Pipelines {
+	PipelineInfo quad;
+	PipelineInfo simpleModel;
 };
 
 struct DescriptorSets {
+	
+};
 
+struct Shaders {
+	ShaderInfo quad;
+	ShaderInfo simpleModel;
 };
 
 struct VulkanState {
@@ -60,6 +85,7 @@ struct VulkanState {
 
 	DeviceInfo deviceInfo;
 	Pipelines pipelines;
+	Shaders shaders;
 	DescriptorSets descriptorSets;
 };
 
