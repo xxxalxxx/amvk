@@ -5,6 +5,7 @@ INC_DIR := inc
 SRC_DIR := src
 OBJ_DIR := obj
 SHADER_SPV_DIR := shader/spv
+CACHE_DIR := cache
 SRC_DIRS := src
 
 TARGET=$(BIN_DIR)/myengine
@@ -38,6 +39,6 @@ $(OBJ_DIR)/%.o : %.cpp
 .PHONY : clean
 
 clean:
-	$(RM) $(OBJ_DIR)/* $(TARGET) $(SHADER_SPV_DIR)/*
+	$(RM) $(OBJ_DIR)/* $(TARGET) $(SHADER_SPV_DIR)/* $(CACHE_DIR)/*
 
 -include $(DEPS)

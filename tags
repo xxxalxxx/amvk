@@ -504,6 +504,8 @@ BuiltInViewportIndex	lib/vulkan/spirv.hpp	/^    BuiltInViewportIndex = 10,$/;"	e
 BuiltInWorkDim	lib/vulkan/spirv.hpp	/^    BuiltInWorkDim = 30,$/;"	e	enum:spv::BuiltIn
 BuiltInWorkgroupId	lib/vulkan/spirv.hpp	/^    BuiltInWorkgroupId = 26,$/;"	e	enum:spv::BuiltIn
 BuiltInWorkgroupSize	lib/vulkan/spirv.hpp	/^    BuiltInWorkgroupSize = 25,$/;"	e	enum:spv::BuiltIn
+CACHE_DIR	Makefile	/^CACHE_DIR := cache$/;"	m
+CACHE_DIR	inc/file_manager.h	/^	static constexpr const char* CACHE_DIR = "cache\/";$/;"	m	class:FileManager	access:private
 CASE	lib/stb/stb_image.h	1360;"	d
 CASE	lib/stb/stb_image.h	1378;"	d
 CASE	lib/stb/stb_image.h	4084;"	d
@@ -978,6 +980,7 @@ FPRoundingModeRTZ	lib/vulkan/spirv.hpp	/^    FPRoundingModeRTZ = 1,$/;"	e	enum:s
 FPS	src/timer.cpp	/^uint32_t Timer::FPS() const$/;"	f	class:Timer	signature:() const
 FileManager	inc/file_manager.h	/^class FileManager {$/;"	c
 FileManager	src/file_manager.cpp	/^FileManager::FileManager() $/;"	f	class:FileManager	signature:()
+FileManager::CACHE_DIR	inc/file_manager.h	/^	static constexpr const char* CACHE_DIR = "cache\/";$/;"	m	class:FileManager	access:private
 FileManager::ENGINE_RELATIVE_ROOT	inc/file_manager.h	/^	static constexpr const char* ENGINE_RELATIVE_ROOT = "\/..\/";$/;"	m	class:FileManager	access:private
 FileManager::FileManager	src/file_manager.cpp	/^FileManager::FileManager() $/;"	f	class:FileManager	signature:()
 FileManager::MODELS_DIR	inc/file_manager.h	/^	static constexpr const char* MODELS_DIR = "res\/model\/";$/;"	m	class:FileManager	access:private
@@ -986,19 +989,23 @@ FileManager::SHADER_DIR	inc/file_manager.h	/^	static constexpr const char* SHADE
 FileManager::fileManager	inc/file_manager.h	/^	FileManager(const FileManager& fileManager) = delete;$/;"	m	class:FileManager	access:public
 FileManager::fileManager	inc/file_manager.h	/^	void operator=(const FileManager& fileManager) = delete;$/;"	m	class:FileManager	access:public
 FileManager::getBinPath	src/file_manager.cpp	/^std::string FileManager::getBinPath() $/;"	f	class:FileManager	signature:()
+FileManager::getCachePath	src/file_manager.cpp	/^std::string FileManager::getCachePath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
 FileManager::getFilePath	src/file_manager.cpp	/^std::string FileManager::getFilePath(const char* filename) $/;"	f	class:FileManager	signature:(const char* filename)
 FileManager::getFilePath	src/file_manager.cpp	/^std::string FileManager::getFilePath(const std::string& filename)$/;"	f	class:FileManager	signature:(const std::string& filename)
 FileManager::getInstance	src/file_manager.cpp	/^FileManager& FileManager::getInstance()$/;"	f	class:FileManager	signature:()
 FileManager::getModelsPath	src/file_manager.cpp	/^std::string FileManager::getModelsPath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
 FileManager::getResourcePath	src/file_manager.cpp	/^std::string FileManager::getResourcePath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
 FileManager::initBinPath	src/file_manager.cpp	/^void FileManager::initBinPath()$/;"	f	class:FileManager	signature:()
-FileManager::mBinPath	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir;$/;"	m	class:FileManager	access:private
-FileManager::mEngineRoot	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir;$/;"	m	class:FileManager	access:private
-FileManager::mModelsDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir;$/;"	m	class:FileManager	access:private
-FileManager::mResourceDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir;$/;"	m	class:FileManager	access:private
-FileManager::mShaderDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir;$/;"	m	class:FileManager	access:private
+FileManager::mBinPath	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
+FileManager::mCacheDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
+FileManager::mEngineRoot	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
+FileManager::mModelsDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
+FileManager::mResourceDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
+FileManager::mShaderDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
+FileManager::readCache	src/file_manager.cpp	/^std::vector<char> FileManager::readCache(const std::string& cacheName)$/;"	f	class:FileManager	signature:(const std::string& cacheName)
 FileManager::readFile	src/file_manager.cpp	/^std::vector<char> FileManager::readFile(const std::string& filename) $/;"	f	class:FileManager	signature:(const std::string& filename)
 FileManager::readShader	src/file_manager.cpp	/^std::vector<char> FileManager::readShader(const std::string& shaderName)$/;"	f	class:FileManager	signature:(const std::string& shaderName)
+FileManager::writeCache	src/file_manager.cpp	/^void FileManager::writeCache(const char* cacheName, void* data, size_t size)$/;"	f	class:FileManager	signature:(const char* cacheName, void* data, size_t size)
 FileSizeProc	lib/assimp/cfileio.h	/^    aiFileTellProc FileSizeProc;$/;"	m	struct:aiFile	access:public
 FindNode	lib/assimp/scene.h	/^    aiNode* FindNode(const aiString& name) {$/;"	f	struct:aiNode	access:public	signature:(const aiString& name)
 FindNode	lib/assimp/scene.h	/^    const aiNode* FindNode(const aiString& name) const {$/;"	f	struct:aiNode	access:public	signature:(const aiString& name) const
@@ -2653,6 +2660,7 @@ PipelineCreator::dynamicState	src/pipeline_creator.cpp	/^VkPipelineDynamicStateC
 PipelineCreator::inputAssemblyNoRestart	src/pipeline_creator.cpp	/^VkPipelineInputAssemblyStateCreateInfo PipelineCreator::inputAssemblyNoRestart(VkPrimitiveTopology topology) $/;"	f	class:PipelineCreator	signature:(VkPrimitiveTopology topology)
 PipelineCreator::layout	src/pipeline_creator.cpp	/^VkPipelineLayoutCreateInfo PipelineCreator::layout($/;"	f	class:PipelineCreator	signature:( VkDescriptorSetLayout* setLayouts, uint32_t setLayoutCount, VkPushConstantRange* pushConstantRanges, uint32_t pushConstantRangeCount)
 PipelineCreator::multisampleStateNoMultisampleNoSampleShading	src/pipeline_creator.cpp	/^VkPipelineMultisampleStateCreateInfo PipelineCreator::multisampleStateNoMultisampleNoSampleShading()$/;"	f	class:PipelineCreator	signature:()
+PipelineCreator::pipelineCache	src/pipeline_creator.cpp	/^void PipelineCreator::pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)$/;"	f	class:PipelineCreator	signature:(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)
 PipelineCreator::pushConstantRange	src/pipeline_creator.cpp	/^VkPushConstantRange PipelineCreator::pushConstantRange(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)$/;"	f	class:PipelineCreator	signature:(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)
 PipelineCreator::rasterizationStateCullBackCCW	src/pipeline_creator.cpp	/^VkPipelineRasterizationStateCreateInfo PipelineCreator::rasterizationStateCullBackCCW() $/;"	f	class:PipelineCreator	signature:()
 PipelineCreator::shaderStage	src/pipeline_creator.cpp	/^VkPipelineShaderStageCreateInfo PipelineCreator::shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)$/;"	f	class:PipelineCreator	signature:(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)
@@ -2663,8 +2671,9 @@ PipelineCreator::viewportStateDynamic	src/pipeline_creator.cpp	/^VkPipelineViewp
 PipelineInfo	inc/vulkan_state.h	/^	PipelineInfo(): $/;"	f	struct:PipelineInfo	access:public	signature:()
 PipelineInfo	inc/vulkan_state.h	/^struct PipelineInfo {$/;"	s
 PipelineInfo::PipelineInfo	inc/vulkan_state.h	/^	PipelineInfo(): $/;"	f	struct:PipelineInfo	access:public	signature:()
+PipelineInfo::cache	inc/vulkan_state.h	/^	VkPipelineCache cache;$/;"	m	struct:PipelineInfo	access:public
+PipelineInfo::layout	inc/vulkan_state.h	/^	VkPipelineLayout layout;$/;"	m	struct:PipelineInfo	access:public
 PipelineInfo::pipeline	inc/vulkan_state.h	/^	VkPipeline pipeline;$/;"	m	struct:PipelineInfo	access:public
-PipelineInfo::pipelineLayout	inc/vulkan_state.h	/^	VkPipelineLayout pipelineLayout;$/;"	m	struct:PipelineInfo	access:public
 PipelineManager	inc/pipeline_manager.h	/^class PipelineManager {$/;"	c
 PipelineManager	src/pipeline_manager.cpp	/^PipelineManager::PipelineManager(VulkanState& state):$/;"	f	class:PipelineManager	signature:(VulkanState& state)
 PipelineManager::PipelineManager	src/pipeline_manager.cpp	/^PipelineManager::PipelineManager(VulkanState& state):$/;"	f	class:PipelineManager	signature:(VulkanState& state)
@@ -7811,6 +7820,7 @@ c3	lib/assimp/matrix4x4.h	/^    TReal c1, c2, c3, c4;$/;"	m	class:aiMatrix4x4t	a
 c3	lib/assimp/matrix4x4.h	/^    ai_real c1, c2, c3, c4;$/;"	m	struct:aiMatrix4x4	access:public
 c4	lib/assimp/matrix4x4.h	/^    TReal c1, c2, c3, c4;$/;"	m	class:aiMatrix4x4t	access:public
 c4	lib/assimp/matrix4x4.h	/^    ai_real c1, c2, c3, c4;$/;"	m	struct:aiMatrix4x4	access:public
+cache	inc/vulkan_state.h	/^	VkPipelineCache cache;$/;"	m	struct:PipelineInfo	access:public
 calcAspect	src/window.cpp	/^void Window::calcAspect() $/;"	f	class:Window	signature:()
 call	lib/glm/detail/_vectorize.hpp	/^		GLM_FUNC_QUALIFIER static vec<1, R, P> call(R (*Func) (T x), vec<1, T, P> const & v)$/;"	f	struct:glm::detail::functor1	access:public	signature:(R (Func) T x), vec<1, T, P> const & v)
 call	lib/glm/detail/_vectorize.hpp	/^		GLM_FUNC_QUALIFIER static vec<1, T, P> call(T (*Func) (T x, T y), vec<1, T, P> const & a, T b)$/;"	f	struct:glm::detail::functor2_vec_sca	access:public	signature:(T (Func) T x, T y), vec<1, T, P> const & a, T b)
@@ -8629,6 +8639,7 @@ getAspect	src/window.cpp	/^float Window::getAspect() const$/;"	f	class:Window	si
 getAttrDesc	src/quad.cpp	/^std::array<VkVertexInputAttributeDescription, 3> Quad::getAttrDesc() const $/;"	f	class:Quad	signature:() const
 getBinPath	src/file_manager.cpp	/^std::string FileManager::getBinPath() $/;"	f	class:FileManager	signature:()
 getBindingDesc	src/quad.cpp	/^VkVertexInputBindingDescription Quad::getBindingDesc() const$/;"	f	class:Quad	signature:() const
+getCachePath	src/file_manager.cpp	/^std::string FileManager::getCachePath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
 getCamera	src/engine.cpp	/^Camera& Engine::getCamera()$/;"	f	class:Engine	signature:()
 getChannels	src/texture_data.cpp	/^int TextureData::getChannels() const$/;"	f	class:TextureData	signature:() const
 getComputeQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getComputeQueueIndex()$/;"	f	class:DeviceQueueIndicies	signature:()
@@ -11993,6 +12004,7 @@ layerCount	lib/vulkan/vulkan.h	/^    uint32_t              layerCount;$/;"	m	str
 layerCount	lib/vulkan/vulkan.h	/^    uint32_t    layerCount;$/;"	m	struct:VkClearRect	access:public
 layerName	lib/vulkan/vulkan.h	/^    char        layerName[VK_MAX_EXTENSION_NAME_SIZE];$/;"	m	struct:VkLayerProperties	access:public
 layers	lib/vulkan/vulkan.h	/^    uint32_t                    layers;$/;"	m	struct:VkFramebufferCreateInfo	access:public
+layout	inc/vulkan_state.h	/^	VkPipelineLayout layout;$/;"	m	struct:PipelineInfo	access:public
 layout	lib/vulkan/vulkan.h	/^    VkImageLayout    layout;$/;"	m	struct:VkAttachmentReference	access:public
 layout	lib/vulkan/vulkan.h	/^    VkPipelineLayout                                 layout;$/;"	m	struct:VkGraphicsPipelineCreateInfo	access:public
 layout	lib/vulkan/vulkan.h	/^    VkPipelineLayout                   layout;$/;"	m	struct:VkComputePipelineCreateInfo	access:public
@@ -12318,10 +12330,11 @@ mAttenuationConstant	lib/assimp/light.h	/^    float mAttenuationConstant;$/;"	m	
 mAttenuationLinear	lib/assimp/light.h	/^    float mAttenuationLinear;$/;"	m	struct:aiLight	access:public
 mAttenuationQuadratic	lib/assimp/light.h	/^    float mAttenuationQuadratic;$/;"	m	struct:aiLight	access:public
 mAuthor	lib/assimp/importerdesc.h	/^    const char* mAuthor;$/;"	m	struct:aiImporterDesc	access:public
-mBinPath	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir;$/;"	m	class:FileManager	access:private
+mBinPath	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
 mBitangents	lib/assimp/mesh.h	/^    C_STRUCT aiVector3D* mBitangents;$/;"	m	struct:aiAnimMesh	access:public
 mBitangents	lib/assimp/mesh.h	/^    C_STRUCT aiVector3D* mBitangents;$/;"	m	struct:aiMesh	access:public
 mBones	lib/assimp/mesh.h	/^    C_STRUCT aiBone** mBones;$/;"	m	struct:aiMesh	access:public
+mCacheDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
 mCachedSize	lib/assimp/DefaultIOStream.h	/^    mutable size_t mCachedSize;$/;"	m	class:Assimp::DefaultIOStream	access:private
 mCamera	inc/engine.h	/^	Camera mCamera;$/;"	m	class:Engine	access:private
 mCameras	lib/assimp/scene.h	/^    C_STRUCT aiCamera** mCameras;$/;"	m	struct:aiScene	access:public
@@ -12354,7 +12367,7 @@ mDirection	lib/assimp/light.h	/^    C_STRUCT aiVector3D mDirection;$/;"	m	struct
 mDt	inc/timer.h	/^	double mDt;$/;"	m	class:Timer	access:private
 mDuration	lib/assimp/anim.h	/^    double mDuration;$/;"	m	struct:aiAnimation	access:public
 mEnforcePP	lib/assimp/Exporter.hpp	/^        unsigned int mEnforcePP;$/;"	m	struct:Assimp::Exporter::ExportFormatEntry	access:public
-mEngineRoot	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir;$/;"	m	class:FileManager	access:private
+mEngineRoot	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
 mExportFunction	lib/assimp/Exporter.hpp	/^        fpExportFunc mExportFunction;$/;"	m	struct:Assimp::Exporter::ExportFormatEntry	access:public
 mEye	inc/camera.h	/^    glm::vec3 mEye; $/;"	m	class:Camera	access:private
 mFOV	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:private
@@ -12405,7 +12418,7 @@ mMetaData	lib/assimp/scene.h	/^    C_STRUCT aiMetadata* mMetaData;$/;"	m	struct:
 mMethod	lib/assimp/mesh.h	/^    unsigned int mMethod;$/;"	m	struct:aiMesh	access:public
 mMinMajor	lib/assimp/importerdesc.h	/^    unsigned int mMinMajor;$/;"	m	struct:aiImporterDesc	access:public
 mMinMinor	lib/assimp/importerdesc.h	/^    unsigned int mMinMinor;$/;"	m	struct:aiImporterDesc	access:public
-mModelsDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir;$/;"	m	class:FileManager	access:private
+mModelsDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
 mMorphMeshChannels	lib/assimp/anim.h	/^    C_STRUCT aiMeshMorphAnim **mMorphMeshChannels;$/;"	m	struct:aiAnimation	access:public
 mMouseSensitivityScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera	access:private
 mName	lib/assimp/anim.h	/^    C_STRUCT aiString mName;$/;"	m	struct:aiAnimation	access:public
@@ -12474,7 +12487,7 @@ mProj	inc/camera.h	/^    glm::mat4 mProj, mView;$/;"	m	class:Camera	access:priva
 mProperties	lib/assimp/material.h	/^    C_STRUCT aiMaterialProperty** mProperties;$/;"	m	struct:aiMaterial	access:public
 mQuad	inc/vulkan_manager.h	/^	Quad mQuad;$/;"	m	class:VulkanManager	access:private
 mRenderFinishedSemaphore	inc/swapchain_manager.h	/^	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;$/;"	m	class:SwapchainManager	access:public
-mResourceDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir;$/;"	m	class:FileManager	access:private
+mResourceDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
 mRootNode	lib/assimp/scene.h	/^    C_STRUCT aiNode* mRootNode;$/;"	m	struct:aiScene	access:public
 mRotation	lib/assimp/material.h	/^    ai_real mRotation;$/;"	m	struct:aiUVTransform	access:public
 mRotationKeys	lib/assimp/anim.h	/^    C_STRUCT aiQuatKey* mRotationKeys;$/;"	m	struct:aiNodeAnim	access:public
@@ -12482,7 +12495,7 @@ mScaling	lib/assimp/material.h	/^    C_STRUCT aiVector2D mScaling;$/;"	m	struct:
 mScalingKeys	lib/assimp/anim.h	/^    C_STRUCT aiVectorKey* mScalingKeys;$/;"	m	struct:aiNodeAnim	access:public
 mScrollSensitivityScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera	access:private
 mSemantic	lib/assimp/material.h	/^    unsigned int mSemantic;$/;"	m	struct:aiMaterialProperty	access:public
-mShaderDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir;$/;"	m	class:FileManager	access:private
+mShaderDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
 mShaderManager	inc/vulkan_manager.h	/^	ShaderManager mShaderManager;$/;"	m	class:VulkanManager	access:private
 mShaders	inc/shader_manager.h	/^	Shaders& mShaders;$/;"	m	class:ShaderManager	access:private
 mSidewaysMovementScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera	access:private
@@ -13338,8 +13351,8 @@ pimpl	lib/assimp/Exporter.hpp	/^    ExporterPimpl* pimpl;$/;"	m	class:Assimp::Ex
 pimpl	lib/assimp/Importer.hpp	/^    ImporterPimpl* pimpl;$/;"	m	class:Assimp::Importer	access:protected
 pipeline	inc/vulkan_state.h	/^	VkPipeline pipeline;$/;"	m	struct:PipelineInfo	access:public
 pipelineBindPoint	lib/vulkan/vulkan.h	/^    VkPipelineBindPoint             pipelineBindPoint;$/;"	m	struct:VkSubpassDescription	access:public
+pipelineCache	src/pipeline_creator.cpp	/^void PipelineCreator::pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)$/;"	f	class:PipelineCreator	signature:(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)
 pipelineCacheUUID	lib/vulkan/vulkan.h	/^    uint8_t                             pipelineCacheUUID[VK_UUID_SIZE];$/;"	m	struct:VkPhysicalDeviceProperties	access:public
-pipelineLayout	inc/vulkan_state.h	/^	VkPipelineLayout pipelineLayout;$/;"	m	struct:PipelineInfo	access:public
 pipelineStatistics	lib/vulkan/vulkan.h	/^    VkQueryPipelineStatisticFlags    pipelineStatistics;$/;"	m	struct:VkCommandBufferInheritanceInfo	access:public
 pipelineStatistics	lib/vulkan/vulkan.h	/^    VkQueryPipelineStatisticFlags    pipelineStatistics;$/;"	m	struct:VkQueryPoolCreateInfo	access:public
 pipelineStatisticsQuery	lib/vulkan/vulkan.h	/^    VkBool32    pipelineStatisticsQuery;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
@@ -13432,6 +13445,7 @@ ratio	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, d
 raw_coeff	lib/stb/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon43::__anon44	access:public
 raw_data	lib/stb/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon43::__anon44	access:public
 read	lib/stb/stb_image.h	/^   int      (*read)  (void *user,char *data,int size);   \/\/ fill 'data' with 'size' bytes.  return number of bytes actually read$/;"	m	struct:__anon39	access:public
+readCache	src/file_manager.cpp	/^std::vector<char> FileManager::readCache(const std::string& cacheName)$/;"	f	class:FileManager	signature:(const std::string& cacheName)
 readFile	src/file_manager.cpp	/^std::vector<char> FileManager::readFile(const std::string& filename) $/;"	f	class:FileManager	signature:(const std::string& filename)
 readShader	src/file_manager.cpp	/^std::vector<char> FileManager::readShader(const std::string& shaderName)$/;"	f	class:FileManager	signature:(const std::string& shaderName)
 read_from_callbacks	lib/stb/stb_image.h	/^   int read_from_callbacks;$/;"	m	struct:__anon40	access:public
@@ -15319,6 +15333,7 @@ word	lib/glm/gtx/raw_data.hpp	/^	typedef detail::uint16		word;$/;"	t	namespace:g
 wordCount	lib/vulkan/libspirv.h	/^  const size_t wordCount;$/;"	m	struct:spv_const_binary_t	access:public
 wordCount	lib/vulkan/libspirv.h	/^  size_t wordCount;$/;"	m	struct:spv_binary_t	access:public
 words	lib/vulkan/libspirv.h	/^  const uint32_t* words;$/;"	m	struct:spv_parsed_instruction_t	access:public
+writeCache	src/file_manager.cpp	/^void FileManager::writeCache(const char* cacheName, void* data, size_t size)$/;"	f	class:FileManager	signature:(const char* cacheName, void* data, size_t size)
 writeMask	lib/vulkan/vulkan.h	/^    uint32_t       writeMask;$/;"	m	struct:VkStencilOpState	access:public
 wstate_saver	lib/glm/gtx/io.hpp	/^		typedef basic_state_saver<wchar_t> wstate_saver;$/;"	t	namespace:glm::io
 ww	lib/glm/gtx/vec_swizzle.hpp	/^	GLM_INLINE glm::vec<2, T, P> ww(const glm::vec<4, T, P> &v) {$/;"	f	namespace:glm	signature:(const glm::vec<4, T, P> &v)

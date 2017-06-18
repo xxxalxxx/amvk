@@ -214,3 +214,15 @@ VkPipelineVertexInputStateCreateInfo PipelineCreator::vertexInputState(
 	
 	return vertexInputInfo;
 }
+
+
+void PipelineCreator::pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)
+{
+	out = {};
+	out.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+	if (cache.empty())
+		return;
+	out.initialDataSize = sizeof(char) * cache.size();
+	out.pInitialData = cache.data();
+	LOG("CACHE:" << (const char*) cache.data());
+}

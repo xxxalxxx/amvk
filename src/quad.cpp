@@ -91,7 +91,7 @@ void Quad::updatePushConstants(VkCommandBuffer& commandBuffer, const Timer& time
 	pushConstants.proj = camera.proj();
 	vkCmdPushConstants(
 			commandBuffer, 
-			mVulkanState.pipelines.quad.pipelineLayout, 
+			mVulkanState.pipelines.quad.layout, 
 			VK_SHADER_STAGE_VERTEX_BIT, 
 			0,
 			sizeof(PushConstants),
@@ -111,7 +111,7 @@ void Quad::draw(VkCommandBuffer& commandBuffer)
 	vkCmdBindDescriptorSets(
 			commandBuffer, 
 			VK_PIPELINE_BIND_POINT_GRAPHICS, 
-			mVulkanState.pipelines.quad.pipelineLayout, 
+			mVulkanState.pipelines.quad.layout, 
 			0, 
 			1, 
 			&mVkDescriptorSet, 
@@ -491,8 +491,13 @@ void Quad::createPipeline(VulkanState& state)
 			PUSH_CONST_SIZE);
 
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(&state.descriptorSetLayouts.quad, 1, &pushConstantRange, 1);
+	VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
+	
+	auto cache = FileManager::getInstance().readCache("quad");
+	PipelineCreator::pipelineCache(state.device, cache, pipelineCacheCreateInfo);
 
-	VK_CHECK_RESULT(vkCreatePipelineLayout(state.device, &pipelineLayoutInfo, nullptr, &state.pipelines.quad.pipelineLayout));
+	VK_CHECK_RESULT(vkCreatePipelineCache(state.device, &pipelineCacheCreateInfo, nullptr, &state.pipelines.quad.cache));
+	VK_CHECK_RESULT(vkCreatePipelineLayout(state.device, &pipelineLayoutInfo, nullptr, &state.pipelines.quad.layout));
 
 	VkGraphicsPipelineCreateInfo pipelineInfo = {};
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -506,13 +511,24 @@ void Quad::createPipeline(VulkanState& state)
 	pipelineInfo.pDepthStencilState = &depthStencil;
 	pipelineInfo.pColorBlendState = &blendState;
 	pipelineInfo.pDynamicState = &dynamicInfo;
-	pipelineInfo.layout = state.pipelines.quad.pipelineLayout;
+	pipelineInfo.layout = state.pipelines.quad.layout;
 	pipelineInfo.renderPass = state.renderPass;
 	pipelineInfo.subpass = 0;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
 	VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &state.pipelines.quad.pipeline));
-	LOG("PIPELINE CREATED");
+	
+	if (cache.size() == 0) {
+		LOG("CREATE CACHE");
+		size_t cacheSize;
+		VK_CHECK_RESULT(vkGetPipelineCacheData(state.device, state.pipelines.quad.cache, &cacheSize, NULL));
+		char* cacheData = (char*) malloc(cacheSize);
+		VK_CHECK_RESULT(vkGetPipelineCacheData(state.device, state.pipelines.quad.cache, &cacheSize, cacheData));
+		LOG("CACHE SIZE: " << cacheSize << " DATA: " << (const char*) cacheData);
+
+		FileManager::getInstance().writeCache("quad", cacheData, cacheSize);
+		free(cacheData);
+	}
 
 }
 

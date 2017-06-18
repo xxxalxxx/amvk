@@ -17,10 +17,12 @@ struct DeviceInfo {
 struct PipelineInfo {
 	PipelineInfo(): 
 		pipeline(VK_NULL_HANDLE),
-		pipelineLayout(VK_NULL_HANDLE) {}
+		cache(VK_NULL_HANDLE),
+		layout(VK_NULL_HANDLE) {}
 
 	VkPipeline pipeline;
-	VkPipelineLayout pipelineLayout;
+	VkPipelineCache cache;
+	VkPipelineLayout layout;
 };
 
 struct ShaderInfo {

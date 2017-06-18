@@ -50,6 +50,7 @@ public:
 			VkVertexInputAttributeDescription* attributes,
 			uint32_t attributesCount);
 
+	static void pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out);
 };
 
 #endif
