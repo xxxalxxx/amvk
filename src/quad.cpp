@@ -456,39 +456,7 @@ void Quad::createPipeline(VulkanState& state)
 	bindingDesc.stride = VERTEX_SIZE;
 	bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-	VkVertexInputAttributeDescription positionDesc = {};
-	positionDesc.location = 0;
-	positionDesc.binding = 0;
-	positionDesc.format = VK_FORMAT_R32G32B32_SFLOAT;
-	positionDesc.offset = offsetof(Vertex, pos);
-
-	VkVertexInputAttributeDescription colorDesc = {};
-	colorDesc.location = 1;
-	colorDesc.binding = 0;
-	colorDesc.format = VK_FORMAT_R32G32B32_SFLOAT;
-	colorDesc.offset = offsetof(Vertex, color);
-
-	VkVertexInputAttributeDescription textCoordDesc = {};
-	positionDesc.location = 2;
-	positionDesc.binding = 0;
-	positionDesc.format = VK_FORMAT_R32G32_SFLOAT;
-	positionDesc.offset = offsetof(Vertex, texCoord);
-
-
-	/*std::array<VkVertexInputAttributeDescription, 3> attrDesc = {{
-		{ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos) },
-		{ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) },
-		{ 2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCoord) }
-	}};*/
-
-
-
-	/*std::array<VkVertexInputAttributeDescription, 3> attrDesc = {{
-		positionDesc,
-		colorDesc,
-		textCoordDesc
-	}};*/
-
+	//location, binding, format, offset
 	VkVertexInputAttributeDescription attrDesc[] = { 
 		{ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos) },
 		{ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) },

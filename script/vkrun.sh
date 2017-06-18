@@ -2,6 +2,7 @@
 
 function tag()
 {
+	echo ""
 	echo "*********************"
 	echo "TAGGING"
 	echo "*********************"
@@ -10,8 +11,18 @@ function tag()
 
 function compile_shaders()
 {
-	./glslangValidator -V shader/quad.frag -o shader/spv/quad.frag.spv
-	./glslangValidator -V shader/quad.vert -o shader/spv/quad.vert.spv
+	echo ""
+	echo "*********************"
+	echo "Compile shaders"
+	echo "*********************"
+	pushd /home/al/amvk/shader
+
+	for filename in *.*; do
+		echo $filename
+		../glslangValidator -V $filename -o spv/$filename.spv
+	done
+
+	popd
 }
 
 make_clean=false; compile_shaders=true
@@ -42,9 +53,6 @@ tag
 
 pwd
 if $compile_shaders; then
-	echo "*********************"
-	echo "Compile shaders"
-	echo "*********************"
 	compile_shaders
 fi
 
@@ -54,14 +62,14 @@ then
 	echo "Make clean"
 	echo "*********************"
 
-	make -j3 clean
+	make clean
 	compile_shaders
 	make
 else
 	echo "*********************"
 	echo "Make"
 	echo "*********************"
-	make -j3
+	make
 fi
 
 popd
