@@ -10,8 +10,8 @@ function tag()
 
 function compile_shaders()
 {
-	./glslangValidator -V shader/shader.frag -o shader/spv/shader.frag.spv
-	./glslangValidator -V shader/shader.vert -o shader/spv/shader.vert.spv
+	./glslangValidator -V shader/quad.frag -o shader/spv/quad.frag.spv
+	./glslangValidator -V shader/quad.vert -o shader/spv/quad.vert.spv
 }
 
 make_clean=false; compile_shaders=true
@@ -36,7 +36,7 @@ done
 
 
 
-pushd /home/al/code/amvk
+pushd /home/al/amvk
 
 tag
 

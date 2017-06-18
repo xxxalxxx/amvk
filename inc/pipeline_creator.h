@@ -38,8 +38,18 @@ public:
 
 	static VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW();
 
-	static VkPipelineLayoutCreateInfo layout(VkDescriptorSetLayout* setLayouts, uint32_t setLayoutCount,
-			VkPushConstantRange* pushConstantRanges,uint32_t pushConstantRangeCount);
+	static VkPipelineLayoutCreateInfo layout(
+			VkDescriptorSetLayout* setLayouts, 
+			uint32_t setLayoutCount,
+			VkPushConstantRange* pushConstantRanges,
+			uint32_t pushConstantRangeCount);
+
+	static VkPipelineVertexInputStateCreateInfo vertexInputState(
+			VkVertexInputBindingDescription* bindings, 
+			uint32_t bindingsCount,
+			VkVertexInputAttributeDescription* attributes,
+			uint32_t attributesCount);
+
 };
 
 #endif

@@ -6,10 +6,10 @@
 
 struct DeviceInfo {
 	DeviceInfo():
+		samplerAnisotropy(VK_FALSE),
 		maxPushConstantsSize(0),
-		minUniformBufferOffsetAlignment(0)
-	{}
-
+		minUniformBufferOffsetAlignment(0) {}
+	VkBool32 samplerAnisotropy;
 	uint32_t maxPushConstantsSize;
 	VkDeviceSize minUniformBufferOffsetAlignment;
 };
@@ -17,16 +17,14 @@ struct DeviceInfo {
 struct PipelineInfo {
 	PipelineInfo(): 
 		pipeline(VK_NULL_HANDLE),
-		pipelineLayout(VK_NULL_HANDLE) 
-	{}
+		pipelineLayout(VK_NULL_HANDLE) {}
 
 	VkPipeline pipeline;
 	VkPipelineLayout pipelineLayout;
 };
 
 struct ShaderInfo {
-	ShaderInfo()	
-	{}
+	ShaderInfo() {}
 
 	VkPipelineShaderStageCreateInfo vertex;
 	VkPipelineShaderStageCreateInfo fragment;
@@ -39,7 +37,11 @@ struct Pipelines {
 };
 
 struct DescriptorSets {
-	
+
+};
+
+struct DescriptorSetLayouts {
+	VkDescriptorSetLayout quad;
 };
 
 struct Shaders {
@@ -55,7 +57,8 @@ struct VulkanState {
 		swapChain(VK_NULL_HANDLE),
 		graphicsQueue(VK_NULL_HANDLE), 
 		presentQueue(VK_NULL_HANDLE),
-		commandPool(VK_NULL_HANDLE) 
+		commandPool(VK_NULL_HANDLE),
+		descriptorPool(VK_NULL_HANDLE)
 	{};
 	
 	// Disallow copy constructor for VulkanState.
@@ -80,13 +83,14 @@ struct VulkanState {
 	VkRenderPass renderPass;
 	
 	VkCommandPool commandPool;
+	VkDescriptorPool descriptorPool;
 
 	VkFormat depthFormat;
 
 	DeviceInfo deviceInfo;
 	Pipelines pipelines;
 	Shaders shaders;
-	DescriptorSets descriptorSets;
+	DescriptorSetLayouts descriptorSetLayouts;
 };
 
 #endif

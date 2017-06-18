@@ -42,7 +42,8 @@ public:
 	static uint32_t const UBO_SIZE = sizeof(UBO);
 	static uint32_t const PUSH_CONST_SIZE = sizeof(PushConstants);
 
-	static void createPipeline(VulkanState& state, PipelineInfo& info);
+
+	static void createPipeline(VulkanState& state);
 
 	Quad(VulkanState& vulkanState);
 	~Quad();
@@ -62,7 +63,7 @@ public:
 				 mIndexBufferOffset, 
 				 mUniformBufferOffset;
 
-	VkPipeline mVkPipeline;
+	//VkPipeline mVkPipeline;
 	VkRenderPass renderPass;
 
 	VulkanState& mVulkanState;
@@ -70,11 +71,11 @@ public:
 	BufferInfo mCommonStagingBufferInfo;
 	BufferInfo mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;
 	ImageInfo *mTextureDesc;
-	VkDescriptorSetLayout mVkDescriptorSetLayout;
+	//VkDescriptorSetLayout mVkDescriptorSetLayout;
 	VkSampler mTextureSampler;
 	
-	VkPipelineLayout mVkPipelineLayout;
-	VkDescriptorPool mVkDescriptorPool;
+	//VkPipelineLayout mVkPipelineLayout;
+	//VkDescriptorPool mVkDescriptorPool;
 	VkDescriptorSet mVkDescriptorSet;
 
 private:

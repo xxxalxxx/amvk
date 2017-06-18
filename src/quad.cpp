@@ -20,8 +20,8 @@ Quad::~Quad()
 
 void Quad::init()
 {
-	createDescriptorSetLayout();
-	createPipeline();
+	//createDescriptorSetLayout();
+	//createPipeline();
 	TextureDesc textureDesc(FileManager::getResourcePath("texture/statue.jpg"));//"texture/statue.jpg"));
 	mTextureDesc = TextureManager::load(
 			mVulkanState, 
@@ -31,7 +31,7 @@ void Quad::init()
 
 	createBuffers();
 
-	createDescriptorPool();
+	//createDescriptorPool();
 	createDescriptorSet();
 }
 
@@ -74,7 +74,6 @@ void Quad::updateUniformBuffers(const Timer& timer, Camera& camera)
 			mUniformBufferDesc.buffer, 
 			sizeof(ubo));
 	*/
-
 }
 
 void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera) 
@@ -92,7 +91,7 @@ void Quad::updatePushConstants(VkCommandBuffer& commandBuffer, const Timer& time
 	pushConstants.proj = camera.proj();
 	vkCmdPushConstants(
 			commandBuffer, 
-			mVkPipelineLayout, 
+			mVulkanState.pipelines.quad.pipelineLayout, 
 			VK_SHADER_STAGE_VERTEX_BIT, 
 			0,
 			sizeof(PushConstants),
@@ -112,7 +111,7 @@ void Quad::draw(VkCommandBuffer& commandBuffer)
 	vkCmdBindDescriptorSets(
 			commandBuffer, 
 			VK_PIPELINE_BIND_POINT_GRAPHICS, 
-			mVkPipelineLayout, 
+			mVulkanState.pipelines.quad.pipelineLayout, 
 			0, 
 			1, 
 			&mVkDescriptorSet, 
@@ -258,7 +257,7 @@ VkVertexInputBindingDescription Quad::getBindingDesc() const
 
 	return bindDesc;
 }
-
+/*
 void Quad::createDescriptorPool()
 {
 	std::array<VkDescriptorPoolSize, 2> poolSizes = {};
@@ -274,7 +273,7 @@ void Quad::createDescriptorPool()
 	poolInfo.maxSets = 1;
 
 	VK_CHECK_RESULT(vkCreateDescriptorPool(mVulkanState.device, &poolInfo, nullptr, &mVkDescriptorPool));
-}
+}*/
 
 VkPipelineVertexInputStateCreateInfo Quad::getVertexInputStateCreateInfo(
 		VkVertexInputBindingDescription& bindingDesc, 
@@ -308,10 +307,10 @@ std::array<VkVertexInputAttributeDescription, 3> Quad::getAttrDesc() const
 
 void Quad::createDescriptorSet() 
 {
-	VkDescriptorSetLayout layouts[] = { mVkDescriptorSetLayout };
+	VkDescriptorSetLayout layouts[] = { mVulkanState.descriptorSetLayouts.quad };
 	VkDescriptorSetAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-	allocInfo.descriptorPool = mVkDescriptorPool;
+	allocInfo.descriptorPool = mVulkanState.descriptorPool;
 	allocInfo.descriptorSetCount = 1;
 	allocInfo.pSetLayouts = layouts;
 
@@ -349,7 +348,7 @@ void Quad::createDescriptorSet()
 }
 
 
-
+/*
 void Quad::createPipeline()
 {
 	VkPipelineShaderStageCreateInfo vertStageCreateInfo = PipelineCreator::shaderStage(mVulkanState.device, "shader.vert", VK_SHADER_STAGE_VERTEX_BIT);
@@ -414,8 +413,9 @@ void Quad::createPipeline()
 
 	VK_CHECK_RESULT(vkCreateGraphicsPipelines(mVulkanState.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &mVkPipeline));
 	LOG("PIPELINE CREATED");
-}
+}*/
 
+/*
 void Quad::createDescriptorSetLayout()
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
@@ -441,32 +441,61 @@ void Quad::createDescriptorSetLayout()
 
 	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(mVulkanState.device, &descSetLayoutInfo, nullptr, &mVkDescriptorSetLayout));
 	LOG("DESC LAYOUT CREATED");
-}
+}*/
 
-void Quad::createPipeline(VulkanState& state, PipelineInfo& info)
+
+void Quad::createPipeline(VulkanState& state)
 {
 	VkPipelineShaderStageCreateInfo stages[] = {
 		state.shaders.quad.vertex,
 		state.shaders.quad.fragment
 	};
 
-	VkVertexInputBindingDescription bindDesc = {};
-	bindDesc.binding = 0;
-	bindDesc.stride = VERTEX_SIZE;
-	bindDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+	VkVertexInputBindingDescription bindingDesc = {};
+	bindingDesc.binding = 0;
+	bindingDesc.stride = VERTEX_SIZE;
+	bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-	// uint32_t    location;
-    // uint32_t    binding;
-    // VkFormat    format;
-    // uint32_t    offset;
+	VkVertexInputAttributeDescription positionDesc = {};
+	positionDesc.location = 0;
+	positionDesc.binding = 0;
+	positionDesc.format = VK_FORMAT_R32G32B32_SFLOAT;
+	positionDesc.offset = offsetof(Vertex, pos);
 
-	std::array<VkVertexInputAttributeDescription, 3> attrDesc = {{
+	VkVertexInputAttributeDescription colorDesc = {};
+	colorDesc.location = 1;
+	colorDesc.binding = 0;
+	colorDesc.format = VK_FORMAT_R32G32B32_SFLOAT;
+	colorDesc.offset = offsetof(Vertex, color);
+
+	VkVertexInputAttributeDescription textCoordDesc = {};
+	positionDesc.location = 2;
+	positionDesc.binding = 0;
+	positionDesc.format = VK_FORMAT_R32G32_SFLOAT;
+	positionDesc.offset = offsetof(Vertex, texCoord);
+
+
+	/*std::array<VkVertexInputAttributeDescription, 3> attrDesc = {{
 		{ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos) },
 		{ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) },
 		{ 2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCoord) }
-	}};
+	}};*/
 
-	auto vertexInputInfo = getVertexInputStateCreateInfo(bindingDesc, attrDesc);
+
+
+	/*std::array<VkVertexInputAttributeDescription, 3> attrDesc = {{
+		positionDesc,
+		colorDesc,
+		textCoordDesc
+	}};*/
+
+	VkVertexInputAttributeDescription attrDesc[] = { 
+		{ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos) },
+		{ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) },
+		{ 2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCoord) }
+	};
+
+	auto vertexInputInfo = PipelineCreator::vertexInputState(&bindingDesc, 1, attrDesc, ARRAY_SIZE(attrDesc)); 
 
 	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = PipelineCreator::inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
 	VkPipelineViewportStateCreateInfo viewportState = PipelineCreator::viewportStateDynamic();
@@ -483,8 +512,6 @@ void Quad::createPipeline(VulkanState& state, PipelineInfo& info)
 	VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
 
 	VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1); 
-
-	VkDescriptorSetLayout setLayouts[] = { mVkDescriptorSetLayout };
 	
 	VkPhysicalDeviceProperties physicalDeviceProperties;
 	vkGetPhysicalDeviceProperties(state.physicalDevice, &physicalDeviceProperties);
@@ -495,7 +522,7 @@ void Quad::createPipeline(VulkanState& state, PipelineInfo& info)
 			0,
 			PUSH_CONST_SIZE);
 
-	VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(setLayouts, 1, &pushConstantRange, 1);
+	VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(&state.descriptorSetLayouts.quad, 1, &pushConstantRange, 1);
 
 	VK_CHECK_RESULT(vkCreatePipelineLayout(state.device, &pipelineLayoutInfo, nullptr, &state.pipelines.quad.pipelineLayout));
 
@@ -520,4 +547,5 @@ void Quad::createPipeline(VulkanState& state, PipelineInfo& info)
 	LOG("PIPELINE CREATED");
 
 }
+
 

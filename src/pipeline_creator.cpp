@@ -198,3 +198,19 @@ VkPipelineLayoutCreateInfo PipelineCreator::layout(
 
 	return pipelineLayoutInfo;
 }
+
+VkPipelineVertexInputStateCreateInfo PipelineCreator::vertexInputState(
+		VkVertexInputBindingDescription* bindings, 
+		uint32_t bindingsCount,
+		VkVertexInputAttributeDescription* attributes,
+		uint32_t attributesCount)
+{
+	VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
+	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+	vertexInputInfo.vertexBindingDescriptionCount = bindingsCount;
+	vertexInputInfo.pVertexBindingDescriptions = &bindings[0];
+	vertexInputInfo.vertexAttributeDescriptionCount = attributesCount;
+	vertexInputInfo.pVertexAttributeDescriptions = &attributes[0];
+	
+	return vertexInputInfo;
+}

@@ -45,6 +45,8 @@
 #include "texture_manager.h"
 #include "device_manager.h"
 #include "swapchain_manager.h"
+#include "shader_manager.h"
+#include "descriptor_manager.h"
 #include "quad.h"
 #include "model.h"
 
@@ -67,16 +69,14 @@ public:
 
 
 private:
-	void createShaders();
-	void createPipelines();
-	void createDescriptorPool();
-
 	void updateUniformBuffer(const Timer& timer);
 
 	Window& mWindow;
 	VulkanState mVulkanState;
 	DeviceManager mDeviceManager;
 	SwapchainManager mSwapChainManager;
+	ShaderManager mShaderManager;
+	DescriptorManager mDescriptorManager;
 	Quad mQuad;
 	Model mSuit;
 };

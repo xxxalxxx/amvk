@@ -5,6 +5,8 @@ VulkanManager::VulkanManager(Window& window):
 	mWindow(window),
 	mDeviceManager(mVulkanState),
 	mSwapChainManager(mVulkanState, mWindow),
+	mShaderManager(mVulkanState),
+	mDescriptorManager(mVulkanState),
 	mQuad(mVulkanState),
 	mSuit(mVulkanState)
 {
@@ -25,9 +27,6 @@ void VulkanManager::init()
 	mDeviceManager.createPhysicalDevice(mSwapChainManager);
 	mDeviceManager.createLogicalDevice();
 
-	createShaders();
-	createDescriptorPool();
-	createPipelines();
 
 
 	mSwapChainManager.createSwapChain();
@@ -35,6 +34,13 @@ void VulkanManager::init()
 	
 	mSwapChainManager.createRenderPass();
 	mSwapChainManager.createCommandPool();
+
+	mShaderManager.createShaders();
+	mDescriptorManager.createDescriptorSetLayouts();
+	mDescriptorManager.createDescriptorPool();
+
+	Quad::createPipeline(mVulkanState);
+
 	mQuad.init();
 
 //	mSuit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"));
@@ -47,23 +53,6 @@ void VulkanManager::init()
 	
 	LOG("INIT SUCCESSFUL");
 }
-
-void VulkanManager::createShaders() 
-{
-	mVulkanState.shaders.quad.vertex = PipelineCreator::shaderStage(mVulkanState.device, "shader.vert", VK_SHADER_STAGE_VERTEX_BIT);
-	mVulkanState.shaders.quad.fragment = PipelineCreator::shaderStage(mVulkanState.device, "shader.frag", VK_SHADER_STAGE_VERTEX_BIT);
-}
-
-void VulkanManager::createPipelines() 
-{
-
-}
-
-void VulkanManager::createDescriptorPool() 
-{
-
-}
-
 
 void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera) 
 {
@@ -95,7 +84,7 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 		renderPassBeginInfo.framebuffer = mSwapChainManager.mSwapChainFramebuffers[i];
 		
 		vkCmdBeginRenderPass( mSwapChainManager.mVkCommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-		vkCmdBindPipeline( mSwapChainManager.mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mQuad.mVkPipeline);
+		vkCmdBindPipeline( mSwapChainManager.mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mVulkanState.pipelines.quad.pipeline);
 		mQuad.update( mSwapChainManager.mVkCommandBuffers[i], timer, camera);
 
 		VkViewport viewport;

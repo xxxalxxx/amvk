@@ -178,10 +178,16 @@ void DeviceManager::createLogicalDevice()
 
 
 	//init device info
+	VkPhysicalDeviceFeatures physicalDeviceFeatures;
 	VkPhysicalDeviceProperties physicalDeviceProperties;
+
+	vkGetPhysicalDeviceFeatures(mVulkanState.physicalDevice, &physicalDeviceFeatures);
 	vkGetPhysicalDeviceProperties(mVulkanState.physicalDevice, &physicalDeviceProperties); 
+	
+	mVulkanState.deviceInfo.samplerAnisotropy = physicalDeviceFeatures.samplerAnisotropy;
 	mVulkanState.deviceInfo.maxPushConstantsSize = physicalDeviceProperties.limits.maxPushConstantsSize;
 	mVulkanState.deviceInfo.minUniformBufferOffsetAlignment = physicalDeviceProperties.limits.minUniformBufferOffsetAlignment;
+	LOG("ANISOTROPY " << physicalDeviceFeatures.samplerAnisotropy); 
 	LOG("MAX PUSH CONST SIZE max:" << mVulkanState.deviceInfo.maxPushConstantsSize);
 
 	LOG("LOGICAL DEVICE CREATED");
