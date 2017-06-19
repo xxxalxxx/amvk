@@ -347,103 +347,6 @@ void Quad::createDescriptorSet()
 	vkUpdateDescriptorSets(mVulkanState.device, writeSets.size(), writeSets.data(), 0, nullptr);
 }
 
-
-/*
-void Quad::createPipeline()
-{
-	VkPipelineShaderStageCreateInfo vertStageCreateInfo = PipelineCreator::shaderStage(mVulkanState.device, "shader.vert", VK_SHADER_STAGE_VERTEX_BIT);
-	VkPipelineShaderStageCreateInfo fragStageCreateInfo = PipelineCreator::shaderStage(mVulkanState.device, "shader.frag", VK_SHADER_STAGE_FRAGMENT_BIT);
-
-	VkPipelineShaderStageCreateInfo stages[] = {
-		vertStageCreateInfo,
-		fragStageCreateInfo
-	};
-
-	auto bindingDesc = getBindingDesc();
-	auto attrDesc = getAttrDesc();
-	auto vertexInputInfo = getVertexInputStateCreateInfo(bindingDesc, attrDesc);
-
-	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = PipelineCreator::inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-	VkPipelineViewportStateCreateInfo viewportState = PipelineCreator::viewportStateDynamic();
-
-	VkDynamicState dynamicStates[] = {
-		VK_DYNAMIC_STATE_VIEWPORT,
-		VK_DYNAMIC_STATE_SCISSOR
-	};
-
-	VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
-	VkPipelineRasterizationStateCreateInfo rasterizationState = PipelineCreator::rasterizationStateCullBackCCW();
-	VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessNoStencil();
-	VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
-	VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
-
-	VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1); 
-
-	VkDescriptorSetLayout setLayouts[] = { mVkDescriptorSetLayout };
-	
-	VkPhysicalDeviceProperties physicalDeviceProperties;
-	vkGetPhysicalDeviceProperties(mVulkanState.physicalDevice, &physicalDeviceProperties);
-
-	VkPushConstantRange pushConstantRange = PipelineCreator::pushConstantRange(
-			mVulkanState,
-			VK_SHADER_STAGE_VERTEX_BIT, 
-			0,
-			sizeof(PushConstants));
-
-	VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(setLayouts, 1, &pushConstantRange, 1);
-
-	VK_CHECK_RESULT(vkCreatePipelineLayout(mVulkanState.device, &pipelineLayoutInfo, nullptr, &mVkPipelineLayout));
-
-	VkGraphicsPipelineCreateInfo pipelineInfo = {};
-	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-	pipelineInfo.stageCount = ARRAY_SIZE(stages);
-	pipelineInfo.pStages = stages;
-	pipelineInfo.pVertexInputState = &vertexInputInfo;
-	pipelineInfo.pInputAssemblyState = &assemblyInfo;
-	pipelineInfo.pViewportState = &viewportState;
-	pipelineInfo.pRasterizationState = &rasterizationState;
-	pipelineInfo.pMultisampleState = &multisampleState;
-	pipelineInfo.pDepthStencilState = &depthStencil;
-	pipelineInfo.pColorBlendState = &blendState;
-	pipelineInfo.pDynamicState = &dynamicInfo;
-	pipelineInfo.layout = mVkPipelineLayout;
-	pipelineInfo.renderPass = mVulkanState.renderPass;
-	pipelineInfo.subpass = 0;
-	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
-
-	VK_CHECK_RESULT(vkCreateGraphicsPipelines(mVulkanState.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &mVkPipeline));
-	LOG("PIPELINE CREATED");
-}*/
-
-/*
-void Quad::createDescriptorSetLayout()
-{
-	VkDescriptorSetLayoutBinding descSetBinding = {};
-	descSetBinding.binding = 0;
-	descSetBinding.descriptorCount = 1;
-	descSetBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	descSetBinding.pImmutableSamplers = nullptr;
-	descSetBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-
-	VkDescriptorSetLayoutBinding samplerLayoutBinding = {};
-	samplerLayoutBinding.binding = 1;
-	samplerLayoutBinding.descriptorCount = 1;
-	samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	samplerLayoutBinding.pImmutableSamplers = nullptr;
-	samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-	
-	std::array<VkDescriptorSetLayoutBinding, 2> bindings = {{descSetBinding, samplerLayoutBinding}};
-
-	VkDescriptorSetLayoutCreateInfo descSetLayoutInfo = {};
-	descSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	descSetLayoutInfo.bindingCount = bindings.size();
-	descSetLayoutInfo.pBindings = bindings.data();
-
-	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(mVulkanState.device, &descSetLayoutInfo, nullptr, &mVkDescriptorSetLayout));
-	LOG("DESC LAYOUT CREATED");
-}*/
-
-
 void Quad::createPipeline(VulkanState& state)
 {
 	VkPipelineShaderStageCreateInfo stages[] = {
@@ -491,13 +394,10 @@ void Quad::createPipeline(VulkanState& state)
 			PUSH_CONST_SIZE);
 
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(&state.descriptorSetLayouts.quad, 1, &pushConstantRange, 1);
-	VkPipelineCacheCreateInfo pipelineCacheCreateInfo;
-	
-	auto cache = FileManager::getInstance().readCache("quad");
-	PipelineCreator::pipelineCache(state.device, cache, pipelineCacheCreateInfo);
-
-	VK_CHECK_RESULT(vkCreatePipelineCache(state.device, &pipelineCacheCreateInfo, nullptr, &state.pipelines.quad.cache));
 	VK_CHECK_RESULT(vkCreatePipelineLayout(state.device, &pipelineLayoutInfo, nullptr, &state.pipelines.quad.layout));
+
+	PipelineCacheInfo cacheInfo("quad", state.pipelines.quad.cache);
+	cacheInfo.getCache(state.device);
 
 	VkGraphicsPipelineCreateInfo pipelineInfo = {};
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -518,17 +418,7 @@ void Quad::createPipeline(VulkanState& state)
 
 	VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &state.pipelines.quad.pipeline));
 	
-	if (cache.size() == 0) {
-		LOG("CREATE CACHE");
-		size_t cacheSize;
-		VK_CHECK_RESULT(vkGetPipelineCacheData(state.device, state.pipelines.quad.cache, &cacheSize, NULL));
-		char* cacheData = (char*) malloc(cacheSize);
-		VK_CHECK_RESULT(vkGetPipelineCacheData(state.device, state.pipelines.quad.cache, &cacheSize, cacheData));
-		LOG("CACHE SIZE: " << cacheSize << " DATA: " << (const char*) cacheData);
-
-		FileManager::getInstance().writeCache("quad", cacheData, cacheSize);
-		free(cacheData);
-	}
+	cacheInfo.saveCache(state.device);
 
 }
 

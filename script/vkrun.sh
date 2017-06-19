@@ -18,7 +18,6 @@ function compile_shaders()
 	pushd /home/al/amvk/shader
 
 	for filename in *.*; do
-		echo $filename
 		../glslangValidator -V $filename -o spv/$filename.spv
 	done
 

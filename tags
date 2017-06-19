@@ -1002,7 +1002,7 @@ FileManager::mEngineRoot	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot
 FileManager::mModelsDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
 FileManager::mResourceDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
 FileManager::mShaderDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, mResourceDir, mModelsDir, mCacheDir;$/;"	m	class:FileManager	access:private
-FileManager::readCache	src/file_manager.cpp	/^std::vector<char> FileManager::readCache(const std::string& cacheName)$/;"	f	class:FileManager	signature:(const std::string& cacheName)
+FileManager::readCache	src/file_manager.cpp	/^void FileManager::readCache(std::vector<char>& out, const std::string& cacheName)$/;"	f	class:FileManager	signature:(std::vector<char>& out, const std::string& cacheName)
 FileManager::readFile	src/file_manager.cpp	/^std::vector<char> FileManager::readFile(const std::string& filename) $/;"	f	class:FileManager	signature:(const std::string& filename)
 FileManager::readShader	src/file_manager.cpp	/^std::vector<char> FileManager::readShader(const std::string& shaderName)$/;"	f	class:FileManager	signature:(const std::string& shaderName)
 FileManager::writeCache	src/file_manager.cpp	/^void FileManager::writeCache(const char* cacheName, void* data, size_t size)$/;"	f	class:FileManager	signature:(const char* cacheName, void* data, size_t size)
@@ -2652,6 +2652,16 @@ PTRDIFF_MIN	lib/assimp/Compiler/pstdint.h	770;"	d
 PUSH_CONST_SIZE	inc/quad.h	/^	static uint32_t const PUSH_CONST_SIZE = sizeof(PushConstants);$/;"	m	class:Quad	access:public
 Pimpl	lib/assimp/Importer.hpp	/^    ImporterPimpl* Pimpl() { return pimpl; }$/;"	f	class:Assimp::Importer	access:public	signature:()
 Pimpl	lib/assimp/Importer.hpp	/^    const ImporterPimpl* Pimpl() const { return pimpl; }$/;"	f	class:Assimp::Importer	access:public	signature:() const
+PipelineCacheInfo	inc/pipeline_manager.h	/^struct PipelineCacheInfo {$/;"	s
+PipelineCacheInfo	src/pipeline_manager.cpp	/^PipelineCacheInfo::PipelineCacheInfo(const char* cacheName, VkPipelineCache& pipelineCache):$/;"	f	class:PipelineCacheInfo	signature:(const char* cacheName, VkPipelineCache& pipelineCache)
+PipelineCacheInfo::PipelineCacheInfo	src/pipeline_manager.cpp	/^PipelineCacheInfo::PipelineCacheInfo(const char* cacheName, VkPipelineCache& pipelineCache):$/;"	f	class:PipelineCacheInfo	signature:(const char* cacheName, VkPipelineCache& pipelineCache)
+PipelineCacheInfo::cacheName	inc/pipeline_manager.h	/^	const char* cacheName;$/;"	m	struct:PipelineCacheInfo	access:public
+PipelineCacheInfo::createInfo	inc/pipeline_manager.h	/^	VkPipelineCacheCreateInfo createInfo;$/;"	m	struct:PipelineCacheInfo	access:public
+PipelineCacheInfo::data	inc/pipeline_manager.h	/^	std::vector<char> data;$/;"	m	struct:PipelineCacheInfo	access:public
+PipelineCacheInfo::getCache	src/pipeline_manager.cpp	/^void PipelineCacheInfo::getCache(const VkDevice& device) $/;"	f	class:PipelineCacheInfo	signature:(const VkDevice& device)
+PipelineCacheInfo::hasCache	inc/pipeline_manager.h	/^	bool hasCache;$/;"	m	struct:PipelineCacheInfo	access:public
+PipelineCacheInfo::pipelineCache	inc/pipeline_manager.h	/^	VkPipelineCache& pipelineCache;$/;"	m	struct:PipelineCacheInfo	access:public
+PipelineCacheInfo::saveCache	src/pipeline_manager.cpp	/^void PipelineCacheInfo::saveCache(const VkDevice& device)$/;"	f	class:PipelineCacheInfo	signature:(const VkDevice& device)
 PipelineCreator	inc/pipeline_creator.h	/^class PipelineCreator {$/;"	c
 PipelineCreator::blendAttachmentStateDisabled	src/pipeline_creator.cpp	/^VkPipelineColorBlendAttachmentState PipelineCreator::blendAttachmentStateDisabled() $/;"	f	class:PipelineCreator	signature:()
 PipelineCreator::blendStateDisabled	src/pipeline_creator.cpp	/^VkPipelineColorBlendStateCreateInfo PipelineCreator::blendStateDisabled($/;"	f	class:PipelineCreator	signature:( VkPipelineColorBlendAttachmentState* attachmentStates, uint32_t attachmentCount)
@@ -7821,6 +7831,7 @@ c3	lib/assimp/matrix4x4.h	/^    ai_real c1, c2, c3, c4;$/;"	m	struct:aiMatrix4x4
 c4	lib/assimp/matrix4x4.h	/^    TReal c1, c2, c3, c4;$/;"	m	class:aiMatrix4x4t	access:public
 c4	lib/assimp/matrix4x4.h	/^    ai_real c1, c2, c3, c4;$/;"	m	struct:aiMatrix4x4	access:public
 cache	inc/vulkan_state.h	/^	VkPipelineCache cache;$/;"	m	struct:PipelineInfo	access:public
+cacheName	inc/pipeline_manager.h	/^	const char* cacheName;$/;"	m	struct:PipelineCacheInfo	access:public
 calcAspect	src/window.cpp	/^void Window::calcAspect() $/;"	f	class:Window	signature:()
 call	lib/glm/detail/_vectorize.hpp	/^		GLM_FUNC_QUALIFIER static vec<1, R, P> call(R (*Func) (T x), vec<1, T, P> const & v)$/;"	f	struct:glm::detail::functor1	access:public	signature:(R (Func) T x), vec<1, T, P> const & v)
 call	lib/glm/detail/_vectorize.hpp	/^		GLM_FUNC_QUALIFIER static vec<1, T, P> call(T (*Func) (T x, T y), vec<1, T, P> const & a, T b)$/;"	f	struct:glm::detail::functor2_vec_sca	access:public	signature:(T (Func) T x, T y), vec<1, T, P> const & a, T b)
@@ -7949,6 +7960,7 @@ createImageView	src/vulkan_image_creator.cpp	/^void ImageHelper::createImageView
 createImageViews	src/swapchain_manager.cpp	/^void SwapchainManager::createImageViews() $/;"	f	class:SwapchainManager	signature:()
 createIndexBuffer	src/buffer_helper.cpp	/^void BufferHelper::createIndexBuffer(const VulkanState& state, BufferInfo& bufferInfo)$/;"	f	class:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
 createIndexBuffer	src/quad.cpp	/^void Quad::createIndexBuffer()$/;"	f	class:Quad	signature:()
+createInfo	inc/pipeline_manager.h	/^	VkPipelineCacheCreateInfo createInfo;$/;"	m	struct:PipelineCacheInfo	access:public
 createLogicalDevice	src/device_manager.cpp	/^void DeviceManager::createLogicalDevice() $/;"	f	class:DeviceManager	signature:()
 createPhysicalDevice	src/device_manager.cpp	/^void DeviceManager::createPhysicalDevice(SwapchainManager& swapchainManager) $/;"	f	class:DeviceManager	signature:(SwapchainManager& swapchainManager)
 createPipeline	src/quad.cpp	/^void Quad::createPipeline(VulkanState& state)$/;"	f	class:Quad	signature:(VulkanState& state)
@@ -7987,6 +7999,7 @@ d3	lib/assimp/matrix4x4.h	/^    TReal d1, d2, d3, d4;$/;"	m	class:aiMatrix4x4t	a
 d3	lib/assimp/matrix4x4.h	/^    ai_real d1, d2, d3, d4;$/;"	m	struct:aiMatrix4x4	access:public
 d4	lib/assimp/matrix4x4.h	/^    TReal d1, d2, d3, d4;$/;"	m	class:aiMatrix4x4t	access:public
 d4	lib/assimp/matrix4x4.h	/^    ai_real d1, d2, d3, d4;$/;"	m	struct:aiMatrix4x4	access:public
+data	inc/pipeline_manager.h	/^	std::vector<char> data;$/;"	m	struct:PipelineCacheInfo	access:public
 data	lib/assimp/cexport.h	/^    void* data;$/;"	m	struct:aiExportDataBlob	access:public
 data	lib/assimp/types.h	/^    char data[MAXLEN];$/;"	m	struct:aiString	access:public
 data	lib/glm/detail/type_vec.hpp	/^			uint8 data[size];$/;"	m	struct:glm::detail::storage::type	access:public
@@ -8639,6 +8652,7 @@ getAspect	src/window.cpp	/^float Window::getAspect() const$/;"	f	class:Window	si
 getAttrDesc	src/quad.cpp	/^std::array<VkVertexInputAttributeDescription, 3> Quad::getAttrDesc() const $/;"	f	class:Quad	signature:() const
 getBinPath	src/file_manager.cpp	/^std::string FileManager::getBinPath() $/;"	f	class:FileManager	signature:()
 getBindingDesc	src/quad.cpp	/^VkVertexInputBindingDescription Quad::getBindingDesc() const$/;"	f	class:Quad	signature:() const
+getCache	src/pipeline_manager.cpp	/^void PipelineCacheInfo::getCache(const VkDevice& device) $/;"	f	class:PipelineCacheInfo	signature:(const VkDevice& device)
 getCachePath	src/file_manager.cpp	/^std::string FileManager::getCachePath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
 getCamera	src/engine.cpp	/^Camera& Engine::getCamera()$/;"	f	class:Engine	signature:()
 getChannels	src/texture_data.cpp	/^int TextureData::getChannels() const$/;"	f	class:TextureData	signature:() const
@@ -11446,6 +11460,7 @@ h	lib/stb/stb_image.h	/^   int w,h;$/;"	m	struct:__anon54	access:public
 h2	lib/stb/stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon43::__anon44	access:public
 ha	lib/stb/stb_image.h	/^      int hd,ha;$/;"	m	struct:__anon43::__anon44	access:public
 handleMovement	src/engine.cpp	/^void Engine::handleMovement(double dt) $/;"	f	class:Engine	signature:(double dt)
+hasCache	inc/pipeline_manager.h	/^	bool hasCache;$/;"	m	struct:PipelineCacheInfo	access:public
 hash	inc/texture_data.h	/^    template<> struct hash<TextureDesc> {$/;"	s	namespace:std
 hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::mat<2, 2, T,P> >$/;"	s	namespace:std
 hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::mat<2, 3, T,P> >$/;"	s	namespace:std
@@ -13351,6 +13366,7 @@ pimpl	lib/assimp/Exporter.hpp	/^    ExporterPimpl* pimpl;$/;"	m	class:Assimp::Ex
 pimpl	lib/assimp/Importer.hpp	/^    ImporterPimpl* pimpl;$/;"	m	class:Assimp::Importer	access:protected
 pipeline	inc/vulkan_state.h	/^	VkPipeline pipeline;$/;"	m	struct:PipelineInfo	access:public
 pipelineBindPoint	lib/vulkan/vulkan.h	/^    VkPipelineBindPoint             pipelineBindPoint;$/;"	m	struct:VkSubpassDescription	access:public
+pipelineCache	inc/pipeline_manager.h	/^	VkPipelineCache& pipelineCache;$/;"	m	struct:PipelineCacheInfo	access:public
 pipelineCache	src/pipeline_creator.cpp	/^void PipelineCreator::pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)$/;"	f	class:PipelineCreator	signature:(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)
 pipelineCacheUUID	lib/vulkan/vulkan.h	/^    uint8_t                             pipelineCacheUUID[VK_UUID_SIZE];$/;"	m	struct:VkPhysicalDeviceProperties	access:public
 pipelineStatistics	lib/vulkan/vulkan.h	/^    VkQueryPipelineStatisticFlags    pipelineStatistics;$/;"	m	struct:VkCommandBufferInheritanceInfo	access:public
@@ -13445,7 +13461,7 @@ ratio	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, d
 raw_coeff	lib/stb/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon43::__anon44	access:public
 raw_data	lib/stb/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon43::__anon44	access:public
 read	lib/stb/stb_image.h	/^   int      (*read)  (void *user,char *data,int size);   \/\/ fill 'data' with 'size' bytes.  return number of bytes actually read$/;"	m	struct:__anon39	access:public
-readCache	src/file_manager.cpp	/^std::vector<char> FileManager::readCache(const std::string& cacheName)$/;"	f	class:FileManager	signature:(const std::string& cacheName)
+readCache	src/file_manager.cpp	/^void FileManager::readCache(std::vector<char>& out, const std::string& cacheName)$/;"	f	class:FileManager	signature:(std::vector<char>& out, const std::string& cacheName)
 readFile	src/file_manager.cpp	/^std::vector<char> FileManager::readFile(const std::string& filename) $/;"	f	class:FileManager	signature:(const std::string& filename)
 readShader	src/file_manager.cpp	/^std::vector<char> FileManager::readShader(const std::string& shaderName)$/;"	f	class:FileManager	signature:(const std::string& shaderName)
 read_from_callbacks	lib/stb/stb_image.h	/^   int read_from_callbacks;$/;"	m	struct:__anon40	access:public
@@ -13600,6 +13616,7 @@ saturate	lib/glm/gtx/compatibility.hpp	/^	template<typename T, precision P> GLM_
 saturate	lib/glm/gtx/compatibility.hpp	/^	template<typename T, precision P> GLM_FUNC_QUALIFIER vec<2, T, P> saturate(const vec<2, T, P>& x){return clamp(x, T(0), T(1));}					\/\/!< \\brief Returns clamp(x, 0, 1) for each component in x. (From GLM_GTX_compatibility)$/;"	f	namespace:glm	signature:(const vec<2, T, P>& x)
 saturate	lib/glm/gtx/compatibility.hpp	/^	template<typename T, precision P> GLM_FUNC_QUALIFIER vec<3, T, P> saturate(const vec<3, T, P>& x){return clamp(x, T(0), T(1));}					\/\/!< \\brief Returns clamp(x, 0, 1) for each component in x. (From GLM_GTX_compatibility)$/;"	f	namespace:glm	signature:(const vec<3, T, P>& x)
 saturate	lib/glm/gtx/compatibility.hpp	/^	template<typename T, precision P> GLM_FUNC_QUALIFIER vec<4, T, P> saturate(const vec<4, T, P>& x){return clamp(x, T(0), T(1));}					\/\/!< \\brief Returns clamp(x, 0, 1) for each component in x. (From GLM_GTX_compatibility)$/;"	f	namespace:glm	signature:(const vec<4, T, P>& x)
+saveCache	src/pipeline_manager.cpp	/^void PipelineCacheInfo::saveCache(const VkDevice& device)$/;"	f	class:PipelineCacheInfo	signature:(const VkDevice& device)
 scan_n	lib/stb/stb_image.h	/^   int scan_n, order[4];$/;"	m	struct:__anon43	access:public
 scissorCount	lib/vulkan/vulkan.h	/^    uint32_t                              scissorCount;$/;"	m	struct:VkPipelineViewportStateCreateInfo	access:public
 scrollCallback	src/engine.cpp	/^void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)$/;"	f	signature:(GLFWwindow* window, double xoffset, double yoffset)

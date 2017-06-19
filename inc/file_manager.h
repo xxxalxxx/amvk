@@ -29,8 +29,8 @@ public:
 	static std::string getCachePath(std::string&& path); 
 
 
+	static void readCache(std::vector<char>& out, const std::string& cacheName);
 	static std::vector<char> readFile(const std::string& filename); 
-	static std::vector<char> readCache(const std::string& cacheName); 
 	static std::vector<char> readShader(const std::string& shaderName);
 	static void writeCache(const char* cacheName, void* data, size_t size);
 

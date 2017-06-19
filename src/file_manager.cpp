@@ -70,7 +70,7 @@ std::vector<char> FileManager::readFile(const std::string& filename)
 	return buffer;
 }
 
-std::vector<char> FileManager::readCache(const std::string& cacheName)
+void FileManager::readCache(std::vector<char>& out, const std::string& cacheName)
 {
 	std::string filename = FileManager::getInstance().mCacheDir + cacheName;
 	LOG("CACHE FILE NAME:" << filename);
@@ -78,19 +78,18 @@ std::vector<char> FileManager::readCache(const std::string& cacheName)
 
 	if (!file.is_open()) {
 		LOG("CACHE CANNOT BE OPENED");
-		std::vector<char> buffer;
-		return buffer;
+		out.clear();
+		return;
 	} 
 
 
 	size_t fileSize = (size_t) file.tellg();
-	std::vector<char> buffer(fileSize);
+	out.resize(fileSize);
 
 	file.seekg(0);
-	file.read(buffer.data(), fileSize);
+	file.read(out.data(), fileSize);
 	file.close();
 	LOG("RETURNING CACHED: " << fileSize);
-	return buffer;
 }
 
 
