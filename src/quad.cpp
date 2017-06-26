@@ -8,7 +8,6 @@ Quad::Quad(VulkanState& vulkanState):
 	mIndexBufferDesc(vulkanState.device),
 	mUniformBufferDesc(vulkanState.device),
 	mUniformStagingBufferDesc(vulkanState.device)
-	//mTextureDesc(vulkanState.device)
 {
 	
 }
@@ -20,8 +19,6 @@ Quad::~Quad()
 
 void Quad::init()
 {
-	//createDescriptorSetLayout();
-	//createPipeline();
 	TextureDesc textureDesc(FileManager::getResourcePath("texture/statue.jpg"));//"texture/statue.jpg"));
 	mTextureDesc = TextureManager::load(
 			mVulkanState, 
@@ -30,12 +27,10 @@ void Quad::init()
 			textureDesc);
 
 	createBuffers();
-
-	//createDescriptorPool();
 	createDescriptorSet();
 }
 
-void Quad::updateUniformBuffers(const Timer& timer, Camera& camera) 
+void Quad::updateUniformBuffers(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera) 
 {
 	UBO ubo = {};
 	ubo.model = glm::mat4();
@@ -54,10 +49,10 @@ void Quad::updateUniformBuffers(const Timer& timer, Camera& camera)
 			sizeof(ubo));
 	*/
 
-	CmdPass cmdPass(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue); 
+	//CmdPass cmdPass(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue); 
 
 	vkCmdUpdateBuffer(
-			cmdPass.buffer,
+			commandBuffer,
 			mCommonBufferInfo.buffer,
 			mUniformBufferOffset,
 			UBO_SIZE,
@@ -100,6 +95,8 @@ void Quad::updatePushConstants(VkCommandBuffer& commandBuffer, const Timer& time
 
 void Quad::draw(VkCommandBuffer& commandBuffer) 
 {
+	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, mVulkanState.pipelines.quad.pipeline);
+
 	VkDeviceSize offset = mVertexBufferOffset;
 	VkBuffer& commonBuff = mCommonBufferInfo.buffer;
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &commonBuff, &offset);
@@ -245,65 +242,6 @@ void Quad::createUniformBuffer()
 	BufferHelper::createStagingBuffer(mVulkanState, mUniformStagingBufferDesc);
 	BufferHelper::createUniformBuffer(mVulkanState, mUniformBufferDesc);
 }
-
-
-
-VkVertexInputBindingDescription Quad::getBindingDesc() const
-{
-	VkVertexInputBindingDescription bindDesc = {};
-	bindDesc.binding = 0;
-	bindDesc.stride = VERTEX_SIZE;
-	bindDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-	return bindDesc;
-}
-/*
-void Quad::createDescriptorPool()
-{
-	std::array<VkDescriptorPoolSize, 2> poolSizes = {};
-	poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	poolSizes[0].descriptorCount = 1;
-	poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	poolSizes[1].descriptorCount = 1;
-
-	VkDescriptorPoolCreateInfo poolInfo = {};
-	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-	poolInfo.poolSizeCount = poolSizes.size();
-	poolInfo.pPoolSizes = poolSizes.data();
-	poolInfo.maxSets = 1;
-
-	VK_CHECK_RESULT(vkCreateDescriptorPool(mVulkanState.device, &poolInfo, nullptr, &mVkDescriptorPool));
-}*/
-
-VkPipelineVertexInputStateCreateInfo Quad::getVertexInputStateCreateInfo(
-		VkVertexInputBindingDescription& bindingDesc, 
-		std::array<VkVertexInputAttributeDescription, 3>& attrDesc) const
-{
-	VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
-	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-	vertexInputInfo.vertexBindingDescriptionCount = 1;
-	vertexInputInfo.pVertexBindingDescriptions = &bindingDesc;
-	vertexInputInfo.vertexAttributeDescriptionCount = attrDesc.size();
-	vertexInputInfo.pVertexAttributeDescriptions = attrDesc.data();
-
-	return vertexInputInfo;
-}
-
-std::array<VkVertexInputAttributeDescription, 3> Quad::getAttrDesc() const 
-{
-    // uint32_t    location;
-    // uint32_t    binding;
-    // VkFormat    format;
-    // uint32_t    offset;
-
-	std::array<VkVertexInputAttributeDescription, 3> attrDesc = {{
-		{ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos) },
-		{ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) },
-		{ 2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCoord) }
-	}};
-
-	return attrDesc;
-} 
 
 void Quad::createDescriptorSet() 
 {

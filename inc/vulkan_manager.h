@@ -60,6 +60,7 @@ public:
 	void init();
 
 	void updateCommandBuffers(const Timer& timer, Camera& camera);
+	void updateUniformBuffers(const Timer& timer, Camera& camera);
 	void draw();
 	
 	void waitIdle();
@@ -79,6 +80,7 @@ private:
 	DescriptorManager mDescriptorManager;
 	Quad mQuad;
 	Model mSuit;
+	uint32_t imageIndex;
 };
 
 #endif

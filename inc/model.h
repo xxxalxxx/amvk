@@ -15,6 +15,9 @@
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
 
+#include "macro.h"
+#include "util.h"
+#include "pipeline_manager.h"
 #include "buffer_helper.h"
 #include "vulkan_image_creator.h"
 #include "vulkan_image_info.h"
@@ -42,11 +45,21 @@ public:
 	};
 
 	struct Material {
+		Material(): 
+			numImages(0), 
+			minImages(1), 
+			maxImages(1) {}
+
 		std::vector<ImageInfo*> 
 			diffuseImages, 
 			specularImages, 
 			heightImages, 
-			ambientImages; 
+			ambientImages;
+		
+		std::vector<VkDescriptorSet> descriptors;
+
+		uint32_t numImages;
+		uint32_t minImages, maxImages;
 	}; 
 
 	struct Mesh {
@@ -56,8 +69,19 @@ public:
 		uint32_t materialIndex;
 	};
 
+	static const aiTextureType* TEXTURE_TYPES;
+	static const uint32_t NUM_TEXTURE_TYPES;
+	static constexpr uint32_t const DEFAULT_FLAGS = aiProcess_CalcTangentSpace
+		| aiProcess_Triangulate 
+		| aiProcess_JoinIdenticalVertices  
+		| aiProcess_SortByPType;
+
+	static void convertVector(const aiVector3D& src, glm::vec3& dest);
+	static void convertVector(const aiVector3D& src, glm::vec2& dest);
+	static void createPipeline(VulkanState& state);
+
 	Model(VulkanState& vulkanState);
-	~Model();
+	virtual ~Model();
 
 	void init(const char* modelPath, 
 		unsigned int pFlags = 
@@ -74,19 +98,31 @@ public:
 		| aiProcess_SortByPType); 
 
 	void processModel(const aiScene& scene);
-private:
-	static void convertVector(const aiVector3D& src, glm::vec3& dest);
-	static void convertVector(const aiVector3D& src, glm::vec2& dest);
-	static const std::array<aiTextureType, 4> mTextureTypes;
-	
+	void createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+	void createDescriptorPool();
+	void createDescriptorSet();
+
+	void draw(VkCommandBuffer& commandBuffer); 
+	void update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera);
+
 	void throwError(const char* error);
 	void throwError(std::string& error);
 	
-	VulkanState& mVulkanState;
-	uint32_t mVertexSize;
+	uint32_t numVertices, numIndices;
+	VkDeviceSize uniformBufferOffset,  
+				 vertexBufferOffset, 
+				 indexBufferOffset; 
+protected:
+	std::vector<Mesh> mMeshes;
+	uint32_t mNumSamplerDescriptors;
+	VkDescriptorPool mDescriptorPool;
+	VkDescriptorSet mUniformDescriptorSet;
+
+	VulkanState& mState;
+	BufferInfo mCommonBufferInfo;
+	BufferInfo mCommonStagingBufferInfo;
 
 	std::string mPath, mFolder;
-	ImageInfo *imageInfoDiffuse, *imageInfoSpecular, *imageInfoHeight, *imageInfoAmbient; 
 	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;	
 };
 

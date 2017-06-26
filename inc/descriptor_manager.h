@@ -12,6 +12,10 @@ public:
 	void createDescriptorPool();
 
 private:
+	void createQuadDescriptorSetLayout();
+	void createModelDescriptorSetLayout();
+	void createSamplerDescriptorSetLayout();
+	void createUniformDescriptorSetLayout();
 	VulkanState& mState;
 	DescriptorSetLayouts& mLayouts;
 };

@@ -8,7 +8,8 @@ VulkanManager::VulkanManager(Window& window):
 	mShaderManager(mVulkanState),
 	mDescriptorManager(mVulkanState),
 	mQuad(mVulkanState),
-	mSuit(mVulkanState)
+	mSuit(mVulkanState),
+	imageIndex(0)
 {
 	
 }
@@ -40,10 +41,11 @@ void VulkanManager::init()
 	mDescriptorManager.createDescriptorPool();
 
 	Quad::createPipeline(mVulkanState);
+	Model::createPipeline(mVulkanState);
 
 	mQuad.init();
 
-//	mSuit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"));
+	mSuit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"));
 
 	mSwapChainManager.createDepthResources();
 	mSwapChainManager.createFramebuffers(mVulkanState.renderPass);
@@ -54,10 +56,18 @@ void VulkanManager::init()
 	LOG("INIT SUCCESSFUL");
 }
 
+
+void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)
+{
+	CmdPass cmd(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue);
+	//mQuad.updateUniformBuffers(cmd.buffer, timer, camera);
+	mSuit.update(cmd.buffer, timer, camera);
+}
+
 void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera) 
 {
 
-	mQuad.updateUniformBuffers(timer, camera);
+//	mQuad.updateUniformBuffers(timer, camera);
 
 	VkClearValue clearValues[] ={
 		{{0.4f, 0.1f, 0.1f, 1.0f}},	// VkClearColorValue color; 
@@ -77,15 +87,11 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 	renderPassBeginInfo.clearValueCount = ARRAY_SIZE(clearValues);
 	renderPassBeginInfo.pClearValues = clearValues;
 	
-	for (size_t i = 0; i < mSwapChainManager.mVkCommandBuffers.size(); ++i) {
-
+	for (size_t i = 0; i < mSwapChainManager.mVkCommandBuffers.size(); ++i) {	
 		VK_CHECK_RESULT(vkBeginCommandBuffer(mSwapChainManager.mVkCommandBuffers[i], &beginInfo));
 		
 		renderPassBeginInfo.framebuffer = mSwapChainManager.mSwapChainFramebuffers[i];
-		
 		vkCmdBeginRenderPass( mSwapChainManager.mVkCommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-		vkCmdBindPipeline( mSwapChainManager.mVkCommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, mVulkanState.pipelines.quad.pipeline);
-		mQuad.update( mSwapChainManager.mVkCommandBuffers[i], timer, camera);
 
 		VkViewport viewport;
 		viewport.x = 0.0f;
@@ -101,9 +107,9 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 
 		vkCmdSetViewport( mSwapChainManager.mVkCommandBuffers[i], 0, 1, &viewport);
 		vkCmdSetScissor( mSwapChainManager.mVkCommandBuffers[i], 0, 1, &scissor);
-		
-		mQuad.draw( mSwapChainManager.mVkCommandBuffers[i]);
-
+			
+		//mQuad.draw(mSwapChainManager.mVkCommandBuffers[i]);
+		mSuit.draw(mSwapChainManager.mVkCommandBuffers[i]);
 		vkCmdEndRenderPass( mSwapChainManager.mVkCommandBuffers[i]);
 		VK_CHECK_RESULT(vkEndCommandBuffer(mSwapChainManager.mVkCommandBuffers[i]));
 	}
@@ -111,8 +117,6 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 
 void VulkanManager::draw() 
 {
-	uint32_t imageIndex = 0;
-
 	VkResult result = vkAcquireNextImageKHR(mVulkanState.device, 
 										  mVulkanState.swapChain, 
 										  std::numeric_limits<uint64_t>::max(), 

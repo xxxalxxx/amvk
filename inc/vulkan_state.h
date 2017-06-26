@@ -34,8 +34,8 @@ struct ShaderInfo {
 };
 
 struct Pipelines {
-	PipelineInfo quad;
-	PipelineInfo simpleModel;
+	PipelineInfo quad,
+				 model;
 };
 
 struct DescriptorSets {
@@ -43,12 +43,15 @@ struct DescriptorSets {
 };
 
 struct DescriptorSetLayouts {
-	VkDescriptorSetLayout quad;
+	VkDescriptorSetLayout quad, 
+						  model,
+						  uniform,
+						  sampler;
 };
 
 struct Shaders {
-	ShaderInfo quad;
-	ShaderInfo simpleModel;
+	ShaderInfo quad,
+			   model;
 };
 
 struct VulkanState {

@@ -15,14 +15,14 @@ int main() {
 	VulkanManager& vulkanManager = engine.getVulkanManager();
 	Timer& timer = engine.getTimer();
 	Camera& camera = engine.getCamera();
+
+	vulkanManager.updateCommandBuffers(timer, camera);
 	
 	while (window.isOpen()) {
 		inputManager.pollEvents();
 		double dt = timer.tick();
 		engine.handleMovement(dt);
-
-		vulkanManager.updateCommandBuffers(timer, camera);
-
+		vulkanManager.updateUniformBuffers(timer, camera);
 		vulkanManager.draw();
 	}
 	vulkanManager.waitIdle();
