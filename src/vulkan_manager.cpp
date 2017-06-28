@@ -107,7 +107,9 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 		vkCmdSetScissor( mSwapChainManager.mVkCommandBuffers[i], 0, 1, &scissor);
 			
 		//mQuad.draw(mSwapChainManager.mVkCommandBuffers[i]);
-		mSuit.draw(mSwapChainManager.mVkCommandBuffers[i]);
+		mSuit.draw(mSwapChainManager.mVkCommandBuffers[i], 
+				mVulkanState.pipelines.model.pipeline,
+				mVulkanState.pipelines.model.layout);
 		vkCmdEndRenderPass( mSwapChainManager.mVkCommandBuffers[i]);
 		VK_CHECK_RESULT(vkEndCommandBuffer(mSwapChainManager.mVkCommandBuffers[i]));
 	}

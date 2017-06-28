@@ -2083,7 +2083,7 @@ Model::createCommonBuffer	src/model.cpp	/^void Model::createCommonBuffer(const s
 Model::createDescriptorPool	src/model.cpp	/^void Model::createDescriptorPool() $/;"	f	class:Model	signature:()
 Model::createDescriptorSet	src/model.cpp	/^void Model::createDescriptorSet()$/;"	f	class:Model	signature:()
 Model::createPipeline	src/model.cpp	/^void Model::createPipeline(VulkanState& state) $/;"	f	class:Model	signature:(VulkanState& state)
-Model::draw	src/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer)
+Model::draw	src/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 Model::indexBufferOffset	inc/model.h	/^				 indexBufferOffset; $/;"	m	class:Model	access:public
 Model::init	src/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
 Model::init	src/model.cpp	/^void Model::init(std::string modelPath, unsigned int pFlags) $/;"	f	class:Model	signature:(std::string modelPath, unsigned int pFlags)
@@ -2091,7 +2091,7 @@ Model::mCommonBufferInfo	inc/model.h	/^	BufferInfo mCommonBufferInfo;$/;"	m	clas
 Model::mCommonStagingBufferInfo	inc/model.h	/^	BufferInfo mCommonStagingBufferInfo;$/;"	m	class:Model	access:protected
 Model::mDescriptorPool	inc/model.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:Model	access:protected
 Model::mFolder	inc/model.h	/^	std::string mPath, mFolder;$/;"	m	class:Model	access:protected
-Model::mMaterialIndexToMaterial	inc/model.h	/^	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;	$/;"	m	class:Model	access:protected
+Model::mMaterialIndexToMaterial	inc/model.h	/^	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;$/;"	m	class:Model	access:protected
 Model::mMeshes	inc/model.h	/^	std::vector<Mesh> mMeshes;$/;"	m	class:Model	access:protected
 Model::mNumSamplerDescriptors	inc/model.h	/^	uint32_t mNumSamplerDescriptors;$/;"	m	class:Model	access:protected
 Model::mPath	inc/model.h	/^	std::string mPath, mFolder;$/;"	m	class:Model	access:protected
@@ -8223,7 +8223,7 @@ dpy	lib/vulkan/vulkan.h	/^    Display*                       dpy;$/;"	m	struct:V
 dquat	lib/glm/fwd.hpp	/^	typedef highp_dquat			dquat;$/;"	t	namespace:glm
 dquat	lib/glm/fwd.hpp	/^	typedef lowp_dquat			dquat;$/;"	t	namespace:glm
 dquat	lib/glm/fwd.hpp	/^	typedef mediump_dquat		dquat;$/;"	t	namespace:glm
-draw	src/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer)
+draw	src/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 draw	src/quad.cpp	/^void Quad::draw(VkCommandBuffer& commandBuffer) $/;"	f	class:Quad	signature:(VkCommandBuffer& commandBuffer)
 draw	src/vulkan_manager.cpp	/^void VulkanManager::draw() $/;"	f	class:VulkanManager	signature:()
 drawIndirectFirstInstance	lib/vulkan/vulkan.h	/^    VkBool32    drawIndirectFirstInstance;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
@@ -12464,7 +12464,7 @@ mLights	lib/assimp/scene.h	/^    C_STRUCT aiLight** mLights;$/;"	m	struct:aiScen
 mLookAt	lib/assimp/camera.h	/^    C_STRUCT aiVector3D mLookAt;$/;"	m	struct:aiCamera	access:public
 mMaintainer	lib/assimp/importerdesc.h	/^    const char* mMaintainer;$/;"	m	struct:aiImporterDesc	access:public
 mMaterialIndex	lib/assimp/mesh.h	/^    unsigned int mMaterialIndex;$/;"	m	struct:aiMesh	access:public
-mMaterialIndexToMaterial	inc/model.h	/^	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;	$/;"	m	class:Model	access:protected
+mMaterialIndexToMaterial	inc/model.h	/^	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;$/;"	m	class:Model	access:protected
 mMaterials	lib/assimp/scene.h	/^    C_STRUCT aiMaterial** mMaterials;$/;"	m	struct:aiScene	access:public
 mMatrixProperties	lib/assimp/Exporter.hpp	/^    MatrixPropertyMap mMatrixProperties;$/;"	m	class:Assimp::ExportProperties	access:protected
 mMaxMajor	lib/assimp/importerdesc.h	/^    unsigned int mMaxMajor;$/;"	m	struct:aiImporterDesc	access:public

@@ -104,8 +104,7 @@ public:
 	void createUniformBuffer();
 	void createDescriptorPool();
 	void createDescriptorSet();
-
-	void draw(VkCommandBuffer& commandBuffer); 
+	void draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout);
 	void update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera);
 
 	void throwError(const char* error);
@@ -126,7 +125,7 @@ protected:
 	BufferInfo mCommonStagingBufferInfo;
 
 	std::string mPath, mFolder;
-	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;	
+	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;
 };
 
 #endif

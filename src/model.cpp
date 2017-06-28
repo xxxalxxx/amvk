@@ -44,8 +44,6 @@ void Model::init(const char* modelPath, unsigned int pFlags)
 	mFolder = FileManager::getFilePath(std::string(modelPath));
 	LOG("FOLDER:" << mFolder);
 	Assimp::Importer importer;
-	
-//	pFlags = aiProcess_FlipWindingOrder | aiProcess_Triangulate; // | aiProcess_PreTransformVertices;
 
 	const aiScene* scene = importer.ReadFile(modelPath, pFlags);
 	  
@@ -388,9 +386,9 @@ void Model::createDescriptorSet()
 	}
 }
 
-void Model::draw(VkCommandBuffer& commandBuffer)
+void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 {
-	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, mState.pipelines.model.pipeline);
+	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 	
 	VkDeviceSize offset = vertexBufferOffset;
 	VkBuffer& commonBuff = mCommonBufferInfo.buffer;
@@ -407,7 +405,7 @@ void Model::draw(VkCommandBuffer& commandBuffer)
 		vkCmdBindDescriptorSets(
 			commandBuffer, 
 			VK_PIPELINE_BIND_POINT_GRAPHICS, 
-			mState.pipelines.model.layout, 
+			pipelineLayout, 
 			0, 
 			ARRAY_SIZE(sets), 
 			sets, 
