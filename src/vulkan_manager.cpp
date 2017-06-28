@@ -45,7 +45,7 @@ void VulkanManager::init()
 
 	mQuad.init();
 
-	mSuit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"));
+	mSuit.init(FileManager::getModelsPath("nanosuit2/nanosuit.obj"));
 
 	mSwapChainManager.createDepthResources();
 	mSwapChainManager.createFramebuffers(mVulkanState.renderPass);
@@ -66,8 +66,6 @@ void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)
 
 void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera) 
 {
-
-//	mQuad.updateUniformBuffers(timer, camera);
 
 	VkClearValue clearValues[] ={
 		{{0.4f, 0.1f, 0.1f, 1.0f}},	// VkClearColorValue color; 

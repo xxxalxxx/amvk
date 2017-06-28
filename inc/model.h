@@ -71,10 +71,18 @@ public:
 
 	static const aiTextureType* TEXTURE_TYPES;
 	static const uint32_t NUM_TEXTURE_TYPES;
-	static constexpr uint32_t const DEFAULT_FLAGS = aiProcess_CalcTangentSpace
-		| aiProcess_Triangulate 
-		| aiProcess_JoinIdenticalVertices  
-		| aiProcess_SortByPType;
+	static constexpr uint32_t const DEFAULT_FLAGS = 
+								aiProcess_Triangulate | 
+								aiProcess_GenSmoothNormals | 
+								aiProcess_ImproveCacheLocality | 
+								//aiProcess_JoinIdenticalVertices | 
+								aiProcess_SortByPType | 
+								aiProcess_FindDegenerates | 
+								aiProcess_FindInvalidData | 
+								//aiProcess_FlipUVs | 
+								aiProcess_CalcTangentSpace | 
+								aiProcess_OptimizeMeshes | 
+								aiProcess_OptimizeGraph;
 
 	static void convertVector(const aiVector3D& src, glm::vec3& dest);
 	static void convertVector(const aiVector3D& src, glm::vec2& dest);
@@ -84,21 +92,16 @@ public:
 	virtual ~Model();
 
 	void init(const char* modelPath, 
-		unsigned int pFlags = 
-		aiProcess_CalcTangentSpace
-		| aiProcess_Triangulate 
-		| aiProcess_JoinIdenticalVertices  
-		| aiProcess_SortByPType);
+		unsigned int pFlags = DEFAULT_FLAGS);
 	
 	void init(std::string modelPath, 
-		unsigned int pFlags = 
-		aiProcess_CalcTangentSpace
-		| aiProcess_Triangulate 
-		| aiProcess_JoinIdenticalVertices  
-		| aiProcess_SortByPType); 
+		unsigned int pFlags = DEFAULT_FLAGS); 
 
 	void processModel(const aiScene& scene);
 	void createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+	void createVertexBuffer(std::vector<Vertex>& vertices);
+	void createIndexBuffer(std::vector<uint32_t>& indices);
+	void createUniformBuffer();
 	void createDescriptorPool();
 	void createDescriptorSet();
 

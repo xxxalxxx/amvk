@@ -712,7 +712,7 @@ CurrentDirectory	lib/assimp/IOSystem.hpp	/^inline const std::string &IOSystem::C
 DECL	lib/assimp/Compiler/pstdint.h	824;"	d
 DECLI	lib/assimp/Compiler/pstdint.h	822;"	d
 DECLU	lib/assimp/Compiler/pstdint.h	821;"	d
-DEFAULT_FLAGS	inc/model.h	/^	static constexpr uint32_t const DEFAULT_FLAGS = aiProcess_CalcTangentSpace$/;"	m	class:Model	access:public
+DEFAULT_FLAGS	inc/model.h	/^	static constexpr uint32_t const DEFAULT_FLAGS = $/;"	m	class:Model	access:public
 DEPS	Makefile	/^DEPS=$(patsubst %.cpp,$(OBJ_DIR)\/%.d, $(SRCS_NO_PATH))$/;"	m
 DLS_DEBUGGER	lib/assimp/types.h	455;"	d
 DLS_FILE	lib/assimp/types.h	452;"	d
@@ -2044,7 +2044,7 @@ MessageTask::execute	inc/task_manager.h	/^	void execute() {$/;"	f	class:MessageT
 MessageTask::mId	inc/task_manager.h	/^	int mId;$/;"	m	class:MessageTask	access:public
 Model	inc/model.h	/^class Model {$/;"	c
 Model	src/model.cpp	/^Model::Model(VulkanState& vulkanState):$/;"	f	class:Model	signature:(VulkanState& vulkanState)
-Model::DEFAULT_FLAGS	inc/model.h	/^	static constexpr uint32_t const DEFAULT_FLAGS = aiProcess_CalcTangentSpace$/;"	m	class:Model	access:public
+Model::DEFAULT_FLAGS	inc/model.h	/^	static constexpr uint32_t const DEFAULT_FLAGS = $/;"	m	class:Model	access:public
 Model::Material	inc/model.h	/^	struct Material {$/;"	s	class:Model	access:public
 Model::Material::Material	inc/model.h	/^		Material(): $/;"	f	struct:Model::Material	access:public	signature:()
 Model::Material::ambientImages	inc/model.h	/^			ambientImages;$/;"	m	struct:Model::Material	access:public
@@ -2697,22 +2697,23 @@ PipelineCacheInfo::getCache	src/pipeline_manager.cpp	/^void PipelineCacheInfo::g
 PipelineCacheInfo::hasCache	inc/pipeline_manager.h	/^	bool hasCache;$/;"	m	struct:PipelineCacheInfo	access:public
 PipelineCacheInfo::pipelineCache	inc/pipeline_manager.h	/^	VkPipelineCache& pipelineCache;$/;"	m	struct:PipelineCacheInfo	access:public
 PipelineCacheInfo::saveCache	src/pipeline_manager.cpp	/^void PipelineCacheInfo::saveCache(const VkDevice& device)$/;"	f	class:PipelineCacheInfo	signature:(const VkDevice& device)
-PipelineCreator	inc/pipeline_creator.h	/^class PipelineCreator {$/;"	c
-PipelineCreator::blendAttachmentStateDisabled	src/pipeline_creator.cpp	/^VkPipelineColorBlendAttachmentState PipelineCreator::blendAttachmentStateDisabled() $/;"	f	class:PipelineCreator	signature:()
-PipelineCreator::blendStateDisabled	src/pipeline_creator.cpp	/^VkPipelineColorBlendStateCreateInfo PipelineCreator::blendStateDisabled($/;"	f	class:PipelineCreator	signature:( VkPipelineColorBlendAttachmentState* attachmentStates, uint32_t attachmentCount)
-PipelineCreator::depthStencilStateDepthLessNoStencil	src/pipeline_creator.cpp	/^VkPipelineDepthStencilStateCreateInfo PipelineCreator::depthStencilStateDepthLessNoStencil() $/;"	f	class:PipelineCreator	signature:()
-PipelineCreator::dynamicState	src/pipeline_creator.cpp	/^VkPipelineDynamicStateCreateInfo PipelineCreator::dynamicState(VkDynamicState* dynamicStates, uint32_t stateCount)$/;"	f	class:PipelineCreator	signature:(VkDynamicState* dynamicStates, uint32_t stateCount)
-PipelineCreator::inputAssemblyNoRestart	src/pipeline_creator.cpp	/^VkPipelineInputAssemblyStateCreateInfo PipelineCreator::inputAssemblyNoRestart(VkPrimitiveTopology topology) $/;"	f	class:PipelineCreator	signature:(VkPrimitiveTopology topology)
-PipelineCreator::layout	src/pipeline_creator.cpp	/^VkPipelineLayoutCreateInfo PipelineCreator::layout($/;"	f	class:PipelineCreator	signature:( VkDescriptorSetLayout* setLayouts, uint32_t setLayoutCount, VkPushConstantRange* pushConstantRanges, uint32_t pushConstantRangeCount)
-PipelineCreator::multisampleStateNoMultisampleNoSampleShading	src/pipeline_creator.cpp	/^VkPipelineMultisampleStateCreateInfo PipelineCreator::multisampleStateNoMultisampleNoSampleShading()$/;"	f	class:PipelineCreator	signature:()
-PipelineCreator::pipelineCache	src/pipeline_creator.cpp	/^void PipelineCreator::pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)$/;"	f	class:PipelineCreator	signature:(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)
-PipelineCreator::pushConstantRange	src/pipeline_creator.cpp	/^VkPushConstantRange PipelineCreator::pushConstantRange(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)$/;"	f	class:PipelineCreator	signature:(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)
-PipelineCreator::rasterizationStateCullBackCCW	src/pipeline_creator.cpp	/^VkPipelineRasterizationStateCreateInfo PipelineCreator::rasterizationStateCullBackCCW() $/;"	f	class:PipelineCreator	signature:()
-PipelineCreator::shaderStage	src/pipeline_creator.cpp	/^VkPipelineShaderStageCreateInfo PipelineCreator::shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)$/;"	f	class:PipelineCreator	signature:(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)
-PipelineCreator::shaderStage	src/pipeline_creator.cpp	/^VkPipelineShaderStageCreateInfo PipelineCreator::shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)$/;"	f	class:PipelineCreator	signature:(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)
-PipelineCreator::vertexInputState	src/pipeline_creator.cpp	/^VkPipelineVertexInputStateCreateInfo PipelineCreator::vertexInputState($/;"	f	class:PipelineCreator	signature:( VkVertexInputBindingDescription* bindings, uint32_t bindingsCount, VkVertexInputAttributeDescription* attributes, uint32_t attributesCount)
-PipelineCreator::viewportStateDefault	src/pipeline_creator.cpp	/^VkPipelineViewportStateCreateInfo PipelineCreator::viewportStateDefault(VkExtent2D& extent)$/;"	f	class:PipelineCreator	signature:(VkExtent2D& extent)
-PipelineCreator::viewportStateDynamic	src/pipeline_creator.cpp	/^VkPipelineViewportStateCreateInfo PipelineCreator::viewportStateDynamic() $/;"	f	class:PipelineCreator	signature:()
+PipelineCreator	inc/pipeline_creator.h	/^namespace PipelineCreator $/;"	n
+PipelineCreator::blendAttachmentStateDisabled	inc/pipeline_creator.h	/^inline VkPipelineColorBlendAttachmentState blendAttachmentStateDisabled() $/;"	f	namespace:PipelineCreator	signature:()
+PipelineCreator::blendStateDisabled	inc/pipeline_creator.h	/^inline VkPipelineColorBlendStateCreateInfo blendStateDisabled($/;"	f	namespace:PipelineCreator	signature:( VkPipelineColorBlendAttachmentState* attachmentStates, uint32_t attachmentCount)
+PipelineCreator::depthStencilStateDepthLessNoStencil	inc/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessNoStencil() $/;"	f	namespace:PipelineCreator	signature:()
+PipelineCreator::dynamicState	inc/pipeline_creator.h	/^inline VkPipelineDynamicStateCreateInfo dynamicState(VkDynamicState* dynamicStates, uint32_t stateCount)$/;"	f	namespace:PipelineCreator	signature:(VkDynamicState* dynamicStates, uint32_t stateCount)
+PipelineCreator::inputAssemblyNoRestart	inc/pipeline_creator.h	/^inline VkPipelineInputAssemblyStateCreateInfo inputAssemblyNoRestart(VkPrimitiveTopology topology) $/;"	f	namespace:PipelineCreator	signature:(VkPrimitiveTopology topology)
+PipelineCreator::layout	inc/pipeline_creator.h	/^inline VkPipelineLayoutCreateInfo layout($/;"	f	namespace:PipelineCreator	signature:( VkDescriptorSetLayout* setLayouts, uint32_t setLayoutCount, VkPushConstantRange* pushConstantRanges, uint32_t pushConstantRangeCount)
+PipelineCreator::multisampleStateNoMultisampleNoSampleShading	inc/pipeline_creator.h	/^inline VkPipelineMultisampleStateCreateInfo multisampleStateNoMultisampleNoSampleShading()$/;"	f	namespace:PipelineCreator	signature:()
+PipelineCreator::pipelineCache	inc/pipeline_creator.h	/^inline void pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)$/;"	f	namespace:PipelineCreator	signature:(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)
+PipelineCreator::pushConstantRange	inc/pipeline_creator.h	/^inline VkPushConstantRange pushConstantRange(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)$/;"	f	namespace:PipelineCreator	signature:(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)
+PipelineCreator::rasterizationStateCullBackCCW	inc/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() $/;"	f	namespace:PipelineCreator	signature:()
+PipelineCreator::rasterizationStateCullBackCW	inc/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW() $/;"	f	namespace:PipelineCreator	signature:()
+PipelineCreator::shaderStage	inc/pipeline_creator.h	/^inline VkPipelineShaderStageCreateInfo shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)$/;"	f	namespace:PipelineCreator	signature:(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)
+PipelineCreator::shaderStage	inc/pipeline_creator.h	/^inline VkPipelineShaderStageCreateInfo shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)$/;"	f	namespace:PipelineCreator	signature:(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)
+PipelineCreator::vertexInputState	inc/pipeline_creator.h	/^inline VkPipelineVertexInputStateCreateInfo vertexInputState($/;"	f	namespace:PipelineCreator	signature:( VkVertexInputBindingDescription* bindings, uint32_t bindingsCount, VkVertexInputAttributeDescription* attributes, uint32_t attributesCount)
+PipelineCreator::viewportStateDefault	inc/pipeline_creator.h	/^inline VkPipelineViewportStateCreateInfo viewportStateDefault(VkExtent2D& extent)$/;"	f	namespace:PipelineCreator	signature:(VkExtent2D& extent)
+PipelineCreator::viewportStateDynamic	inc/pipeline_creator.h	/^inline VkPipelineViewportStateCreateInfo viewportStateDynamic() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineInfo	inc/vulkan_state.h	/^	PipelineInfo(): $/;"	f	struct:PipelineInfo	access:public	signature:()
 PipelineInfo	inc/vulkan_state.h	/^struct PipelineInfo {$/;"	s
 PipelineInfo::PipelineInfo	inc/vulkan_state.h	/^	PipelineInfo(): $/;"	f	struct:PipelineInfo	access:public	signature:()
@@ -7795,10 +7796,10 @@ binding	lib/vulkan/vulkan.h	/^    uint32_t             binding;$/;"	m	struct:VkV
 binding	lib/vulkan/vulkan.h	/^    uint32_t    binding;$/;"	m	struct:VkVertexInputAttributeDescription	access:public
 bindingCount	lib/vulkan/vulkan.h	/^    uint32_t                               bindingCount;$/;"	m	struct:VkDescriptorSetLayoutCreateInfo	access:public
 bitangent	inc/model.h	/^		glm::vec3 bitangent;$/;"	m	struct:Model::Vertex	access:public
-blendAttachmentStateDisabled	src/pipeline_creator.cpp	/^VkPipelineColorBlendAttachmentState PipelineCreator::blendAttachmentStateDisabled() $/;"	f	class:PipelineCreator	signature:()
+blendAttachmentStateDisabled	inc/pipeline_creator.h	/^inline VkPipelineColorBlendAttachmentState blendAttachmentStateDisabled() $/;"	f	namespace:PipelineCreator	signature:()
 blendConstants	lib/vulkan/vulkan.h	/^    float                                         blendConstants[4];$/;"	m	struct:VkPipelineColorBlendStateCreateInfo	access:public
 blendEnable	lib/vulkan/vulkan.h	/^    VkBool32                 blendEnable;$/;"	m	struct:VkPipelineColorBlendAttachmentState	access:public
-blendStateDisabled	src/pipeline_creator.cpp	/^VkPipelineColorBlendStateCreateInfo PipelineCreator::blendStateDisabled($/;"	f	class:PipelineCreator	signature:( VkPipelineColorBlendAttachmentState* attachmentStates, uint32_t attachmentCount)
+blendStateDisabled	inc/pipeline_creator.h	/^inline VkPipelineColorBlendStateCreateInfo blendStateDisabled($/;"	f	namespace:PipelineCreator	signature:( VkPipelineColorBlendAttachmentState* attachmentStates, uint32_t attachmentCount)
 bool1	lib/glm/gtx/compatibility.hpp	/^	typedef bool						bool1;			\/\/!< \\brief boolean type with 1 component. (From GLM_GTX_compatibility extension)$/;"	t	namespace:glm
 bool1x1	lib/glm/gtx/compatibility.hpp	/^	typedef bool						bool1x1;		\/\/!< \\brief boolean matrix with 1 x 1 component. (From GLM_GTX_compatibility extension)$/;"	t	namespace:glm
 bool2	lib/glm/gtx/compatibility.hpp	/^	typedef vec<2, bool, highp>			bool2;			\/\/!< \\brief boolean type with 2 components. (From GLM_GTX_compatibility extension)$/;"	t	namespace:glm
@@ -8126,7 +8127,7 @@ depthFailOp	lib/vulkan/vulkan.h	/^    VkStencilOp    depthFailOp;$/;"	m	struct:V
 depthFormat	inc/vulkan_state.h	/^	VkFormat depthFormat;$/;"	m	struct:VulkanState	access:public
 depthPitch	lib/vulkan/vulkan.h	/^    VkDeviceSize    depthPitch;$/;"	m	struct:VkSubresourceLayout	access:public
 depthStencil	lib/vulkan/vulkan.h	/^    VkClearDepthStencilValue    depthStencil;$/;"	m	union:VkClearValue	access:public
-depthStencilStateDepthLessNoStencil	src/pipeline_creator.cpp	/^VkPipelineDepthStencilStateCreateInfo PipelineCreator::depthStencilStateDepthLessNoStencil() $/;"	f	class:PipelineCreator	signature:()
+depthStencilStateDepthLessNoStencil	inc/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessNoStencil() $/;"	f	namespace:PipelineCreator	signature:()
 depthTestEnable	lib/vulkan/vulkan.h	/^    VkBool32                                  depthTestEnable;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo	access:public
 depthWriteEnable	lib/vulkan/vulkan.h	/^    VkBool32                                  depthWriteEnable;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo	access:public
 dequant	lib/stb/stb_image.h	/^   stbi_uc dequant[4][64];$/;"	m	struct:__anon43	access:public
@@ -8270,7 +8271,7 @@ dvec4	lib/glm/detail/type_vec.hpp	/^	typedef highp_dvec4			dvec4;$/;"	t	namespac
 dvec4	lib/glm/detail/type_vec.hpp	/^	typedef lowp_dvec4			dvec4;$/;"	t	namespace:glm
 dvec4	lib/glm/detail/type_vec.hpp	/^	typedef mediump_dvec4		dvec4;$/;"	t	namespace:glm
 dword	lib/glm/gtx/raw_data.hpp	/^	typedef detail::uint32		dword;$/;"	t	namespace:glm
-dynamicState	src/pipeline_creator.cpp	/^VkPipelineDynamicStateCreateInfo PipelineCreator::dynamicState(VkDynamicState* dynamicStates, uint32_t stateCount)$/;"	f	class:PipelineCreator	signature:(VkDynamicState* dynamicStates, uint32_t stateCount)
+dynamicState	inc/pipeline_creator.h	/^inline VkPipelineDynamicStateCreateInfo dynamicState(VkDynamicState* dynamicStates, uint32_t stateCount)$/;"	f	namespace:PipelineCreator	signature:(VkDynamicState* dynamicStates, uint32_t stateCount)
 dynamicStateCount	lib/vulkan/vulkan.h	/^    uint32_t                             dynamicStateCount;$/;"	m	struct:VkPipelineDynamicStateCreateInfo	access:public
 eflags	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon54	access:public
 elem	lib/glm/detail/_swizzle.hpp	/^		GLM_FUNC_QUALIFIER T const& elem(size_t i) const{ return (reinterpret_cast<const T*>(_buffer))[i]; }$/;"	f	struct:glm::detail::_swizzle_base0	access:protected	signature:(size_t i) const
@@ -11952,7 +11953,7 @@ initialLayout	lib/vulkan/vulkan.h	/^    VkImageLayout                   initialL
 initialLayout	lib/vulkan/vulkan.h	/^    VkImageLayout            initialLayout;$/;"	m	struct:VkImageCreateInfo	access:public
 inline	lib/vulkan/vk_sdk_platform.h	28;"	d
 inline	lib/vulkan/vk_sdk_platform.h	29;"	d
-inputAssemblyNoRestart	src/pipeline_creator.cpp	/^VkPipelineInputAssemblyStateCreateInfo PipelineCreator::inputAssemblyNoRestart(VkPrimitiveTopology topology) $/;"	f	class:PipelineCreator	signature:(VkPrimitiveTopology topology)
+inputAssemblyNoRestart	inc/pipeline_creator.h	/^inline VkPipelineInputAssemblyStateCreateInfo inputAssemblyNoRestart(VkPrimitiveTopology topology) $/;"	f	namespace:PipelineCreator	signature:(VkPrimitiveTopology topology)
 inputAttachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                        inputAttachmentCount;$/;"	m	struct:VkSubpassDescription	access:public
 inputRate	lib/vulkan/vulkan.h	/^    VkVertexInputRate    inputRate;$/;"	m	struct:VkVertexInputBindingDescription	access:public
 instance	inc/vulkan_state.h	/^	VkInstance instance;$/;"	m	struct:VulkanState	access:public
@@ -12058,11 +12059,11 @@ layerCount	lib/vulkan/vulkan.h	/^    uint32_t              layerCount;$/;"	m	str
 layerCount	lib/vulkan/vulkan.h	/^    uint32_t    layerCount;$/;"	m	struct:VkClearRect	access:public
 layerName	lib/vulkan/vulkan.h	/^    char        layerName[VK_MAX_EXTENSION_NAME_SIZE];$/;"	m	struct:VkLayerProperties	access:public
 layers	lib/vulkan/vulkan.h	/^    uint32_t                    layers;$/;"	m	struct:VkFramebufferCreateInfo	access:public
+layout	inc/pipeline_creator.h	/^inline VkPipelineLayoutCreateInfo layout($/;"	f	namespace:PipelineCreator	signature:( VkDescriptorSetLayout* setLayouts, uint32_t setLayoutCount, VkPushConstantRange* pushConstantRanges, uint32_t pushConstantRangeCount)
 layout	inc/vulkan_state.h	/^	VkPipelineLayout layout;$/;"	m	struct:PipelineInfo	access:public
 layout	lib/vulkan/vulkan.h	/^    VkImageLayout    layout;$/;"	m	struct:VkAttachmentReference	access:public
 layout	lib/vulkan/vulkan.h	/^    VkPipelineLayout                                 layout;$/;"	m	struct:VkGraphicsPipelineCreateInfo	access:public
 layout	lib/vulkan/vulkan.h	/^    VkPipelineLayout                   layout;$/;"	m	struct:VkComputePipelineCreateInfo	access:public
-layout	src/pipeline_creator.cpp	/^VkPipelineLayoutCreateInfo PipelineCreator::layout($/;"	f	class:PipelineCreator	signature:( VkDescriptorSetLayout* setLayouts, uint32_t setLayoutCount, VkPushConstantRange* pushConstantRanges, uint32_t pushConstantRangeCount)
 length	lib/assimp/types.h	/^    size_t length;$/;"	m	struct:aiString	access:public
 length	lib/glm/detail/type_mat2x2.hpp	/^		GLM_FUNC_DECL static length_type length(){return 2;}$/;"	f	struct:glm::mat	access:public	signature:()
 length	lib/glm/detail/type_mat2x3.hpp	/^		GLM_FUNC_DECL static length_type length(){return 2;}$/;"	f	struct:glm::mat	access:public	signature:()
@@ -13084,7 +13085,7 @@ moveStraight	src/camera.cpp	/^void Camera::moveStraight(float direction, float d
 mr	lib/stb/stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon51	access:public
 multiDrawIndirect	lib/vulkan/vulkan.h	/^    VkBool32    multiDrawIndirect;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 multiViewport	lib/vulkan/vulkan.h	/^    VkBool32    multiViewport;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
-multisampleStateNoMultisampleNoSampleShading	src/pipeline_creator.cpp	/^VkPipelineMultisampleStateCreateInfo PipelineCreator::multisampleStateNoMultisampleNoSampleShading()$/;"	f	class:PipelineCreator	signature:()
+multisampleStateNoMultisampleNoSampleShading	inc/pipeline_creator.h	/^inline VkPipelineMultisampleStateCreateInfo multisampleStateNoMultisampleNoSampleShading()$/;"	f	namespace:PipelineCreator	signature:()
 name	lib/assimp/cexport.h	/^    C_STRUCT aiString name;$/;"	m	struct:aiExportDataBlob	access:public
 newLayout	lib/vulkan/vulkan.h	/^    VkImageLayout              newLayout;$/;"	m	struct:VkImageMemoryBarrier	access:public
 newline	lib/glm/gtx/io.hpp	/^			char_type  newline;$/;"	m	class:glm::io::format_punct	access:public
@@ -13417,8 +13418,8 @@ pimpl	lib/assimp/Exporter.hpp	/^    ExporterPimpl* pimpl;$/;"	m	class:Assimp::Ex
 pimpl	lib/assimp/Importer.hpp	/^    ImporterPimpl* pimpl;$/;"	m	class:Assimp::Importer	access:protected
 pipeline	inc/vulkan_state.h	/^	VkPipeline pipeline;$/;"	m	struct:PipelineInfo	access:public
 pipelineBindPoint	lib/vulkan/vulkan.h	/^    VkPipelineBindPoint             pipelineBindPoint;$/;"	m	struct:VkSubpassDescription	access:public
+pipelineCache	inc/pipeline_creator.h	/^inline void pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)$/;"	f	namespace:PipelineCreator	signature:(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)
 pipelineCache	inc/pipeline_manager.h	/^	VkPipelineCache& pipelineCache;$/;"	m	struct:PipelineCacheInfo	access:public
-pipelineCache	src/pipeline_creator.cpp	/^void PipelineCreator::pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)$/;"	f	class:PipelineCreator	signature:(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)
 pipelineCacheUUID	lib/vulkan/vulkan.h	/^    uint8_t                             pipelineCacheUUID[VK_UUID_SIZE];$/;"	m	struct:VkPhysicalDeviceProperties	access:public
 pipelineStatistics	lib/vulkan/vulkan.h	/^    VkQueryPipelineStatisticFlags    pipelineStatistics;$/;"	m	struct:VkCommandBufferInheritanceInfo	access:public
 pipelineStatistics	lib/vulkan/vulkan.h	/^    VkQueryPipelineStatisticFlags    pipelineStatistics;$/;"	m	struct:VkQueryPoolCreateInfo	access:public
@@ -13466,7 +13467,7 @@ proj	inc/quad.h	/^		glm::mat4 proj;$/;"	m	struct:Quad::PushConstants	access:publ
 proj	inc/quad.h	/^		glm::mat4 proj;$/;"	m	struct:Quad::UBO	access:public
 proj	src/camera.cpp	/^glm::mat4& Camera::proj()$/;"	f	class:Camera	signature:()
 propertyFlags	lib/vulkan/vulkan.h	/^    VkMemoryPropertyFlags    propertyFlags;$/;"	m	struct:VkMemoryType	access:public
-pushConstantRange	src/pipeline_creator.cpp	/^VkPushConstantRange PipelineCreator::pushConstantRange(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)$/;"	f	class:PipelineCreator	signature:(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)
+pushConstantRange	inc/pipeline_creator.h	/^inline VkPushConstantRange pushConstantRange(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)$/;"	f	namespace:PipelineCreator	signature:(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)
 pushConstantRangeCount	lib/vulkan/vulkan.h	/^    uint32_t                        pushConstantRangeCount;$/;"	m	struct:VkPipelineLayoutCreateInfo	access:public
 q	lib/glm/detail/type_vec4.hpp	/^				struct { T s, t, p, q; };$/;"	m	struct:glm::vec::__anon15::__anon18	access:public
 q	lib/glm/detail/type_vec4.hpp	/^			union { T w, a, q; };$/;"	m	union:glm::vec::__anon22	access:public
@@ -13506,7 +13507,8 @@ range	lib/vulkan/vulkan.h	/^    VkDeviceSize               range;$/;"	m	struct:V
 range	lib/vulkan/vulkan.h	/^    VkDeviceSize    range;$/;"	m	struct:VkDescriptorBufferInfo	access:public
 rasterizationOrder	lib/vulkan/vulkan.h	/^    VkRasterizationOrderAMD    rasterizationOrder;$/;"	m	struct:VkPipelineRasterizationStateRasterizationOrderAMD	access:public
 rasterizationSamples	lib/vulkan/vulkan.h	/^    VkSampleCountFlagBits                    rasterizationSamples;$/;"	m	struct:VkPipelineMultisampleStateCreateInfo	access:public
-rasterizationStateCullBackCCW	src/pipeline_creator.cpp	/^VkPipelineRasterizationStateCreateInfo PipelineCreator::rasterizationStateCullBackCCW() $/;"	f	class:PipelineCreator	signature:()
+rasterizationStateCullBackCCW	inc/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() $/;"	f	namespace:PipelineCreator	signature:()
+rasterizationStateCullBackCW	inc/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW() $/;"	f	namespace:PipelineCreator	signature:()
 rasterizerDiscardEnable	lib/vulkan/vulkan.h	/^    VkBool32                                   rasterizerDiscardEnable;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo	access:public
 ratio	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon54	access:public
 raw_coeff	lib/stb/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon43::__anon44	access:public
@@ -13701,8 +13703,8 @@ shaderInt64	lib/vulkan/vulkan.h	/^    VkBool32    shaderInt64;$/;"	m	struct:VkPh
 shaderResourceMinLod	lib/vulkan/vulkan.h	/^    VkBool32    shaderResourceMinLod;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 shaderResourceResidency	lib/vulkan/vulkan.h	/^    VkBool32    shaderResourceResidency;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 shaderSampledImageArrayDynamicIndexing	lib/vulkan/vulkan.h	/^    VkBool32    shaderSampledImageArrayDynamicIndexing;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
-shaderStage	src/pipeline_creator.cpp	/^VkPipelineShaderStageCreateInfo PipelineCreator::shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)$/;"	f	class:PipelineCreator	signature:(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)
-shaderStage	src/pipeline_creator.cpp	/^VkPipelineShaderStageCreateInfo PipelineCreator::shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)$/;"	f	class:PipelineCreator	signature:(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)
+shaderStage	inc/pipeline_creator.h	/^inline VkPipelineShaderStageCreateInfo shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)$/;"	f	namespace:PipelineCreator	signature:(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)
+shaderStage	inc/pipeline_creator.h	/^inline VkPipelineShaderStageCreateInfo shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)$/;"	f	namespace:PipelineCreator	signature:(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)
 shaderStorageBufferArrayDynamicIndexing	lib/vulkan/vulkan.h	/^    VkBool32    shaderStorageBufferArrayDynamicIndexing;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 shaderStorageImageArrayDynamicIndexing	lib/vulkan/vulkan.h	/^    VkBool32    shaderStorageImageArrayDynamicIndexing;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 shaderStorageImageExtendedFormats	lib/vulkan/vulkan.h	/^    VkBool32    shaderStorageImageExtendedFormats;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
@@ -15352,7 +15354,7 @@ vertexAttributeDescriptionCount	lib/vulkan/vulkan.h	/^    uint32_t              
 vertexBindingDescriptionCount	lib/vulkan/vulkan.h	/^    uint32_t                                    vertexBindingDescriptionCount;$/;"	m	struct:VkPipelineVertexInputStateCreateInfo	access:public
 vertexBufferOffset	inc/model.h	/^				 vertexBufferOffset, $/;"	m	class:Model	access:public
 vertexCount	lib/vulkan/vulkan.h	/^    uint32_t    vertexCount;$/;"	m	struct:VkDrawIndirectCommand	access:public
-vertexInputState	src/pipeline_creator.cpp	/^VkPipelineVertexInputStateCreateInfo PipelineCreator::vertexInputState($/;"	f	class:PipelineCreator	signature:( VkVertexInputBindingDescription* bindings, uint32_t bindingsCount, VkVertexInputAttributeDescription* attributes, uint32_t attributesCount)
+vertexInputState	inc/pipeline_creator.h	/^inline VkPipelineVertexInputStateCreateInfo vertexInputState($/;"	f	namespace:PipelineCreator	signature:( VkVertexInputBindingDescription* bindings, uint32_t bindingsCount, VkVertexInputAttributeDescription* attributes, uint32_t attributesCount)
 vertexOffset	lib/vulkan/vulkan.h	/^    int32_t     vertexOffset;$/;"	m	struct:VkDrawIndexedIndirectCommand	access:public
 vertexPipelineStoresAndAtomics	lib/vulkan/vulkan.h	/^    VkBool32    vertexPipelineStoresAndAtomics;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 view	inc/model.h	/^		glm::mat4 view;$/;"	m	struct:Model::UBO	access:public
@@ -15362,8 +15364,8 @@ view	src/camera.cpp	/^glm::mat4& Camera::view()$/;"	f	class:Camera	signature:()
 viewType	lib/vulkan/vulkan.h	/^    VkImageViewType            viewType;$/;"	m	struct:VkImageViewCreateInfo	access:public
 viewportBoundsRange	lib/vulkan/vulkan.h	/^    float                 viewportBoundsRange[2];$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 viewportCount	lib/vulkan/vulkan.h	/^    uint32_t                              viewportCount;$/;"	m	struct:VkPipelineViewportStateCreateInfo	access:public
-viewportStateDefault	src/pipeline_creator.cpp	/^VkPipelineViewportStateCreateInfo PipelineCreator::viewportStateDefault(VkExtent2D& extent)$/;"	f	class:PipelineCreator	signature:(VkExtent2D& extent)
-viewportStateDynamic	src/pipeline_creator.cpp	/^VkPipelineViewportStateCreateInfo PipelineCreator::viewportStateDynamic() $/;"	f	class:PipelineCreator	signature:()
+viewportStateDefault	inc/pipeline_creator.h	/^inline VkPipelineViewportStateCreateInfo viewportStateDefault(VkExtent2D& extent)$/;"	f	namespace:PipelineCreator	signature:(VkExtent2D& extent)
+viewportStateDynamic	inc/pipeline_creator.h	/^inline VkPipelineViewportStateCreateInfo viewportStateDynamic() $/;"	f	namespace:PipelineCreator	signature:()
 viewportSubPixelBits	lib/vulkan/vulkan.h	/^    uint32_t              viewportSubPixelBits;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 visibleRegion	lib/vulkan/vulkan.h	/^    VkExtent2D    visibleRegion;$/;"	m	struct:VkDisplayModeParametersKHR	access:public
 vs	lib/stb/stb_image.h	/^   int hs,vs;   \/\/ expansion factor in each axis$/;"	m	struct:__anon45	access:public

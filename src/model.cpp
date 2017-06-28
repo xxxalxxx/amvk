@@ -44,9 +44,9 @@ void Model::init(const char* modelPath, unsigned int pFlags)
 	mFolder = FileManager::getFilePath(std::string(modelPath));
 	LOG("FOLDER:" << mFolder);
 	Assimp::Importer importer;
-	  // And have it read the given file with some example postprocessing
-	  // Usually - if speed is not the most important aspect for you - you'll 
-	  // propably to request more postprocessing than we do in this example.
+	
+//	pFlags = aiProcess_FlipWindingOrder | aiProcess_Triangulate; // | aiProcess_PreTransformVertices;
+
 	const aiScene* scene = importer.ReadFile(modelPath, pFlags);
 	  
 	  // If the import failed, report it
@@ -70,18 +70,19 @@ void Model::processModel(const aiScene& scene)
 
 		aiMesh& mesh = *scene.mMeshes[i];
 		Mesh& meshInfo = mMeshes[i];
-
 		bool hasPositions = mesh.HasPositions();
 		bool hasNormals = mesh.HasNormals();
 		bool hasTangentsAndBitangents = mesh.HasTangentsAndBitangents();
 		bool hasTexCoords = mesh.HasTextureCoords(0);
-
+	
 		// Vertices
 		meshInfo.baseVertex = vertices.size();
 		for (size_t j = 0; j < mesh.mNumVertices; ++j) {
 			Vertex vertex;
-			if (hasPositions) 
+			if (hasPositions) { 
 				convertVector(mesh.mVertices[j], vertex.pos);
+				vertex.pos.y *= -1;
+			}
 			if (hasNormals) 
 				convertVector(mesh.mNormals[j], vertex.normal);
 			if (hasTangentsAndBitangents) {
@@ -98,7 +99,7 @@ void Model::processModel(const aiScene& scene)
 		meshInfo.baseIndex = indices.size();
 		for (size_t j = 0; j < mesh.mNumFaces; ++j) 
 			for (size_t k = 0; k < 3; ++k)
-				indices.push_back(mesh.mFaces[j].mIndices[k]);
+				indices.push_back(mesh.mFaces[j].mIndices[k] + meshInfo.baseIndex);
 		meshInfo.numIndices = indices.size() - meshInfo.baseIndex;
 		
 		// Textures
@@ -151,6 +152,7 @@ void Model::processModel(const aiScene& scene)
 			mMaterialIndexToMaterial[mesh.mMaterialIndex] = materialInfo;
 		} else {LOG("MATERIAL EXISTS");}
 	}
+
 	createCommonBuffer(vertices, indices);
 	createDescriptorPool();
 	createDescriptorSet();
@@ -188,7 +190,6 @@ void Model::createCommonBuffer(const std::vector<Vertex>& vertices, const std::v
 			mCommonStagingBufferInfo.buffer, 
 			mCommonBufferInfo.buffer, 
 			mCommonBufferInfo.size);
-	LOG("MODEL COMMON BUFFER CREATED");
 }
 
 void Model::createPipeline(VulkanState& state) 
@@ -305,7 +306,7 @@ void Model::createDescriptorSet()
 	allocInfo.pSetLayouts = &mState.descriptorSetLayouts.uniform;
 
 	VK_CHECK_RESULT(vkAllocateDescriptorSets(mState.device, &allocInfo, &mUniformDescriptorSet));
-
+	
 	VkDescriptorBufferInfo buffInfo = {};
 	buffInfo.buffer = mCommonBufferInfo.buffer;
 	buffInfo.offset = uniformBufferOffset;
@@ -384,8 +385,7 @@ void Model::createDescriptorSet()
 			}
 			vkUpdateDescriptorSets(mState.device, writeSets.size(), writeSets.data(), 0, nullptr);
 		} 
-	} 
-	
+	}
 }
 
 void Model::draw(VkCommandBuffer& commandBuffer)
@@ -415,8 +415,6 @@ void Model::draw(VkCommandBuffer& commandBuffer)
 			nullptr);
 		vkCmdDrawIndexed(commandBuffer, mesh.numIndices, 1, mesh.baseIndex, 0, 0);
 	}
-	//vkCmdDrawIndexed(commandBuffer, numIndices, 1, 0, 0, 0);
-
 }
 
 void Model::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
@@ -432,6 +430,7 @@ void Model::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camer
 			uniformBufferOffset,
 			sizeof(UBO),
 			&ubo);
+			
 }
 
 void Model::convertVector(const aiVector3D& src, glm::vec3& dest)
