@@ -77,7 +77,6 @@ private:
 	DeviceManager mDeviceManager;
 	SwapchainManager mSwapChainManager;
 	ShaderManager mShaderManager;
-	DescriptorManager mDescriptorManager;
 	Quad mQuad;
 	Model mSuit;
 	uint32_t imageIndex;

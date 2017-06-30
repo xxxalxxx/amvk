@@ -79,7 +79,7 @@ private:
 
 	void createDescriptorPool();
 	void createDescriptorSet();
-	void createRenderPass(const ImageHelper& vic);
+
 
 	std::array<VkVertexInputAttributeDescription, 3> getAttrDesc() const;
 	VkVertexInputBindingDescription getBindingDesc() const;

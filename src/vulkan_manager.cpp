@@ -6,7 +6,6 @@ VulkanManager::VulkanManager(Window& window):
 	mDeviceManager(mVulkanState),
 	mSwapChainManager(mVulkanState, mWindow),
 	mShaderManager(mVulkanState),
-	mDescriptorManager(mVulkanState),
 	mQuad(mVulkanState),
 	mSuit(mVulkanState),
 	imageIndex(0)
@@ -28,8 +27,6 @@ void VulkanManager::init()
 	mDeviceManager.createPhysicalDevice(mSwapChainManager);
 	mDeviceManager.createLogicalDevice();
 
-
-
 	mSwapChainManager.createSwapChain();
 	mSwapChainManager.createImageViews();
 	
@@ -37,8 +34,8 @@ void VulkanManager::init()
 	mSwapChainManager.createCommandPool();
 
 	mShaderManager.createShaders();
-	mDescriptorManager.createDescriptorSetLayouts();
-	mDescriptorManager.createDescriptorPool();
+	DescriptorManager::createDescriptorSetLayouts(mVulkanState);
+	DescriptorManager::createDescriptorPool(mVulkanState);
 
 	Quad::createPipeline(mVulkanState);
 	Model::createPipeline(mVulkanState);
@@ -60,7 +57,7 @@ void VulkanManager::init()
 void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)
 {
 	CmdPass cmd(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue);
-	//mQuad.updateUniformBuffers(cmd.buffer, timer, camera);
+	mQuad.updateUniformBuffers(cmd.buffer, timer, camera);
 	mSuit.update(cmd.buffer, timer, camera);
 }
 
@@ -106,7 +103,7 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 		vkCmdSetViewport( mSwapChainManager.mVkCommandBuffers[i], 0, 1, &viewport);
 		vkCmdSetScissor( mSwapChainManager.mVkCommandBuffers[i], 0, 1, &scissor);
 			
-		//mQuad.draw(mSwapChainManager.mVkCommandBuffers[i]);
+		mQuad.draw(mSwapChainManager.mVkCommandBuffers[i]);
 		mSuit.draw(mSwapChainManager.mVkCommandBuffers[i], 
 				mVulkanState.pipelines.model.pipeline,
 				mVulkanState.pipelines.model.layout);
