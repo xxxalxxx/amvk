@@ -12,7 +12,7 @@ Camera::Camera():
 	mNear(0.1f), mFar(1000.0f), 
 	mFOV(0.5f * (MAX_FOV_RADIANS + MIN_FOV_RADIANS)), mAspect(1.0f),
 	mPitch(0.0f), mYaw(3.0f),
-	mForwardMovementScalar(20.0f), mSidewaysMovementScalar(20.0f), mMouseSensitivityScalar(0.002f), mScrollSensitivityScalar(0.05f),
+	mForwardMovementScalar(40.0f), mSidewaysMovementScalar(40.0f), mMouseSensitivityScalar(0.002f), mScrollSensitivityScalar(0.05f),
 	mEye(0.0f, 0.0f, -4.0f),
 	initPrevPos(true)
 {

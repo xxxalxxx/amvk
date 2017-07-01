@@ -35,7 +35,8 @@ struct ShaderInfo {
 
 struct Pipelines {
 	PipelineInfo quad,
-				 model;
+				 model,
+				 skinned;
 };
 
 struct DescriptorSets {
@@ -51,7 +52,8 @@ struct DescriptorSetLayouts {
 
 struct Shaders {
 	ShaderInfo quad,
-			   model;
+			   model,
+			   skinned;
 };
 
 struct VulkanState {

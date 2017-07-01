@@ -114,6 +114,9 @@ public:
 	VkDeviceSize uniformBufferOffset,  
 				 vertexBufferOffset, 
 				 indexBufferOffset; 
+
+	UBO ubo;
+
 protected:
 	std::vector<Mesh> mMeshes;
 	uint32_t mNumSamplerDescriptors;

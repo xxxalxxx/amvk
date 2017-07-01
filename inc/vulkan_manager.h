@@ -33,6 +33,7 @@
 #include <unordered_set>
 #include <cstddef>
 
+
 #include "macro.h"
 #include "window.h"
 #include "camera.h"
@@ -49,6 +50,8 @@
 #include "descriptor_manager.h"
 #include "quad.h"
 #include "model.h"
+#include "skinned.h"
+
 
 class VulkanManager { 
 	friend class Engine;
@@ -76,9 +79,9 @@ private:
 	VulkanState mVulkanState;
 	DeviceManager mDeviceManager;
 	SwapchainManager mSwapChainManager;
-	ShaderManager mShaderManager;
 	Quad mQuad;
 	Model mSuit;
+	Skinned mGuard;
 	uint32_t imageIndex;
 };
 

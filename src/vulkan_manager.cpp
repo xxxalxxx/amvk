@@ -5,9 +5,9 @@ VulkanManager::VulkanManager(Window& window):
 	mWindow(window),
 	mDeviceManager(mVulkanState),
 	mSwapChainManager(mVulkanState, mWindow),
-	mShaderManager(mVulkanState),
 	mQuad(mVulkanState),
 	mSuit(mVulkanState),
+	mGuard(mVulkanState),
 	imageIndex(0)
 {
 	
@@ -33,16 +33,23 @@ void VulkanManager::init()
 	mSwapChainManager.createRenderPass();
 	mSwapChainManager.createCommandPool();
 
-	mShaderManager.createShaders();
+	ShaderManager::createShaders(mVulkanState);
 	DescriptorManager::createDescriptorSetLayouts(mVulkanState);
 	DescriptorManager::createDescriptorPool(mVulkanState);
 
 	Quad::createPipeline(mVulkanState);
 	Model::createPipeline(mVulkanState);
+	Skinned::createPipeline(mVulkanState);
 
 	mQuad.init();
 
-	mSuit.init(FileManager::getModelsPath("nanosuit2/nanosuit.obj"));
+	mSuit.init(FileManager::getModelsPath("guard/boblampclean.md5mesh"), Model::DEFAULT_FLAGS | aiProcess_FlipUVs);
+//	mSuit.ubo.model = glm::rotate(glm::radians(90.f), glm::vec3(1.f, 0.f, 0.f));
+//	mSuit.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(0.f, 1.f, 0.f)) * mSuit.ubo.model;
+
+	mGuard.init(FileManager::getModelsPath("guard/boblampclean.md5mesh"), Skinned::DEFAULT_FLAGS | aiProcess_FlipUVs | aiProcess_FlipWindingOrder);
+	mGuard.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(1.f, 0.f, 0.f));
+	//mGuard.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(0.f, 1.f, 0.f)) * mGuard.ubo.model;
 
 	mSwapChainManager.createDepthResources();
 	mSwapChainManager.createFramebuffers(mVulkanState.renderPass);
@@ -58,7 +65,8 @@ void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)
 {
 	CmdPass cmd(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue);
 	mQuad.updateUniformBuffers(cmd.buffer, timer, camera);
-	mSuit.update(cmd.buffer, timer, camera);
+	//mSuit.update(cmd.buffer, timer, camera);
+	mGuard.update(cmd.buffer, timer, camera);
 }
 
 void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera) 
@@ -104,9 +112,10 @@ void VulkanManager::updateCommandBuffers(const Timer& timer, Camera& camera)
 		vkCmdSetScissor( mSwapChainManager.mVkCommandBuffers[i], 0, 1, &scissor);
 			
 		mQuad.draw(mSwapChainManager.mVkCommandBuffers[i]);
-		mSuit.draw(mSwapChainManager.mVkCommandBuffers[i], 
-				mVulkanState.pipelines.model.pipeline,
-				mVulkanState.pipelines.model.layout);
+		//mSuit.draw(mSwapChainManager.mVkCommandBuffers[i], 	mVulkanState.pipelines.model.pipeline, mVulkanState.pipelines.model.layout);
+
+		mGuard.draw(mSwapChainManager.mVkCommandBuffers[i], mVulkanState.pipelines.skinned.pipeline, mVulkanState.pipelines.skinned.layout);
+
 		vkCmdEndRenderPass( mSwapChainManager.mVkCommandBuffers[i]);
 		VK_CHECK_RESULT(vkEndCommandBuffer(mSwapChainManager.mVkCommandBuffers[i]));
 	}

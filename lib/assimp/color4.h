@@ -41,11 +41,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @file color4.h
  *  @brief RGBA color structure, including operators when compiling in C++
  */
-#pragma once
 #ifndef AI_COLOR4D_H_INC
 #define AI_COLOR4D_H_INC
 
-#include "defs.h"
+#include "./Compiler/pushpack1.h"
 
 #ifdef __cplusplus
 
@@ -87,17 +86,29 @@ public:
 public:
 
     // Red, green, blue and alpha color values
-    TReal r, g, b, a;
-};  // !struct aiColor4D
+    union {
+        struct {
+            TReal r, g, b, a;
+        };
+        TReal c[ 4 ];
+    };
+} PACK_STRUCT;  // !struct aiColor4D
 
-typedef aiColor4t<ai_real> aiColor4D;
+typedef aiColor4t<float> aiColor4D;
 
 #else
 
 struct aiColor4D {
-    ai_real r, g, b, a;
-};
+    union {
+        struct {
+            float r, g, b, a;
+        };
+        float c[ 4 ];
+    };
+} PACK_STRUCT;
 
 #endif // __cplusplus
+
+#include "./Compiler/poppack1.h"
 
 #endif // AI_COLOR4D_H_INC

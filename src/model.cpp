@@ -417,8 +417,6 @@ void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelin
 
 void Model::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 {
-	UBO ubo = {};
-	ubo.model = glm::mat4();
 	ubo.view = camera.view();
 	ubo.proj = camera.proj();
 
