@@ -43,14 +43,20 @@ void VulkanManager::init()
 
 	mQuad.init();
 
-	mSuit.init(FileManager::getModelsPath("guard/boblampclean.md5mesh"), Model::DEFAULT_FLAGS | aiProcess_FlipUVs);
+//	mSuit.init(FileManager::getModelsPath("guard/boblampclean.md5mesh"), Model::DEFAULT_FLAGS | aiProcess_FlipUVs);
 //	mSuit.ubo.model = glm::rotate(glm::radians(90.f), glm::vec3(1.f, 0.f, 0.f));
 //	mSuit.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(0.f, 1.f, 0.f)) * mSuit.ubo.model;
 
-	mGuard.init(FileManager::getModelsPath("dwarf/dwarf2.ms3d"/*"guard/boblampclean.md5mesh"*/), 
+	mGuard.init(FileManager::getModelsPath(
+				"dwarf/dwarf2.ms3d"
+				//"guard/boblampclean.md5mesh"
+				), 
 			Skinned::DEFAULT_FLAGS | aiProcess_FlipUVs | aiProcess_FlipWindingOrder,
-			Skinned::ModelFlag_stripFullPath);
+			//0
+			Skinned::ModelFlag_stripFullPath
+			);
 	mGuard.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(1.f, 0.f, 0.f));
+	mGuard.animSpeedScale = 0.5f;
 	//mGuard.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(0.f, 1.f, 0.f)) * mGuard.ubo.model;
 
 	mSwapChainManager.createDepthResources();

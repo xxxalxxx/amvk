@@ -12,9 +12,11 @@ const aiTextureType* Skinned::TEXTURE_TYPES = Skinned_TEXTURE_TYPES;
 const uint32_t Skinned::NUM_TEXTURE_TYPES = ARRAY_SIZE(Skinned_TEXTURE_TYPES);
 
 Skinned::Skinned(VulkanState& vulkanState):
+	animSpeedScale(1.f),
 	numVertices(0),
 	numIndices(0),
 	numBones(0),
+	numSamplers(0),
 	uniformBufferOffset(0),
 	vertexBufferOffset(0),
 	indexBufferOffset(0),
@@ -67,10 +69,12 @@ void Skinned::processMeshVertices(std::vector<Vertex>& vertices, aiMesh& mesh, M
 	bool hasNormals = mesh.HasNormals();
 	bool hasTangentsAndBitangents = mesh.HasTangentsAndBitangents();
 	bool hasTexCoords = mesh.HasTextureCoords(0);
-
+	auto it = mMaterialIndexToMaterial.find(mesh.mMaterialIndex);
+	bool hasMaterial = it != mMaterialIndexToMaterial.end();
 	// Vertices
 	for (size_t j = 0; j < mesh.mNumVertices; ++j) {
 		Vertex& vertex = vertices[meshInfo.baseVertex + j];
+
 		if (hasPositions) 
 			convertVector(mesh.mVertices[j], vertex.pos);
 		if (hasNormals) 
@@ -79,8 +83,14 @@ void Skinned::processMeshVertices(std::vector<Vertex>& vertices, aiMesh& mesh, M
 			convertVector(mesh.mTangents[j], vertex.tangent);
 			convertVector(mesh.mBitangents[j], vertex.bitangent);
 		}
+
 		if (hasTexCoords) 
 			convertVector(mesh.mTextureCoords[0][j], vertex.texCoord);
+		if (hasMaterial) {
+			Material& material = it->second;
+			if (!material.diffuseIndices.empty())
+				vertex.samplerIndices[0] = material.diffuseIndices[0];
+		}
 	}
 }
 
@@ -99,12 +109,14 @@ void Skinned::processMeshMaterials(aiMesh& mesh, Mesh& meshInfo)
 	auto it = mMaterialIndexToMaterial.find(mesh.mMaterialIndex);
 	if (it == mMaterialIndexToMaterial.end()) {
 		Material materialInfo;
+
 		for (size_t j = 0; j < NUM_TEXTURE_TYPES; ++j) {
 			aiTextureType textureType = TEXTURE_TYPES[j];
 			size_t numMaterials = material.GetTextureCount(textureType); 
+
 			for (size_t k = 0; k < numMaterials; ++k) {
 				aiString texturePath;
-			
+
 				material.GetTexture(textureType, k, &texturePath);
 				std::string fullTexturePath = mFolder + "/";
 				if (mModelFlags & ModelFlag_stripFullPath)
@@ -118,33 +130,43 @@ void Skinned::processMeshMaterials(aiMesh& mesh, Mesh& meshInfo)
 						mState.commandPool, 
 						mState.graphicsQueue, 
 						textureDesc);
+				uint32_t index = numSamplers;
+				bool textureSupported = true;
 
-				LOG("AFTER LOAD");
 				switch(textureType) {
-					case aiTextureType_DIFFUSE:
-						materialInfo.diffuseImages.push_back(imageInfo);
-						++materialInfo.numImages;
+					case aiTextureType_DIFFUSE: 
+						materialInfo.diffuseIndices.push_back(index);
 						break;
-					case aiTextureType_SPECULAR:
-						materialInfo.specularImages.push_back(imageInfo);
-						++materialInfo.numImages;
+					case aiTextureType_SPECULAR: 
+						materialInfo.specularIndices.push_back(index);
 						break;
-					case aiTextureType_HEIGHT:
-						materialInfo.heightImages.push_back(imageInfo);
-						++materialInfo.numImages;
+					case aiTextureType_HEIGHT: 
+						materialInfo.heightIndices.push_back(index);
 						break;
 					case aiTextureType_AMBIENT:
-						materialInfo.ambientImages.push_back(imageInfo);
-						++materialInfo.numImages;
+						materialInfo.ambientIndices.push_back(index);
 						break;
 					default:
+						textureSupported = false;
 						break;
 				}
+
+				if (textureSupported) {
+					materialInfo.textures.push_back(MaterialTexture());
+					auto& texture = materialInfo.textures.back();
+					texture.type = textureType;
+					texture.image = imageInfo;
+					texture.index = index;
+					++numSamplers;
+				}
 			}
+	
 			mNumSamplerDescriptors += NUM_TEXTURE_TYPES;
 		}	
 		mMaterialIndexToMaterial[mesh.mMaterialIndex] = materialInfo;
-	} else {LOG("MATERIAL EXISTS");}
+	} else {
+		LOG("MATERIAL EXISTS");
+	}
 
 }
 
@@ -192,7 +214,6 @@ void Skinned::processMeshBones(
 			if (weightIndex < MAX_BONES_PER_VERTEX && vertex.weights[weightIndex] == 0.0f) {
 				vertex.boneIndices[weightIndex] = boneIndex;
 				vertex.weights[weightIndex] = vertexWeight.mWeight;
-				LOG("WEIGHT INDEX:" << weightIndex);
 				++weightIndex;
 			}
 				
@@ -214,7 +235,6 @@ void Skinned::createAnimNode(aiNode* node, AnimNode* parent)
     auto it = mNodeToBoneIndexMap.find(node);
     if (it == mNodeToBoneIndexMap.end()) 
 		return;
-	LOG("CREATE NODE");
 	AnimNode* animNode = new AnimNode(*node);
 
 	if (parent) 
@@ -300,13 +320,13 @@ void Skinned::processModel(const aiScene& scene)
 		for (size_t i = 0; i < n->mNumMeshes; ++i) {
             aiMesh& mesh = *(mScene->mMeshes[n->mMeshes[i]]);
 			Mesh& meshInfo = mMeshes[i];
+			processMeshMaterials(mesh, meshInfo);
 			processMeshVertices(vertices, mesh, meshInfo);
 			processMeshIndices(indices, mesh, meshInfo);
-			processMeshMaterials(mesh, meshInfo);
 			processMeshBones(n, boneNameToIndexMap, vertices, vertexBoneIndices, mesh, meshInfo);
         }
             
-        for(size_t i = 0; i < n->mNumChildren; ++i)
+        for (size_t i = 0; i < n->mNumChildren; ++i)
             s.push(n->mChildren[i]);
 	}
 
@@ -387,7 +407,8 @@ void Skinned::createPipeline(VulkanState& state)
 		{ 3, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, bitangent) },
 		{ 4, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCoord) },
 		{ 5, 0, VK_FORMAT_R32G32B32A32_UINT, offsetof(Vertex, boneIndices) },
-		{ 6, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, weights) }
+		{ 6, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Vertex, weights) },
+		{ 7, 0, VK_FORMAT_R32G32B32A32_UINT, offsetof(Vertex, samplerIndices) },
 	};
 
 	auto vertexInputInfo = PipelineCreator::vertexInputState(&bindingDesc, 1, attrDesc, ARRAY_SIZE(attrDesc)); 
@@ -413,7 +434,7 @@ void Skinned::createPipeline(VulkanState& state)
 
 	VkDescriptorSetLayout layouts[] = {
 		state.descriptorSetLayouts.uniform,
-		state.descriptorSetLayouts.sampler
+		state.descriptorSetLayouts.samplerList
 	};
 
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(layouts, ARRAY_SIZE(layouts), NULL, 0);
@@ -451,11 +472,11 @@ void Skinned::createDescriptorPool()
 {
 	VkDescriptorPoolSize uboSize = {};
 	uboSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	uboSize.descriptorCount = mNumSamplerDescriptors + 1;
+	uboSize.descriptorCount = SAMPLER_LIST_SIZE + 1;
 	
 	VkDescriptorPoolSize samplerSize = {};
 	samplerSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	samplerSize.descriptorCount = mNumSamplerDescriptors + 1;
+	samplerSize.descriptorCount = SAMPLER_LIST_SIZE + 1;
 
 	VkDescriptorPoolSize poolSizes[] = {
 		uboSize,
@@ -466,9 +487,9 @@ void Skinned::createDescriptorPool()
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	poolInfo.poolSizeCount = ARRAY_SIZE(poolSizes);
 	poolInfo.pPoolSizes = poolSizes;
-	poolInfo.maxSets = mNumSamplerDescriptors + 1;
+	poolInfo.maxSets = SAMPLER_LIST_SIZE + 1;
 	
-	LOG("NUM SAMPLERS:" << mNumSamplerDescriptors << " materials: " << mMaterialIndexToMaterial.size());
+	LOG("NUM SAMPLERS:" << numSamplers << " materials: " << mMaterialIndexToMaterial.size());
 	LOG("MAX SETS:" << poolInfo.maxSets);
 
 	VK_CHECK_RESULT(vkCreateDescriptorPool(mState.device, &poolInfo, nullptr, &mDescriptorPool));
@@ -498,71 +519,42 @@ void Skinned::createDescriptorSet()
 	uniformWriteSet.descriptorCount = 1;
 	uniformWriteSet.pBufferInfo = &buffInfo;
 
-	vkUpdateDescriptorSets(mState.device, 1, &uniformWriteSet, 0, nullptr);
-	LOG("UNIFORM SET CREATED");
-	
-	std::vector<VkDescriptorSetLayout> layouts(NUM_TEXTURE_TYPES, mState.descriptorSetLayouts.sampler);
-	
+	std::vector<VkDescriptorImageInfo> images(numSamplers);
+	VkDescriptorSetAllocateInfo samplerAllocInfo = {};
+	samplerAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	samplerAllocInfo.descriptorPool = mDescriptorPool;
+	samplerAllocInfo.descriptorSetCount = 1;
+	samplerAllocInfo.pSetLayouts = &mState.descriptorSetLayouts.samplerList;
+
+	VK_CHECK_RESULT(vkAllocateDescriptorSets(mState.device, &samplerAllocInfo, &mSamplersDescriptorSet));
+
 	for (auto& materialPair : mMaterialIndexToMaterial) {
 		Material& material = materialPair.second;
-		material.descriptors.resize(material.maxImages);
-		for (size_t i = 0; i < material.maxImages; ++i) {
-			VkDescriptorSet& descriptorSet = material.descriptors[i];
-			std::vector<VkWriteDescriptorSet> writeSets(NUM_TEXTURE_TYPES);
 
-			VkDescriptorSetAllocateInfo samplerAllocInfo = {};
-			samplerAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-			samplerAllocInfo.descriptorPool = mDescriptorPool;
-			samplerAllocInfo.descriptorSetCount = NUM_TEXTURE_TYPES;
-			samplerAllocInfo.pSetLayouts = layouts.data();
-
-			VK_CHECK_RESULT(vkAllocateDescriptorSets(mState.device, &samplerAllocInfo, &descriptorSet));
-
-			for (size_t j = 0; j < NUM_TEXTURE_TYPES; ++j) {
-				std::vector<ImageInfo*>* images = NULL;
-				uint32_t binding;
-
-				switch(TEXTURE_TYPES[j]) {
-					case aiTextureType_DIFFUSE:
-						images = &material.diffuseImages;
-						binding = 0;
-						break;
-					case aiTextureType_SPECULAR:
-						images = &material.specularImages;
-						binding = 1;
-						break;
-					case aiTextureType_HEIGHT:
-						images = &material.heightImages;
-						binding = 2;
-						break;
-					default: //aiTextureType_AMBIENT
-						images = &material.ambientImages;
-						binding = 3;
-						break;
-				}
-
-				bool hasImage = images != NULL && j < images->size();
-
-				if (hasImage) {
-					LOG("HAS IMAGE binding: " << binding << " index: " << j << " N:" << NUM_TEXTURE_TYPES);
-					ImageInfo* imageInfo = images->at(i);
-					VkDescriptorImageInfo descriptorInfo = {};
-					descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-					descriptorInfo.imageView = imageInfo->imageView;
-					descriptorInfo.sampler = imageInfo->sampler;
-
-					writeSets[j].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-					writeSets[j].dstSet = descriptorSet;
-					writeSets[j].dstBinding = binding;
-					writeSets[j].dstArrayElement = 0;
-					writeSets[j].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-					writeSets[j].descriptorCount = 1;
-					writeSets[j].pImageInfo = &descriptorInfo;
-				}
-			}
-			vkUpdateDescriptorSets(mState.device, writeSets.size(), writeSets.data(), 0, nullptr);
-		} 
+		for (size_t i = 0; i < material.textures.size(); ++i) {
+			auto& texture = material.textures[i];
+			auto& descriptorInfo = images[texture.index];
+			descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			descriptorInfo.imageView = texture.image->imageView;
+			descriptorInfo.sampler = texture.image->sampler;
+		}
 	}
+
+	VkWriteDescriptorSet samplersWriteSet = {};
+	samplersWriteSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	samplersWriteSet.dstSet = mSamplersDescriptorSet;
+	samplersWriteSet.dstBinding = 0;
+	samplersWriteSet.dstArrayElement = 0;
+	samplersWriteSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	samplersWriteSet.pImageInfo = images.data();
+	samplersWriteSet.descriptorCount = images.size();
+
+	VkWriteDescriptorSet writeSets[] = {
+		uniformWriteSet,
+		samplersWriteSet
+	};
+
+	vkUpdateDescriptorSets(mState.device, ARRAY_SIZE(writeSets), writeSets, 0, nullptr);
 }
 
 void Skinned::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
@@ -573,25 +565,21 @@ void Skinned::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipel
 	VkBuffer& commonBuff = mCommonBufferInfo.buffer;
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &commonBuff, &offset);
 	vkCmdBindIndexBuffer(commandBuffer, mCommonBufferInfo.buffer, indexBufferOffset, VK_INDEX_TYPE_UINT32);
-	
-	for (const auto& mesh : mMeshes) {
-		Material& material = mMaterialIndexToMaterial[mesh.materialIndex];
-		VkDescriptorSet sets[] = {
-			mUniformDescriptorSet,
-			material.descriptors[0]
-		};
 
-		vkCmdBindDescriptorSets(
-			commandBuffer, 
-			VK_PIPELINE_BIND_POINT_GRAPHICS, 
-			pipelineLayout, 
-			0, 
-			ARRAY_SIZE(sets), 
-			sets, 
-			0, 
-			nullptr);
-		//vkCmdDrawIndexed(commandBuffer, mesh.numIndices, 1, mesh.baseIndex, 0, 0);
-	}
+	VkDescriptorSet sets[] = {
+		mUniformDescriptorSet,
+		mSamplersDescriptorSet
+	};
+
+	vkCmdBindDescriptorSets(
+		commandBuffer, 
+		VK_PIPELINE_BIND_POINT_GRAPHICS, 
+		pipelineLayout, 
+		0, 
+		ARRAY_SIZE(sets), 
+		sets, 
+		0, 
+		nullptr);
 
 	vkCmdDrawIndexed(commandBuffer, numIndices, 1, 0, 0, 0);
 }
@@ -604,7 +592,7 @@ void Skinned::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& cam
     }
 
     aiMatrix4x4 initialTransform;
-    float progress = 0.5f * timer.total() * mScene->mAnimations[animationIndex]->mTicksPerSecond;
+    float progress = animSpeedScale * timer.total() * mScene->mAnimations[animationIndex]->mTicksPerSecond;
     progress = fmod(progress, mScene->mAnimations[animationIndex]->mDuration);
     processAnimNode(progress, initialTransform, mAnimNodeRoot, animationIndex);
 
