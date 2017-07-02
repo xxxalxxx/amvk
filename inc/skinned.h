@@ -38,13 +38,15 @@
 #include "anim_node.h"
 
 
-
-
 class Skinned {
 public:
-
+	typedef int ModelFlags;
+	static constexpr int ModelFlag_stripFullPath = 1;
+	
 	static const aiTextureType* TEXTURE_TYPES;
 	static const uint32_t NUM_TEXTURE_TYPES;
+
+
 
 	static constexpr uint32_t const MAX_BONES = 64;
 	static constexpr uint32_t const MAX_BONES_PER_VERTEX = 4;
@@ -110,9 +112,9 @@ public:
 	Skinned(VulkanState& vulkanState);
 	virtual ~Skinned();
 
-	void init(const char* modelPath, unsigned int pFlags = DEFAULT_FLAGS);
+	void init(const char* modelPath, unsigned int pFlags = DEFAULT_FLAGS, ModelFlags modelFlags = 0);
 	
-	void init(std::string modelPath, unsigned int pFlags = DEFAULT_FLAGS); 
+	void init(std::string modelPath, unsigned int pFlags = DEFAULT_FLAGS, ModelFlags modelFlags = 0); 
 
 	void createAnimNode(aiNode* node, AnimNode* parent);
 	void processMeshVertices(std::vector<Vertex>& vertices, aiMesh& mesh, Mesh& meshInfo);
@@ -158,6 +160,8 @@ protected:
 	BufferInfo mCommonStagingBufferInfo;
 
 	std::string mPath, mFolder;
+	ModelFlags mModelFlags;
+
 	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;
 
     const aiScene* mScene;

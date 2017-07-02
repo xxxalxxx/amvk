@@ -47,7 +47,9 @@ void VulkanManager::init()
 //	mSuit.ubo.model = glm::rotate(glm::radians(90.f), glm::vec3(1.f, 0.f, 0.f));
 //	mSuit.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(0.f, 1.f, 0.f)) * mSuit.ubo.model;
 
-	mGuard.init(FileManager::getModelsPath("guard/boblampclean.md5mesh"), Skinned::DEFAULT_FLAGS | aiProcess_FlipUVs | aiProcess_FlipWindingOrder);
+	mGuard.init(FileManager::getModelsPath("dwarf/dwarf2.ms3d"/*"guard/boblampclean.md5mesh"*/), 
+			Skinned::DEFAULT_FLAGS | aiProcess_FlipUVs | aiProcess_FlipWindingOrder,
+			Skinned::ModelFlag_stripFullPath);
 	mGuard.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(1.f, 0.f, 0.f));
 	//mGuard.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(0.f, 1.f, 0.f)) * mGuard.ubo.model;
 

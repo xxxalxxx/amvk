@@ -17,6 +17,13 @@ FileManager& FileManager::getInstance()
 	return fileManager;
 }
 
+std::string FileManager::stripPath(const std::string&& path)
+{
+	std::string s = path.substr(path.find_last_of("/\\") + 1);
+	LOG("STRIP:" << s);
+	return s;
+}
+
 std::string FileManager::getFilePath(const char* filename) 
 {
 	std::string s(filename);

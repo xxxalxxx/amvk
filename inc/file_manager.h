@@ -25,6 +25,7 @@ public:
 	static std::string getFilePath(const std::string& filename);
 	static std::string getFilePath(const char* filename);
 	static std::string getResourcePath(std::string&& path);
+	static std::string stripPath(const std::string&& fullPath);
 	static std::string getModelsPath(std::string&& path); 
 	static std::string getCachePath(std::string&& path); 
 

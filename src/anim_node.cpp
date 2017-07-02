@@ -33,8 +33,7 @@ aiMatrix4x4 AnimNode::getAnimatedTransform(float progress, unsigned int animInde
                 rotation    = getRotation(progress, animIndex, channel), 
                 scaling     = getScaling(progress, animIndex, channel);
 
-    aiMatrix4x4 result = translation * rotation * scaling;
-	return result;
+	return translation * rotation * scaling;
 }
 
 aiMatrix4x4 AnimNode::getTranslation(float progress, unsigned int animIndex, aiNodeAnim& channel)

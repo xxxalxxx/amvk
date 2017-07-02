@@ -35,15 +35,16 @@ Skinned::~Skinned()
 {	
 }
 
-void Skinned::init(std::string modelPath, unsigned int pFlags) 
+void Skinned::init(std::string modelPath, unsigned int pFlags, ModelFlags modelFlags) 
 {
-	init(modelPath.c_str(), pFlags);
+	init(modelPath.c_str(), pFlags, modelFlags);
 }
 
-void Skinned::init(const char* modelPath, unsigned int pFlags)
+void Skinned::init(const char* modelPath, unsigned int pFlags, ModelFlags modelFlags)
 {
 	mPath = modelPath;
 	mFolder = FileManager::getFilePath(std::string(modelPath));
+	mModelFlags = modelFlags;
 	LOG("FOLDER:" << mFolder);
 
 	mScene = importer.ReadFile(modelPath, pFlags);
@@ -106,7 +107,10 @@ void Skinned::processMeshMaterials(aiMesh& mesh, Mesh& meshInfo)
 			
 				material.GetTexture(textureType, k, &texturePath);
 				std::string fullTexturePath = mFolder + "/";
-				fullTexturePath += texturePath.C_Str();
+				if (mModelFlags & ModelFlag_stripFullPath)
+					fullTexturePath += FileManager::stripPath(std::string(texturePath.C_Str()));
+				else
+					fullTexturePath += texturePath.C_Str();
 
 				TextureDesc textureDesc(fullTexturePath);
 				ImageInfo* imageInfo = TextureManager::load(
@@ -598,8 +602,8 @@ void Skinned::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& cam
     }
 
     aiMatrix4x4 initialTransform;
-    float progress = timer.total() * mScene->mAnimations[0]->mTicksPerSecond;
-    progress = fmod(progress, mScene->mAnimations[0]->mDuration);
+    float progress = 0.5f * timer.total() * mScene->mAnimations[animationIndex]->mTicksPerSecond;
+    progress = fmod(progress, mScene->mAnimations[animationIndex]->mDuration);
     processAnimNode(progress, initialTransform, mAnimNodeRoot, animationIndex);
 
 	ubo.view = camera.view();
