@@ -152,6 +152,8 @@ void Skinned::processMeshMaterials(aiMesh& mesh, Mesh& meshInfo)
 				}
 
 				if (textureSupported) {
+					if (index >= SAMPLER_LIST_SIZE) 
+						throwError("SAMPLER OVERFLOW: Add support for model with more textures and sampler");
 					materialInfo.textures.push_back(MaterialTexture());
 					auto& texture = materialInfo.textures.back();
 					texture.type = textureType;
@@ -160,9 +162,7 @@ void Skinned::processMeshMaterials(aiMesh& mesh, Mesh& meshInfo)
 					++numSamplers;
 				}
 			}
-	
-			mNumSamplerDescriptors += NUM_TEXTURE_TYPES;
-		}	
+		}
 		mMaterialIndexToMaterial[mesh.mMaterialIndex] = materialInfo;
 	} else {
 		LOG("MATERIAL EXISTS");
