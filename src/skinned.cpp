@@ -590,8 +590,10 @@ void Skinned::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipel
 			sets, 
 			0, 
 			nullptr);
-		vkCmdDrawIndexed(commandBuffer, mesh.numIndices, 1, mesh.baseIndex, 0, 0);
+		//vkCmdDrawIndexed(commandBuffer, mesh.numIndices, 1, mesh.baseIndex, 0, 0);
 	}
+
+	vkCmdDrawIndexed(commandBuffer, numIndices, 1, 0, 0, 0);
 }
 
 void Skinned::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera, uint32_t animationIndex /* = 0 */)
