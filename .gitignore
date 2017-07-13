@@ -6,8 +6,8 @@
 
 # swap
 .*.sw*
-src/*.sw*
-inc/*.sw*
+src/.*.sw*
+inc/.*.sw*
 
 # session
 Session.vim
