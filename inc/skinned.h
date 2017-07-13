@@ -37,6 +37,7 @@
 #include "camera.h"
 #include "anim_node.h"
 
+#define MAX_SAMPLERS_PER_VERTEX 4
 
 class Skinned {
 public:
@@ -75,6 +76,7 @@ public:
 		glm::vec2 texCoord;
 		glm::uvec4 boneIndices;
 		glm::vec4 weights;
+		glm::uvec4 samplerIndices;
 	};
 
 	struct UBO {
@@ -84,22 +86,18 @@ public:
 		std::array<glm::mat4, MAX_BONES> bones;
 	};
 
+	struct MaterialTexture {
+		MaterialTexture():
+			index(0),
+			image(NULL) {}
+		uint32_t index;
+		aiTextureType type;
+		ImageInfo* image;
+	};
+
 	struct Material {
-		Material(): 
-			numImages(0), 
-			minImages(1), 
-			maxImages(1) {}
-
-		std::vector<ImageInfo*> 
-			diffuseImages, 
-			specularImages, 
-			heightImages, 
-			ambientImages;
-		
-		std::vector<VkDescriptorSet> descriptors;
-
-		uint32_t numImages;
-		uint32_t minImages, maxImages;
+		std::vector<MaterialTexture> textures;
+		std::vector<uint32_t> diffuseIndices, specularIndices, heightIndices, ambientIndices;
 	}; 
 
 	struct Mesh {
@@ -143,7 +141,8 @@ public:
 	void throwError(const char* error);
 	void throwError(std::string& error);
 	
-	uint32_t numVertices, numIndices, numBones;
+	float animSpeedScale;
+	uint32_t numVertices, numIndices, numBones, numSamplers;
 	VkDeviceSize uniformBufferOffset,  
 				 vertexBufferOffset, 
 				 indexBufferOffset;
@@ -154,6 +153,7 @@ protected:
 	uint32_t mNumSamplerDescriptors;
 	VkDescriptorPool mDescriptorPool;
 	VkDescriptorSet mUniformDescriptorSet;
+	VkDescriptorSet mSamplersDescriptorSet;
 
 	VulkanState& mState;
 	BufferInfo mCommonBufferInfo;

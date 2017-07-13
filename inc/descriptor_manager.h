@@ -72,6 +72,27 @@ inline void createSamplerDescriptorSetLayout(VulkanState& state)
 	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.sampler));
 }
 
+
+
+inline void createSamplerListDescriptorSetLayout(VulkanState& state)
+{
+	VkDescriptorSetLayoutBinding samplerLayoutBinding = {};
+	samplerLayoutBinding.binding = 0;
+	samplerLayoutBinding.descriptorCount = SAMPLER_LIST_SIZE;
+	samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	samplerLayoutBinding.pImmutableSamplers = nullptr;
+	samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+	VkDescriptorSetLayoutCreateInfo descSetLayoutInfo = {};
+	descSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	descSetLayoutInfo.bindingCount = 1; 
+	descSetLayoutInfo.pBindings = &samplerLayoutBinding;
+
+	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.samplerList));
+}
+
+
+
 inline void createUniformDescriptorSetLayout(VulkanState& state)
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
@@ -173,6 +194,7 @@ inline void createDescriptorSetLayouts(VulkanState& state)
 	createQuadDescriptorSetLayout(state);
 	createModelDescriptorSetLayout(state);
 	createSamplerDescriptorSetLayout(state);
+	createSamplerListDescriptorSetLayout(state);
 	createUniformDescriptorSetLayout(state);
 	LOG("DESC LAYOUTS CREATED");
 }

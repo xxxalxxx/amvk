@@ -1242,11 +1242,13 @@ DescriptorManager::createDescriptorSetLayouts	inc/descriptor_manager.h	/^inline 
 DescriptorManager::createModelDescriptorSetLayout	inc/descriptor_manager.h	/^inline void createModelDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createQuadDescriptorSetLayout	inc/descriptor_manager.h	/^inline void createQuadDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createSamplerDescriptorSetLayout	inc/descriptor_manager.h	/^inline void createSamplerDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
+DescriptorManager::createSamplerListDescriptorSetLayout	inc/descriptor_manager.h	/^inline void createSamplerListDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createUniformDescriptorSetLayout	inc/descriptor_manager.h	/^inline void createUniformDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorSetLayouts	inc/vulkan_state.h	/^struct DescriptorSetLayouts {$/;"	s
 DescriptorSetLayouts::model	inc/vulkan_state.h	/^						  model,$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSetLayouts::quad	inc/vulkan_state.h	/^	VkDescriptorSetLayout quad, $/;"	m	struct:DescriptorSetLayouts	access:public
-DescriptorSetLayouts::sampler	inc/vulkan_state.h	/^						  sampler;$/;"	m	struct:DescriptorSetLayouts	access:public
+DescriptorSetLayouts::sampler	inc/vulkan_state.h	/^						  sampler,$/;"	m	struct:DescriptorSetLayouts	access:public
+DescriptorSetLayouts::samplerList	inc/vulkan_state.h	/^						  samplerList;$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSetLayouts::uniform	inc/vulkan_state.h	/^						  uniform,$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSets	inc/vulkan_state.h	/^struct DescriptorSets {$/;"	s
 DestroyBuffer	lib/vulkan/vk_layer.h	/^    PFN_vkDestroyBuffer DestroyBuffer;$/;"	m	struct:VkLayerDispatchTable_	access:public
@@ -2583,6 +2585,7 @@ MAX_FOV_RADIANS	inc/camera.h	/^    const static float MAX_FOV_RADIANS, MIN_FOV_R
 MAX_FOV_RADIANS	src/camera.cpp	/^const float Camera::MAX_FOV_RADIANS = M_PI_2;$/;"	m	class:Camera	file:
 MAX_LOG_MESSAGE_LENGTH	lib/__assimp/Logger.hpp	54;"	d
 MAX_LOG_MESSAGE_LENGTH	lib/assimp/Logger.hpp	52;"	d
+MAX_SAMPLERS_PER_VERTEX	inc/skinned.h	40;"	d
 MAX_SIZE_NOT_FOUND	inc/util.h	/^static constexpr const int MAX_SIZE_NOT_FOUND = std::numeric_limits<int>::lowest();$/;"	v
 MIN_FOV_RADIANS	inc/camera.h	/^    const static float MAX_FOV_RADIANS, MIN_FOV_RADIANS;$/;"	m	class:Camera	access:private
 MIN_FOV_RADIANS	src/camera.cpp	/^const float Camera::MIN_FOV_RADIANS = M_PI_4;$/;"	m	class:Camera	file:
@@ -2593,8 +2596,9 @@ MagicNumber	lib/vulkan/spirv.hpp	/^static const unsigned int MagicNumber = 0x072
 MapMemory	lib/vulkan/vk_layer.h	/^    PFN_vkMapMemory MapMemory;$/;"	m	struct:VkLayerDispatchTable_	access:public
 Material	inc/model.h	/^		Material(): $/;"	f	struct:Model::Material	access:public	signature:()
 Material	inc/model.h	/^	struct Material {$/;"	s	class:Model	access:public
-Material	inc/skinned.h	/^		Material(): $/;"	f	struct:Skinned::Material	access:public	signature:()
 Material	inc/skinned.h	/^	struct Material {$/;"	s	class:Skinned	access:public
+MaterialTexture	inc/skinned.h	/^		MaterialTexture():$/;"	f	struct:Skinned::MaterialTexture	access:public	signature:()
+MaterialTexture	inc/skinned.h	/^	struct MaterialTexture {$/;"	s	class:Skinned	access:public
 MatrixPropertyMap	lib/__assimp/Exporter.hpp	/^    typedef std::map<KeyType, aiMatrix4x4> MatrixPropertyMap;$/;"	t	class:Assimp::ExportProperties	access:public
 MatrixPropertyMap	lib/assimp/Exporter.hpp	/^    typedef std::map<KeyType, aiMatrix4x4> MatrixPropertyMap;$/;"	t	class:Assimp::ExportProperties	access:public
 MaxLenHint	lib/__assimp/Importer.hpp	/^    static const unsigned int MaxLenHint = 200;$/;"	m	class:Assimp::Importer	access:public
@@ -3491,6 +3495,7 @@ ResetDescriptorPool	lib/vulkan/vk_layer.h	/^    PFN_vkResetDescriptorPool ResetD
 ResetEvent	lib/vulkan/vk_layer.h	/^    PFN_vkResetEvent ResetEvent;$/;"	m	struct:VkLayerDispatchTable_	access:public
 ResetFences	lib/vulkan/vk_layer.h	/^    PFN_vkResetFences ResetFences;$/;"	m	struct:VkLayerDispatchTable_	access:public
 Revision	lib/vulkan/spirv.hpp	/^static const unsigned int Revision = 2;$/;"	m	namespace:spv
+SAMPLER_LIST_SIZE	inc/macro.h	24;"	d
 SHADER_DIR	inc/file_manager.h	/^	static constexpr const char* SHADER_DIR = "shader\/spv\/";$/;"	m	class:FileManager	access:private
 SHADER_SPV_DIR	Makefile	/^SHADER_SPV_DIR := shader\/spv$/;"	m
 SIG_ATOMIC_MAX	lib/__assimp/Compiler/pstdint.h	802;"	d
@@ -3718,15 +3723,16 @@ Skinned::DEFAULT_FLAGS	inc/skinned.h	/^	static constexpr uint32_t const DEFAULT_
 Skinned::MAX_BONES	inc/skinned.h	/^	static constexpr uint32_t const MAX_BONES = 64;$/;"	m	class:Skinned	access:public
 Skinned::MAX_BONES_PER_VERTEX	inc/skinned.h	/^	static constexpr uint32_t const MAX_BONES_PER_VERTEX = 4;$/;"	m	class:Skinned	access:public
 Skinned::Material	inc/skinned.h	/^	struct Material {$/;"	s	class:Skinned	access:public
-Skinned::Material::Material	inc/skinned.h	/^		Material(): $/;"	f	struct:Skinned::Material	access:public	signature:()
-Skinned::Material::ambientImages	inc/skinned.h	/^			ambientImages;$/;"	m	struct:Skinned::Material	access:public
-Skinned::Material::descriptors	inc/skinned.h	/^		std::vector<VkDescriptorSet> descriptors;$/;"	m	struct:Skinned::Material	access:public
-Skinned::Material::diffuseImages	inc/skinned.h	/^			diffuseImages, $/;"	m	struct:Skinned::Material	access:public
-Skinned::Material::heightImages	inc/skinned.h	/^			heightImages, $/;"	m	struct:Skinned::Material	access:public
-Skinned::Material::maxImages	inc/skinned.h	/^		uint32_t minImages, maxImages;$/;"	m	struct:Skinned::Material	access:public
-Skinned::Material::minImages	inc/skinned.h	/^		uint32_t minImages, maxImages;$/;"	m	struct:Skinned::Material	access:public
-Skinned::Material::numImages	inc/skinned.h	/^		uint32_t numImages;$/;"	m	struct:Skinned::Material	access:public
-Skinned::Material::specularImages	inc/skinned.h	/^			specularImages, $/;"	m	struct:Skinned::Material	access:public
+Skinned::Material::ambientIndices	inc/skinned.h	/^		std::vector<uint32_t> diffuseIndices, specularIndices, heightIndices, ambientIndices;$/;"	m	struct:Skinned::Material	access:public
+Skinned::Material::diffuseIndices	inc/skinned.h	/^		std::vector<uint32_t> diffuseIndices, specularIndices, heightIndices, ambientIndices;$/;"	m	struct:Skinned::Material	access:public
+Skinned::Material::heightIndices	inc/skinned.h	/^		std::vector<uint32_t> diffuseIndices, specularIndices, heightIndices, ambientIndices;$/;"	m	struct:Skinned::Material	access:public
+Skinned::Material::specularIndices	inc/skinned.h	/^		std::vector<uint32_t> diffuseIndices, specularIndices, heightIndices, ambientIndices;$/;"	m	struct:Skinned::Material	access:public
+Skinned::Material::textures	inc/skinned.h	/^		std::vector<MaterialTexture> textures;$/;"	m	struct:Skinned::Material	access:public
+Skinned::MaterialTexture	inc/skinned.h	/^	struct MaterialTexture {$/;"	s	class:Skinned	access:public
+Skinned::MaterialTexture::MaterialTexture	inc/skinned.h	/^		MaterialTexture():$/;"	f	struct:Skinned::MaterialTexture	access:public	signature:()
+Skinned::MaterialTexture::image	inc/skinned.h	/^		ImageInfo* image;$/;"	m	struct:Skinned::MaterialTexture	access:public
+Skinned::MaterialTexture::index	inc/skinned.h	/^		uint32_t index;$/;"	m	struct:Skinned::MaterialTexture	access:public
+Skinned::MaterialTexture::type	inc/skinned.h	/^		aiTextureType type;$/;"	m	struct:Skinned::MaterialTexture	access:public
 Skinned::Mesh	inc/skinned.h	/^	struct Mesh {$/;"	s	class:Skinned	access:public
 Skinned::Mesh::Mesh	inc/skinned.h	/^		Mesh(): baseVertex(0), numVertices(0), baseIndex(0), numIndices(0), materialIndex(0) {}$/;"	f	struct:Skinned::Mesh	access:public	signature:()
 Skinned::Mesh::baseIndex	inc/skinned.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Skinned::Mesh	access:public
@@ -3751,9 +3757,11 @@ Skinned::Vertex::bitangent	inc/skinned.h	/^		glm::vec3 bitangent;$/;"	m	struct:S
 Skinned::Vertex::boneIndices	inc/skinned.h	/^		glm::uvec4 boneIndices;$/;"	m	struct:Skinned::Vertex	access:public
 Skinned::Vertex::normal	inc/skinned.h	/^		glm::vec3 normal;$/;"	m	struct:Skinned::Vertex	access:public
 Skinned::Vertex::pos	inc/skinned.h	/^		glm::vec3 pos;$/;"	m	struct:Skinned::Vertex	access:public
+Skinned::Vertex::samplerIndices	inc/skinned.h	/^		glm::uvec4 samplerIndices;$/;"	m	struct:Skinned::Vertex	access:public
 Skinned::Vertex::tangent	inc/skinned.h	/^		glm::vec3 tangent;$/;"	m	struct:Skinned::Vertex	access:public
 Skinned::Vertex::texCoord	inc/skinned.h	/^		glm::vec2 texCoord;$/;"	m	struct:Skinned::Vertex	access:public
 Skinned::Vertex::weights	inc/skinned.h	/^		glm::vec4 weights;$/;"	m	struct:Skinned::Vertex	access:public
+Skinned::animSpeedScale	inc/skinned.h	/^	float animSpeedScale;$/;"	m	class:Skinned	access:public
 Skinned::convertVector	src/skinned.cpp	/^void Skinned::convertVector(const aiVector3D& src, glm::vec2& dest)$/;"	f	class:Skinned	signature:(const aiVector3D& src, glm::vec2& dest)
 Skinned::convertVector	src/skinned.cpp	/^void Skinned::convertVector(const aiVector3D& src, glm::vec3& dest)$/;"	f	class:Skinned	signature:(const aiVector3D& src, glm::vec3& dest)
 Skinned::createAnimNode	src/skinned.cpp	/^void Skinned::createAnimNode(aiNode* node, AnimNode* parent)$/;"	f	class:Skinned	signature:(aiNode* node, AnimNode* parent)
@@ -3779,12 +3787,14 @@ Skinned::mModelSpaceTransform	inc/skinned.h	/^    aiMatrix4x4 mModelSpaceTransfo
 Skinned::mNodeToBoneIndexMap	inc/skinned.h	/^	std::unordered_map<aiNode*, uint32_t> mNodeToBoneIndexMap;$/;"	m	class:Skinned	access:protected
 Skinned::mNumSamplerDescriptors	inc/skinned.h	/^	uint32_t mNumSamplerDescriptors;$/;"	m	class:Skinned	access:protected
 Skinned::mPath	inc/skinned.h	/^	std::string mPath, mFolder;$/;"	m	class:Skinned	access:protected
+Skinned::mSamplersDescriptorSet	inc/skinned.h	/^	VkDescriptorSet mSamplersDescriptorSet;$/;"	m	class:Skinned	access:protected
 Skinned::mScene	inc/skinned.h	/^    const aiScene* mScene;$/;"	m	class:Skinned	access:protected
 Skinned::mState	inc/skinned.h	/^	VulkanState& mState;$/;"	m	class:Skinned	access:protected
 Skinned::mUniformDescriptorSet	inc/skinned.h	/^	VkDescriptorSet mUniformDescriptorSet;$/;"	m	class:Skinned	access:protected
-Skinned::numBones	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones;$/;"	m	class:Skinned	access:public
-Skinned::numIndices	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones;$/;"	m	class:Skinned	access:public
-Skinned::numVertices	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones;$/;"	m	class:Skinned	access:public
+Skinned::numBones	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones, numSamplers;$/;"	m	class:Skinned	access:public
+Skinned::numIndices	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones, numSamplers;$/;"	m	class:Skinned	access:public
+Skinned::numSamplers	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones, numSamplers;$/;"	m	class:Skinned	access:public
+Skinned::numVertices	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones, numSamplers;$/;"	m	class:Skinned	access:public
 Skinned::processAnimNode	src/skinned.cpp	/^void Skinned::processAnimNode(float progress, aiMatrix4x4& parentTransform, AnimNode* animNode, uint32_t animationIndex)$/;"	f	class:Skinned	signature:(float progress, aiMatrix4x4& parentTransform, AnimNode* animNode, uint32_t animationIndex)
 Skinned::processMeshBones	src/skinned.cpp	/^void Skinned::processMeshBones($/;"	f	class:Skinned	signature:( aiNode* node, std::unordered_map<std::string, uint32_t>& boneNameToIndexMap, std::vector<Vertex>& vertices, std::vector<uint32_t>& vertexWeightIndices, aiMesh& mesh, Mesh& meshInfo)
 Skinned::processMeshIndices	src/skinned.cpp	/^void Skinned::processMeshIndices(std::vector<uint32_t>& indices, aiMesh& mesh, Mesh& meshInfo)$/;"	f	class:Skinned	signature:(std::vector<uint32_t>& indices, aiMesh& mesh, Mesh& meshInfo)
@@ -9278,7 +9288,8 @@ alphaToCoverageEnable	lib/vulkan/vulkan.h	/^    VkBool32                        
 alphaToOne	lib/vulkan/vulkan.h	/^    VkBool32    alphaToOne;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 alphaToOneEnable	lib/vulkan/vulkan.h	/^    VkBool32                                 alphaToOneEnable;$/;"	m	struct:VkPipelineMultisampleStateCreateInfo	access:public
 ambientImages	inc/model.h	/^			ambientImages;$/;"	m	struct:Model::Material	access:public
-ambientImages	inc/skinned.h	/^			ambientImages;$/;"	m	struct:Skinned::Material	access:public
+ambientIndices	inc/skinned.h	/^		std::vector<uint32_t> diffuseIndices, specularIndices, heightIndices, ambientIndices;$/;"	m	struct:Skinned::Material	access:public
+animSpeedScale	inc/skinned.h	/^	float animSpeedScale;$/;"	m	class:Skinned	access:public
 animations	lib/__assimp/types.h	/^    unsigned int animations;$/;"	m	struct:aiMemoryInfo	access:public
 animations	lib/assimp/types.h	/^    unsigned int animations;$/;"	m	struct:aiMemoryInfo	access:public
 anisotropyEnable	lib/vulkan/vulkan.h	/^    VkBool32                anisotropyEnable;$/;"	m	struct:VkSamplerCreateInfo	access:public
@@ -9625,6 +9636,7 @@ createQuadDescriptorSetLayout	inc/descriptor_manager.h	/^inline void createQuadD
 createQuadPipeline	src/pipeline_manager.cpp	/^void PipelineManager::createQuadPipeline()$/;"	f	class:PipelineManager	signature:()
 createRenderPass	src/swapchain_manager.cpp	/^void SwapchainManager::createRenderPass()$/;"	f	class:SwapchainManager	signature:()
 createSamplerDescriptorSetLayout	inc/descriptor_manager.h	/^inline void createSamplerDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
+createSamplerListDescriptorSetLayout	inc/descriptor_manager.h	/^inline void createSamplerListDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createSemaphores	src/swapchain_manager.cpp	/^void SwapchainManager::createSemaphores()$/;"	f	class:SwapchainManager	signature:()
 createShaders	inc/shader_manager.h	/^inline void createShaders(VulkanState& state)$/;"	f	namespace:ShaderManager	signature:(VulkanState& state)
 createStagedImage	inc/vulkan_image_creator.h	/^inline void createStagedImage($/;"	f	namespace:ImageHelper	signature:( ImageInfo& imageInfo, const TextureData& textureData, VulkanState& state, const VkCommandPool& cmdPool, const VkQueue& cmdQueue)
@@ -9773,7 +9785,6 @@ descriptorSetLayouts	inc/vulkan_state.h	/^	DescriptorSetLayouts descriptorSetLay
 descriptorType	lib/vulkan/vulkan.h	/^    VkDescriptorType                 descriptorType;$/;"	m	struct:VkWriteDescriptorSet	access:public
 descriptorType	lib/vulkan/vulkan.h	/^    VkDescriptorType      descriptorType;$/;"	m	struct:VkDescriptorSetLayoutBinding	access:public
 descriptors	inc/model.h	/^		std::vector<VkDescriptorSet> descriptors;$/;"	m	struct:Model::Material	access:public
-descriptors	inc/skinned.h	/^		std::vector<VkDescriptorSet> descriptors;$/;"	m	struct:Skinned::Material	access:public
 detail	lib/glm/detail/_noise.hpp	/^namespace detail$/;"	n	namespace:glm
 detail	lib/glm/detail/_swizzle.hpp	/^	namespace detail$/;"	n	namespace:glm
 detail	lib/glm/detail/_swizzle.hpp	/^namespace detail$/;"	n	namespace:glm
@@ -9796,7 +9807,7 @@ deviceName	lib/vulkan/vulkan.h	/^    char                                deviceN
 deviceType	lib/vulkan/vulkan.h	/^    VkPhysicalDeviceType                deviceType;$/;"	m	struct:VkPhysicalDeviceProperties	access:public
 device_info	lib/vulkan/vk_layer.h	/^    void *device_info;$/;"	m	struct:VkLayerDeviceInfo_	access:public
 diffuseImages	inc/model.h	/^			diffuseImages, $/;"	m	struct:Model::Material	access:public
-diffuseImages	inc/skinned.h	/^			diffuseImages, $/;"	m	struct:Skinned::Material	access:public
+diffuseIndices	inc/skinned.h	/^		std::vector<uint32_t> diffuseIndices, specularIndices, heightIndices, ambientIndices;$/;"	m	struct:Skinned::Material	access:public
 dir	lib/__assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	access:public
 dir	lib/assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	access:public
 discreteQueuePriorities	lib/vulkan/vulkan.h	/^    uint32_t              discreteQueuePriorities;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
@@ -13180,7 +13191,7 @@ height	lib/vulkan/vulkan.h	/^    uint32_t                    height;$/;"	m	struc
 height	lib/vulkan/vulkan.h	/^    uint32_t    height;$/;"	m	struct:VkExtent2D	access:public
 height	lib/vulkan/vulkan.h	/^    uint32_t    height;$/;"	m	struct:VkExtent3D	access:public
 heightImages	inc/model.h	/^			heightImages, $/;"	m	struct:Model::Material	access:public
-heightImages	inc/skinned.h	/^			heightImages, $/;"	m	struct:Skinned::Material	access:public
+heightIndices	inc/skinned.h	/^		std::vector<uint32_t> diffuseIndices, specularIndices, heightIndices, ambientIndices;$/;"	m	struct:Skinned::Material	access:public
 highp	lib/glm/detail/precision.hpp	/^		highp = packed_highp,$/;"	e	enum:glm::precision
 highp_bvec1	lib/glm/gtc/vec1.hpp	/^	typedef highp_bvec1_t			highp_bvec1;$/;"	t	namespace:glm
 highp_bvec1_t	lib/glm/detail/type_vec.hpp	/^	typedef vec<1, bool, highp>		highp_bvec1_t;$/;"	t	namespace:glm
@@ -13505,6 +13516,7 @@ id	lib/glm/gtx/io.hpp	/^			static std::locale::id id;$/;"	m	class:glm::io::forma
 id	lib/stb/stb_image.h	/^      int id;$/;"	m	struct:__anon63::__anon64	access:public
 idata	lib/stb/stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon69	access:public
 idct_block_kernel	lib/stb/stb_image.h	/^   void (*idct_block_kernel)(stbi_uc *out, int out_stride, short data[64]);$/;"	m	struct:__anon63	access:public
+image	inc/skinned.h	/^		ImageInfo* image;$/;"	m	struct:Skinned::MaterialTexture	access:public
 image	inc/vulkan_image_info.h	/^	VkImage image;$/;"	m	class:ImageInfo	access:public
 image	lib/vulkan/vulkan.h	/^    VkImage                           image;$/;"	m	struct:VkSparseImageMemoryBindInfo	access:public
 image	lib/vulkan/vulkan.h	/^    VkImage                      image;$/;"	m	struct:VkSparseImageOpaqueMemoryBindInfo	access:public
@@ -13589,6 +13601,7 @@ img_y	lib/stb/stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__anon60	
 implementationVersion	lib/vulkan/vulkan.h	/^    uint32_t    implementationVersion;$/;"	m	struct:VkLayerProperties	access:public
 importer	inc/skinned.h	/^    Assimp::Importer importer;    $/;"	m	class:Skinned	access:protected
 independentBlend	lib/vulkan/vulkan.h	/^    VkBool32    independentBlend;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
+index	inc/skinned.h	/^		uint32_t index;$/;"	m	struct:Skinned::MaterialTexture	access:public
 index	lib/vulkan/libspirv.h	/^  size_t index;$/;"	m	struct:spv_position_t	access:public
 indexBufferOffset	inc/model.h	/^				 indexBufferOffset; $/;"	m	class:Model	access:public
 indexBufferOffset	inc/skinned.h	/^				 indexBufferOffset;$/;"	m	class:Skinned	access:public
@@ -14366,6 +14379,7 @@ mRotation	lib/__assimp/material.h	/^    ai_real mRotation;$/;"	m	struct:aiUVTran
 mRotation	lib/assimp/material.h	/^    float mRotation;$/;"	m	struct:aiUVTransform	access:public
 mRotationKeys	lib/__assimp/anim.h	/^    C_STRUCT aiQuatKey* mRotationKeys;$/;"	m	struct:aiNodeAnim	access:public
 mRotationKeys	lib/assimp/anim.h	/^    C_STRUCT aiQuatKey* mRotationKeys;$/;"	m	struct:aiNodeAnim	access:public
+mSamplersDescriptorSet	inc/skinned.h	/^	VkDescriptorSet mSamplersDescriptorSet;$/;"	m	class:Skinned	access:protected
 mScaling	lib/__assimp/material.h	/^    C_STRUCT aiVector2D mScaling;$/;"	m	struct:aiUVTransform	access:public
 mScaling	lib/assimp/material.h	/^    C_STRUCT aiVector2D mScaling;$/;"	m	struct:aiUVTransform	access:public
 mScalingKeys	lib/__assimp/anim.h	/^    C_STRUCT aiVectorKey* mScalingKeys;$/;"	m	struct:aiNodeAnim	access:public
@@ -14588,7 +14602,6 @@ maxImageDimension3D	lib/vulkan/vulkan.h	/^    uint32_t              maxImageDime
 maxImageDimensionCube	lib/vulkan/vulkan.h	/^    uint32_t              maxImageDimensionCube;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 maxImageExtent	lib/vulkan/vulkan.h	/^    VkExtent2D                       maxImageExtent;$/;"	m	struct:VkSurfaceCapabilitiesKHR	access:public
 maxImages	inc/model.h	/^		uint32_t minImages, maxImages;$/;"	m	struct:Model::Material	access:public
-maxImages	inc/skinned.h	/^		uint32_t minImages, maxImages;$/;"	m	struct:Skinned::Material	access:public
 maxInterpolationOffset	lib/vulkan/vulkan.h	/^    float                 maxInterpolationOffset;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 maxLod	lib/vulkan/vulkan.h	/^    float                   maxLod;$/;"	m	struct:VkSamplerCreateInfo	access:public
 maxMemoryAllocationCount	lib/vulkan/vulkan.h	/^    uint32_t              maxMemoryAllocationCount;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
@@ -14901,7 +14914,6 @@ minImageCount	lib/vulkan/vulkan.h	/^    uint32_t                         minImag
 minImageExtent	lib/vulkan/vulkan.h	/^    VkExtent2D                       minImageExtent;$/;"	m	struct:VkSurfaceCapabilitiesKHR	access:public
 minImageTransferGranularity	lib/vulkan/vulkan.h	/^    VkExtent3D      minImageTransferGranularity;$/;"	m	struct:VkQueueFamilyProperties	access:public
 minImages	inc/model.h	/^		uint32_t minImages, maxImages;$/;"	m	struct:Model::Material	access:public
-minImages	inc/skinned.h	/^		uint32_t minImages, maxImages;$/;"	m	struct:Skinned::Material	access:public
 minInterpolationOffset	lib/vulkan/vulkan.h	/^    float                 minInterpolationOffset;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 minLod	lib/vulkan/vulkan.h	/^    float                   minLod;$/;"	m	struct:VkSamplerCreateInfo	access:public
 minMemoryMapAlignment	lib/vulkan/vulkan.h	/^    size_t                minMemoryMapAlignment;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
@@ -14955,18 +14967,18 @@ nonCoherentAtomSize	lib/vulkan/vulkan.h	/^    VkDeviceSize          nonCoherentA
 normal	inc/model.h	/^		glm::vec3 normal;$/;"	m	struct:Model::Vertex	access:public
 normal	inc/skinned.h	/^		glm::vec3 normal;$/;"	m	struct:Skinned::Vertex	access:public
 null	lib/glm/detail/type_gentype.hpp	/^		enum ctor{null};$/;"	e	enum:glm::detail::genType::ctor
-numBones	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones;$/;"	m	class:Skinned	access:public
+numBones	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones, numSamplers;$/;"	m	class:Skinned	access:public
 numImages	inc/model.h	/^		uint32_t numImages;$/;"	m	struct:Model::Material	access:public
-numImages	inc/skinned.h	/^		uint32_t numImages;$/;"	m	struct:Skinned::Material	access:public
 numIndices	inc/model.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Model::Mesh	access:public
 numIndices	inc/model.h	/^	uint32_t numVertices, numIndices;$/;"	m	class:Model	access:public
 numIndices	inc/quad.h	/^	uint32_t numIndices;$/;"	m	class:Quad	access:public
 numIndices	inc/skinned.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Skinned::Mesh	access:public
-numIndices	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones;$/;"	m	class:Skinned	access:public
+numIndices	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones, numSamplers;$/;"	m	class:Skinned	access:public
+numSamplers	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones, numSamplers;$/;"	m	class:Skinned	access:public
 numVertices	inc/model.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Model::Mesh	access:public
 numVertices	inc/model.h	/^	uint32_t numVertices, numIndices;$/;"	m	class:Model	access:public
 numVertices	inc/skinned.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Skinned::Mesh	access:public
-numVertices	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones;$/;"	m	class:Skinned	access:public
+numVertices	inc/skinned.h	/^	uint32_t numVertices, numIndices, numBones, numSamplers;$/;"	m	class:Skinned	access:public
 num_bits	lib/stb/stb_image.h	/^   int num_bits;$/;"	m	struct:__anon67	access:public
 num_operands	lib/vulkan/libspirv.h	/^  uint16_t num_operands;$/;"	m	struct:spv_parsed_instruction_t	access:public
 num_words	lib/vulkan/libspirv.h	/^  uint16_t num_words;$/;"	m	struct:spv_parsed_instruction_t	access:public
@@ -15577,10 +15589,12 @@ sampledImageDepthSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sa
 sampledImageIntegerSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sampledImageIntegerSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 sampledImageStencilSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sampledImageStencilSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 sampler	inc/vulkan_image_info.h	/^	VkSampler sampler;$/;"	m	class:ImageInfo	access:public
-sampler	inc/vulkan_state.h	/^						  sampler;$/;"	m	struct:DescriptorSetLayouts	access:public
+sampler	inc/vulkan_state.h	/^						  sampler,$/;"	m	struct:DescriptorSetLayouts	access:public
 sampler	lib/vulkan/vulkan.h	/^    VkSampler        sampler;$/;"	m	struct:VkDescriptorImageInfo	access:public
 samplerAnisotropy	inc/vulkan_state.h	/^	VkBool32 samplerAnisotropy;$/;"	m	struct:DeviceInfo	access:public
 samplerAnisotropy	lib/vulkan/vulkan.h	/^    VkBool32    samplerAnisotropy;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
+samplerIndices	inc/skinned.h	/^		glm::uvec4 samplerIndices;$/;"	m	struct:Skinned::Vertex	access:public
+samplerList	inc/vulkan_state.h	/^						  samplerList;$/;"	m	struct:DescriptorSetLayouts	access:public
 samples	lib/vulkan/vulkan.h	/^    VkSampleCountFlagBits           samples;$/;"	m	struct:VkAttachmentDescription	access:public
 samples	lib/vulkan/vulkan.h	/^    VkSampleCountFlagBits    samples;$/;"	m	struct:VkImageCreateInfo	access:public
 saturate	lib/glm/gtx/compatibility.hpp	/^	template<typename T, precision P> GLM_FUNC_QUALIFIER T saturate(T x){return clamp(x, T(0), T(1));}														\/\/!< \\brief Returns clamp(x, 0, 1) for each component in x. (From GLM_GTX_compatibility)$/;"	f	namespace:glm	signature:(T x)
@@ -15688,7 +15702,7 @@ specVersion	lib/vulkan/vulkan.h	/^    uint32_t    specVersion;$/;"	m	struct:VkLa
 spec_end	lib/stb/stb_image.h	/^   int            spec_end;$/;"	m	struct:__anon63	access:public
 spec_start	lib/stb/stb_image.h	/^   int            spec_start;$/;"	m	struct:__anon63	access:public
 specularImages	inc/model.h	/^			specularImages, $/;"	m	struct:Model::Material	access:public
-specularImages	inc/skinned.h	/^			specularImages, $/;"	m	struct:Skinned::Material	access:public
+specularIndices	inc/skinned.h	/^		std::vector<uint32_t> diffuseIndices, specularIndices, heightIndices, ambientIndices;$/;"	m	struct:Skinned::Material	access:public
 spirv_H	lib/vulkan/spirv.h	49;"	d
 spirv_HPP	lib/vulkan/spirv.hpp	43;"	d
 spv	lib/vulkan/spirv.hpp	/^namespace spv {$/;"	n
@@ -16952,6 +16966,7 @@ textureCompressionBC	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionBC;
 textureCompressionETC2	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionETC2;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 textureManager	inc/texture_manager.h	/^	TextureManager(const TextureManager& textureManager) = delete;$/;"	m	class:TextureManager	access:public
 textureManager	inc/texture_manager.h	/^	void operator=(const TextureManager& textureManager) = delete;$/;"	m	class:TextureManager	access:public
+textures	inc/skinned.h	/^		std::vector<MaterialTexture> textures;$/;"	m	struct:Skinned::Material	access:public
 textures	lib/__assimp/types.h	/^    unsigned int textures;$/;"	m	struct:aiMemoryInfo	access:public
 textures	lib/assimp/types.h	/^    unsigned int textures;$/;"	m	struct:aiMemoryInfo	access:public
 throwError	src/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
@@ -16989,6 +17004,7 @@ transpose_type	lib/glm/detail/type_mat3x4.hpp	/^		typedef mat<4, 3, T, P> transp
 transpose_type	lib/glm/detail/type_mat4x2.hpp	/^		typedef mat<2, 4, T, P> transpose_type;$/;"	t	struct:glm::mat	access:public
 transpose_type	lib/glm/detail/type_mat4x3.hpp	/^		typedef mat<3, 4, T, P> transpose_type;$/;"	t	struct:glm::mat	access:public
 transpose_type	lib/glm/detail/type_mat4x4.hpp	/^		typedef mat<4, 4, T, P> transpose_type;$/;"	t	struct:glm::mat	access:public
+type	inc/skinned.h	/^		aiTextureType type;$/;"	m	struct:Skinned::MaterialTexture	access:public
 type	lib/glm/detail/func_matrix.hpp	/^		typedef mat<2, 2, T, P> type;$/;"	t	struct:glm::detail::outerProduct_trait	access:public
 type	lib/glm/detail/func_matrix.hpp	/^		typedef mat<2, 3, T, P> type;$/;"	t	struct:glm::detail::outerProduct_trait	access:public
 type	lib/glm/detail/func_matrix.hpp	/^		typedef mat<2, 4, T, P> type;$/;"	t	struct:glm::detail::outerProduct_trait	access:public

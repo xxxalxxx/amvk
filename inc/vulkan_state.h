@@ -47,7 +47,8 @@ struct DescriptorSetLayouts {
 	VkDescriptorSetLayout quad, 
 						  model,
 						  uniform,
-						  sampler;
+						  sampler,
+						  samplerList;
 };
 
 struct Shaders {

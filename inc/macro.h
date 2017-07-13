@@ -21,6 +21,7 @@
 #define LOG(x) do { std::cout << x << std::endl; } while(0)
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
+#define SAMPLER_LIST_SIZE 16
 
 #endif
 

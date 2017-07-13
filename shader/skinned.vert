@@ -18,9 +18,10 @@ layout(location = 3) in vec3 inBitangent;
 layout(location = 4) in vec2 inTexCoord;
 layout(location = 5) in uvec4 inBoneIndices;
 layout(location = 6) in vec4 inWeights;
-
+layout(location = 7) in uvec4 inSamplerIndices;
 
 layout(location = 0) out vec2 fragTexCoord;
+layout(location = 1) out uvec4 samplerIndices;
 
 void main() { 
 	mat4 boneTransform = ubo.bones[inBoneIndices.x] * inWeights.x;
@@ -29,4 +30,5 @@ void main() {
     boneTransform += ubo.bones[inBoneIndices.w] * inWeights.w;
     gl_Position = ubo.proj * ubo.view * ubo.model * boneTransform * vec4(inPosition, 1.0);
     fragTexCoord = inTexCoord;
+	samplerIndices = inSamplerIndices;
 }
