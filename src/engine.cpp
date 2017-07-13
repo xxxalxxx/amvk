@@ -1,18 +1,123 @@
 #include "engine.h"
 
-Engine::Engine():
-	mVulkanManager(mWindow)
-{
-	
-}
-
 Engine::~Engine() 
 {
 
 }
 
+
+
+#ifdef __ANDROID__
+
+Engine::Engine():
+        mVulkanManager(mWindow),
+        isReady(false),
+        hasFocus(false)
+{
+
+}
+
+void Engine::init(android_app* state)
+{
+    FileManager::activity = state->activity;
+    FileManager::assetManager = state->activity->assetManager;
+    FileManager::internalStoragePath = state->activity->internalDataPath;
+    mWindow.initWindow(*this);
+    LOG("WINDOW ASPECT %f width: %u height: %u", mWindow.mAspect, mWindow.mWidth, mWindow.mHeight);
+    mCamera.setAspect(mWindow.mAspect);
+    mVulkanManager.init();
+    mVulkanManager.buildCommandBuffers(mTimer, mCamera);
+
+    JNIEnv* jni;
+    state->activity->vm->AttachCurrentThread(&jni, NULL);
+    jclass clazz = jni->GetObjectClass(state->activity->clazz);
+    jmethodID methodID = jni->GetMethodID(clazz, "showUI", "()V");
+    jni->CallVoidMethod(state->activity->clazz, methodID);
+    state->activity->vm->DetachCurrentThread();
+}
+
+
+int32_t Engine::handleInput(android_app *app, AInputEvent *event)
+{
+    Engine* eng = (Engine*) app->userData;
+    InputManager& inputManager = eng->getWindow().getInputManager();
+    Camera& camera = eng->getCamera();
+
+    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
+
+        int flags =  AMotionEvent_getAction(event) & AMOTION_EVENT_ACTION_MASK;
+
+        float x = AMotionEvent_getX(event, 0);
+        float y = AMotionEvent_getY(event, 0);
+
+
+        switch (flags) {
+            case AMOTION_EVENT_ACTION_DOWN:
+                inputManager.touching = true;
+                camera.mPrevMouseX = x;
+                camera.mPrevMouseY = y;
+                break;
+            case AMOTION_EVENT_ACTION_UP:
+                inputManager.touching = false;
+                break;
+        }
+
+        camera.updateOrientation(x, y);
+
+
+        return 1;
+    }
+    return 0;
+}
+
+void Engine::handleCmd(struct android_app *app, int32_t cmd)
+{
+    Engine* eng = (Engine*) app->userData;
+    switch (cmd) {
+        case APP_CMD_SAVE_STATE:
+            break;
+        case APP_CMD_INIT_WINDOW:
+            // The window is being shown, get it ready.
+            if (app->window != NULL) {
+                eng->isReady = true;
+                //eng->initDisplay();
+                //eng->drawFrame();
+            }
+            break;
+        case APP_CMD_TERM_WINDOW:
+            // The window is being hidden or closed, clean it up.
+            //eng->termDisplay();
+            eng->hasFocus = false;
+            break;
+        case APP_CMD_STOP:
+            break;
+        case APP_CMD_GAINED_FOCUS:
+
+            // Start animation
+            //eng->hasFocus = true;
+            break;
+        case APP_CMD_LOST_FOCUS:
+            // Also stop animating.
+            //eng->hasFocus = false;
+            //eng->drawFrame();
+            break;
+        case APP_CMD_LOW_MEMORY:
+            // Free up GL resources
+            //eng->trimMemory();
+            break;
+    }
+}
+
+#else
+
+Engine::Engine():
+	mVulkanManager(mWindow)
+{
+
+}
+
 void onWindowResized(GLFWwindow* window, int width, int height) {
-	if (width * height == 0) 
+	if (width * height == 0)
 		return;
 
 	Engine* eng = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
@@ -44,7 +149,7 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
                   std::cout<< "RELEASE";
 
                 break;
-            case GLFW_PRESS:  
+            case GLFW_PRESS:
                 std::cout<< "PRESS";
 
                 break;
@@ -62,7 +167,7 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
             case GLFW_RELEASE:
                   std::cout<< "RELEASE";
                 break;
-            case GLFW_PRESS:  
+            case GLFW_PRESS:
                 std::cout<< "PRESS";
                 break;
             case GLFW_REPEAT:
@@ -70,13 +175,13 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
                 break;
         }
         std::cout<<std::endl;
-    }  
+    }
 }
 
 void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
   	Engine* eng = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
-	Camera& engCamera = eng->getCamera(); 
+	Camera& engCamera = eng->getCamera();
     engCamera.updateFOV(yoffset);
     engCamera.rebuildPerspective();
     std::cout<< "SCROLL POS " << xoffset << " " << yoffset << std::endl;
@@ -85,7 +190,7 @@ void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, VK_TRUE); 
+		glfwSetWindowShouldClose(window, VK_TRUE);
 		window = nullptr;
 	} else if(key == GLFW_KEY_E && action == GLFW_PRESS) {
 		std::cout<< "E PRESSED" <<std::endl;
@@ -94,21 +199,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 	}
 }
 
-void Engine::handleMovement(double dt) 
-{
-	InputManager& im = mWindow.getInputManager();
-	if(im.keyPressed(GLFW_KEY_W))
-        mCamera.moveStraight(1.0f, dt);
-    if(im.keyPressed(GLFW_KEY_S))
-        mCamera.moveStraight(-1.0f, dt);
-
-    if(im.keyPressed(GLFW_KEY_D))
-        mCamera.moveSideways(1.0f, dt);
-    if(im.keyPressed(GLFW_KEY_A))
-        mCamera.moveSideways(-1.0f, dt);
-}
-
-void Engine::init() 
+void Engine::init()
 {
 	mWindow.initWindow(*this);
 	mWindow.setWindowSizeCallback(onWindowResized);
@@ -123,6 +214,34 @@ void Engine::init()
 
 	mVulkanManager.init();
 }
+
+#endif
+
+
+void Engine::handleMovement(double dt)
+{
+#ifdef __ANDROID__
+    InputManager& im = mWindow.getInputManager();
+    if (im.movingForward)
+        mCamera.moveStraight(im.directionForward, dt);
+
+    if (im.movingSideways)
+        mCamera.moveSideways(im.directionSideways, dt);
+#else
+    InputManager& im = mWindow.getInputManager();
+    if (im.keyPressed(GLFW_KEY_W))
+        mCamera.moveStraight(1.0f, dt);
+    if (im.keyPressed(GLFW_KEY_S))
+        mCamera.moveStraight(-1.0f, dt);
+
+    if (im.keyPressed(GLFW_KEY_D))
+        mCamera.moveSideways(1.0f, dt);
+    if (im.keyPressed(GLFW_KEY_A))
+        mCamera.moveSideways(-1.0f, dt);
+#endif
+
+}
+
 
 Window& Engine::getWindow()
 {

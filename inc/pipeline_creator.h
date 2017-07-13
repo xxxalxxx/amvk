@@ -1,7 +1,13 @@
 #ifndef AMVK_VULKAN_PIPELINE_CREATOR_H
 #define AMVK_VULKAN_PIPELINE_CREATOR_H
 
+
+#ifdef __ANDROID__
+#include "vulkan_wrapper.h"
+#else
 #include <vulkan/vulkan.h>
+#endif
+
 #include "macro.h"
 #include "file_manager.h"
 #include "vulkan_utils.h"
@@ -253,55 +259,5 @@ inline void pipelineCache(const VkDevice& device, const std::vector<char>& cache
 
 
 };
-
-/*
-class PipelineCreator {
-public:
-
-	static VkPipelineViewportStateCreateInfo viewportStateDynamic();
-	static VkPipelineViewportStateCreateInfo viewportStateDefault(VkExtent2D& extent);
-	
-	static VkPipelineDynamicStateCreateInfo dynamicState(VkDynamicState* dynamicStates, uint32_t stateCount);
-
-	static VkPipelineShaderStageCreateInfo shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage);
-	static VkPipelineShaderStageCreateInfo shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage);
-	static VkPipelineColorBlendAttachmentState blendAttachmentStateDisabled();
-
-	static VkPushConstantRange pushConstantRange(
-			const VulkanState& state, 
-			VkShaderStageFlags stageFlags, 
-			uint32_t offset, 
-			uint32_t size); 
-
-	static VkPipelineColorBlendStateCreateInfo blendStateDisabled(
-			VkPipelineColorBlendAttachmentState* attachmentStates,
-			uint32_t attachmentCount); 
-
-	static VkPipelineInputAssemblyStateCreateInfo inputAssemblyNoRestart(VkPrimitiveTopology topology);
-
-	static VkPipelineMultisampleStateCreateInfo multisampleStateNoMultisampleNoSampleShading();
-
-	static VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessNoStencil(); 
-
-
-	static VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW();
-	static VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW();
-
-	static VkPipelineLayoutCreateInfo layout(
-			VkDescriptorSetLayout* setLayouts, 
-			uint32_t setLayoutCount,
-			VkPushConstantRange* pushConstantRanges,
-			uint32_t pushConstantRangeCount);
-
-	static VkPipelineVertexInputStateCreateInfo vertexInputState(
-			VkVertexInputBindingDescription* bindings, 
-			uint32_t bindingsCount,
-			VkVertexInputAttributeDescription* attributes,
-			uint32_t attributesCount);
-
-	static void pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out);
-};*/
-
-
 
 #endif

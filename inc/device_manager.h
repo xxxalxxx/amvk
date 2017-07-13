@@ -1,8 +1,13 @@
 #ifndef AMVK_DEVICE_MANAGER_H
 #define AMVK_DEVICE_MANAGER_H
 
+#ifdef __ANDROID__
+#include "vulkan_wrapper.h"
+#else
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
+#endif
+
 
 #include <vector>
 #include <cstring>

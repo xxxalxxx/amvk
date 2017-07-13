@@ -16,7 +16,7 @@ public:
 	void updateViewAngles();
 	void rebuildView();
 	void rebuildPerspective();
-	void setAspect(double aspect);
+	void setAspect(float aspect);
     void moveStraight(float direction, float dt);
     void moveSideways(float direction, float dt);
 

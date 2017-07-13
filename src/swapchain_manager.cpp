@@ -15,15 +15,28 @@ SwapchainManager::~SwapchainManager()
 
 void SwapchainManager::createSurface()
 {
+#ifdef __ANDROID__
+	VkAndroidSurfaceCreateInfoKHR surfaceCreateInfo = {};
+	surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
+	surfaceCreateInfo.window =  mWindow.androidNativeWindow;
+	VK_CHECK_RESULT(vkCreateAndroidSurfaceKHR(mVulkanState.instance, &surfaceCreateInfo, NULL, &mVulkanState.surface));
+	LOG("Android surface created");
+#else
 	VK_CHECK_RESULT(glfwCreateWindowSurface(mVulkanState.instance, mWindow.mGlfwWindow, nullptr, &mVulkanState.surface));
-	
+
 	if (glfwVulkanSupported() == GLFW_FALSE)
 		throw std::runtime_error("Vulkan is not supported by GLFW. Cannot create a surface");
-
+#endif
 }
 
 void SwapchainManager::createSwapChain()
 {
+	//(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR* pSurfaceCapabilities);
+	VkSurfaceCapabilitiesKHR surfaceCapabilities;
+	LOG("Before surface capabilities");
+	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(mVulkanState.physicalDevice, mVulkanState.surface, &surfaceCapabilities);
+	LOG("After surface capabilities");
+
 	VkSurfaceFormatKHR surfaceFormat = getSurfaceFormat(mVulkanState.swapChainDesc.surfaceFormats);
 	VkPresentModeKHR presentMode = getPresentMode(mVulkanState.swapChainDesc.presentModes);
 	VkExtent2D extent = getExtent(mVulkanState.swapChainDesc.surfaceCapabilities); 
@@ -56,7 +69,13 @@ void SwapchainManager::createSwapChain()
 	}
 
 	createInfo.preTransform = mVulkanState.swapChainDesc.surfaceCapabilities.currentTransform;
-	createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+
+	VkCompositeAlphaFlagBitsKHR compositeAlpha;
+	if (surfaceCapabilities.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR)
+		compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+	else
+		compositeAlpha = VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR;
+	createInfo.compositeAlpha = compositeAlpha;
 	createInfo.presentMode = presentMode;
 	createInfo.clipped = VK_TRUE;
 	VkSwapchainKHR oldSwapChain = mVulkanState.swapChain;
@@ -132,7 +151,7 @@ void SwapchainManager::createDepthResources()
 
 void SwapchainManager::createFramebuffers(VkRenderPass renderPass)
 {
-	mSwapChainFramebuffers.resize(mSwapChainImageViews.size());
+	framebuffers.resize(mSwapChainImageViews.size());
 
 	VkFramebufferCreateInfo createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -141,7 +160,7 @@ void SwapchainManager::createFramebuffers(VkRenderPass renderPass)
 	createInfo.height = mVulkanState.swapChainExtent.height;
 	createInfo.layers = 1;
 
-	for (size_t i = 0; i < mSwapChainFramebuffers.size(); ++i) {
+	for (size_t i = 0; i < framebuffers.size(); ++i) {
 		std::array<VkImageView, 2> attachments = { 
 			mSwapChainImageViews[i],
 			mDepthImageDesc.imageView
@@ -150,7 +169,7 @@ void SwapchainManager::createFramebuffers(VkRenderPass renderPass)
 		createInfo.attachmentCount = attachments.size();
 		createInfo.pAttachments = attachments.data();
 
-		VK_CHECK_RESULT(vkCreateFramebuffer(mVulkanState.device, &createInfo, nullptr, &mSwapChainFramebuffers[i]));
+		VK_CHECK_RESULT(vkCreateFramebuffer(mVulkanState.device, &createInfo, nullptr, &framebuffers[i]));
 		LOG("FRAMEBUFFER CREATED");
 	}
 }
@@ -297,19 +316,19 @@ void SwapchainManager::createCommandPool()
 
 void SwapchainManager::createCommandBuffers()
 {
-	mVkCommandBuffers.resize(mSwapChainFramebuffers.size());
+	cmdBuffers.resize(framebuffers.size());
 
 	VkCommandBufferAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	allocInfo.commandPool = mVulkanState.commandPool;
 	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	allocInfo.commandBufferCount = (uint32_t) mVkCommandBuffers.size();
+	allocInfo.commandBufferCount = (uint32_t) cmdBuffers.size();
 	
-	VK_CHECK_RESULT(vkAllocateCommandBuffers(mVulkanState.device, &allocInfo, mVkCommandBuffers.data()));
+	VK_CHECK_RESULT(vkAllocateCommandBuffers(mVulkanState.device, &allocInfo, cmdBuffers.data()));
 
 	LOG("COMMAND POOL ALLOCATED");
 
-//	updateCommandBuffers();
+//	buildCommandBuffers();
 }
 
 void SwapchainManager::createSemaphores()

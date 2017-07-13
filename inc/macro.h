@@ -5,7 +5,7 @@
 #include <iostream>
 #include <exception>
 #include <string>
-
+#include <stdio.h>
 #define AMVK_DEBUG
 
 #define GLM_FORCE_RADIANS
@@ -17,8 +17,17 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
 
+#if defined(__ANDROID__)
+#include <android/log.h>
+#define LOG(...) do { ((void)__android_log_print(ANDROID_LOG_INFO, "__AMVK", __VA_ARGS__)); } while (0)
+#else
 
-#define LOG(x) do { std::cout << x << std::endl; } while(0)
+#define LOG(...) do { \
+	printf(__VA_ARGS__); \
+	printf("\n"); \
+} while (0) 
+#endif
+
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
 #define SAMPLER_LIST_SIZE 16

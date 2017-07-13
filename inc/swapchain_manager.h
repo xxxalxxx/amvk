@@ -1,8 +1,14 @@
 #ifndef AMVK_SWAPCHAIN_MANAGER_H
 #define AMVK_SWAPCHAIN_MANAGER_H
 
+
+#ifdef __ANDROID__
+#include "vulkan_wrapper.h"
+#else
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
+#endif
+
 
 #include <vector>
 #include <array>
@@ -34,8 +40,8 @@ public:
 	SwapChainDesc getSwapChainDesc(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface);
 	SwapChainDesc swapChainDesc;
 
-	std::vector<VkFramebuffer> mSwapChainFramebuffers;
-	std::vector<VkCommandBuffer> mVkCommandBuffers;
+	std::vector<VkFramebuffer> framebuffers;
+	std::vector<VkCommandBuffer> cmdBuffers;
 
 	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;
 private:

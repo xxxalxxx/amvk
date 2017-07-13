@@ -1,7 +1,14 @@
 #ifndef AMVK_VULKAN_STATE_H
 #define AMVK_VULKAN_STATE_H
 
+
+#ifdef __ANDROID__
+#include "vulkan_wrapper.h"
+#else
 #include <vulkan/vulkan.h>
+#endif
+
+
 #include "swap_chain_desc.h"
 
 struct DeviceInfo {

@@ -18,7 +18,15 @@ stbi_uc* TextureData::load(const char* resource, int reqComp)
 {
 	std::string filenameStr(resource);
 	const char* filename = filenameStr.c_str();
-	pixels = stbi_load(filename, &width, &height, &channels, reqComp); 
+	LOG("LOADING %s", filename);
+#ifdef __ANDROID__
+    std::vector<char> bytes = FileManager::readFile(filenameStr);
+    pixels = stbi_load_from_memory((unsigned  char *) bytes.data(), sizeof(char) * bytes.size(), &width, &height, &channels, reqComp);
+#else
+    pixels = stbi_load(filename, &width, &height, &channels, reqComp);
+#endif
+
+	LOG("AFTER LOAD");
 	size = width * height * reqComp;
 	if (!pixels || !size) {
 		char err[256];
@@ -26,7 +34,7 @@ stbi_uc* TextureData::load(const char* resource, int reqComp)
 		throw std::runtime_error(err);
 	}
 	
-	LOG("TEXTURE LOADED path:\""<< filename << "\" w:" << width << " h:" << height << " channels:" << channels << " reqComp:"<< reqComp << " size:" << size);
+	LOG("TEXTURE LOADED path:\"%s\" w: %d h: %d channels: %d reqComp: %d size: %d", filename, width, height, channels, reqComp, size);
 	return pixels;
 }
 

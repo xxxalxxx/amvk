@@ -42,9 +42,11 @@ void Model::init(const char* modelPath, unsigned int pFlags)
 {
 	mPath = modelPath;
 	mFolder = FileManager::getFilePath(std::string(modelPath));
-	LOG("FOLDER:" << mFolder);
+	LOG("FOLDER: %s", mFolder.c_str());
 	Assimp::Importer importer;
-
+#ifdef __ANDROID__
+	importer.SetIOHandler(FileManager::newAssimpIOSystem());
+#endif
 	const aiScene* scene = importer.ReadFile(modelPath, pFlags);
 	  
 	  // If the import failed, report it
@@ -190,84 +192,6 @@ void Model::createCommonBuffer(const std::vector<Vertex>& vertices, const std::v
 			mCommonBufferInfo.size);
 }
 
-void Model::createPipeline(VulkanState& state) 
-{
-	VkPipelineShaderStageCreateInfo stages[] = {
-		state.shaders.model.vertex,
-		state.shaders.model.fragment
-	};
-
-	VkVertexInputBindingDescription bindingDesc = {};
-	bindingDesc.binding = 0;
-	bindingDesc.stride = sizeof(Vertex);
-	bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-	//location, binding, format, offset
-	VkVertexInputAttributeDescription attrDesc[] = { 
-		{ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos) },
-		{ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal) },
-		{ 2, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, tangent) },
-		{ 3, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, bitangent) },
-		{ 4, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCoord) }
-	};
-
-	auto vertexInputInfo = PipelineCreator::vertexInputState(&bindingDesc, 1, attrDesc, ARRAY_SIZE(attrDesc)); 
-
-	VkPipelineInputAssemblyStateCreateInfo assemblyInfo = PipelineCreator::inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-	VkPipelineViewportStateCreateInfo viewportState = PipelineCreator::viewportStateDynamic();
-
-	VkDynamicState dynamicStates[] = {
-		VK_DYNAMIC_STATE_VIEWPORT,
-		VK_DYNAMIC_STATE_SCISSOR
-	};
-
-	VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
-	VkPipelineRasterizationStateCreateInfo rasterizationState = PipelineCreator::rasterizationStateCullBackCCW();
-	VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessNoStencil();
-	VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
-	VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
-
-	VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1); 
-	
-	VkPhysicalDeviceProperties physicalDeviceProperties;
-	vkGetPhysicalDeviceProperties(state.physicalDevice, &physicalDeviceProperties);
-
-	VkDescriptorSetLayout layouts[] = {
-		state.descriptorSetLayouts.uniform,
-		state.descriptorSetLayouts.sampler
-	};
-
-	VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(layouts, ARRAY_SIZE(layouts), NULL, 0);
-	VK_CHECK_RESULT(vkCreatePipelineLayout(state.device, &pipelineLayoutInfo, nullptr, &state.pipelines.model.layout));
-
-	PipelineCacheInfo cacheInfo("model", state.pipelines.model.cache);
-	cacheInfo.getCache(state.device);
-
-	VkGraphicsPipelineCreateInfo pipelineInfo = {};
-	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-	pipelineInfo.stageCount = ARRAY_SIZE(stages);
-	pipelineInfo.pStages = stages;
-	pipelineInfo.pVertexInputState = &vertexInputInfo;
-	pipelineInfo.pInputAssemblyState = &assemblyInfo;
-	pipelineInfo.pViewportState = &viewportState;
-	pipelineInfo.pRasterizationState = &rasterizationState;
-	pipelineInfo.pMultisampleState = &multisampleState;
-	pipelineInfo.pDepthStencilState = &depthStencil;
-	pipelineInfo.pColorBlendState = &blendState;
-	pipelineInfo.pDynamicState = &dynamicInfo;
-	pipelineInfo.layout = state.pipelines.model.layout;
-	pipelineInfo.renderPass = state.renderPass;
-	pipelineInfo.subpass = 0;
-	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
-
-	VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &state.pipelines.model.pipeline));
-	
-	cacheInfo.saveCache(state.device);
-
-	LOG("MODEL PIPELINE CREATED");
-
-}
-
 void Model::createDescriptorPool() 
 {
 	VkDescriptorPoolSize uboSize = {};
@@ -289,8 +213,7 @@ void Model::createDescriptorPool()
 	poolInfo.pPoolSizes = poolSizes;
 	poolInfo.maxSets = mNumSamplerDescriptors + 1;
 	
-	LOG("NUM SAMPLERS:" << mNumSamplerDescriptors << " materials: " << mMaterialIndexToMaterial.size());
-	LOG("MAX SETS:" << poolInfo.maxSets);
+	LOG("NUM SAMPLERS: %u materials: %zu", mNumSamplerDescriptors, mMaterialIndexToMaterial.size());
 
 	VK_CHECK_RESULT(vkCreateDescriptorPool(mState.device, &poolInfo, nullptr, &mDescriptorPool));
 }
@@ -365,7 +288,7 @@ void Model::createDescriptorSet()
 				bool hasImage = images != NULL && j < images->size();
 
 				if (hasImage) {
-					LOG("HAS IMAGE binding: " << binding << " index: " << j << " N:" << NUM_TEXTURE_TYPES);
+					LOG("HAS IMAGE binding: %u index: %zu N: %u", binding, j, NUM_TEXTURE_TYPES);
 					ImageInfo* imageInfo = images->at(i);
 					VkDescriptorImageInfo descriptorInfo = {};
 					descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;

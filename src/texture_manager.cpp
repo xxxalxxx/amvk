@@ -17,7 +17,7 @@ ImageInfo* TextureManager::load(
 	// Check map, load image thread safely
 	auto it = tm.mPool.find(textureDesc);
 	if (it != tm.mPool.end()) {
-		LOG("TEXTURE FOUND: " << textureDesc.filename);
+		LOG("TEXTURE FOUND: %s", textureDesc.filename.c_str());
 		return it->second;	
 	}
 

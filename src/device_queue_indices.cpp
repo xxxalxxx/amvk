@@ -81,13 +81,13 @@ int DeviceQueueIndicies::getTransfersQueueIndex()
 
 void DeviceQueueIndicies::setGraphicsIndex(int index) 
 {
-	LOG("GRAPHICS INDEX SET TO " << index);
+	LOG("GRAPHICS INDEX SET TO %d ", index);
 	setIndex(mGraphicsIndex, index);
 }
 
 void DeviceQueueIndicies::setSupportedIndex(int index)
 {
-	LOG("SUPPORTED IDNEX SET TO " << index);
+	LOG("SUPPORTED IDNEX SET TO %d", index);
 	setIndex(mSupportedIndex, index);
 }
 
@@ -103,7 +103,7 @@ void DeviceQueueIndicies::setTransferIndex(int index)
 
 void DeviceQueueIndicies::setIndex(int& currIndex, int index)
 {
-	LOG("INDEX " << index << " UPDATED");
+	LOG("INDEX %d UPDATED", index);
 	if (index >= INDEX_UNSET && currIndex != index) {
 		if (currIndex == INDEX_UNSET) 
 			++mNumIndicesFound;

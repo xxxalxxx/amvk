@@ -5,7 +5,17 @@ const std::vector<const char*> DeviceManager::sDeviceExtensions = {
 };
 
 const std::vector<const char*> DeviceManager::sValidationLayers = {
+#ifdef __ANDROID__
+            "VK_LAYER_GOOGLE_threading",
+            "VK_LAYER_LUNARG_parameter_validation",
+            "VK_LAYER_LUNARG_object_tracker",
+            "VK_LAYER_LUNARG_core_validation",
+            "VK_LAYER_LUNARG_image",
+            "VK_LAYER_LUNARG_swapchain",
+            "VK_LAYER_GOOGLE_unique_objects"
+#else
 	"VK_LAYER_LUNARG_standard_validation",
+#endif
 };
 
 VKAPI_ATTR VkBool32 VKAPI_CALL debugCb(
@@ -18,7 +28,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugCb(
 		const char* msg, 
 		void* userData) 
 {
-	std::cerr << ">>> VK_VALIDATION_LAYER: " << msg << std::endl;
+    LOG(">>> VK_VALIDATION: %s", msg);
 	return VK_FALSE;
 }
 
@@ -31,28 +41,31 @@ DeviceManager::DeviceManager(VulkanState& vulkanState):
 void DeviceManager::createVkInstance() 
 {
 #ifdef AMVK_DEBUG
-	{
-		uint32_t numLayers;
-		vkEnumerateInstanceLayerProperties(&numLayers, nullptr);
-		std::vector<VkLayerProperties> props(numLayers);
-		vkEnumerateInstanceLayerProperties(&numLayers, props.data());
-	
-		for (const char* layerName : sValidationLayers) {
-            bool layerFound = false;
-			for (const auto& layerProperties : props) {
-				if (strcmp(layerName, layerProperties.layerName) == 0) {
-					layerFound = true;
-					break;
-                }
-			}
 
-			if (!layerFound) {
-				std::string msg = "Unable to found layer:";
-				msg += layerName;
-				throw std::runtime_error(msg);
+	uint32_t numLayers = 0;
+    LOG("BEFORE LAYERS");
+	vkEnumerateInstanceLayerProperties(&numLayers, nullptr);
+    LOG("NUM LAYERS: %u", numLayers);
+	std::vector<VkLayerProperties> props(numLayers);
+	vkEnumerateInstanceLayerProperties(&numLayers, props.data());
+
+	for (const char* layerName : sValidationLayers) {
+		bool layerFound = false;
+		for (const auto& layerProperties : props) {
+			if (strcmp(layerName, layerProperties.layerName) == 0) {
+				layerFound = true;
+				break;
 			}
 		}
+
+		if (!layerFound) {
+            LOG("Layer %s not found!", layerName);
+			std::string msg = "Unable to found layer:";
+			msg += layerName;
+			throw std::runtime_error(msg);
+		}
 	}
+
 #endif
 
 	VkApplicationInfo applicationInfo = {};
@@ -78,6 +91,7 @@ void DeviceManager::createVkInstance()
 	LOG("DEBUG DOES NOT EXIST");
 	instanceInfo.enabledLayerCount = 0;
 #endif
+    LOG("BEFORE LAYERS");
 	VK_CHECK_RESULT(vkCreateInstance(&instanceInfo, nullptr, &mVulkanState.instance));
 	LOG("INSTANCE CREATED");
 }
@@ -146,7 +160,7 @@ void DeviceManager::createLogicalDevice()
 		uniqueIndices.insert(mDeviceQueueIndices[i]);
 
 	for (int index : uniqueIndices) {
-		LOG("DEVICE INDEX:" << index);
+		LOG("DEVICE INDEX: %d", index);
 		VkDeviceQueueCreateInfo queueCreateInfo = {};
 		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 		queueCreateInfo.queueFamilyIndex = index;
@@ -187,8 +201,8 @@ void DeviceManager::createLogicalDevice()
 	mVulkanState.deviceInfo.samplerAnisotropy = physicalDeviceFeatures.samplerAnisotropy;
 	mVulkanState.deviceInfo.maxPushConstantsSize = physicalDeviceProperties.limits.maxPushConstantsSize;
 	mVulkanState.deviceInfo.minUniformBufferOffsetAlignment = physicalDeviceProperties.limits.minUniformBufferOffsetAlignment;
-	LOG("ANISOTROPY " << physicalDeviceFeatures.samplerAnisotropy); 
-	LOG("MAX PUSH CONST SIZE max:" << mVulkanState.deviceInfo.maxPushConstantsSize);
+	LOG("ANISOTROPY %u", physicalDeviceFeatures.samplerAnisotropy);
+	LOG("MAX PUSH CONST SIZE max: %u", mVulkanState.deviceInfo.maxPushConstantsSize);
 
 	LOG("LOGICAL DEVICE CREATED");
 }
@@ -196,18 +210,53 @@ void DeviceManager::createLogicalDevice()
 
 std::vector<const char*> DeviceManager::getExtensionNames() 
 {
-	unsigned numExt = 0;
-	const char **ppExtenstions = glfwGetRequiredInstanceExtensions(&numExt);
-	std::vector<const char*> extensions;
-	extensions.reserve(numExt);
-	for (unsigned i = 0; i < numExt; ++i)
-		extensions.push_back(ppExtenstions[i]);
+    std::vector<const char*> extensions;
+#ifdef __ANDROID__
+    extensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+    extensions.push_back(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);
+#ifdef AMVK_DEBUG
+    extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+#endif
+    uint32_t instanceExtensionCount = 0;
+    vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount, nullptr);
+    std::vector<VkExtensionProperties> properties(instanceExtensionCount);
+    //VkExtensionProperties* inst_exts = (VkExtensionProperties *) malloc(instExtCount * sizeof(VkExtensionProperties));
+    vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount, properties.data());
+    for (const char* extension : extensions) {
+        bool extensionFound = false;
+        for (VkExtensionProperties& property : properties) {
+            if (strcmp(property.extensionName, extension) == 0) {
+                extensionFound = true;
+                break;
+            }
+        }
 
-	#ifdef AMVK_DEBUG
-		extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
-	#endif
+        if (!extensionFound) {
+            LOG("Extension %s not found!", extension);
+            std::string msg = std::string("Unable to found layer:") + extension;
+            throw std::runtime_error(msg);
+        }
+    }
 
-	return extensions;
+    LOG("All extenstions are found");
+
+    //throw std::runtime_error("DeviceManager::getExtensionNames is unsupported");
+#else
+    unsigned numExt = 0;
+    const char **ppExtenstions = glfwGetRequiredInstanceExtensions(&numExt);
+    extensions.reserve(numExt);
+    for (unsigned i = 0; i < numExt; ++i)
+        extensions.push_back(ppExtenstions[i]);
+
+#ifdef AMVK_DEBUG
+    extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+#endif
+
+#endif
+
+
+
+    return extensions;
 }
 
 DeviceQueueIndicies DeviceManager::getDeviceQueueFamilyIndices(const VkPhysicalDevice& physicalDevice) const

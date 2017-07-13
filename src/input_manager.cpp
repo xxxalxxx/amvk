@@ -1,20 +1,43 @@
 #include "input_manager.h"
-#include <iostream>
 
 
-InputManager::InputManager(): 
-	mGlfwWindow(nullptr)
-{
 
-}
 
-InputManager::InputManager(GLFWwindow& glfwWindow): 
-	mGlfwWindow(&glfwWindow)
-{
-
-}
 
 InputManager::~InputManager()
+{
+
+}
+
+void InputManager::pollEvents()
+{
+#ifdef __ANDROID__
+
+#else
+	glfwPollEvents();
+#endif
+}
+
+#ifdef __ANDROID__
+InputManager::InputManager():
+        touching(false),
+        movingSideways(false),
+        directionSideways(0.0f),
+        movingForward(false),
+        directionForward(0.0f)
+{
+
+}
+#else
+
+InputManager::InputManager()
+		: mGlfwWindow(nullptr)
+{
+
+}
+
+InputManager::InputManager(GLFWwindow& glfwWindow)
+		: mGlfwWindow(&glfwWindow)
 {
 
 }
@@ -24,7 +47,7 @@ void InputManager::setGlfwWindow(GLFWwindow& glfwWindow)
 	mGlfwWindow = &glfwWindow;
 }
 
-void InputManager::assertGlfwWindowIsValid() 
+void InputManager::assertGlfwWindowIsValid()
 {
 	if (!mGlfwWindow)
 		throw std::runtime_error("GLFWWindow cannot be NULL");
@@ -37,7 +60,7 @@ void InputManager::setFramebufferSizeCallback(GLFWframebuffersizefun cbfun)
 }
 
 void InputManager::setScrollCallback(GLFWscrollfun cbfun)
-{   
+{
 	assertGlfwWindowIsValid();
 	glfwSetScrollCallback(mGlfwWindow, cbfun);
 }
@@ -45,7 +68,7 @@ void InputManager::setScrollCallback(GLFWscrollfun cbfun)
 void InputManager::setKeyCallback(GLFWkeyfun cbfun)
 {
 	assertGlfwWindowIsValid();
-	glfwSetKeyCallback(mGlfwWindow, cbfun); 
+	glfwSetKeyCallback(mGlfwWindow, cbfun);
 }
 
 void InputManager::setCursorPosCallback(GLFWcursorposfun cbfun)
@@ -60,11 +83,10 @@ void InputManager::setMouseButtonCallback(GLFWmousebuttonfun cbfun)
 	glfwSetMouseButtonCallback(mGlfwWindow, cbfun);
 }
 
-
-
-
 bool InputManager::keyPressed(int key)
 {
 	return glfwGetKey(mGlfwWindow, key) == GLFW_PRESS;
 }
 
+
+#endif
