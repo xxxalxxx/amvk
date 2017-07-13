@@ -2727,7 +2727,6 @@ Model::indexBufferOffset	inc/model.h	/^				 indexBufferOffset; $/;"	m	class:Mode
 Model::init	src/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
 Model::init	src/model.cpp	/^void Model::init(std::string modelPath, unsigned int pFlags) $/;"	f	class:Model	signature:(std::string modelPath, unsigned int pFlags)
 Model::mCommonBufferInfo	inc/model.h	/^	BufferInfo mCommonBufferInfo;$/;"	m	class:Model	access:protected
-Model::mCommonStagingBufferInfo	inc/model.h	/^	BufferInfo mCommonStagingBufferInfo;$/;"	m	class:Model	access:protected
 Model::mDescriptorPool	inc/model.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:Model	access:protected
 Model::mFolder	inc/model.h	/^	std::string mPath, mFolder;$/;"	m	class:Model	access:protected
 Model::mMaterialIndexToMaterial	inc/model.h	/^	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;$/;"	m	class:Model	access:protected
@@ -3484,7 +3483,6 @@ Quad::createVertexBuffer	src/quad.cpp	/^void Quad::createVertexBuffer() $/;"	f	c
 Quad::draw	src/quad.cpp	/^void Quad::draw(VkCommandBuffer& commandBuffer) $/;"	f	class:Quad	signature:(VkCommandBuffer& commandBuffer)
 Quad::init	src/quad.cpp	/^void Quad::init()$/;"	f	class:Quad	signature:()
 Quad::mCommonBufferInfo	inc/quad.h	/^	BufferInfo mCommonBufferInfo;$/;"	m	class:Quad	access:public
-Quad::mCommonStagingBufferInfo	inc/quad.h	/^	BufferInfo mCommonStagingBufferInfo;$/;"	m	class:Quad	access:public
 Quad::mIndexBufferDesc	inc/quad.h	/^	BufferInfo mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;$/;"	m	class:Quad	access:public
 Quad::mIndexBufferOffset	inc/quad.h	/^				 mIndexBufferOffset, $/;"	m	class:Quad	access:public
 Quad::mTextureDesc	inc/quad.h	/^	ImageInfo *mTextureDesc;$/;"	m	class:Quad	access:public
@@ -3800,7 +3798,6 @@ Skinned::init	src/skinned.cpp	/^void Skinned::init(std::string modelPath, unsign
 Skinned::mAnimNodeRoot	inc/skinned.h	/^    AnimNode* mAnimNodeRoot;$/;"	m	class:Skinned	access:protected
 Skinned::mBoneTransforms	inc/skinned.h	/^	std::vector<aiMatrix4x4> mBoneTransforms;$/;"	m	class:Skinned	access:protected
 Skinned::mCommonBufferInfo	inc/skinned.h	/^	BufferInfo mCommonBufferInfo;$/;"	m	class:Skinned	access:protected
-Skinned::mCommonStagingBufferInfo	inc/skinned.h	/^	BufferInfo mCommonStagingBufferInfo;$/;"	m	class:Skinned	access:protected
 Skinned::mDescriptorPool	inc/skinned.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:Skinned	access:protected
 Skinned::mFolder	inc/skinned.h	/^	std::string mPath, mFolder;$/;"	m	class:Skinned	access:protected
 Skinned::mMaterialIndexToMaterial	inc/skinned.h	/^	std::unordered_map<uint32_t, Material> mMaterialIndexToMaterial;$/;"	m	class:Skinned	access:protected
@@ -14177,9 +14174,6 @@ mComments	lib/assimp/importerdesc.h	/^    const char* mComments;$/;"	m	struct:ai
 mCommonBufferInfo	inc/model.h	/^	BufferInfo mCommonBufferInfo;$/;"	m	class:Model	access:protected
 mCommonBufferInfo	inc/quad.h	/^	BufferInfo mCommonBufferInfo;$/;"	m	class:Quad	access:public
 mCommonBufferInfo	inc/skinned.h	/^	BufferInfo mCommonBufferInfo;$/;"	m	class:Skinned	access:protected
-mCommonStagingBufferInfo	inc/model.h	/^	BufferInfo mCommonStagingBufferInfo;$/;"	m	class:Model	access:protected
-mCommonStagingBufferInfo	inc/quad.h	/^	BufferInfo mCommonStagingBufferInfo;$/;"	m	class:Quad	access:public
-mCommonStagingBufferInfo	inc/skinned.h	/^	BufferInfo mCommonStagingBufferInfo;$/;"	m	class:Skinned	access:protected
 mComputeIndex	inc/device_queue_indices.h	/^	int mGraphicsIndex, mSupportedIndex, mComputeIndex, mTransferIndex;$/;"	m	class:DeviceQueueIndicies	access:private
 mCondition	inc/task_manager.h	/^	std::condition_variable mCondition;$/;"	m	class:TaskManager	access:private
 mContinue	inc/task_manager.h	/^	std::atomic_bool mContinue;$/;"	m	class:TaskManager	access:private

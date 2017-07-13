@@ -3,7 +3,6 @@
 Quad::Quad(VulkanState& vulkanState):
 	mVulkanState(vulkanState), 
 	mCommonBufferInfo(vulkanState.device),
-	mCommonStagingBufferInfo(vulkanState.device),
 	mVertexBufferDesc(vulkanState.device),
 	mIndexBufferDesc(vulkanState.device),
 	mUniformBufferDesc(vulkanState.device),
@@ -39,12 +38,12 @@ void Quad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& ca
 	ubo.proj = camera.proj();
 	/*
 	Buffer update via copy
-	BufferHelper::mapMemory(mVulkanState, mCommonStagingBufferInfo.memory, mUniformBufferOffset, sizeof(ubo), &ubo);
+	BufferHelper::mapMemory(mVulkanState, staging.memory, mUniformBufferOffset, sizeof(ubo), &ubo);
 	BufferHelper::copyBuffer(
 			mVulkanState.device,
 			mVulkanState.commandPool,
 			mVulkanState.graphicsQueue,
-			mCommonStagingBufferInfo.buffer,
+			staging.buffer,
 			mCommonBufferInfo.buffer,
 			mUniformBufferOffset,
 			sizeof(ubo));
@@ -158,21 +157,22 @@ void Quad::createBuffers()
 	//mIndexBufferOffset = vertexBufferSize;
 	//mUniformBufferOffset = vertexBufferSize + indexBufferSize;
 	mCommonBufferInfo.size = vertexBufferSize + indexBufferSize + uniformBufferSize;
-	mCommonStagingBufferInfo.size = mCommonBufferInfo.size;
-	BufferHelper::createStagingBuffer(mVulkanState, mCommonStagingBufferInfo);
+	BufferInfo staging(mVulkanState.device);
+	staging.size = mCommonBufferInfo.size;
+	BufferHelper::createStagingBuffer(mVulkanState, staging);
 	
 	char* data;
-	vkMapMemory(mVulkanState.device, mCommonStagingBufferInfo.memory, 0, mCommonStagingBufferInfo.size, 0, (void**) &data);
+	vkMapMemory(mVulkanState.device, staging.memory, 0, staging.size, 0, (void**) &data);
 	memcpy(data + mUniformBufferOffset, &ubo, (size_t) uniformBufferSize);
 	memcpy(data + mVertexBufferOffset, vertices.data(), vertexBufferSize);
 	memcpy(data + mIndexBufferOffset, indices.data(), indexBufferSize);
-	vkUnmapMemory(mVulkanState.device, mCommonStagingBufferInfo.memory);
+	vkUnmapMemory(mVulkanState.device, staging.memory);
 
 	BufferHelper::createCommonBuffer(mVulkanState, mCommonBufferInfo);
 
 	BufferHelper::copyBuffer(
 			mVulkanState,
-			mCommonStagingBufferInfo.buffer, 
+			staging.buffer, 
 			mCommonBufferInfo.buffer, 
 			mCommonBufferInfo.size);
 }

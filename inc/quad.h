@@ -65,7 +65,6 @@ public:
 
 	VulkanState& mVulkanState;
 	BufferInfo mCommonBufferInfo;
-	BufferInfo mCommonStagingBufferInfo;
 	BufferInfo mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;
 	ImageInfo *mTextureDesc;
 	VkDescriptorSet mVkDescriptorSet;
