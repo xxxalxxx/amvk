@@ -5,23 +5,6 @@
 #include "vulkan_state.h"
 #include "pipeline_creator.h"
 
-/*
-class DescriptorManager {
-public:
-	DescriptorManager(VulkanState& state);
-	void createDescriptorSetLayouts();
-	void createDescriptorPool();
-
-private:
-	void createQuadDescriptorSetLayout();
-	void createModelDescriptorSetLayout();
-	void createSamplerDescriptorSetLayout();
-	void createUniformDescriptorSetLayout();
-	VulkanState& state;
-	DescriptorSetLayouts& state.descriptorSetLayouts;
-};
-*/
-
 namespace DescriptorManager 
 {
 

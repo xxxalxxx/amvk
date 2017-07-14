@@ -4,5 +4,8 @@
 -std=c++14
 -I./
 -I./inc
+-I./inc/creator
+-I./inc/shape
 -I./src
+-I./src/shape
 -I./lib

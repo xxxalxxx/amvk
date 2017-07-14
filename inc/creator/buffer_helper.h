@@ -1,34 +1,24 @@
-#include "buffer_helper.h"
+#ifndef AMVK_BUFFER_MANAGER_H
+#define AMVK_BUFFER_MANAGER_H
 
-BufferInfo::BufferInfo(const VkDevice& device):
-	buffer(VK_NULL_HANDLE),
-	memory(VK_NULL_HANDLE),
-	size(0),
-	mVkDevice(device)
 
+#ifdef __ANDROID__
+#include "vulkan_wrapper.h"
+#else
+#include <vulkan/vulkan.h>
+#endif
+
+#include "cmd_pass.h"
+#include "vulkan_utils.h"
+#include "vulkan_state.h"
+#include "buffer_info.h"
+
+#include <cstring>
+
+namespace BufferHelper 
 {
 
-}
-
-
-BufferInfo::BufferInfo(const VkDevice& device, VkDeviceSize size):
-	buffer(VK_NULL_HANDLE),
-	memory(VK_NULL_HANDLE),
-	size(size),
-	mVkDevice(device)
-{
-
-}
-
-BufferInfo::~BufferInfo() 
-{
-	if (buffer != VK_NULL_HANDLE)
-		vkDestroyBuffer(mVkDevice, buffer, nullptr);
-	if (memory != VK_NULL_HANDLE)
-		vkFreeMemory(mVkDevice, memory, nullptr);
-}
-
-uint32_t BufferHelper::getMemoryType(
+inline uint32_t getMemoryType(
 		const VkPhysicalDevice& physicalDevice, 
 		uint32_t typeFilter, 
 		VkMemoryPropertyFlags& flags)
@@ -43,17 +33,7 @@ uint32_t BufferHelper::getMemoryType(
 	throw std::runtime_error("Failed to find memory type");
 }
 
-void BufferHelper::mapMemory(const VulkanState& state, BufferInfo& bufferInfo, const void* src) 
-{
-	mapMemory(state, bufferInfo.memory, 0, bufferInfo.size, src);
-}
-
-void BufferHelper::mapMemory(const VulkanState& state, VkDeviceMemory& memory, VkDeviceSize size, const void* src) 
-{
-	mapMemory(state, memory, 0, size, src);
-} 
-
-void BufferHelper::mapMemory(
+inline void mapMemory(
 		const VulkanState& state, 
 		VkDeviceMemory& memory, 
 		VkDeviceSize offset, 
@@ -67,7 +47,19 @@ void BufferHelper::mapMemory(
 }
 
 
-void BufferHelper::mapMemory(
+
+inline void mapMemory(const VulkanState& state, BufferInfo& bufferInfo, const void* src) 
+{
+	mapMemory(state, bufferInfo.memory, 0, bufferInfo.size, src);
+}
+
+inline void mapMemory(const VulkanState& state, VkDeviceMemory& memory, VkDeviceSize size, const void* src) 
+{
+	mapMemory(state, memory, 0, size, src);
+} 
+
+
+inline void mapMemory(
 		const VkDevice& device, 
 		VkDeviceMemory& memory, 
 		VkDeviceSize offset, 
@@ -80,7 +72,7 @@ void BufferHelper::mapMemory(
 	vkUnmapMemory(device, memory);
 }
 
-void BufferHelper::createBuffer(
+inline void createBuffer(
 		const VkPhysicalDevice& physicalDevice,
 		const VkDevice& device,
 		VkBuffer& buffer, 
@@ -109,7 +101,7 @@ void BufferHelper::createBuffer(
 	vkBindBufferMemory(device, buffer, memory, 0);
 }
 
-void BufferHelper::createBuffer(
+inline void createBuffer(
 			const VulkanState& state,
 			VkBuffer& buffer, 
 			VkDeviceSize size, 
@@ -128,7 +120,7 @@ void BufferHelper::createBuffer(
 
 }
 
-void BufferHelper::createBuffer(
+inline void createBuffer(
 			const VulkanState& state,
 			BufferInfo& bufferInfo,  
 			VkBufferUsageFlags usage,
@@ -145,7 +137,7 @@ void BufferHelper::createBuffer(
 
 }
 
-void BufferHelper::createVertexBuffer(const VulkanState& state, BufferInfo& bufferInfo)
+inline void createVertexBuffer(const VulkanState& state, BufferInfo& bufferInfo)
 {
 	createBuffer(
 			state.physicalDevice,
@@ -157,7 +149,7 @@ void BufferHelper::createVertexBuffer(const VulkanState& state, BufferInfo& buff
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 }
 
-void BufferHelper::createCommonBuffer(const VulkanState& state, BufferInfo& bufferInfo)
+inline void createCommonBuffer(const VulkanState& state, BufferInfo& bufferInfo)
 {
 	createBuffer(
 		state.physicalDevice,
@@ -173,7 +165,7 @@ void BufferHelper::createCommonBuffer(const VulkanState& state, BufferInfo& buff
 
 }
 
-void BufferHelper::createIndexBuffer(const VulkanState& state, BufferInfo& bufferInfo)
+inline void createIndexBuffer(const VulkanState& state, BufferInfo& bufferInfo)
 {
 	createBuffer(
 			state.physicalDevice,
@@ -185,7 +177,7 @@ void BufferHelper::createIndexBuffer(const VulkanState& state, BufferInfo& buffe
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 }
 
-void BufferHelper::createUniformBuffer(const VulkanState& state, BufferInfo& bufferInfo)
+inline void createUniformBuffer(const VulkanState& state, BufferInfo& bufferInfo)
 {
 	createBuffer(
 			state.physicalDevice,
@@ -197,19 +189,7 @@ void BufferHelper::createUniformBuffer(const VulkanState& state, BufferInfo& buf
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 }
 
-
-void BufferHelper::createStagingBuffer(
-			const VulkanState& state,
-			BufferInfo& bufferInfo) 
-{
-	createStagingBuffer(
-			state,
-			bufferInfo.buffer,
-			bufferInfo.size,
-			bufferInfo.memory);
-}
-
-void BufferHelper::createStagingBuffer(
+inline void createStagingBuffer(
 			const VulkanState& state,
 			VkBuffer& buffer, 
 			VkDeviceSize size, 
@@ -225,7 +205,18 @@ void BufferHelper::createStagingBuffer(
 			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
-void BufferHelper::createStagingBuffer(
+inline void createStagingBuffer(
+			const VulkanState& state,
+			BufferInfo& bufferInfo) 
+{
+	createStagingBuffer(
+			state,
+			bufferInfo.buffer,
+			bufferInfo.size,
+			bufferInfo.memory);
+}
+
+inline void createStagingBuffer(
 			const VkPhysicalDevice& physicalDevice,
 			const VkDevice& device,
 			VkBuffer& buffer, 
@@ -242,7 +233,7 @@ void BufferHelper::createStagingBuffer(
 			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
-void BufferHelper::copyBuffer(
+inline void copyBuffer(
 		const VkDevice& device,
 		const VkCommandPool& commandPool,
 		const VkQueue& queue,
@@ -256,7 +247,7 @@ void BufferHelper::copyBuffer(
 	vkCmdCopyBuffer(cmdPass.buffer, src, dst, 1, &bufferCopy);
 }
 
-void BufferHelper::copyBuffer(
+inline void copyBuffer(
 		const VkDevice& device,
 		const VkCommandPool& commandPool,
 		const VkQueue& queue,
@@ -273,7 +264,7 @@ void BufferHelper::copyBuffer(
 	vkCmdCopyBuffer(cmdPass.buffer, src, dst, 1, &bufferCopy);
 }
 
-void BufferHelper::copyBuffer(
+inline void copyBuffer(
 			const VulkanState& state,
 			VkBuffer src, 
 			VkBuffer dst, 
@@ -287,3 +278,7 @@ void BufferHelper::copyBuffer(
 			dst,
 			size);
 }
+
+}
+
+#endif

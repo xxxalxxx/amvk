@@ -15,9 +15,8 @@
 #include <vector>
 
 #include "buffer_helper.h"
-#include "vulkan_image_creator.h"
+#include "image_helper.h"
 #include "vulkan_image_info.h"
-#include "vulkan_render_pass_creator.h"
 #include "texture_manager.h"
 #include "pipeline_creator.h"
 #include "pipeline_cache.h"
