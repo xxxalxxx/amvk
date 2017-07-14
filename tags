@@ -515,7 +515,6 @@ AMVK_MACROS_H	inc/macro.h	3;"	d
 AMVK_MODEL_H	inc/model.h	2;"	d
 AMVK_PIPELINE_CACHE_H	inc/pipeline_cache.h	2;"	d
 AMVK_PIPELINE_MANAGER_H	inc/pipeline_manager.h	2;"	d
-AMVK_QUAD_H	inc/tquad.h	2;"	d
 AMVK_SHADER_MANAGER_H	inc/shader_manager.h	2;"	d
 AMVK_SKINNED_MODEL_H	inc/skinned.h	2;"	d
 AMVK_STATE_MANAGER_H	inc/state_manager.h	2;"	d
@@ -525,6 +524,7 @@ AMVK_TASK_MANAGER_H	inc/task_manager.h	4;"	d
 AMVK_TEXTURE_DATA_H	inc/texture_data.h	2;"	d
 AMVK_TEXTURE_MANAGER_H	inc/texture_manager.h	2;"	d
 AMVK_TIMER_H	inc/timer.h	2;"	d
+AMVK_TQUAD_H	inc/tquad.h	2;"	d
 AMVK_UTIL_H	inc/util.h	2;"	d
 AMVK_VULKAN_IMAGE_MANAGER_H	inc/vulkan_image_creator.h	2;"	d
 AMVK_VULKAN_MANAGER_H	inc/vulkan_manager.h	2;"	d
@@ -1246,11 +1246,11 @@ DescriptorManager::createSamplerDescriptorSetLayout	inc/descriptor_manager.h	/^i
 DescriptorManager::createSamplerListDescriptorSetLayout	inc/descriptor_manager.h	/^inline void createSamplerListDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createUniformDescriptorSetLayout	inc/descriptor_manager.h	/^inline void createUniformDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorSetLayouts	inc/vulkan_state.h	/^struct DescriptorSetLayouts {$/;"	s
-DescriptorSetLayouts::model	inc/vulkan_state.h	/^						  model,$/;"	m	struct:DescriptorSetLayouts	access:public
-DescriptorSetLayouts::sampler	inc/vulkan_state.h	/^						  sampler,$/;"	m	struct:DescriptorSetLayouts	access:public
-DescriptorSetLayouts::samplerList	inc/vulkan_state.h	/^						  samplerList;$/;"	m	struct:DescriptorSetLayouts	access:public
-DescriptorSetLayouts::tquad	inc/vulkan_state.h	/^	VkDescriptorSetLayout tquad,$/;"	m	struct:DescriptorSetLayouts	access:public
-DescriptorSetLayouts::uniform	inc/vulkan_state.h	/^						  uniform,$/;"	m	struct:DescriptorSetLayouts	access:public
+DescriptorSetLayouts::model	inc/vulkan_state.h	/^	VkDescriptorSetLayout model;$/;"	m	struct:DescriptorSetLayouts	access:public
+DescriptorSetLayouts::sampler	inc/vulkan_state.h	/^	VkDescriptorSetLayout sampler;$/;"	m	struct:DescriptorSetLayouts	access:public
+DescriptorSetLayouts::samplerList	inc/vulkan_state.h	/^	VkDescriptorSetLayout samplerList;$/;"	m	struct:DescriptorSetLayouts	access:public
+DescriptorSetLayouts::tquad	inc/vulkan_state.h	/^	VkDescriptorSetLayout tquad;$/;"	m	struct:DescriptorSetLayouts	access:public
+DescriptorSetLayouts::uniform	inc/vulkan_state.h	/^	VkDescriptorSetLayout uniform;$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSets	inc/vulkan_state.h	/^struct DescriptorSets {$/;"	s
 DestroyBuffer	lib/vulkan/vk_layer.h	/^    PFN_vkDestroyBuffer DestroyBuffer;$/;"	m	struct:VkLayerDispatchTable_	access:public
 DestroyBufferView	lib/vulkan/vk_layer.h	/^    PFN_vkDestroyBufferView DestroyBufferView;$/;"	m	struct:VkLayerDispatchTable_	access:public
@@ -3445,9 +3445,9 @@ PipelineManager::createPipelines	inc/pipeline_manager.h	/^inline void createPipe
 PipelineManager::createSkinnedPipeline	inc/pipeline_manager.h	/^inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
 PipelineManager::createTQuadPipeline	inc/pipeline_manager.h	/^inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
 Pipelines	inc/vulkan_state.h	/^struct Pipelines {$/;"	s
-Pipelines::model	inc/vulkan_state.h	/^				 model,$/;"	m	struct:Pipelines	access:public
-Pipelines::skinned	inc/vulkan_state.h	/^				 skinned;$/;"	m	struct:Pipelines	access:public
-Pipelines::tquad	inc/vulkan_state.h	/^	PipelineInfo tquad,$/;"	m	struct:Pipelines	access:public
+Pipelines::model	inc/vulkan_state.h	/^	PipelineInfo model;$/;"	m	struct:Pipelines	access:public
+Pipelines::skinned	inc/vulkan_state.h	/^	PipelineInfo skinned;$/;"	m	struct:Pipelines	access:public
+Pipelines::tquad	inc/vulkan_state.h	/^	PipelineInfo tquad;$/;"	m	struct:Pipelines	access:public
 PopDirectory	lib/__assimp/IOSystem.hpp	/^inline bool IOSystem::PopDirectory() {$/;"	f	class:Assimp::IOSystem	signature:()
 PopDirectory	lib/assimp/IOSystem.hpp	/^inline bool IOSystem::PopDirectory() {$/;"	f	class:Assimp::IOSystem	signature:()
 ProgressHandler	lib/__assimp/ProgressHandler.hpp	/^    ProgressHandler () {$/;"	f	class:Assimp::ProgressHandler	access:protected	signature:()
@@ -3698,9 +3698,9 @@ ShaderInfo::vertex	inc/vulkan_state.h	/^	VkPipelineShaderStageCreateInfo vertex;
 ShaderManager	inc/shader_manager.h	/^namespace ShaderManager $/;"	n
 ShaderManager::createShaders	inc/shader_manager.h	/^inline void createShaders(VulkanState& state)$/;"	f	namespace:ShaderManager	signature:(VulkanState& state)
 Shaders	inc/vulkan_state.h	/^struct Shaders {$/;"	s
-Shaders::model	inc/vulkan_state.h	/^			   model,$/;"	m	struct:Shaders	access:public
-Shaders::skinned	inc/vulkan_state.h	/^			   skinned;$/;"	m	struct:Shaders	access:public
-Shaders::tquad	inc/vulkan_state.h	/^	ShaderInfo tquad,$/;"	m	struct:Shaders	access:public
+Shaders::model	inc/vulkan_state.h	/^	ShaderInfo model;$/;"	m	struct:Shaders	access:public
+Shaders::skinned	inc/vulkan_state.h	/^	ShaderInfo skinned;$/;"	m	struct:Shaders	access:public
+Shaders::tquad	inc/vulkan_state.h	/^	ShaderInfo tquad;$/;"	m	struct:Shaders	access:public
 Skinned	inc/skinned.h	/^class Skinned {$/;"	c
 Skinned	src/skinned.cpp	/^Skinned::Skinned(VulkanState& vulkanState):$/;"	f	class:Skinned	signature:(VulkanState& vulkanState)
 Skinned::DEFAULT_FLAGS	inc/skinned.h	/^	static constexpr uint32_t const DEFAULT_FLAGS = $/;"	m	class:Skinned	access:public
@@ -14963,9 +14963,9 @@ model	inc/model.h	/^	    glm::mat4 model;$/;"	m	struct:Model::UBO	access:public
 model	inc/skinned.h	/^	    glm::mat4 model;$/;"	m	struct:Skinned::UBO	access:public
 model	inc/tquad.h	/^	    glm::mat4 model;$/;"	m	struct:TQuad::PushConstants	access:public
 model	inc/tquad.h	/^	    glm::mat4 model;$/;"	m	struct:TQuad::UBO	access:public
-model	inc/vulkan_state.h	/^						  model,$/;"	m	struct:DescriptorSetLayouts	access:public
-model	inc/vulkan_state.h	/^				 model,$/;"	m	struct:Pipelines	access:public
-model	inc/vulkan_state.h	/^			   model,$/;"	m	struct:Shaders	access:public
+model	inc/vulkan_state.h	/^	PipelineInfo model;$/;"	m	struct:Pipelines	access:public
+model	inc/vulkan_state.h	/^	ShaderInfo model;$/;"	m	struct:Shaders	access:public
+model	inc/vulkan_state.h	/^	VkDescriptorSetLayout model;$/;"	m	struct:DescriptorSetLayouts	access:public
 module	lib/vulkan/vulkan.h	/^    VkShaderModule                      module;$/;"	m	struct:VkPipelineShaderStageCreateInfo	access:public
 mouseButtonCallback	src/engine.cpp	/^void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)$/;"	f	signature:(GLFWwindow* window, int button, int action, int mods)
 moveSideways	src/camera.cpp	/^void Camera::moveSideways(float direction, float dt)$/;"	f	class:Camera	signature:(float direction, float dt)
@@ -15611,12 +15611,12 @@ sampledImageDepthSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sa
 sampledImageIntegerSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sampledImageIntegerSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 sampledImageStencilSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sampledImageStencilSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 sampler	inc/vulkan_image_info.h	/^	VkSampler sampler;$/;"	m	class:ImageInfo	access:public
-sampler	inc/vulkan_state.h	/^						  sampler,$/;"	m	struct:DescriptorSetLayouts	access:public
+sampler	inc/vulkan_state.h	/^	VkDescriptorSetLayout sampler;$/;"	m	struct:DescriptorSetLayouts	access:public
 sampler	lib/vulkan/vulkan.h	/^    VkSampler        sampler;$/;"	m	struct:VkDescriptorImageInfo	access:public
 samplerAnisotropy	inc/vulkan_state.h	/^	VkBool32 samplerAnisotropy;$/;"	m	struct:DeviceInfo	access:public
 samplerAnisotropy	lib/vulkan/vulkan.h	/^    VkBool32    samplerAnisotropy;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 samplerIndices	inc/skinned.h	/^		glm::uvec4 samplerIndices;$/;"	m	struct:Skinned::Vertex	access:public
-samplerList	inc/vulkan_state.h	/^						  samplerList;$/;"	m	struct:DescriptorSetLayouts	access:public
+samplerList	inc/vulkan_state.h	/^	VkDescriptorSetLayout samplerList;$/;"	m	struct:DescriptorSetLayouts	access:public
 samples	lib/vulkan/vulkan.h	/^    VkSampleCountFlagBits           samples;$/;"	m	struct:VkAttachmentDescription	access:public
 samples	lib/vulkan/vulkan.h	/^    VkSampleCountFlagBits    samples;$/;"	m	struct:VkImageCreateInfo	access:public
 saturate	lib/glm/gtx/compatibility.hpp	/^	template<typename T, precision P> GLM_FUNC_QUALIFIER T saturate(T x){return clamp(x, T(0), T(1));}														\/\/!< \\brief Returns clamp(x, 0, 1) for each component in x. (From GLM_GTX_compatibility)$/;"	f	namespace:glm	signature:(T x)
@@ -15703,8 +15703,8 @@ size4	lib/glm/gtx/std_based_type.hpp	/^	typedef vec<4, std::size_t, defaultp>		s
 size4_t	lib/glm/gtx/std_based_type.hpp	/^	typedef vec<4, std::size_t, defaultp>		size4_t;$/;"	t	namespace:glm
 sizeType	lib/glm/detail/type_gentype.hpp	/^	typedef std::size_t sizeType;$/;"	t	namespace:glm
 size_type	lib/glm/detail/type_gentype.hpp	/^		typedef sizeType size_type;$/;"	t	struct:glm::detail::genType	access:public
-skinned	inc/vulkan_state.h	/^				 skinned;$/;"	m	struct:Pipelines	access:public
-skinned	inc/vulkan_state.h	/^			   skinned;$/;"	m	struct:Shaders	access:public
+skinned	inc/vulkan_state.h	/^	PipelineInfo skinned;$/;"	m	struct:Pipelines	access:public
+skinned	inc/vulkan_state.h	/^	ShaderInfo skinned;$/;"	m	struct:Shaders	access:public
 skip	lib/stb/stb_image.h	/^   void     (*skip)  (void *user,int n);                 \/\/ skip the next 'n' bytes, or 'unget' the last -n bytes if negative$/;"	m	struct:__anon59	access:public
 snprintf	lib/vulkan/vk_sdk_platform.h	39;"	d
 space	lib/glm/gtx/io.hpp	/^			char_type  space;$/;"	m	class:glm::io::format_punct	access:public
@@ -17014,9 +17014,9 @@ total	src/timer.cpp	/^double Timer::total() const $/;"	f	class:Timer	signature:(
 touching	inc/input_manager.h	/^	bool touching;$/;"	m	class:InputManager	access:public
 tq	lib/stb/stb_image.h	/^      int tq;$/;"	m	struct:__anon63::__anon64	access:public
 tquad	inc/vulkan_manager.h	/^	TQuad tquad;$/;"	m	class:VulkanManager	access:private
-tquad	inc/vulkan_state.h	/^	PipelineInfo tquad,$/;"	m	struct:Pipelines	access:public
-tquad	inc/vulkan_state.h	/^	ShaderInfo tquad,$/;"	m	struct:Shaders	access:public
-tquad	inc/vulkan_state.h	/^	VkDescriptorSetLayout tquad,$/;"	m	struct:DescriptorSetLayouts	access:public
+tquad	inc/vulkan_state.h	/^	PipelineInfo tquad;$/;"	m	struct:Pipelines	access:public
+tquad	inc/vulkan_state.h	/^	ShaderInfo tquad;$/;"	m	struct:Shaders	access:public
+tquad	inc/vulkan_state.h	/^	VkDescriptorSetLayout tquad;$/;"	m	struct:DescriptorSetLayouts	access:public
 tquat	lib/glm/gtc/quaternion.hpp	/^	struct tquat$/;"	s	namespace:glm
 transferIndexSet	src/device_queue_indices.cpp	/^bool DeviceQueueIndicies::transferIndexSet() $/;"	f	class:DeviceQueueIndicies	signature:()
 transform	lib/vulkan/vk_icd.h	/^    VkSurfaceTransformFlagBitsKHR transform;$/;"	m	struct:__anon83	access:public
@@ -17266,7 +17266,7 @@ umat4x3	lib/glm/gtc/matrix_integer.hpp	/^	typedef mediump_umat4x3							umat4x3;
 umat4x4	lib/glm/gtc/matrix_integer.hpp	/^	typedef highp_umat4x4							umat4x4;$/;"	t	namespace:glm
 umat4x4	lib/glm/gtc/matrix_integer.hpp	/^	typedef lowp_umat4x4							umat4x4;$/;"	t	namespace:glm
 umat4x4	lib/glm/gtc/matrix_integer.hpp	/^	typedef mediump_umat4x4							umat4x4;$/;"	t	namespace:glm
-uniform	inc/vulkan_state.h	/^						  uniform,$/;"	m	struct:DescriptorSetLayouts	access:public
+uniform	inc/vulkan_state.h	/^	VkDescriptorSetLayout uniform;$/;"	m	struct:DescriptorSetLayouts	access:public
 uniformBufferOffset	inc/model.h	/^	VkDeviceSize uniformBufferOffset,  $/;"	m	class:Model	access:public
 uniformBufferOffset	inc/skinned.h	/^	VkDeviceSize uniformBufferOffset,  $/;"	m	class:Skinned	access:public
 uninitialize	lib/glm/detail/setup.hpp	/^	enum ctor{uninitialize};$/;"	e	enum:glm::ctor

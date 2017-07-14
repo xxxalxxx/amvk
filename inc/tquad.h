@@ -1,5 +1,5 @@
-#ifndef AMVK_QUAD_H
-#define AMVK_QUAD_H
+#ifndef AMVK_TQUAD_H
+#define AMVK_TQUAD_H
 #include "macro.h"
 
 #ifdef __ANDROID__
