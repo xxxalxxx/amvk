@@ -18,7 +18,7 @@
 #include "vulkan_image_creator.h"
 #include "window.h"
 #include "swap_chain_desc.h"
-#include "tquad.h"
+#include "quad.h"
 
 class SwapchainManager {
 public:

@@ -41,7 +41,7 @@ struct ShaderInfo {
 };
 
 struct Pipelines {
-	PipelineInfo tquad,
+	PipelineInfo quad,
 				 model,
 				 skinned;
 };
@@ -51,7 +51,7 @@ struct DescriptorSets {
 };
 
 struct DescriptorSetLayouts {
-	VkDescriptorSetLayout tquad,
+	VkDescriptorSetLayout quad, 
 						  model,
 						  uniform,
 						  sampler,
@@ -59,7 +59,7 @@ struct DescriptorSetLayouts {
 };
 
 struct Shaders {
-	ShaderInfo tquad,
+	ShaderInfo quad,
 			   model,
 			   skinned;
 };
