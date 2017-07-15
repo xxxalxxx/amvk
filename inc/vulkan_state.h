@@ -1,7 +1,6 @@
 #ifndef AMVK_VULKAN_STATE_H
 #define AMVK_VULKAN_STATE_H
 
-
 #ifdef __ANDROID__
 #include "vulkan_wrapper.h"
 #else
@@ -40,6 +39,9 @@ struct ShaderInfo {
 };
 
 struct Pipelines {
+	PipelineInfo fullscreenQuad;
+	PipelineInfo quad;
+	PipelineInfo pointLight;
 	PipelineInfo tquad;
 	PipelineInfo model;
 	PipelineInfo skinned;
@@ -50,7 +52,10 @@ struct DescriptorSets {
 };
 
 struct DescriptorSetLayouts {
+	VkDescriptorSetLayout quad;
+	VkDescriptorSetLayout fullscreenQuad;
 	VkDescriptorSetLayout tquad;
+	VkDescriptorSetLayout pointLight;
 	VkDescriptorSetLayout model;
 	VkDescriptorSetLayout uniform;
 	VkDescriptorSetLayout sampler;
@@ -58,7 +63,10 @@ struct DescriptorSetLayouts {
 };
 
 struct Shaders {
+	ShaderInfo quad;
+	ShaderInfo fullscreenQuad;
 	ShaderInfo tquad;
+	ShaderInfo pointLight;
 	ShaderInfo model;
 	ShaderInfo skinned;
 };

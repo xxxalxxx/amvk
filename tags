@@ -510,7 +510,9 @@ AMVK_DEVICE_MANAGER_H	inc/device_manager.h	2;"	d
 AMVK_DEVICE_QUEUE_INDICES	inc/device_queue_indices.h	2;"	d
 AMVK_ENGINE_H	inc/engine.h	2;"	d
 AMVK_FILE_MANAGER	inc/file_manager.h	2;"	d
+AMVK_FULLSCREEN_QUAD_H	inc/shape/fullscreen_quad.h	2;"	d
 AMVK_INPUT_MANAGER_H	inc/input_manager.h	2;"	d
+AMVK_LIGHTS_H	inc/lights.h	2;"	d
 AMVK_MACROS_H	inc/macro.h	3;"	d
 AMVK_MODEL_H	inc/shape/model.h	2;"	d
 AMVK_PIPELINE_CACHE_H	inc/pipeline_cache.h	2;"	d
@@ -1239,12 +1241,15 @@ DescriptorManager	inc/creator/descriptor_manager.h	/^namespace DescriptorManager
 DescriptorManager::createDescriptorPool	inc/creator/descriptor_manager.h	/^inline void createDescriptorPool(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createDescriptorSetLayouts	inc/creator/descriptor_manager.h	/^inline void createDescriptorSetLayouts(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createModelDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createModelDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
-DescriptorManager::createQuadDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createQuadDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createSamplerDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createSamplerDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createSamplerListDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createSamplerListDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
+DescriptorManager::createTQuadDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createTQuadDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createUniformDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createUniformDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorSetLayouts	inc/vulkan_state.h	/^struct DescriptorSetLayouts {$/;"	s
+DescriptorSetLayouts::fullscreenQuad	inc/vulkan_state.h	/^	VkDescriptorSetLayout fullscreenQuad;$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSetLayouts::model	inc/vulkan_state.h	/^	VkDescriptorSetLayout model;$/;"	m	struct:DescriptorSetLayouts	access:public
+DescriptorSetLayouts::pointLight	inc/vulkan_state.h	/^	VkDescriptorSetLayout pointLight;$/;"	m	struct:DescriptorSetLayouts	access:public
+DescriptorSetLayouts::quad	inc/vulkan_state.h	/^	VkDescriptorSetLayout quad;$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSetLayouts::sampler	inc/vulkan_state.h	/^	VkDescriptorSetLayout sampler;$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSetLayouts::samplerList	inc/vulkan_state.h	/^	VkDescriptorSetLayout samplerList;$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSetLayouts::tquad	inc/vulkan_state.h	/^	VkDescriptorSetLayout tquad;$/;"	m	struct:DescriptorSetLayouts	access:public
@@ -1524,6 +1529,15 @@ FlushProc	lib/assimp/cfileio.h	/^    aiFileFlushProc FlushProc;$/;"	m	struct:aiF
 FreeCommandBuffers	lib/vulkan/vk_layer.h	/^    PFN_vkFreeCommandBuffers FreeCommandBuffers;$/;"	m	struct:VkLayerDispatchTable_	access:public
 FreeDescriptorSets	lib/vulkan/vk_layer.h	/^    PFN_vkFreeDescriptorSets FreeDescriptorSets;$/;"	m	struct:VkLayerDispatchTable_	access:public
 FreeMemory	lib/vulkan/vk_layer.h	/^    PFN_vkFreeMemory FreeMemory;$/;"	m	struct:VkLayerDispatchTable_	access:public
+FullscreenQuad	inc/shape/fullscreen_quad.h	/^class FullscreenQuad {$/;"	c
+FullscreenQuad	src/shape/fullscreen_quad.cpp	/^FullscreenQuad::FullscreenQuad(VulkanState& state):$/;"	f	class:FullscreenQuad	signature:(VulkanState& state)
+FullscreenQuad::FullscreenQuad	src/shape/fullscreen_quad.cpp	/^FullscreenQuad::FullscreenQuad(VulkanState& state):$/;"	f	class:FullscreenQuad	signature:(VulkanState& state)
+FullscreenQuad::createDescriptorSets	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::createDescriptorSets() $/;"	f	class:FullscreenQuad	signature:()
+FullscreenQuad::draw	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::draw(VkCommandBuffer& cmdBuffer) $/;"	f	class:FullscreenQuad	signature:(VkCommandBuffer& cmdBuffer)
+FullscreenQuad::init	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::init() $/;"	f	class:FullscreenQuad	signature:()
+FullscreenQuad::mDescriptorSet	inc/shape/fullscreen_quad.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:FullscreenQuad	access:private
+FullscreenQuad::mImageInfo	inc/shape/fullscreen_quad.h	/^	ImageInfo* mImageInfo;$/;"	m	class:FullscreenQuad	access:private
+FullscreenQuad::mState	inc/shape/fullscreen_quad.h	/^	VulkanState& mState;$/;"	m	class:FullscreenQuad	access:private
 FunctionControlConstMask	lib/vulkan/spirv.hpp	/^    FunctionControlConstMask = 0x00000008,$/;"	e	enum:spv::FunctionControlMask
 FunctionControlConstShift	lib/vulkan/spirv.hpp	/^    FunctionControlConstShift = 3,$/;"	e	enum:spv::FunctionControlShift
 FunctionControlDontInlineMask	lib/vulkan/spirv.hpp	/^    FunctionControlDontInlineMask = 0x00000002,$/;"	e	enum:spv::FunctionControlMask
@@ -2681,7 +2695,7 @@ MessageTask::MessageTask	inc/task_manager.h	/^	MessageTask(int id): mId(id) {}$/
 MessageTask::execute	inc/task_manager.h	/^	void execute() {$/;"	f	class:MessageTask	access:public	signature:()
 MessageTask::mId	inc/task_manager.h	/^	int mId;$/;"	m	class:MessageTask	access:public
 Model	inc/shape/model.h	/^class Model {$/;"	c
-Model	src/model.cpp	/^Model::Model(VulkanState& vulkanState):$/;"	f	class:Model	signature:(VulkanState& vulkanState)
+Model	src/shape/model.cpp	/^Model::Model(VulkanState& vulkanState):$/;"	f	class:Model	signature:(VulkanState& vulkanState)
 Model::DEFAULT_FLAGS	inc/shape/model.h	/^	static constexpr uint32_t const DEFAULT_FLAGS = $/;"	m	class:Model	access:public
 Model::Material	inc/shape/model.h	/^	struct Material {$/;"	s	class:Model	access:public
 Model::Material::Material	inc/shape/model.h	/^		Material(): $/;"	f	struct:Model::Material	access:public	signature:()
@@ -2700,11 +2714,11 @@ Model::Mesh::baseVertex	inc/shape/model.h	/^		uint32_t baseVertex, numVertices;$
 Model::Mesh::materialIndex	inc/shape/model.h	/^		uint32_t materialIndex;$/;"	m	struct:Model::Mesh	access:public
 Model::Mesh::numIndices	inc/shape/model.h	/^		uint32_t baseIndex, numIndices;$/;"	m	struct:Model::Mesh	access:public
 Model::Mesh::numVertices	inc/shape/model.h	/^		uint32_t baseVertex, numVertices;$/;"	m	struct:Model::Mesh	access:public
-Model::Model	src/model.cpp	/^Model::Model(VulkanState& vulkanState):$/;"	f	class:Model	signature:(VulkanState& vulkanState)
+Model::Model	src/shape/model.cpp	/^Model::Model(VulkanState& vulkanState):$/;"	f	class:Model	signature:(VulkanState& vulkanState)
 Model::NUM_TEXTURE_TYPES	inc/shape/model.h	/^	static const uint32_t NUM_TEXTURE_TYPES;$/;"	m	class:Model	access:public
-Model::NUM_TEXTURE_TYPES	src/model.cpp	/^const uint32_t Model::NUM_TEXTURE_TYPES = ARRAY_SIZE(Model_TEXTURE_TYPES);$/;"	m	class:Model	file:
+Model::NUM_TEXTURE_TYPES	src/shape/model.cpp	/^const uint32_t Model::NUM_TEXTURE_TYPES = ARRAY_SIZE(Model_TEXTURE_TYPES);$/;"	m	class:Model	file:
 Model::TEXTURE_TYPES	inc/shape/model.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;"	m	class:Model	access:public
-Model::TEXTURE_TYPES	src/model.cpp	/^const aiTextureType* Model::TEXTURE_TYPES = Model_TEXTURE_TYPES;$/;"	m	class:Model	file:
+Model::TEXTURE_TYPES	src/shape/model.cpp	/^const aiTextureType* Model::TEXTURE_TYPES = Model_TEXTURE_TYPES;$/;"	m	class:Model	file:
 Model::UBO	inc/shape/model.h	/^	struct UBO {$/;"	s	class:Model	access:public
 Model::UBO::model	inc/shape/model.h	/^	    glm::mat4 model;$/;"	m	struct:Model::UBO	access:public
 Model::UBO::proj	inc/shape/model.h	/^		glm::mat4 proj;$/;"	m	struct:Model::UBO	access:public
@@ -2715,15 +2729,15 @@ Model::Vertex::normal	inc/shape/model.h	/^		glm::vec3 normal;$/;"	m	struct:Model
 Model::Vertex::pos	inc/shape/model.h	/^		glm::vec3 pos;$/;"	m	struct:Model::Vertex	access:public
 Model::Vertex::tangent	inc/shape/model.h	/^		glm::vec3 tangent;$/;"	m	struct:Model::Vertex	access:public
 Model::Vertex::texCoord	inc/shape/model.h	/^		glm::vec2 texCoord;$/;"	m	struct:Model::Vertex	access:public
-Model::convertVector	src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec2& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec2& dest)
-Model::convertVector	src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec3& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec3& dest)
-Model::createCommonBuffer	src/model.cpp	/^void Model::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Model	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
-Model::createDescriptorPool	src/model.cpp	/^void Model::createDescriptorPool() $/;"	f	class:Model	signature:()
-Model::createDescriptorSet	src/model.cpp	/^void Model::createDescriptorSet()$/;"	f	class:Model	signature:()
-Model::draw	src/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
+Model::convertVector	src/shape/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec2& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec2& dest)
+Model::convertVector	src/shape/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec3& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec3& dest)
+Model::createCommonBuffer	src/shape/model.cpp	/^void Model::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Model	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
+Model::createDescriptorPool	src/shape/model.cpp	/^void Model::createDescriptorPool() $/;"	f	class:Model	signature:()
+Model::createDescriptorSet	src/shape/model.cpp	/^void Model::createDescriptorSet()$/;"	f	class:Model	signature:()
+Model::draw	src/shape/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 Model::indexBufferOffset	inc/shape/model.h	/^				 indexBufferOffset; $/;"	m	class:Model	access:public
-Model::init	src/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
-Model::init	src/model.cpp	/^void Model::init(std::string modelPath, unsigned int pFlags) $/;"	f	class:Model	signature:(std::string modelPath, unsigned int pFlags)
+Model::init	src/shape/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
+Model::init	src/shape/model.cpp	/^void Model::init(std::string modelPath, unsigned int pFlags) $/;"	f	class:Model	signature:(std::string modelPath, unsigned int pFlags)
 Model::mCommonBufferInfo	inc/shape/model.h	/^	BufferInfo mCommonBufferInfo;$/;"	m	class:Model	access:protected
 Model::mDescriptorPool	inc/shape/model.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:Model	access:protected
 Model::mFolder	inc/shape/model.h	/^	std::string mPath, mFolder;$/;"	m	class:Model	access:protected
@@ -2735,24 +2749,24 @@ Model::mState	inc/shape/model.h	/^	VulkanState& mState;$/;"	m	class:Model	access
 Model::mUniformDescriptorSet	inc/shape/model.h	/^	VkDescriptorSet mUniformDescriptorSet;$/;"	m	class:Model	access:protected
 Model::numIndices	inc/shape/model.h	/^	uint32_t numVertices, numIndices;$/;"	m	class:Model	access:public
 Model::numVertices	inc/shape/model.h	/^	uint32_t numVertices, numIndices;$/;"	m	class:Model	access:public
-Model::processModel	src/model.cpp	/^void Model::processModel(const aiScene& scene) $/;"	f	class:Model	signature:(const aiScene& scene)
-Model::throwError	src/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
-Model::throwError	src/model.cpp	/^void Model::throwError(std::string& error) $/;"	f	class:Model	signature:(std::string& error)
+Model::processModel	src/shape/model.cpp	/^void Model::processModel(const aiScene& scene) $/;"	f	class:Model	signature:(const aiScene& scene)
+Model::throwError	src/shape/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
+Model::throwError	src/shape/model.cpp	/^void Model::throwError(std::string& error) $/;"	f	class:Model	signature:(std::string& error)
 Model::ubo	inc/shape/model.h	/^	UBO ubo;$/;"	m	class:Model	access:public
 Model::uniformBufferOffset	inc/shape/model.h	/^	VkDeviceSize uniformBufferOffset,  $/;"	m	class:Model	access:public
-Model::update	src/model.cpp	/^void Model::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:Model	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
+Model::update	src/shape/model.cpp	/^void Model::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:Model	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 Model::vertexBufferOffset	inc/shape/model.h	/^				 vertexBufferOffset, $/;"	m	class:Model	access:public
-Model::~Model	src/model.cpp	/^Model::~Model() $/;"	f	class:Model	signature:()
+Model::~Model	src/shape/model.cpp	/^Model::~Model() $/;"	f	class:Model	signature:()
 ModelFlag_stripFullPath	inc/shape/skinned.h	/^	static constexpr int ModelFlag_stripFullPath = 1;$/;"	m	class:Skinned	access:public
 ModelFlags	inc/shape/skinned.h	/^	typedef int ModelFlags;$/;"	t	class:Skinned	access:public
-Model_TEXTURE_TYPES	src/model.cpp	/^static const aiTextureType Model_TEXTURE_TYPES[] ={$/;"	v	file:
+Model_TEXTURE_TYPES	src/shape/model.cpp	/^static const aiTextureType Model_TEXTURE_TYPES[] ={$/;"	v	file:
 NOMINMAX	lib/vulkan/vk_sdk_platform.h	26;"	d
 NORMAL	lib/__assimp/Logger.hpp	/^        NORMAL,     \/\/!< Normal granularity of logging$/;"	e	enum:Assimp::Logger::LogSeverity
 NORMAL	lib/assimp/Logger.hpp	/^        NORMAL,     \/\/!< Normal granularity of logging$/;"	e	enum:Assimp::Logger::LogSeverity
 NUM_DEVICE_QUEUE_INDICES	inc/device_queue_indices.h	6;"	d
 NUM_TEXTURE_TYPES	inc/shape/model.h	/^	static const uint32_t NUM_TEXTURE_TYPES;$/;"	m	class:Model	access:public
 NUM_TEXTURE_TYPES	inc/shape/skinned.h	/^	static const uint32_t NUM_TEXTURE_TYPES;$/;"	m	class:Skinned	access:public
-NUM_TEXTURE_TYPES	src/model.cpp	/^const uint32_t Model::NUM_TEXTURE_TYPES = ARRAY_SIZE(Model_TEXTURE_TYPES);$/;"	m	class:Model	file:
+NUM_TEXTURE_TYPES	src/shape/model.cpp	/^const uint32_t Model::NUM_TEXTURE_TYPES = ARRAY_SIZE(Model_TEXTURE_TYPES);$/;"	m	class:Model	file:
 NUM_TEXTURE_TYPES	src/shape/skinned.cpp	/^const uint32_t Skinned::NUM_TEXTURE_TYPES = ARRAY_SIZE(Skinned_TEXTURE_TYPES);$/;"	m	class:Skinned	file:
 NullLogger	lib/__assimp/NullLogger.hpp	/^class ASSIMP_API NullLogger$/;"	c	namespace:Assimp	inherits:Logger
 NullLogger	lib/assimp/NullLogger.hpp	/^class ASSIMP_API NullLogger$/;"	c	namespace:Assimp	inherits:Logger
@@ -3418,6 +3432,7 @@ PipelineCreator	inc/creator/pipeline_creator.h	/^namespace PipelineCreator $/;"	
 PipelineCreator::blendAttachmentStateDisabled	inc/creator/pipeline_creator.h	/^inline VkPipelineColorBlendAttachmentState blendAttachmentStateDisabled() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::blendStateDisabled	inc/creator/pipeline_creator.h	/^inline VkPipelineColorBlendStateCreateInfo blendStateDisabled($/;"	f	namespace:PipelineCreator	signature:( VkPipelineColorBlendAttachmentState* attachmentStates, uint32_t attachmentCount)
 PipelineCreator::depthStencilStateDepthLessNoStencil	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessNoStencil() $/;"	f	namespace:PipelineCreator	signature:()
+PipelineCreator::depthStencilStateDepthLessOrEqualNoStencil	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessOrEqualNoStencil() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::dynamicState	inc/creator/pipeline_creator.h	/^inline VkPipelineDynamicStateCreateInfo dynamicState(VkDynamicState* dynamicStates, uint32_t stateCount)$/;"	f	namespace:PipelineCreator	signature:(VkDynamicState* dynamicStates, uint32_t stateCount)
 PipelineCreator::inputAssemblyNoRestart	inc/creator/pipeline_creator.h	/^inline VkPipelineInputAssemblyStateCreateInfo inputAssemblyNoRestart(VkPrimitiveTopology topology) $/;"	f	namespace:PipelineCreator	signature:(VkPrimitiveTopology topology)
 PipelineCreator::layout	inc/creator/pipeline_creator.h	/^inline VkPipelineLayoutCreateInfo layout($/;"	f	namespace:PipelineCreator	signature:( VkDescriptorSetLayout* setLayouts, uint32_t setLayoutCount, VkPushConstantRange* pushConstantRanges, uint32_t pushConstantRangeCount)
@@ -3426,6 +3441,7 @@ PipelineCreator::pipelineCache	inc/creator/pipeline_creator.h	/^inline void pipe
 PipelineCreator::pushConstantRange	inc/creator/pipeline_creator.h	/^inline VkPushConstantRange pushConstantRange(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)$/;"	f	namespace:PipelineCreator	signature:(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)
 PipelineCreator::rasterizationStateCullBackCCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::rasterizationStateCullBackCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW() $/;"	f	namespace:PipelineCreator	signature:()
+PipelineCreator::rasterizationStateCullNone	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::shaderStage	inc/creator/pipeline_creator.h	/^inline VkPipelineShaderStageCreateInfo shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)$/;"	f	namespace:PipelineCreator	signature:(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)
 PipelineCreator::shaderStage	inc/creator/pipeline_creator.h	/^inline VkPipelineShaderStageCreateInfo shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)$/;"	f	namespace:PipelineCreator	signature:(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)
 PipelineCreator::vertexInputState	inc/creator/pipeline_creator.h	/^inline VkPipelineVertexInputStateCreateInfo vertexInputState($/;"	f	namespace:PipelineCreator	signature:( VkVertexInputBindingDescription* bindings, uint32_t bindingsCount, VkVertexInputAttributeDescription* attributes, uint32_t attributesCount)
@@ -3438,14 +3454,32 @@ PipelineInfo::cache	inc/vulkan_state.h	/^	VkPipelineCache cache;$/;"	m	struct:Pi
 PipelineInfo::layout	inc/vulkan_state.h	/^	VkPipelineLayout layout;$/;"	m	struct:PipelineInfo	access:public
 PipelineInfo::pipeline	inc/vulkan_state.h	/^	VkPipeline pipeline;$/;"	m	struct:PipelineInfo	access:public
 PipelineManager	inc/creator/pipeline_manager.h	/^namespace PipelineManager$/;"	n
+PipelineManager::createFullscreenQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
 PipelineManager::createModelPipeline	inc/creator/pipeline_manager.h	/^inline void createModelPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
 PipelineManager::createPipelines	inc/creator/pipeline_manager.h	/^inline void createPipelines(VulkanState& state)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state)
 PipelineManager::createSkinnedPipeline	inc/creator/pipeline_manager.h	/^inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
 PipelineManager::createTQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
 Pipelines	inc/vulkan_state.h	/^struct Pipelines {$/;"	s
+Pipelines::fullscreenQuad	inc/vulkan_state.h	/^	PipelineInfo fullscreenQuad;$/;"	m	struct:Pipelines	access:public
 Pipelines::model	inc/vulkan_state.h	/^	PipelineInfo model;$/;"	m	struct:Pipelines	access:public
+Pipelines::pointLight	inc/vulkan_state.h	/^	PipelineInfo pointLight;$/;"	m	struct:Pipelines	access:public
+Pipelines::quad	inc/vulkan_state.h	/^	PipelineInfo quad;$/;"	m	struct:Pipelines	access:public
 Pipelines::skinned	inc/vulkan_state.h	/^	PipelineInfo skinned;$/;"	m	struct:Pipelines	access:public
 Pipelines::tquad	inc/vulkan_state.h	/^	PipelineInfo tquad;$/;"	m	struct:Pipelines	access:public
+PointLight	inc/lights.h	/^struct PointLight {$/;"	s
+PointLight	src/lights.cpp	/^PointLight::PointLight(const glm::vec3& color, const glm::vec3& position, float radius)$/;"	f	class:PointLight	signature:(const glm::vec3& color, const glm::vec3& position, float radius)
+PointLight::PointLight	src/lights.cpp	/^PointLight::PointLight(const glm::vec3& color, const glm::vec3& position, float radius)$/;"	f	class:PointLight	signature:(const glm::vec3& color, const glm::vec3& position, float radius)
+PointLight::Uniform	inc/lights.h	/^	struct Uniform {$/;"	s	struct:PointLight	access:public
+PointLight::Uniform::color	inc/lights.h	/^		glm::vec3 color;$/;"	m	struct:PointLight::Uniform	access:public
+PointLight::Uniform::constant	inc/lights.h	/^		float quadratic, linear, constant; $/;"	m	struct:PointLight::Uniform	access:public
+PointLight::Uniform::linear	inc/lights.h	/^		float quadratic, linear, constant; $/;"	m	struct:PointLight::Uniform	access:public
+PointLight::Uniform::position	inc/lights.h	/^		glm::vec3 position;$/;"	m	struct:PointLight::Uniform	access:public
+PointLight::Uniform::quadratic	inc/lights.h	/^		float quadratic, linear, constant; $/;"	m	struct:PointLight::Uniform	access:public
+PointLight::Uniform::specPower	inc/lights.h	/^		float specPower;$/;"	m	struct:PointLight::Uniform	access:public
+PointLight::getRadius	src/lights.cpp	/^float PointLight::getRadius() const$/;"	f	class:PointLight	signature:() const
+PointLight::radius	inc/lights.h	/^	float radius;$/;"	m	struct:PointLight	access:private
+PointLight::setRadius	src/lights.cpp	/^void PointLight::setRadius(float radius) $/;"	f	class:PointLight	signature:(float radius)
+PointLight::uniform	inc/lights.h	/^	Uniform uniform;$/;"	m	struct:PointLight	access:public
 PopDirectory	lib/__assimp/IOSystem.hpp	/^inline bool IOSystem::PopDirectory() {$/;"	f	class:Assimp::IOSystem	signature:()
 PopDirectory	lib/assimp/IOSystem.hpp	/^inline bool IOSystem::PopDirectory() {$/;"	f	class:Assimp::IOSystem	signature:()
 ProgressHandler	lib/__assimp/ProgressHandler.hpp	/^    ProgressHandler () {$/;"	f	class:Assimp::ProgressHandler	access:protected	signature:()
@@ -3697,7 +3731,10 @@ ShaderInfo::vertex	inc/vulkan_state.h	/^	VkPipelineShaderStageCreateInfo vertex;
 ShaderManager	inc/creator/shader_manager.h	/^namespace ShaderManager $/;"	n
 ShaderManager::createShaders	inc/creator/shader_manager.h	/^inline void createShaders(VulkanState& state)$/;"	f	namespace:ShaderManager	signature:(VulkanState& state)
 Shaders	inc/vulkan_state.h	/^struct Shaders {$/;"	s
+Shaders::fullscreenQuad	inc/vulkan_state.h	/^	ShaderInfo fullscreenQuad;$/;"	m	struct:Shaders	access:public
 Shaders::model	inc/vulkan_state.h	/^	ShaderInfo model;$/;"	m	struct:Shaders	access:public
+Shaders::pointLight	inc/vulkan_state.h	/^	ShaderInfo pointLight;$/;"	m	struct:Shaders	access:public
+Shaders::quad	inc/vulkan_state.h	/^	ShaderInfo quad;$/;"	m	struct:Shaders	access:public
 Shaders::skinned	inc/vulkan_state.h	/^	ShaderInfo skinned;$/;"	m	struct:Shaders	access:public
 Shaders::tquad	inc/vulkan_state.h	/^	ShaderInfo tquad;$/;"	m	struct:Shaders	access:public
 Skinned	inc/shape/skinned.h	/^class Skinned {$/;"	c
@@ -4689,7 +4726,7 @@ TESTUMAX	lib/__assimp/Compiler/pstdint.h	826;"	d
 TESTUMAX	lib/assimp/Compiler/pstdint.h	797;"	d
 TEXTURE_TYPES	inc/shape/model.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;"	m	class:Model	access:public
 TEXTURE_TYPES	inc/shape/skinned.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;"	m	class:Skinned	access:public
-TEXTURE_TYPES	src/model.cpp	/^const aiTextureType* Model::TEXTURE_TYPES = Model_TEXTURE_TYPES;$/;"	m	class:Model	file:
+TEXTURE_TYPES	src/shape/model.cpp	/^const aiTextureType* Model::TEXTURE_TYPES = Model_TEXTURE_TYPES;$/;"	m	class:Model	file:
 TEXTURE_TYPES	src/shape/skinned.cpp	/^const aiTextureType* Skinned::TEXTURE_TYPES = Skinned_TEXTURE_TYPES;$/;"	m	class:Skinned	file:
 TQuad	inc/shape/tquad.h	/^class TQuad {$/;"	c
 TQuad	src/shape/tquad.cpp	/^TQuad::TQuad(VulkanState& vulkanState):$/;"	f	class:TQuad	signature:(VulkanState& vulkanState)
@@ -4864,6 +4901,7 @@ ULONG_LONG_MAX	lib/__assimp/Compiler/pstdint.h	552;"	d
 ULONG_LONG_MAX	lib/assimp/Compiler/pstdint.h	527;"	d
 UP	inc/camera.h	/^    const static glm::vec3 UP, RIGHT;$/;"	m	class:Camera	access:private
 UP	src/camera.cpp	/^const glm::vec3 Camera::UP = glm::vec3(0.0f, 1.0f, 0.0f);$/;"	m	class:Camera	file:
+Uniform	inc/lights.h	/^	struct Uniform {$/;"	s	struct:PointLight	access:public
 UnmapMemory	lib/vulkan/vk_layer.h	/^    PFN_vkUnmapMemory UnmapMemory;$/;"	m	struct:VkLayerDispatchTable_	access:public
 UpdateDescriptorSets	lib/vulkan/vk_layer.h	/^    PFN_vkUpdateDescriptorSets UpdateDescriptorSets;$/;"	m	struct:VkLayerDispatchTable_	access:public
 UpdateFileRead	lib/__assimp/ProgressHandler.hpp	/^    virtual void UpdateFileRead(int currentStep \/*= 0*\/, int numberOfSteps \/*= 0*\/) {$/;"	f	class:Assimp::ProgressHandler	access:public	signature:(int currentStep , int numberOfSteps )
@@ -7431,6 +7469,7 @@ VulkanManager::VulkanManager	src/vulkan_manager.cpp	/^VulkanManager::VulkanManag
 VulkanManager::buildCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)$/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
 VulkanManager::draw	src/vulkan_manager.cpp	/^void VulkanManager::draw() $/;"	f	class:VulkanManager	signature:()
 VulkanManager::dwarf	inc/vulkan_manager.h	/^	Skinned dwarf;$/;"	m	class:VulkanManager	access:private
+VulkanManager::fullscreenQuad	inc/vulkan_manager.h	/^	FullscreenQuad fullscreenQuad;$/;"	m	class:VulkanManager	access:private
 VulkanManager::guard	inc/vulkan_manager.h	/^	Skinned guard;$/;"	m	class:VulkanManager	access:private
 VulkanManager::imageIndex	inc/vulkan_manager.h	/^	uint32_t imageIndex;$/;"	m	class:VulkanManager	access:private
 VulkanManager::init	src/vulkan_manager.cpp	/^void VulkanManager::init() $/;"	f	class:VulkanManager	signature:()
@@ -9536,6 +9575,7 @@ col_type	lib/glm/detail/type_mat3x4.hpp	/^		typedef vec<4, T, P> col_type;$/;"	t
 col_type	lib/glm/detail/type_mat4x2.hpp	/^		typedef vec<2, T, P> col_type;$/;"	t	struct:glm::mat	access:public
 col_type	lib/glm/detail/type_mat4x3.hpp	/^		typedef vec<3, T, P> col_type;$/;"	t	struct:glm::mat	access:public
 col_type	lib/glm/detail/type_mat4x4.hpp	/^		typedef vec<4, T, P> col_type;$/;"	t	struct:glm::mat	access:public
+color	inc/lights.h	/^		glm::vec3 color;$/;"	m	struct:PointLight::Uniform	access:public
 color	inc/shape/tquad.h	/^		glm::vec3 color;$/;"	m	struct:TQuad::Vertex	access:public
 color	lib/vulkan/vulkan.h	/^    VkClearColorValue           color;$/;"	m	union:VkClearValue	access:public
 color	lib/vulkan/vulkan.h	/^    float              color[4];$/;"	m	struct:VkDebugMarkerMarkerInfoEXT	access:public
@@ -9594,9 +9634,10 @@ connection	lib/vulkan/vulkan.h	/^    xcb_connection_t*             connection;$/
 const_pointer	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const * const_pointer;$/;"	t	struct:glm::detail::genType	access:public
 const_pointer_const	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const * const const_pointer_const;$/;"	t	struct:glm::detail::genType	access:public
 const_reference	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const & const_reference;$/;"	t	struct:glm::detail::genType	access:public
+constant	inc/lights.h	/^		float quadratic, linear, constant; $/;"	m	struct:PointLight::Uniform	access:public
 constantID	lib/vulkan/vulkan.h	/^    uint32_t    constantID;$/;"	m	struct:VkSpecializationMapEntry	access:public
-convertVector	src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec2& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec2& dest)
-convertVector	src/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec3& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec3& dest)
+convertVector	src/shape/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec2& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec2& dest)
+convertVector	src/shape/model.cpp	/^void Model::convertVector(const aiVector3D& src, glm::vec3& dest)$/;"	f	class:Model	signature:(const aiVector3D& src, glm::vec3& dest)
 convertVector	src/shape/skinned.cpp	/^void Skinned::convertVector(const aiVector3D& src, glm::vec2& dest)$/;"	f	class:Skinned	signature:(const aiVector3D& src, glm::vec2& dest)
 convertVector	src/shape/skinned.cpp	/^void Skinned::convertVector(const aiVector3D& src, glm::vec3& dest)$/;"	f	class:Skinned	signature:(const aiVector3D& src, glm::vec3& dest)
 copyBuffer	inc/creator/buffer_helper.h	/^inline void copyBuffer($/;"	f	namespace:BufferHelper	signature:( const VkDevice& device, const VkCommandPool& commandPool, const VkQueue& queue, VkBuffer src, VkBuffer dst, VkDeviceSize offset, VkDeviceSize size)
@@ -9614,17 +9655,19 @@ createBuffers	src/shape/tquad.cpp	/^void TQuad::createBuffers()$/;"	f	class:TQua
 createCommandBuffers	src/swapchain_manager.cpp	/^void SwapchainManager::createCommandBuffers()$/;"	f	class:SwapchainManager	signature:()
 createCommandPool	src/swapchain_manager.cpp	/^void SwapchainManager::createCommandPool()$/;"	f	class:SwapchainManager	signature:()
 createCommonBuffer	inc/creator/buffer_helper.h	/^inline void createCommonBuffer(const VulkanState& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
-createCommonBuffer	src/model.cpp	/^void Model::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Model	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
+createCommonBuffer	src/shape/model.cpp	/^void Model::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Model	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 createCommonBuffer	src/shape/skinned.cpp	/^void Skinned::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Skinned	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 createDepthResources	src/swapchain_manager.cpp	/^void SwapchainManager::createDepthResources() $/;"	f	class:SwapchainManager	signature:()
 createDescriptorPool	inc/creator/descriptor_manager.h	/^inline void createDescriptorPool(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
-createDescriptorPool	src/model.cpp	/^void Model::createDescriptorPool() $/;"	f	class:Model	signature:()
+createDescriptorPool	src/shape/model.cpp	/^void Model::createDescriptorPool() $/;"	f	class:Model	signature:()
 createDescriptorPool	src/shape/skinned.cpp	/^void Skinned::createDescriptorPool() $/;"	f	class:Skinned	signature:()
-createDescriptorSet	src/model.cpp	/^void Model::createDescriptorSet()$/;"	f	class:Model	signature:()
+createDescriptorSet	src/shape/model.cpp	/^void Model::createDescriptorSet()$/;"	f	class:Model	signature:()
 createDescriptorSet	src/shape/skinned.cpp	/^void Skinned::createDescriptorSet()$/;"	f	class:Skinned	signature:()
 createDescriptorSet	src/shape/tquad.cpp	/^void TQuad::createDescriptorSet()$/;"	f	class:TQuad	signature:()
 createDescriptorSetLayouts	inc/creator/descriptor_manager.h	/^inline void createDescriptorSetLayouts(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
+createDescriptorSets	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::createDescriptorSets() $/;"	f	class:FullscreenQuad	signature:()
 createFramebuffers	src/swapchain_manager.cpp	/^void SwapchainManager::createFramebuffers(VkRenderPass renderPass)$/;"	f	class:SwapchainManager	signature:(VkRenderPass renderPass)
+createFullscreenQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
 createImage	inc/creator/image_helper.h	/^inline void createImage($/;"	f	namespace:ImageHelper	signature:( VulkanState& state, ImageInfo& imageDesc, VkFormat format, VkImageTiling tiling, VkImageLayout initialLayout, VkImageUsageFlags usage, VkMemoryPropertyFlags properties)
 createImageView	inc/creator/image_helper.h	/^inline void createImageView($/;"	f	namespace:ImageHelper	signature:( const VkDevice& device, ImageInfo& imageDesc, VkFormat format, VkImageAspectFlags aspectFlags)
 createImageView	inc/creator/image_helper.h	/^inline void createImageView($/;"	f	namespace:ImageHelper	signature:( const VkDevice& device, VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkImageView& imageView)
@@ -9637,7 +9680,6 @@ createModelDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void cr
 createModelPipeline	inc/creator/pipeline_manager.h	/^inline void createModelPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
 createPhysicalDevice	src/device_manager.cpp	/^void DeviceManager::createPhysicalDevice(SwapchainManager& swapchainManager) $/;"	f	class:DeviceManager	signature:(SwapchainManager& swapchainManager)
 createPipelines	inc/creator/pipeline_manager.h	/^inline void createPipelines(VulkanState& state)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state)
-createQuadDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createQuadDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createRenderPass	src/swapchain_manager.cpp	/^void SwapchainManager::createRenderPass()$/;"	f	class:SwapchainManager	signature:()
 createSamplerDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createSamplerDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createSamplerListDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createSamplerListDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
@@ -9650,6 +9692,7 @@ createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffe
 createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffer($/;"	f	namespace:BufferHelper	signature:( const VulkanState& state, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory)
 createSurface	src/swapchain_manager.cpp	/^void SwapchainManager::createSurface()$/;"	f	class:SwapchainManager	signature:()
 createSwapChain	src/swapchain_manager.cpp	/^void SwapchainManager::createSwapChain()$/;"	f	class:SwapchainManager	signature:()
+createTQuadDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createTQuadDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createTQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
 createUniformBuffer	inc/creator/buffer_helper.h	/^inline void createUniformBuffer(const VulkanState& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
 createUniformBuffer	src/shape/tquad.cpp	/^void TQuad::createUniformBuffer()$/;"	f	class:TQuad	signature:()
@@ -9774,6 +9817,7 @@ depthFormat	inc/vulkan_state.h	/^	VkFormat depthFormat;$/;"	m	struct:VulkanState
 depthPitch	lib/vulkan/vulkan.h	/^    VkDeviceSize    depthPitch;$/;"	m	struct:VkSubresourceLayout	access:public
 depthStencil	lib/vulkan/vulkan.h	/^    VkClearDepthStencilValue    depthStencil;$/;"	m	union:VkClearValue	access:public
 depthStencilStateDepthLessNoStencil	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessNoStencil() $/;"	f	namespace:PipelineCreator	signature:()
+depthStencilStateDepthLessOrEqualNoStencil	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessOrEqualNoStencil() $/;"	f	namespace:PipelineCreator	signature:()
 depthTestEnable	lib/vulkan/vulkan.h	/^    VkBool32                                  depthTestEnable;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo	access:public
 depthWriteEnable	lib/vulkan/vulkan.h	/^    VkBool32                                  depthWriteEnable;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo	access:public
 dequant	lib/stb/stb_image.h	/^   stbi_uc dequant[4][64];$/;"	m	struct:__anon63	access:public
@@ -9875,7 +9919,8 @@ dpy	lib/vulkan/vulkan.h	/^    Display*                       dpy;$/;"	m	struct:V
 dquat	lib/glm/fwd.hpp	/^	typedef highp_dquat			dquat;$/;"	t	namespace:glm
 dquat	lib/glm/fwd.hpp	/^	typedef lowp_dquat			dquat;$/;"	t	namespace:glm
 dquat	lib/glm/fwd.hpp	/^	typedef mediump_dquat		dquat;$/;"	t	namespace:glm
-draw	src/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
+draw	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::draw(VkCommandBuffer& cmdBuffer) $/;"	f	class:FullscreenQuad	signature:(VkCommandBuffer& cmdBuffer)
+draw	src/shape/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 draw	src/shape/skinned.cpp	/^void Skinned::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Skinned	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 draw	src/shape/tquad.cpp	/^void TQuad::draw(VkCommandBuffer& commandBuffer)$/;"	f	class:TQuad	signature:(VkCommandBuffer& commandBuffer)
 draw	src/vulkan_manager.cpp	/^void VulkanManager::draw() $/;"	f	class:VulkanManager	signature:()
@@ -10308,6 +10353,10 @@ framebuffers	inc/swapchain_manager.h	/^	std::vector<VkFramebuffer> framebuffers;
 front	lib/vulkan/vulkan.h	/^    VkStencilOpState                          front;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo	access:public
 frontFace	lib/vulkan/vulkan.h	/^    VkFrontFace                                frontFace;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo	access:public
 fullDrawIndexUint32	lib/vulkan/vulkan.h	/^    VkBool32    fullDrawIndexUint32;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
+fullscreenQuad	inc/vulkan_manager.h	/^	FullscreenQuad fullscreenQuad;$/;"	m	class:VulkanManager	access:private
+fullscreenQuad	inc/vulkan_state.h	/^	PipelineInfo fullscreenQuad;$/;"	m	struct:Pipelines	access:public
+fullscreenQuad	inc/vulkan_state.h	/^	ShaderInfo fullscreenQuad;$/;"	m	struct:Shaders	access:public
+fullscreenQuad	inc/vulkan_state.h	/^	VkDescriptorSetLayout fullscreenQuad;$/;"	m	struct:DescriptorSetLayouts	access:public
 function	lib/vulkan/vk_layer.h	/^    VkLayerFunction function;$/;"	m	struct:__anon85	access:public
 function	lib/vulkan/vk_layer.h	/^    VkLayerFunction function;$/;"	m	struct:__anon87	access:public
 functor1	lib/glm/detail/_vectorize.hpp	/^	struct functor1<1, R, T, P>$/;"	s	namespace:glm::detail
@@ -10386,6 +10435,7 @@ getMemoryType	inc/creator/buffer_helper.h	/^inline uint32_t getMemoryType($/;"	f
 getModelsPath	src/file_manager.cpp	/^std::string FileManager::getModelsPath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
 getPixels	src/texture_data.cpp	/^stbi_uc* TextureData::getPixels()$/;"	f	class:TextureData	signature:()
 getPresentMode	src/swapchain_manager.cpp	/^VkPresentModeKHR SwapchainManager::getPresentMode(const std::vector<VkPresentModeKHR>& presentModes) const$/;"	f	class:SwapchainManager	signature:(const std::vector<VkPresentModeKHR>& presentModes) const
+getRadius	src/lights.cpp	/^float PointLight::getRadius() const$/;"	f	class:PointLight	signature:() const
 getResourcePath	src/file_manager.cpp	/^std::string FileManager::getResourcePath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
 getRotation	src/shape/anim_node.cpp	/^aiMatrix4x4 AnimNode::getRotation(float progress, unsigned int animIndex, aiNodeAnim& channel)$/;"	f	class:AnimNode	signature:(float progress, unsigned int animIndex, aiNodeAnim& channel)
 getScaling	src/shape/anim_node.cpp	/^aiMatrix4x4 AnimNode::getScaling(float progress, unsigned int animIndex, aiNodeAnim& channel)$/;"	f	class:AnimNode	signature:(float progress, unsigned int animIndex, aiNodeAnim& channel)
@@ -13626,8 +13676,9 @@ info	lib/assimp/Logger.hpp	/^inline void Logger::info(const std::string &message
 inheritedQueries	lib/vulkan/vulkan.h	/^    VkBool32    inheritedQueries;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 init	src/engine.cpp	/^void Engine::init()$/;"	f	class:Engine	signature:()
 init	src/engine.cpp	/^void Engine::init(android_app* state)$/;"	f	class:Engine	signature:(android_app* state)
-init	src/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
-init	src/model.cpp	/^void Model::init(std::string modelPath, unsigned int pFlags) $/;"	f	class:Model	signature:(std::string modelPath, unsigned int pFlags)
+init	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::init() $/;"	f	class:FullscreenQuad	signature:()
+init	src/shape/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
+init	src/shape/model.cpp	/^void Model::init(std::string modelPath, unsigned int pFlags) $/;"	f	class:Model	signature:(std::string modelPath, unsigned int pFlags)
 init	src/shape/skinned.cpp	/^void Skinned::init(const char* modelPath, unsigned int pFlags, ModelFlags modelFlags)$/;"	f	class:Skinned	signature:(const char* modelPath, unsigned int pFlags, ModelFlags modelFlags)
 init	src/shape/skinned.cpp	/^void Skinned::init(std::string modelPath, unsigned int pFlags, ModelFlags modelFlags) $/;"	f	class:Skinned	signature:(std::string modelPath, unsigned int pFlags, ModelFlags modelFlags)
 init	src/shape/tquad.cpp	/^void TQuad::init()$/;"	f	class:TQuad	signature:()
@@ -13833,6 +13884,7 @@ lineWidth	lib/vulkan/vulkan.h	/^    float                                      l
 lineWidthGranularity	lib/vulkan/vulkan.h	/^    float                 lineWidthGranularity;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 lineWidthRange	lib/vulkan/vulkan.h	/^    float                 lineWidthRange[2];$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 line_size	lib/stb/stb_image.h	/^   int line_size;$/;"	m	struct:__anon74	access:public
+linear	inc/lights.h	/^		float quadratic, linear, constant; $/;"	m	struct:PointLight::Uniform	access:public
 linearTilingFeatures	lib/vulkan/vulkan.h	/^    VkFormatFeatureFlags    linearTilingFeatures;$/;"	m	struct:VkFormatProperties	access:public
 linebuf	lib/stb/stb_image.h	/^      stbi_uc *linebuf;$/;"	m	struct:__anon63::__anon64	access:public
 load	src/texture_data.cpp	/^stbi_uc* TextureData::load(const char* resource, int reqComp)$/;"	f	class:TextureData	signature:(const char* resource, int reqComp)
@@ -14173,6 +14225,7 @@ mDescription	lib/__assimp/Exporter.hpp	/^        aiExportFormatDesc mDescription
 mDescription	lib/assimp/Exporter.hpp	/^        aiExportFormatDesc mDescription;$/;"	m	struct:Assimp::Exporter::ExportFormatEntry	access:public
 mDescriptorPool	inc/shape/model.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:Model	access:protected
 mDescriptorPool	inc/shape/skinned.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:Skinned	access:protected
+mDescriptorSet	inc/shape/fullscreen_quad.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:FullscreenQuad	access:private
 mDeviceManager	inc/vulkan_manager.h	/^	DeviceManager mDeviceManager;$/;"	m	class:VulkanManager	access:private
 mDeviceQueueIndices	inc/device_manager.h	/^	DeviceQueueIndicies mDeviceQueueIndices;$/;"	m	class:DeviceManager	access:private
 mDeviceQueueIndiciesArr	inc/device_queue_indices.h	/^	int *mDeviceQueueIndiciesArr[NUM_DEVICE_QUEUE_INDICES];$/;"	m	class:DeviceQueueIndicies	access:private
@@ -14216,6 +14269,7 @@ mHorizontalFOV	lib/__assimp/camera.h	/^    float mHorizontalFOV;$/;"	m	struct:ai
 mHorizontalFOV	lib/assimp/camera.h	/^    float mHorizontalFOV;$/;"	m	struct:aiCamera	access:public
 mId	inc/task_manager.h	/^	int mId;$/;"	m	class:MessageTask	access:public
 mImageAvailableSemaphore	inc/swapchain_manager.h	/^	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;$/;"	m	class:SwapchainManager	access:public
+mImageInfo	inc/shape/fullscreen_quad.h	/^	ImageInfo* mImageInfo;$/;"	m	class:FullscreenQuad	access:private
 mIndex	lib/__assimp/material.h	/^    unsigned int mIndex;$/;"	m	struct:aiMaterialProperty	access:public
 mIndex	lib/assimp/material.h	/^    unsigned int mIndex;$/;"	m	struct:aiMaterialProperty	access:public
 mIndexBufferDesc	inc/shape/tquad.h	/^	BufferInfo mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;$/;"	m	class:TQuad	access:public
@@ -14405,6 +14459,7 @@ mShaderDir	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir, 
 mSidewaysMovementScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera	access:private
 mSize	lib/__assimp/light.h	/^    C_STRUCT aiVector2D mSize;$/;"	m	struct:aiLight	access:public
 mStartTime	inc/timer.h	/^	std::chrono::high_resolution_clock::time_point mStartTime;$/;"	m	class:Timer	access:private
+mState	inc/shape/fullscreen_quad.h	/^	VulkanState& mState;$/;"	m	class:FullscreenQuad	access:private
 mState	inc/shape/model.h	/^	VulkanState& mState;$/;"	m	class:Model	access:protected
 mState	inc/shape/skinned.h	/^	VulkanState& mState;$/;"	m	class:Skinned	access:protected
 mState	inc/shape/tquad.h	/^	VulkanState& mState;$/;"	m	class:TQuad	access:public
@@ -15359,6 +15414,9 @@ planeReorderPossible	lib/vulkan/vulkan.h	/^    VkBool32                      pla
 planeStackIndex	lib/vulkan/vk_icd.h	/^    uint32_t planeStackIndex;$/;"	m	struct:__anon83	access:public
 planeStackIndex	lib/vulkan/vulkan.h	/^    uint32_t                          planeStackIndex;$/;"	m	struct:VkDisplaySurfaceCreateInfoKHR	access:public
 platform	lib/vulkan/vk_icd.h	/^    VkIcdWsiPlatform platform;$/;"	m	struct:__anon77	access:public
+pointLight	inc/vulkan_state.h	/^	PipelineInfo pointLight;$/;"	m	struct:Pipelines	access:public
+pointLight	inc/vulkan_state.h	/^	ShaderInfo pointLight;$/;"	m	struct:Shaders	access:public
+pointLight	inc/vulkan_state.h	/^	VkDescriptorSetLayout pointLight;$/;"	m	struct:DescriptorSetLayouts	access:public
 pointSizeGranularity	lib/vulkan/vulkan.h	/^    float                 pointSizeGranularity;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 pointSizeRange	lib/vulkan/vulkan.h	/^    float                 pointSizeRange[2];$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 pointer	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> * pointer;$/;"	t	struct:glm::detail::genType	access:public
@@ -15371,6 +15429,7 @@ pos	inc/shape/skinned.h	/^		glm::vec3 pos;$/;"	m	struct:Skinned::Vertex	access:p
 pos	inc/shape/tquad.h	/^		glm::vec3 pos;$/;"	m	struct:TQuad::Vertex	access:public
 pos	lib/__assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	access:public
 pos	lib/assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	access:public
+position	inc/lights.h	/^		glm::vec3 position;$/;"	m	struct:PointLight::Uniform	access:public
 position	lib/vulkan/libspirv.h	/^  spv_position_t position;$/;"	m	struct:spv_diagnostic_t	access:public
 ppEnabledExtensionNames	lib/vulkan/vulkan.h	/^    const char* const*                 ppEnabledExtensionNames;$/;"	m	struct:VkDeviceCreateInfo	access:public
 ppEnabledExtensionNames	lib/vulkan/vulkan.h	/^    const char* const*          ppEnabledExtensionNames;$/;"	m	struct:VkInstanceCreateInfo	access:public
@@ -15393,7 +15452,7 @@ processMeshBones	src/shape/skinned.cpp	/^void Skinned::processMeshBones($/;"	f	c
 processMeshIndices	src/shape/skinned.cpp	/^void Skinned::processMeshIndices(std::vector<uint32_t>& indices, aiMesh& mesh, Mesh& meshInfo)$/;"	f	class:Skinned	signature:(std::vector<uint32_t>& indices, aiMesh& mesh, Mesh& meshInfo)
 processMeshMaterials	src/shape/skinned.cpp	/^void Skinned::processMeshMaterials(aiMesh& mesh, Mesh& meshInfo) $/;"	f	class:Skinned	signature:(aiMesh& mesh, Mesh& meshInfo)
 processMeshVertices	src/shape/skinned.cpp	/^void Skinned::processMeshVertices(std::vector<Vertex>& vertices, aiMesh& mesh, Mesh& meshInfo)$/;"	f	class:Skinned	signature:(std::vector<Vertex>& vertices, aiMesh& mesh, Mesh& meshInfo)
-processModel	src/model.cpp	/^void Model::processModel(const aiScene& scene) $/;"	f	class:Model	signature:(const aiScene& scene)
+processModel	src/shape/model.cpp	/^void Model::processModel(const aiScene& scene) $/;"	f	class:Model	signature:(const aiScene& scene)
 processModel	src/shape/skinned.cpp	/^void Skinned::processModel(const aiScene& scene) $/;"	f	class:Skinned	signature:(const aiScene& scene)
 profile	lib/glm/detail/type_gentype.hpp	/^	enum profile$/;"	g	namespace:glm
 progressive	lib/stb/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon63	access:public
@@ -15406,6 +15465,10 @@ pushConstantRange	inc/creator/pipeline_creator.h	/^inline VkPushConstantRange pu
 pushConstantRangeCount	lib/vulkan/vulkan.h	/^    uint32_t                        pushConstantRangeCount;$/;"	m	struct:VkPipelineLayoutCreateInfo	access:public
 q	lib/glm/detail/type_vec4.hpp	/^				struct { T s, t, p, q; };$/;"	m	struct:glm::vec::__anon35::__anon38	access:public
 q	lib/glm/detail/type_vec4.hpp	/^			union { T w, a, q; };$/;"	m	union:glm::vec::__anon42	access:public
+quad	inc/vulkan_state.h	/^	PipelineInfo quad;$/;"	m	struct:Pipelines	access:public
+quad	inc/vulkan_state.h	/^	ShaderInfo quad;$/;"	m	struct:Shaders	access:public
+quad	inc/vulkan_state.h	/^	VkDescriptorSetLayout quad;$/;"	m	struct:DescriptorSetLayouts	access:public
+quadratic	inc/lights.h	/^		float quadratic, linear, constant; $/;"	m	struct:PointLight::Uniform	access:public
 quat	lib/glm/fwd.hpp	/^	typedef highp_quat			quat;$/;"	t	namespace:glm
 quat	lib/glm/fwd.hpp	/^	typedef lowp_quat			quat;$/;"	t	namespace:glm
 quat	lib/glm/fwd.hpp	/^	typedef mediump_quat		quat;$/;"	t	namespace:glm
@@ -15439,12 +15502,14 @@ r	lib/glm/detail/type_vec3.hpp	/^			union { T x, r, s; };$/;"	m	union:glm::vec::
 r	lib/glm/detail/type_vec4.hpp	/^				struct { T r, g, b, a; };$/;"	m	struct:glm::vec::__anon35::__anon37	access:public
 r	lib/glm/detail/type_vec4.hpp	/^			union { T x, r, s; };$/;"	m	union:glm::vec::__anon39	access:public
 r	lib/vulkan/vulkan.h	/^    VkComponentSwizzle    r;$/;"	m	struct:VkComponentMapping	access:public
+radius	inc/lights.h	/^	float radius;$/;"	m	struct:PointLight	access:private
 range	lib/vulkan/vulkan.h	/^    VkDeviceSize               range;$/;"	m	struct:VkBufferViewCreateInfo	access:public
 range	lib/vulkan/vulkan.h	/^    VkDeviceSize    range;$/;"	m	struct:VkDescriptorBufferInfo	access:public
 rasterizationOrder	lib/vulkan/vulkan.h	/^    VkRasterizationOrderAMD    rasterizationOrder;$/;"	m	struct:VkPipelineRasterizationStateRasterizationOrderAMD	access:public
 rasterizationSamples	lib/vulkan/vulkan.h	/^    VkSampleCountFlagBits                    rasterizationSamples;$/;"	m	struct:VkPipelineMultisampleStateCreateInfo	access:public
 rasterizationStateCullBackCCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() $/;"	f	namespace:PipelineCreator	signature:()
 rasterizationStateCullBackCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW() $/;"	f	namespace:PipelineCreator	signature:()
+rasterizationStateCullNone	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone() $/;"	f	namespace:PipelineCreator	signature:()
 rasterizerDiscardEnable	lib/vulkan/vulkan.h	/^    VkBool32                                   rasterizerDiscardEnable;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo	access:public
 ratio	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon74	access:public
 raw_coeff	lib/stb/stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon63::__anon64	access:public
@@ -15629,6 +15694,7 @@ setLayoutCount	lib/vulkan/vulkan.h	/^    uint32_t                        setLayo
 setLogSeverity	lib/__assimp/Logger.hpp	/^inline void Logger::setLogSeverity(LogSeverity log_severity){$/;"	f	class:Assimp::Logger	signature:(LogSeverity log_severity)
 setLogSeverity	lib/assimp/Logger.hpp	/^inline void Logger::setLogSeverity(LogSeverity log_severity){$/;"	f	class:Assimp::Logger	signature:(LogSeverity log_severity)
 setMouseButtonCallback	src/input_manager.cpp	/^void InputManager::setMouseButtonCallback(GLFWmousebuttonfun cbfun)$/;"	f	class:InputManager	signature:(GLFWmousebuttonfun cbfun)
+setRadius	src/lights.cpp	/^void PointLight::setRadius(float radius) $/;"	f	class:PointLight	signature:(float radius)
 setScrollCallback	src/input_manager.cpp	/^void InputManager::setScrollCallback(GLFWscrollfun cbfun)$/;"	f	class:InputManager	signature:(GLFWscrollfun cbfun)
 setSupportedIndex	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::setSupportedIndex(int index)$/;"	f	class:DeviceQueueIndicies	signature:(int index)
 setTransferIndex	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::setTransferIndex(int index) $/;"	f	class:DeviceQueueIndicies	signature:(int index)
@@ -15704,6 +15770,7 @@ sparseResidencyAliased	lib/vulkan/vulkan.h	/^    VkBool32    sparseResidencyAlia
 sparseResidencyBuffer	lib/vulkan/vulkan.h	/^    VkBool32    sparseResidencyBuffer;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 sparseResidencyImage2D	lib/vulkan/vulkan.h	/^    VkBool32    sparseResidencyImage2D;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 sparseResidencyImage3D	lib/vulkan/vulkan.h	/^    VkBool32    sparseResidencyImage3D;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
+specPower	inc/lights.h	/^		float specPower;$/;"	m	struct:PointLight::Uniform	access:public
 specVersion	lib/vulkan/vulkan.h	/^    uint32_t    specVersion;$/;"	m	struct:VkExtensionProperties	access:public
 specVersion	lib/vulkan/vulkan.h	/^    uint32_t    specVersion;$/;"	m	struct:VkLayerProperties	access:public
 spec_end	lib/stb/stb_image.h	/^   int            spec_end;$/;"	m	struct:__anon63	access:public
@@ -16978,8 +17045,8 @@ textureManager	inc/texture_manager.h	/^	void operator=(const TextureManager& tex
 textures	inc/shape/skinned.h	/^		std::vector<MaterialTexture> textures;$/;"	m	struct:Skinned::Material	access:public
 textures	lib/__assimp/types.h	/^    unsigned int textures;$/;"	m	struct:aiMemoryInfo	access:public
 textures	lib/assimp/types.h	/^    unsigned int textures;$/;"	m	struct:aiMemoryInfo	access:public
-throwError	src/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
-throwError	src/model.cpp	/^void Model::throwError(std::string& error) $/;"	f	class:Model	signature:(std::string& error)
+throwError	src/shape/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
+throwError	src/shape/model.cpp	/^void Model::throwError(std::string& error) $/;"	f	class:Model	signature:(std::string& error)
 throwError	src/shape/skinned.cpp	/^void Skinned::throwError(const char* error) $/;"	f	class:Skinned	signature:(const char* error)
 throwError	src/shape/skinned.cpp	/^void Skinned::throwError(std::string& error) $/;"	f	class:Skinned	signature:(std::string& error)
 tick	src/timer.cpp	/^double Timer::tick()$/;"	f	class:Timer	signature:()
@@ -17251,13 +17318,14 @@ umat4x3	lib/glm/gtc/matrix_integer.hpp	/^	typedef mediump_umat4x3							umat4x3;
 umat4x4	lib/glm/gtc/matrix_integer.hpp	/^	typedef highp_umat4x4							umat4x4;$/;"	t	namespace:glm
 umat4x4	lib/glm/gtc/matrix_integer.hpp	/^	typedef lowp_umat4x4							umat4x4;$/;"	t	namespace:glm
 umat4x4	lib/glm/gtc/matrix_integer.hpp	/^	typedef mediump_umat4x4							umat4x4;$/;"	t	namespace:glm
+uniform	inc/lights.h	/^	Uniform uniform;$/;"	m	struct:PointLight	access:public
 uniform	inc/vulkan_state.h	/^	VkDescriptorSetLayout uniform;$/;"	m	struct:DescriptorSetLayouts	access:public
 uniformBufferOffset	inc/shape/model.h	/^	VkDeviceSize uniformBufferOffset,  $/;"	m	class:Model	access:public
 uniformBufferOffset	inc/shape/skinned.h	/^	VkDeviceSize uniformBufferOffset,  $/;"	m	class:Skinned	access:public
 uninitialize	lib/glm/detail/setup.hpp	/^	enum ctor{uninitialize};$/;"	e	enum:glm::ctor
 unnormalizedCoordinates	lib/vulkan/vulkan.h	/^    VkBool32                unnormalizedCoordinates;$/;"	m	struct:VkSamplerCreateInfo	access:public
 unset	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::unset() $/;"	f	class:DeviceQueueIndicies	signature:()
-update	src/model.cpp	/^void Model::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:Model	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
+update	src/shape/model.cpp	/^void Model::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:Model	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 update	src/shape/skinned.cpp	/^void Skinned::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera, uint32_t animationIndex \/* = 0 *\/)$/;"	f	class:Skinned	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera, uint32_t animationIndex )
 update	src/shape/tquad.cpp	/^void TQuad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera)$/;"	f	class:TQuad	signature:(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera)
 updateFOV	src/camera.cpp	/^void Camera::updateFOV(float scrollDirection)$/;"	f	class:Camera	signature:(float scrollDirection)
@@ -18005,7 +18073,7 @@ zzzz	lib/glm/gtx/vec_swizzle.hpp	/^	GLM_INLINE glm::vec<4, T, P> zzzz(const glm:
 ~LogStream	lib/assimp/LogStream.hpp	/^    virtual ~LogStream() {$/;"	f	class:Assimp::LogStream	access:public	signature:()
 ~Logger	lib/__assimp/Logger.hpp	/^inline  Logger::~Logger()$/;"	f	class:Assimp::Logger	signature:()
 ~Logger	lib/assimp/Logger.hpp	/^inline  Logger::~Logger()$/;"	f	class:Assimp::Logger	signature:()
-~Model	src/model.cpp	/^Model::~Model() $/;"	f	class:Model	signature:()
+~Model	src/shape/model.cpp	/^Model::~Model() $/;"	f	class:Model	signature:()
 ~ProgressHandler	lib/__assimp/ProgressHandler.hpp	/^    virtual ~ProgressHandler () {$/;"	f	class:Assimp::ProgressHandler	access:public	signature:()
 ~ProgressHandler	lib/assimp/ProgressHandler.hpp	/^    virtual ~ProgressHandler () {$/;"	f	class:Assimp::ProgressHandler	access:public	signature:()
 ~Skinned	src/shape/skinned.cpp	/^Skinned::~Skinned() $/;"	f	class:Skinned	signature:()

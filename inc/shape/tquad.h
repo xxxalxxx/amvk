@@ -23,6 +23,8 @@
 #include "timer.h"
 #include "camera.h"
 
+#include <glm/gtx/string_cast.hpp>
+
 class TQuad {
 public:
 	struct Vertex {

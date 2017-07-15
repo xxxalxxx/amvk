@@ -8,7 +8,7 @@
 namespace DescriptorManager 
 {
 
-inline void createQuadDescriptorSetLayout(VulkanState& state)
+inline void createTQuadDescriptorSetLayout(VulkanState& state)
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
 	descSetBinding.binding = 0;
@@ -152,11 +152,11 @@ inline void createDescriptorPool(VulkanState& state)
 {
 	VkDescriptorPoolSize uboSize = {};
 	uboSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	uboSize.descriptorCount = 1;
+	uboSize.descriptorCount = 2;
 	
 	VkDescriptorPoolSize samplerSize = {};
 	samplerSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	samplerSize.descriptorCount = 1;
+	samplerSize.descriptorCount = 2;
 
 	VkDescriptorPoolSize poolSizes[] = {
 		uboSize,
@@ -167,14 +167,14 @@ inline void createDescriptorPool(VulkanState& state)
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	poolInfo.poolSizeCount = ARRAY_SIZE(poolSizes);
 	poolInfo.pPoolSizes = poolSizes;
-	poolInfo.maxSets = 1;
+	poolInfo.maxSets = 2;
 
 	VK_CHECK_RESULT(vkCreateDescriptorPool(state.device, &poolInfo, nullptr, &state.descriptorPool));
 }
 
 inline void createDescriptorSetLayouts(VulkanState& state)
 {
-	createQuadDescriptorSetLayout(state);
+	createTQuadDescriptorSetLayout(state);
 	createModelDescriptorSetLayout(state);
 	createSamplerDescriptorSetLayout(state);
 	createSamplerListDescriptorSetLayout(state);

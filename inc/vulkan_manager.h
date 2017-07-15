@@ -28,6 +28,7 @@
 #include "tquad.h"
 #include "model.h"
 #include "skinned.h"
+#include "fullscreen_quad.h"
 
 
 class VulkanManager { 
@@ -59,6 +60,7 @@ private:
 	Model suit;
 	Skinned guard;
 	Skinned dwarf;
+	FullscreenQuad fullscreenQuad;
 	uint32_t imageIndex;
 };
 

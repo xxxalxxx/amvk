@@ -7,8 +7,7 @@
 #include <assimp/scene.h>
  */
 #include "macro.h"
-#if defined(__ANDROID__)
-
+#ifdef __ANDROID__
 #include "vulkan_wrapper.h"
 #include <jni.h>
 #include <android/looper.h>

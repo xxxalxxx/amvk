@@ -7,8 +7,9 @@ VulkanManager::VulkanManager(Window& window):
 	mSwapChainManager(mState, mWindow),
 	tquad(mState),
 	suit(mState),
-	dwarf(mState),
     guard(mState),
+	dwarf(mState),
+	fullscreenQuad(mState),
 	imageIndex(0)
 {
 	
@@ -41,6 +42,7 @@ void VulkanManager::init()
 
 
 	tquad.init();
+	fullscreenQuad.init();
 
     suit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"),
               Model::DEFAULT_FLAGS | aiProcess_FlipUVs);
@@ -125,6 +127,7 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 		vkCmdSetScissor(cmdBuffer, 0, 1, &scissor);
 			
 		tquad.draw(cmdBuffer);
+		fullscreenQuad.draw(cmdBuffer);
 		suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
 		dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
         guard.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);

@@ -22,6 +22,12 @@ inline void createShaders(VulkanState& state)
 
 	shaders.skinned.vertex = PipelineCreator::shaderStage(state.device, "skinned.vert", VK_SHADER_STAGE_VERTEX_BIT);
 	shaders.skinned.fragment = PipelineCreator::shaderStage(state.device, "skinned.frag", VK_SHADER_STAGE_FRAGMENT_BIT);
+
+	shaders.fullscreenQuad.vertex = PipelineCreator::shaderStage(state.device, "fullscreen_quad.vert", VK_SHADER_STAGE_VERTEX_BIT);
+	shaders.fullscreenQuad.fragment = PipelineCreator::shaderStage(state.device, "fullscreen_quad.frag", VK_SHADER_STAGE_FRAGMENT_BIT);
+	
+	shaders.pointLight.vertex = PipelineCreator::shaderStage(state.device, "point_light.vert", VK_SHADER_STAGE_VERTEX_BIT);
+	shaders.pointLight.fragment = PipelineCreator::shaderStage(state.device, "point_light.frag", VK_SHADER_STAGE_FRAGMENT_BIT);
 }
 
 

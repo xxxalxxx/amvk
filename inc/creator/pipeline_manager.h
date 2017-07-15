@@ -44,15 +44,15 @@ inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)
     };
 
     VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
-    VkPipelineRasterizationStateCreateInfo rasterizationState = PipelineCreator::rasterizationStateCullBackCCW();
-    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessNoStencil();
+    VkPipelineRasterizationStateCreateInfo rasterizationState = 
+		//PipelineCreator::rasterizationStateCullNone();
+		PipelineCreator::rasterizationStateCullBackCCW();
+		//PipelineCreator::rasterizationStateCullBackCW();
+    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessOrEqualNoStencil();
     VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
     VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
 
     VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
-
-    VkPhysicalDeviceProperties physicalDeviceProperties;
-    vkGetPhysicalDeviceProperties(state.physicalDevice, &physicalDeviceProperties);
 
     VkPushConstantRange pushConstantRange = PipelineCreator::pushConstantRange(
             state,
@@ -87,6 +87,64 @@ inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)
 
     cacheInfo.saveCache(state.device);
 }
+
+
+inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info)
+{
+    VkPipelineShaderStageCreateInfo stages[] = {
+            state.shaders.fullscreenQuad.vertex,
+            state.shaders.fullscreenQuad.fragment
+    };
+
+    auto vertexInputInfo = PipelineCreator::vertexInputState(nullptr, 0, nullptr, 0);
+
+    VkPipelineInputAssemblyStateCreateInfo assemblyInfo = PipelineCreator::inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+    VkPipelineViewportStateCreateInfo viewportState = PipelineCreator::viewportStateDynamic();
+
+    VkDynamicState dynamicStates[] = {
+            VK_DYNAMIC_STATE_VIEWPORT,
+            VK_DYNAMIC_STATE_SCISSOR
+    };
+
+    VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
+    VkPipelineRasterizationStateCreateInfo rasterizationState = 
+		//PipelineCreator::rasterizationStateCullNone();
+		//PipelineCreator::rasterizationStateCullBackCCW();
+		PipelineCreator::rasterizationStateCullBackCW();
+    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessOrEqualNoStencil();
+    VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
+    VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
+
+    VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
+
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(&state.descriptorSetLayouts.sampler, 1, nullptr, 0);
+    VK_CHECK_RESULT(vkCreatePipelineLayout(state.device, &pipelineLayoutInfo, nullptr, &info.layout));
+
+    PipelineCacheInfo cacheInfo("fullscreen_quad", info.cache);
+    cacheInfo.getCache(state.device);
+
+    VkGraphicsPipelineCreateInfo pipelineInfo = {};
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    pipelineInfo.stageCount = ARRAY_SIZE(stages);
+    pipelineInfo.pStages = stages;
+    pipelineInfo.pVertexInputState = &vertexInputInfo;
+    pipelineInfo.pInputAssemblyState = &assemblyInfo;
+    pipelineInfo.pViewportState = &viewportState;
+    pipelineInfo.pRasterizationState = &rasterizationState;
+    pipelineInfo.pMultisampleState = &multisampleState;
+    pipelineInfo.pDepthStencilState = &depthStencil;
+    pipelineInfo.pColorBlendState = &blendState;
+    pipelineInfo.pDynamicState = &dynamicInfo;
+    pipelineInfo.layout = info.layout;
+    pipelineInfo.renderPass = state.renderPass;
+    pipelineInfo.subpass = 0;
+    pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+    VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &info.pipeline));
+
+    cacheInfo.saveCache(state.device);
+}
+
 
 inline void createModelPipeline(VulkanState& state, PipelineInfo& info)
 {
@@ -126,9 +184,6 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info)
     VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
 
     VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
-
-    VkPhysicalDeviceProperties physicalDeviceProperties;
-    vkGetPhysicalDeviceProperties(state.physicalDevice, &physicalDeviceProperties);
 
     VkDescriptorSetLayout layouts[] = {
             state.descriptorSetLayouts.uniform,
@@ -209,9 +264,6 @@ inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)
 
     VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
 
-    VkPhysicalDeviceProperties physicalDeviceProperties;
-    vkGetPhysicalDeviceProperties(state.physicalDevice, &physicalDeviceProperties);
-
     VkDescriptorSetLayout layouts[] = {
             state.descriptorSetLayouts.uniform,
             state.descriptorSetLayouts.samplerList
@@ -252,6 +304,7 @@ inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)
 inline void createPipelines(VulkanState& state)
 {
     createTQuadPipeline(state, state.pipelines.tquad);
+	createFullscreenQuadPipeline(state, state.pipelines.fullscreenQuad);
     createModelPipeline(state, state.pipelines.model);
     createSkinnedPipeline(state, state.pipelines.skinned);
 }

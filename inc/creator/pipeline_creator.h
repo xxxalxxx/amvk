@@ -182,6 +182,21 @@ inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessNoStencil
 	return depthStencil;
 }
 
+inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessOrEqualNoStencil() 
+{
+	VkPipelineDepthStencilStateCreateInfo depthStencil = {};
+	depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	depthStencil.depthTestEnable = VK_TRUE;
+	depthStencil.depthWriteEnable = VK_TRUE;
+	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+	depthStencil.depthBoundsTestEnable = VK_FALSE;
+	depthStencil.stencilTestEnable = VK_FALSE;
+
+	return depthStencil;
+}
+
+
+
 inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() 
 {
 	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
@@ -206,6 +221,22 @@ inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW()
 	rasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
 	rasterizationState.lineWidth = 1.0f;
 	rasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
+	rasterizationState.frontFace = VK_FRONT_FACE_CLOCKWISE;
+	rasterizationState.depthBiasEnable = VK_FALSE;
+
+	return rasterizationState;
+}
+
+
+inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone() 
+{
+	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
+	rasterizationState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	rasterizationState.depthClampEnable = VK_FALSE;
+	rasterizationState.rasterizerDiscardEnable = VK_FALSE;
+	rasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
+	rasterizationState.lineWidth = 1.0f;
+	rasterizationState.cullMode = VK_CULL_MODE_NONE;
 	rasterizationState.frontFace = VK_FRONT_FACE_CLOCKWISE;
 	rasterizationState.depthBiasEnable = VK_FALSE;
 
