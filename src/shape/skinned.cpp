@@ -423,7 +423,7 @@ void Skinned::createDescriptorSet()
 	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 	allocInfo.descriptorPool = mDescriptorPool;
 	allocInfo.descriptorSetCount = 1;
-	allocInfo.pSetLayouts = &mState.descriptorSetLayouts.uniform;
+	allocInfo.pSetLayouts = &mState.descriptorSetLayouts.uniformVertex;
 
 	VK_CHECK_RESULT(vkAllocateDescriptorSets(mState.device, &allocInfo, &mUniformDescriptorSet));
 	

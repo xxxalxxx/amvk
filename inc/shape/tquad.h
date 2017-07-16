@@ -1,12 +1,7 @@
 #ifndef AMVK_TQUAD_H
 #define AMVK_TQUAD_H
 #include "macro.h"
-
-#ifdef __ANDROID__
-#include "vulkan_wrapper.h"
-#else
-#include <vulkan/vulkan.h>
-#endif
+#include "vulkan.h"
 
 #include <cstring>
 #include <cstddef>

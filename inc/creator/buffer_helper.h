@@ -27,8 +27,7 @@ inline uint32_t getMemoryType(
 	vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProps);
 
 	for (size_t i = 0; i < memProps.memoryTypeCount; ++i)
-		if ((typeFilter & (1 << i)) 
-		&& (memProps.memoryTypes[i].propertyFlags & flags))
+		if ((typeFilter & (1 << i)) && (memProps.memoryTypes[i].propertyFlags & flags))
 			return i;
 	throw std::runtime_error("Failed to find memory type");
 }
@@ -149,6 +148,20 @@ inline void createVertexBuffer(const VulkanState& state, BufferInfo& bufferInfo)
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 }
 
+inline void createVertexAndIndexBuffer(const VulkanState& state, BufferInfo& bufferInfo) 
+{
+	createBuffer(
+		state.physicalDevice,
+		state.device,
+		bufferInfo.buffer,
+		bufferInfo.size,
+		bufferInfo.memory,
+		VK_BUFFER_USAGE_TRANSFER_DST_BIT 
+		| VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT 
+		| VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
+		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+}
+
 inline void createCommonBuffer(const VulkanState& state, BufferInfo& bufferInfo)
 {
 	createBuffer(
@@ -187,6 +200,18 @@ inline void createUniformBuffer(const VulkanState& state, BufferInfo& bufferInfo
 			bufferInfo.memory,
 			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, 
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+}
+
+inline void createDynamicUniformBuffer(const VulkanState& state, BufferInfo& bufferInfo)
+{
+	createBuffer(
+			state.physicalDevice,
+			state.device,
+			bufferInfo.buffer,
+			bufferInfo.size,
+			bufferInfo.memory,
+			/*VK_BUFFER_USAGE_TRANSFER_DST_BIT |*/ VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, 
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
 }
 
 inline void createStagingBuffer(

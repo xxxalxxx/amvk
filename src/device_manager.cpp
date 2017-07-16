@@ -201,6 +201,7 @@ void DeviceManager::createLogicalDevice()
 	mVulkanState.deviceInfo.samplerAnisotropy = physicalDeviceFeatures.samplerAnisotropy;
 	mVulkanState.deviceInfo.maxPushConstantsSize = physicalDeviceProperties.limits.maxPushConstantsSize;
 	mVulkanState.deviceInfo.minUniformBufferOffsetAlignment = physicalDeviceProperties.limits.minUniformBufferOffsetAlignment;
+	mVulkanState.deviceInfo.maxDescriptorSetUniformBuffersDynamic = physicalDeviceProperties.limits.maxDescriptorSetUniformBuffersDynamic;
 	LOG("ANISOTROPY %u", physicalDeviceFeatures.samplerAnisotropy);
 	LOG("MAX PUSH CONST SIZE max: %u", mVulkanState.deviceInfo.maxPushConstantsSize);
 

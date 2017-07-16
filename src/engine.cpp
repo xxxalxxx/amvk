@@ -208,6 +208,7 @@ void Engine::init()
 	inputManager.setScrollCallback(scrollCallback);
 	inputManager.setMouseButtonCallback(mouseButtonCallback);
 	inputManager.setKeyCallback(keyCallback);
+	mCamera.setAspect(mWindow.mAspect);
 	//glm::perspective(0.0f, 0.0f, 0.0f, 0.0f);
 	mCamera.mPrevMouseX = -400.0f;
 	mCamera.mPrevMouseY = 200.0f;

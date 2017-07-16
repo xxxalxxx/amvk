@@ -10,6 +10,7 @@ VulkanManager::VulkanManager(Window& window):
     guard(mState),
 	dwarf(mState),
 	fullscreenQuad(mState),
+	sceneLights(mState),
 	imageIndex(0)
 {
 	
@@ -65,6 +66,8 @@ void VulkanManager::init()
     guard.ubo.model = glm::rotate(glm::radians(-30.f), glm::vec3(0.f, 1.f, 0.f)) * guard.ubo.model;
     guard.ubo.model = glm::translate(glm::vec3(-9.0f, 4.0f, 8.0f))  * guard.ubo.model;
 
+	sceneLights.init();
+
 	mSwapChainManager.createDepthResources();
 	mSwapChainManager.createFramebuffers(mState.renderPass);
 
@@ -82,6 +85,7 @@ void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)
     suit.update(cmd.buffer, timer, camera);
 	dwarf.update(cmd.buffer, timer, camera);
 	guard.update(cmd.buffer, timer, camera);
+	sceneLights.update(cmd.buffer, timer, camera);
 }
 
 void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
@@ -127,11 +131,11 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 		vkCmdSetScissor(cmdBuffer, 0, 1, &scissor);
 			
 		tquad.draw(cmdBuffer);
-		fullscreenQuad.draw(cmdBuffer);
+		 //fullscreenQuad.draw(cmdBuffer);
 		suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
 		dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
         guard.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
-
+		sceneLights.draw(cmdBuffer);
 		vkCmdEndRenderPass(cmdBuffer);
 		VK_CHECK_RESULT(vkEndCommandBuffer(cmdBuffer));
 	}

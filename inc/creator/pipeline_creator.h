@@ -195,8 +195,6 @@ inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessOrEqualNo
 	return depthStencil;
 }
 
-
-
 inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() 
 {
 	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
@@ -227,6 +225,25 @@ inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW()
 	return rasterizationState;
 }
 
+inline VkPipelineRasterizationStateCreateInfo rasterizationState(
+		VkCullModeFlags cullMode, 
+		VkFrontFace frontFace,
+		VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL) 
+{
+	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
+	rasterizationState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	rasterizationState.depthClampEnable = VK_FALSE;
+	rasterizationState.rasterizerDiscardEnable = VK_FALSE;
+	rasterizationState.polygonMode = polygonMode;
+	rasterizationState.lineWidth = 1.0f;
+	rasterizationState.cullMode = cullMode;
+	rasterizationState.frontFace = frontFace;
+	rasterizationState.depthBiasEnable = VK_FALSE;
+
+	return rasterizationState;
+}
+
+
 
 inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone() 
 {
@@ -235,6 +252,21 @@ inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone()
 	rasterizationState.depthClampEnable = VK_FALSE;
 	rasterizationState.rasterizerDiscardEnable = VK_FALSE;
 	rasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
+	rasterizationState.lineWidth = 1.0f;
+	rasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
+	rasterizationState.frontFace = VK_FRONT_FACE_CLOCKWISE;
+	rasterizationState.depthBiasEnable = VK_FALSE;
+
+	return rasterizationState;
+}
+
+inline VkPipelineRasterizationStateCreateInfo rasterizationStateWireframeCullNoneCW() 
+{
+	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
+	rasterizationState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	rasterizationState.depthClampEnable = VK_FALSE;
+	rasterizationState.rasterizerDiscardEnable = VK_FALSE;
+	rasterizationState.polygonMode = VK_POLYGON_MODE_LINE;
 	rasterizationState.lineWidth = 1.0f;
 	rasterizationState.cullMode = VK_CULL_MODE_NONE;
 	rasterizationState.frontFace = VK_FRONT_FACE_CLOCKWISE;

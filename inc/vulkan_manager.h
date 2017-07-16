@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <unordered_set>
 #include <cstddef>
-
+#include <chrono>
 
 #include "macro.h"
 #include "window.h"
@@ -19,7 +19,6 @@
 #include "vulkan_utils.h"
 #include "pipeline_creator.h"
 #include "pipeline_manager.h"
-#include <chrono>
 #include "texture_manager.h"
 #include "device_manager.h"
 #include "swapchain_manager.h"
@@ -29,7 +28,8 @@
 #include "model.h"
 #include "skinned.h"
 #include "fullscreen_quad.h"
-
+#include "point_light.h"
+#include "scene_lights.h"
 
 class VulkanManager { 
 	friend class Engine;
@@ -61,6 +61,7 @@ private:
 	Skinned guard;
 	Skinned dwarf;
 	FullscreenQuad fullscreenQuad;
+	SceneLights sceneLights;
 	uint32_t imageIndex;
 };
 

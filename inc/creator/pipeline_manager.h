@@ -10,6 +10,7 @@
 #include "tquad.h"
 #include "model.h"
 #include "skinned.h"
+#include "point_light.h"
 
 namespace PipelineManager
 {
@@ -78,7 +79,7 @@ inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)
     pipelineInfo.pDepthStencilState = &depthStencil;
     pipelineInfo.pColorBlendState = &blendState;
     pipelineInfo.pDynamicState = &dynamicInfo;
-    pipelineInfo.layout = state.pipelines.tquad.layout;
+    pipelineInfo.layout = info.layout;
     pipelineInfo.renderPass = state.renderPass;
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
@@ -145,6 +146,79 @@ inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info)
     cacheInfo.saveCache(state.device);
 }
 
+inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info) 
+{
+    VkPipelineShaderStageCreateInfo stages[] = {
+            state.shaders.pointLight.vertex,
+            state.shaders.pointLight.fragment
+    };
+
+    VkVertexInputBindingDescription bindingDesc = {};
+    bindingDesc.binding = 0;
+    bindingDesc.stride = sizeof(Sphere::Vertex);
+    bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+    //location, binding, format, offset
+    VkVertexInputAttributeDescription attrDesc[] = {
+        { 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Sphere::Vertex, position) }
+    };
+
+    auto vertexInputInfo = PipelineCreator::vertexInputState(&bindingDesc, 1, attrDesc, ARRAY_SIZE(attrDesc));
+
+    VkPipelineInputAssemblyStateCreateInfo assemblyInfo = PipelineCreator::inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+    VkPipelineViewportStateCreateInfo viewportState = PipelineCreator::viewportStateDynamic();
+
+    VkDynamicState dynamicStates[] = {
+            VK_DYNAMIC_STATE_VIEWPORT,
+            VK_DYNAMIC_STATE_SCISSOR
+    };
+
+    VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
+    VkPipelineRasterizationStateCreateInfo rasterizationState = 
+	//	PipelineCreator::rasterizationStateCullNone();
+		PipelineCreator::rasterizationStateWireframeCullNoneCW();
+	//	PipelineCreator::rasterizationStateCullBackCCW();
+		//PipelineCreator::rasterizationStateCullBackCW();
+    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessOrEqualNoStencil();
+    VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
+    VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
+
+    VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
+
+    VkDescriptorSetLayout layouts[] = {
+		state.descriptorSetLayouts.uniformVertex,
+		state.descriptorSetLayouts.dynamicUniformVertex,
+		state.descriptorSetLayouts.dynamicUniformFragment,
+    };
+
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(layouts, ARRAY_SIZE(layouts), NULL, 0); 
+    VK_CHECK_RESULT(vkCreatePipelineLayout(state.device, &pipelineLayoutInfo, nullptr, &info.layout));
+
+    PipelineCacheInfo cacheInfo("point_light", info.cache);
+    cacheInfo.getCache(state.device);
+
+    VkGraphicsPipelineCreateInfo pipelineInfo = {};
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    pipelineInfo.stageCount = ARRAY_SIZE(stages);
+    pipelineInfo.pStages = stages;
+    pipelineInfo.pVertexInputState = &vertexInputInfo;
+    pipelineInfo.pInputAssemblyState = &assemblyInfo;
+    pipelineInfo.pViewportState = &viewportState;
+    pipelineInfo.pRasterizationState = &rasterizationState;
+    pipelineInfo.pMultisampleState = &multisampleState;
+    pipelineInfo.pDepthStencilState = &depthStencil;
+    pipelineInfo.pColorBlendState = &blendState;
+    pipelineInfo.pDynamicState = &dynamicInfo;
+    pipelineInfo.layout = info.layout;
+    pipelineInfo.renderPass = state.renderPass;
+    pipelineInfo.subpass = 0;
+    pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+    VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &info.pipeline));
+
+    cacheInfo.saveCache(state.device);
+}
+
 
 inline void createModelPipeline(VulkanState& state, PipelineInfo& info)
 {
@@ -186,7 +260,7 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info)
     VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
 
     VkDescriptorSetLayout layouts[] = {
-            state.descriptorSetLayouts.uniform,
+            state.descriptorSetLayouts.uniformVertex,
             state.descriptorSetLayouts.sampler
     };
 
@@ -208,7 +282,7 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info)
     pipelineInfo.pDepthStencilState = &depthStencil;
     pipelineInfo.pColorBlendState = &blendState;
     pipelineInfo.pDynamicState = &dynamicInfo;
-    pipelineInfo.layout = state.pipelines.model.layout;
+    pipelineInfo.layout = info.layout;
     pipelineInfo.renderPass = state.renderPass;
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
@@ -265,7 +339,7 @@ inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)
     VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
 
     VkDescriptorSetLayout layouts[] = {
-            state.descriptorSetLayouts.uniform,
+            state.descriptorSetLayouts.uniformVertex,
             state.descriptorSetLayouts.samplerList
     };
 
@@ -287,7 +361,7 @@ inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)
     pipelineInfo.pDepthStencilState = &depthStencil;
     pipelineInfo.pColorBlendState = &blendState;
     pipelineInfo.pDynamicState = &dynamicInfo;
-    pipelineInfo.layout = state.pipelines.skinned.layout;
+    pipelineInfo.layout = info.layout;
     pipelineInfo.renderPass = state.renderPass;
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
@@ -304,6 +378,7 @@ inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)
 inline void createPipelines(VulkanState& state)
 {
     createTQuadPipeline(state, state.pipelines.tquad);
+	createPointLightPipeline(state, state.pipelines.pointLight);
 	createFullscreenQuadPipeline(state, state.pipelines.fullscreenQuad);
     createModelPipeline(state, state.pipelines.model);
     createSkinnedPipeline(state, state.pipelines.skinned);

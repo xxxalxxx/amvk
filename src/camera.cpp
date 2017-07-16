@@ -83,7 +83,10 @@ void Camera::rebuildPerspective()
 	mProj = glm::perspective(mFOV, mAspect, mNear, mFar);
 }
 
-
+float Camera::getAspect() const 
+{
+	return mAspect;
+}
 
 void Camera::setAspect(float aspect)
 {

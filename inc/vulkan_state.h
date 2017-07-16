@@ -8,15 +8,18 @@
 #endif
 
 #include "swap_chain_desc.h"
+#include <glm/glm.hpp>
 
 struct DeviceInfo {
 	DeviceInfo():
 		samplerAnisotropy(VK_FALSE),
 		maxPushConstantsSize(0),
-		minUniformBufferOffsetAlignment(0) {}
+		minUniformBufferOffsetAlignment(0),
+		maxDescriptorSetUniformBuffersDynamic(0) {}
 	VkBool32 samplerAnisotropy;
 	uint32_t maxPushConstantsSize;
 	VkDeviceSize minUniformBufferOffsetAlignment;
+	uint32_t maxDescriptorSetUniformBuffersDynamic;
 };
 
 struct PipelineInfo {
@@ -57,7 +60,10 @@ struct DescriptorSetLayouts {
 	VkDescriptorSetLayout tquad;
 	VkDescriptorSetLayout pointLight;
 	VkDescriptorSetLayout model;
-	VkDescriptorSetLayout uniform;
+	VkDescriptorSetLayout uniformVertex;
+	VkDescriptorSetLayout uniformFragment;
+	VkDescriptorSetLayout dynamicUniformVertex;
+	VkDescriptorSetLayout dynamicUniformFragment;
 	VkDescriptorSetLayout sampler;
 	VkDescriptorSetLayout samplerList;
 };
@@ -72,6 +78,14 @@ struct Shaders {
 };
 
 struct VulkanState {
+	
+	struct UBO {
+		glm::mat4 view;
+		glm::mat4 proj;
+	};
+
+	UBO ubo;
+
 	VulkanState(): 
 		instance(VK_NULL_HANDLE), 
 		physicalDevice(VK_NULL_HANDLE), 
