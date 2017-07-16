@@ -19,7 +19,7 @@ SceneLights::~SceneLights()
 
 void SceneLights::init() 
 {
-	mSphere.init(32, 32);
+	mSphere.init(8, 16);
 
 	PointLight& l1 = createPointLight();
 	l1.init(*mState, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);

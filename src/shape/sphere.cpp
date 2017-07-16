@@ -11,12 +11,7 @@ Sphere::Sphere(VulkanState& state):
 
 void Sphere::init(uint32_t numStacks, uint32_t numSlices, float radius /* = 1.0f */)
 {
-	mRadius = radius;
-	std::vector<Vertex> vertices;
-	std::vector<uint32_t> indices;
-   
-    float phiStep = M_PI / numStacks;
-    float thetaStep = 2.0f * M_PI / numSlices;
+
     
 /*
 	for (size_t i = 0; i <= numStacks; ++i) {
@@ -52,32 +47,35 @@ void Sphere::init(uint32_t numStacks, uint32_t numSlices, float radius /* = 1.0f
         }
     }
 */
+	mRadius = radius;
+	uint32_t numVertices = (numStacks - 1) * (numSlices + 1) + 2;
+	std::vector<Vertex> vertices(numVertices);
+	std::vector<uint32_t> indices;
+   
+    float phiStep = M_PI / numStacks;
+    float thetaStep = 2.0f * M_PI / numSlices;
 	// size_t numRings = numStacks - 1;
 	// create vertices except for north and south poles
-    
-	   for (size_t i = 1; i < numStacks; ++i) {
+    // pole logic is separate and loop starts with 1 and lacking one stack to avoid numSlices of repeating poles for first and last step
+	for (size_t i = 1; i < numStacks; ++i) {
         float phi = i * phiStep;
         // vertices of ring
         for (size_t j = 0; j <= numSlices; ++j) {
             float theta = j * thetaStep;
-
-            glm::vec3 position;
+			Vertex& vertex = vertices[(i - 1) * (numSlices + 1) + j];
+            glm::vec3& position = vertex.position;
             position.x = radius * sinf(phi) * cosf(theta);
             position.y = radius * cosf(phi);
             position.z = radius * sinf(phi) * sinf(theta);
-			
-			Vertex vertex = { position };
-            vertices.push_back(vertex);
         }
     }
-
-	Vertex northPole = { glm::vec3(0.0f, -radius, 0.0f) };
-	Vertex southPole = { glm::vec3(0.0f,  radius, 0.0f) };
-    vertices.push_back(northPole);
-    vertices.push_back(southPole);
-
-    size_t northPoleIndex = vertices.size() - 1;
+    
+	size_t northPoleIndex = vertices.size() - 1;
     size_t southPoleIndex = vertices.size() - 2;
+
+	vertices[northPoleIndex].position = glm::vec3(0.0f, radius, 0.0f); 
+	vertices[southPoleIndex].position = glm::vec3(0.0f, -radius, 0.0f); 
+
 
     size_t numRingVertices = numSlices + 1;
 
