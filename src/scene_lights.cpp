@@ -22,11 +22,11 @@ void SceneLights::init()
 	mSphere.init(8, 16);
 
 	PointLight& l1 = createPointLight();
-	l1.init(*mState, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+	l1.init(*mState, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 2.0f);
 
 	PointLight& l2 = createPointLight();
-	l2.init(*mState, glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(2.0f, 0.0f, 0.0f), 1.0f);
-	l2.ubo->model = glm::translate(glm::vec3(2.0f, -1.0, 0.0f));
+	l2.init(*mState, glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(2.0f, -1.0f, 0.0f), 1.0f);
+	//l2.ubo->model = glm::translate(glm::vec3(2.0f, -1.0, 0.0f));
 	//PointLight l2 = createPointLight();
 
 	createUniformBuffer();

@@ -93,7 +93,7 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 
 	VkClearValue clearValues[] ={
 		{{0.4f, 0.1f, 0.1f, 1.0f}},	// VkClearColorValue color; 
-		{{1.0f, 0}} // VkClearDepthStencilValue depthStencil 
+		{{1.0f, 1}} // VkClearDepthStencilValue depthStencil 
 	};
 
 
@@ -129,13 +129,14 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 
 		vkCmdSetViewport(cmdBuffer, 0, 1, &viewport);
 		vkCmdSetScissor(cmdBuffer, 0, 1, &scissor);
-			
-		tquad.draw(cmdBuffer);
+
+
+		//tquad.draw(cmdBuffer);
 		 //fullscreenQuad.draw(cmdBuffer);
+		//sceneLights.draw(cmdBuffer);
 		suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
 		dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
         guard.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
-		sceneLights.draw(cmdBuffer);
 		vkCmdEndRenderPass(cmdBuffer);
 		VK_CHECK_RESULT(vkEndCommandBuffer(cmdBuffer));
 	}

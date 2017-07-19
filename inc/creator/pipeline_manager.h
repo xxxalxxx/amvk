@@ -175,15 +175,22 @@ inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info)
 
     VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
     VkPipelineRasterizationStateCreateInfo rasterizationState = 
-	//	PipelineCreator::rasterizationStateCullNone();
-		PipelineCreator::rasterizationStateWireframeCullNoneCW();
+		PipelineCreator::rasterizationStateCullNone();
+
+	//	PipelineCreator::rasterizationStateWireframeCullNoneCW();
 	//	PipelineCreator::rasterizationStateCullBackCCW();
 		//PipelineCreator::rasterizationStateCullBackCW();
-    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessOrEqualNoStencil();
+    VkPipelineDepthStencilStateCreateInfo depthStencil = 
+		//PipelineCreator::depthStencilStateGBufferStencilPass();
+		PipelineCreator::depthStencilStateDepthLessOrEqualNoStencil();
     VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
-    VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
+    VkPipelineColorBlendAttachmentState blendAttachmentState = 
+		PipelineCreator::blendAttachmentSrcAlpha();
+		//PipelineCreator::blendAttachmentStateDisabled();
 
-    VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
+    VkPipelineColorBlendStateCreateInfo blendState = 
+		PipelineCreator::blendStateEnabled(&blendAttachmentState, 1);
+		//PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
 
     VkDescriptorSetLayout layouts[] = {
 		state.descriptorSetLayouts.uniformVertex,
@@ -252,12 +259,20 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info)
     };
 
     VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
-    VkPipelineRasterizationStateCreateInfo rasterizationState = PipelineCreator::rasterizationStateCullBackCCW();
-    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessNoStencil();
+    VkPipelineRasterizationStateCreateInfo rasterizationState = 
+		PipelineCreator::rasterizationStateCullNoneCCW();
+		//PipelineCreator::rasterizationStateCullBackCCW();
+    VkPipelineDepthStencilStateCreateInfo depthStencil = 
+		//PipelineCreator::depthStencilStateGBufferLightPass();
+		PipelineCreator::depthStencilStateDepthLessNoStencil();
     VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
-    VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
+    VkPipelineColorBlendAttachmentState blendAttachmentState =
+		PipelineCreator::blendAttachmentSrcAlpha();
+		//	PipelineCreator::blendAttachmentStateDisabled();
 
-    VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
+    VkPipelineColorBlendStateCreateInfo blendState = 
+		//PipelineCreator::blendStateEnabled(&blendAttachmentState, 1);
+		PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
 
     VkDescriptorSetLayout layouts[] = {
             state.descriptorSetLayouts.uniformVertex,

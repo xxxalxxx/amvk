@@ -12,8 +12,14 @@ Sphere::Sphere(VulkanState& state):
 void Sphere::init(uint32_t numStacks, uint32_t numSlices, float radius /* = 1.0f */)
 {
 
-    
-/*
+    mRadius = radius;
+	uint32_t numVertices = (numStacks + 1) * (numSlices + 1);
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
+
+    float phiStep = M_PI / numStacks;
+    float thetaStep = 2.0f * M_PI / numSlices;
+
 	for (size_t i = 0; i <= numStacks; ++i) {
         float phi = i * phiStep;
         // vertices of ring
@@ -46,7 +52,9 @@ void Sphere::init(uint32_t numStacks, uint32_t numSlices, float radius /* = 1.0f
 			indices.push_back((i + 1) * numRingVertices + j + 1);
         }
     }
-*/
+
+	/*
+
 	mRadius = radius;
 	uint32_t numVertices = (numStacks - 1) * (numSlices + 1) + 2;
 	std::vector<Vertex> vertices(numVertices);
@@ -105,11 +113,13 @@ void Sphere::init(uint32_t numStacks, uint32_t numSlices, float radius /* = 1.0f
         indices.push_back(baseIndex + i);
         indices.push_back(baseIndex + i + 1);
     }
+	*/
 
     numIndices = indices.size();
     createBuffers(vertices, indices);
 	LOG("SPHERE CREATED");
 	//throw std::runtime_error("SPHERE");
+	
 }
 
 void Sphere::createBuffers(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)

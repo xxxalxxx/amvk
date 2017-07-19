@@ -3446,10 +3446,14 @@ PipelineCacheInfo::hasCache	inc/pipeline_cache.h	/^    bool hasCache;$/;"	m	stru
 PipelineCacheInfo::pipelineCache	inc/pipeline_cache.h	/^    VkPipelineCache& pipelineCache;$/;"	m	struct:PipelineCacheInfo	access:public
 PipelineCacheInfo::saveCache	src/pipeline_cache.cpp	/^void PipelineCacheInfo::saveCache(const VkDevice& device)$/;"	f	class:PipelineCacheInfo	signature:(const VkDevice& device)
 PipelineCreator	inc/creator/pipeline_creator.h	/^namespace PipelineCreator $/;"	n
+PipelineCreator::blendAttachmentSrcAlpha	inc/creator/pipeline_creator.h	/^inline VkPipelineColorBlendAttachmentState blendAttachmentSrcAlpha() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::blendAttachmentStateDisabled	inc/creator/pipeline_creator.h	/^inline VkPipelineColorBlendAttachmentState blendAttachmentStateDisabled() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::blendStateDisabled	inc/creator/pipeline_creator.h	/^inline VkPipelineColorBlendStateCreateInfo blendStateDisabled($/;"	f	namespace:PipelineCreator	signature:( VkPipelineColorBlendAttachmentState* attachmentStates, uint32_t attachmentCount)
+PipelineCreator::blendStateEnabled	inc/creator/pipeline_creator.h	/^inline VkPipelineColorBlendStateCreateInfo blendStateEnabled($/;"	f	namespace:PipelineCreator	signature:( VkPipelineColorBlendAttachmentState* attachmentStates, uint32_t attachmentCount)
 PipelineCreator::depthStencilStateDepthLessNoStencil	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessNoStencil() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::depthStencilStateDepthLessOrEqualNoStencil	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessOrEqualNoStencil() $/;"	f	namespace:PipelineCreator	signature:()
+PipelineCreator::depthStencilStateGBufferLightPass	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateGBufferLightPass() $/;"	f	namespace:PipelineCreator	signature:()
+PipelineCreator::depthStencilStateGBufferStencilPass	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateGBufferStencilPass() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::dynamicState	inc/creator/pipeline_creator.h	/^inline VkPipelineDynamicStateCreateInfo dynamicState(VkDynamicState* dynamicStates, uint32_t stateCount)$/;"	f	namespace:PipelineCreator	signature:(VkDynamicState* dynamicStates, uint32_t stateCount)
 PipelineCreator::inputAssemblyNoRestart	inc/creator/pipeline_creator.h	/^inline VkPipelineInputAssemblyStateCreateInfo inputAssemblyNoRestart(VkPrimitiveTopology topology) $/;"	f	namespace:PipelineCreator	signature:(VkPrimitiveTopology topology)
 PipelineCreator::layout	inc/creator/pipeline_creator.h	/^inline VkPipelineLayoutCreateInfo layout($/;"	f	namespace:PipelineCreator	signature:( VkDescriptorSetLayout* setLayouts, uint32_t setLayoutCount, VkPushConstantRange* pushConstantRanges, uint32_t pushConstantRangeCount)
@@ -3460,6 +3464,7 @@ PipelineCreator::rasterizationState	inc/creator/pipeline_creator.h	/^inline VkPi
 PipelineCreator::rasterizationStateCullBackCCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::rasterizationStateCullBackCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::rasterizationStateCullNone	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone() $/;"	f	namespace:PipelineCreator	signature:()
+PipelineCreator::rasterizationStateCullNoneCCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNoneCCW() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::rasterizationStateWireframeCullNoneCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateWireframeCullNoneCW() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::shaderStage	inc/creator/pipeline_creator.h	/^inline VkPipelineShaderStageCreateInfo shaderStage(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)$/;"	f	namespace:PipelineCreator	signature:(VkShaderModule& shaderModule, VkShaderStageFlagBits stage)
 PipelineCreator::shaderStage	inc/creator/pipeline_creator.h	/^inline VkPipelineShaderStageCreateInfo shaderStage(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)$/;"	f	namespace:PipelineCreator	signature:(const VkDevice& device, const char* path, VkShaderStageFlagBits stage)
@@ -3498,9 +3503,12 @@ PointLight::LightUBO::specPower	inc/shape/point_light.h	/^		float specPower;$/;"
 PointLight::PointLight	src/shape/point_light.cpp	/^PointLight::PointLight(UBO& ubo, LightUBO& lightUbo):$/;"	f	class:PointLight	signature:(UBO& ubo, LightUBO& lightUbo)
 PointLight::UBO	inc/shape/point_light.h	/^	struct UBO {$/;"	s	class:PointLight	access:public
 PointLight::UBO::model	inc/shape/point_light.h	/^	    glm::mat4 model;$/;"	m	struct:PointLight::UBO	access:public
+PointLight::getPosition	src/shape/point_light.cpp	/^glm::vec3 PointLight::getPosition() const$/;"	f	class:PointLight	signature:() const
+PointLight::getRadius	src/shape/point_light.cpp	/^float PointLight::getRadius() const$/;"	f	class:PointLight	signature:() const
 PointLight::init	src/shape/point_light.cpp	/^void PointLight::init(VulkanState& state, const glm::vec3& color, const glm::vec3& position, float radius, float specPower \/* = 1.0f *\/)$/;"	f	class:PointLight	signature:(VulkanState& state, const glm::vec3& color, const glm::vec3& position, float radius, float specPower )
 PointLight::lightUbo	inc/shape/point_light.h	/^	LightUBO* lightUbo;$/;"	m	class:PointLight	access:public
 PointLight::mState	inc/shape/point_light.h	/^	VulkanState* mState;$/;"	m	class:PointLight	access:private
+PointLight::setPosition	src/shape/point_light.cpp	/^void PointLight::setPosition(const glm::vec3& position) $/;"	f	class:PointLight	signature:(const glm::vec3& position)
 PointLight::setRadius	src/shape/point_light.cpp	/^void PointLight::setRadius(float radius) $/;"	f	class:PointLight	signature:(float radius)
 PointLight::ubo	inc/shape/point_light.h	/^	UBO* ubo;$/;"	m	class:PointLight	access:public
 PointLightInfo	inc/scene_lights.h	/^	struct PointLightInfo {$/;"	s	class:SceneLights	access:public
@@ -9521,10 +9529,12 @@ binding	lib/vulkan/vulkan.h	/^    uint32_t    binding;$/;"	m	struct:VkVertexInpu
 bindingCount	lib/vulkan/vulkan.h	/^    uint32_t                               bindingCount;$/;"	m	struct:VkDescriptorSetLayoutCreateInfo	access:public
 bitangent	inc/shape/model.h	/^		glm::vec3 bitangent;$/;"	m	struct:Model::Vertex	access:public
 bitangent	inc/shape/skinned.h	/^		glm::vec3 bitangent;$/;"	m	struct:Skinned::Vertex	access:public
+blendAttachmentSrcAlpha	inc/creator/pipeline_creator.h	/^inline VkPipelineColorBlendAttachmentState blendAttachmentSrcAlpha() $/;"	f	namespace:PipelineCreator	signature:()
 blendAttachmentStateDisabled	inc/creator/pipeline_creator.h	/^inline VkPipelineColorBlendAttachmentState blendAttachmentStateDisabled() $/;"	f	namespace:PipelineCreator	signature:()
 blendConstants	lib/vulkan/vulkan.h	/^    float                                         blendConstants[4];$/;"	m	struct:VkPipelineColorBlendStateCreateInfo	access:public
 blendEnable	lib/vulkan/vulkan.h	/^    VkBool32                 blendEnable;$/;"	m	struct:VkPipelineColorBlendAttachmentState	access:public
 blendStateDisabled	inc/creator/pipeline_creator.h	/^inline VkPipelineColorBlendStateCreateInfo blendStateDisabled($/;"	f	namespace:PipelineCreator	signature:( VkPipelineColorBlendAttachmentState* attachmentStates, uint32_t attachmentCount)
+blendStateEnabled	inc/creator/pipeline_creator.h	/^inline VkPipelineColorBlendStateCreateInfo blendStateEnabled($/;"	f	namespace:PipelineCreator	signature:( VkPipelineColorBlendAttachmentState* attachmentStates, uint32_t attachmentCount)
 boneIndex	inc/shape/anim_node.h	/^    uint32_t boneIndex;$/;"	m	struct:AnimNode	access:public
 boneIndices	inc/shape/skinned.h	/^		glm::uvec4 boneIndices;$/;"	m	struct:Skinned::Vertex	access:public
 bones	inc/shape/skinned.h	/^		std::array<glm::mat4, MAX_BONES> bones;$/;"	m	struct:Skinned::UBO	access:public
@@ -9915,6 +9925,8 @@ depthPitch	lib/vulkan/vulkan.h	/^    VkDeviceSize    depthPitch;$/;"	m	struct:Vk
 depthStencil	lib/vulkan/vulkan.h	/^    VkClearDepthStencilValue    depthStencil;$/;"	m	union:VkClearValue	access:public
 depthStencilStateDepthLessNoStencil	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessNoStencil() $/;"	f	namespace:PipelineCreator	signature:()
 depthStencilStateDepthLessOrEqualNoStencil	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessOrEqualNoStencil() $/;"	f	namespace:PipelineCreator	signature:()
+depthStencilStateGBufferLightPass	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateGBufferLightPass() $/;"	f	namespace:PipelineCreator	signature:()
+depthStencilStateGBufferStencilPass	inc/creator/pipeline_creator.h	/^inline VkPipelineDepthStencilStateCreateInfo depthStencilStateGBufferStencilPass() $/;"	f	namespace:PipelineCreator	signature:()
 depthTestEnable	lib/vulkan/vulkan.h	/^    VkBool32                                  depthTestEnable;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo	access:public
 depthWriteEnable	lib/vulkan/vulkan.h	/^    VkBool32                                  depthWriteEnable;$/;"	m	struct:VkPipelineDepthStencilStateCreateInfo	access:public
 dequant	lib/stb/stb_image.h	/^   stbi_uc dequant[4][64];$/;"	m	struct:__anon63	access:public
@@ -10536,7 +10548,9 @@ getLogSeverity	lib/assimp/Logger.hpp	/^inline Logger::LogSeverity Logger::getLog
 getMemoryType	inc/creator/buffer_helper.h	/^inline uint32_t getMemoryType($/;"	f	namespace:BufferHelper	signature:( const VkPhysicalDevice& physicalDevice, uint32_t typeFilter, VkMemoryPropertyFlags& flags)
 getModelsPath	src/file_manager.cpp	/^std::string FileManager::getModelsPath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
 getPixels	src/texture_data.cpp	/^stbi_uc* TextureData::getPixels()$/;"	f	class:TextureData	signature:()
+getPosition	src/shape/point_light.cpp	/^glm::vec3 PointLight::getPosition() const$/;"	f	class:PointLight	signature:() const
 getPresentMode	src/swapchain_manager.cpp	/^VkPresentModeKHR SwapchainManager::getPresentMode(const std::vector<VkPresentModeKHR>& presentModes) const$/;"	f	class:SwapchainManager	signature:(const std::vector<VkPresentModeKHR>& presentModes) const
+getRadius	src/shape/point_light.cpp	/^float PointLight::getRadius() const$/;"	f	class:PointLight	signature:() const
 getRadius	src/shape/sphere.cpp	/^float Sphere::getRadius() const $/;"	f	class:Sphere	signature:() const
 getResourcePath	src/file_manager.cpp	/^std::string FileManager::getResourcePath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
 getRotation	src/shape/anim_node.cpp	/^aiMatrix4x4 AnimNode::getRotation(float progress, unsigned int animIndex, aiNodeAnim& channel)$/;"	f	class:AnimNode	signature:(float progress, unsigned int animIndex, aiNodeAnim& channel)
@@ -15642,6 +15656,7 @@ rasterizationState	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizati
 rasterizationStateCullBackCCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() $/;"	f	namespace:PipelineCreator	signature:()
 rasterizationStateCullBackCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW() $/;"	f	namespace:PipelineCreator	signature:()
 rasterizationStateCullNone	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone() $/;"	f	namespace:PipelineCreator	signature:()
+rasterizationStateCullNoneCCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNoneCCW() $/;"	f	namespace:PipelineCreator	signature:()
 rasterizationStateWireframeCullNoneCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateWireframeCullNoneCW() $/;"	f	namespace:PipelineCreator	signature:()
 rasterizerDiscardEnable	lib/vulkan/vulkan.h	/^    VkBool32                                   rasterizerDiscardEnable;$/;"	m	struct:VkPipelineRasterizationStateCreateInfo	access:public
 ratio	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon74	access:public
@@ -15830,6 +15845,7 @@ setLayoutCount	lib/vulkan/vulkan.h	/^    uint32_t                        setLayo
 setLogSeverity	lib/__assimp/Logger.hpp	/^inline void Logger::setLogSeverity(LogSeverity log_severity){$/;"	f	class:Assimp::Logger	signature:(LogSeverity log_severity)
 setLogSeverity	lib/assimp/Logger.hpp	/^inline void Logger::setLogSeverity(LogSeverity log_severity){$/;"	f	class:Assimp::Logger	signature:(LogSeverity log_severity)
 setMouseButtonCallback	src/input_manager.cpp	/^void InputManager::setMouseButtonCallback(GLFWmousebuttonfun cbfun)$/;"	f	class:InputManager	signature:(GLFWmousebuttonfun cbfun)
+setPosition	src/shape/point_light.cpp	/^void PointLight::setPosition(const glm::vec3& position) $/;"	f	class:PointLight	signature:(const glm::vec3& position)
 setRadius	src/shape/point_light.cpp	/^void PointLight::setRadius(float radius) $/;"	f	class:PointLight	signature:(float radius)
 setScrollCallback	src/input_manager.cpp	/^void InputManager::setScrollCallback(GLFWscrollfun cbfun)$/;"	f	class:InputManager	signature:(GLFWscrollfun cbfun)
 setSupportedIndex	src/device_queue_indices.cpp	/^void DeviceQueueIndicies::setSupportedIndex(int index)$/;"	f	class:DeviceQueueIndicies	signature:(int index)

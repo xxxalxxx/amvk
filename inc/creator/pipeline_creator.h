@@ -112,6 +112,22 @@ inline VkPipelineColorBlendAttachmentState blendAttachmentStateDisabled()
 	return blendAttachmentState;
 }
 
+inline VkPipelineColorBlendAttachmentState blendAttachmentSrcAlpha() 
+{
+	VkPipelineColorBlendAttachmentState blendAttachmentState = {};
+	blendAttachmentState.colorBlendOp = VK_BLEND_OP_ADD;
+	blendAttachmentState.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+	blendAttachmentState.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+	blendAttachmentState.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+	blendAttachmentState.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+	//blendAttachmentState.alphaBlendOp = VK_BLEND_OP_MIN;
+	blendAttachmentState.colorWriteMask = VK_COLOR_COMPONENT_R_BIT 
+										| VK_COLOR_COMPONENT_G_BIT 
+										| VK_COLOR_COMPONENT_B_BIT ;
+	blendAttachmentState.blendEnable = VK_TRUE;
+
+	return blendAttachmentState;
+} 
 
 inline VkPipelineColorBlendStateCreateInfo blendStateDisabled(
 		VkPipelineColorBlendAttachmentState* attachmentStates,  
@@ -127,6 +143,26 @@ inline VkPipelineColorBlendStateCreateInfo blendStateDisabled(
 	blendState.blendConstants[1] = 0.0f;
 	blendState.blendConstants[2] = 0.0f;
 	blendState.blendConstants[3] = 0.0f;
+	
+	return blendState;
+}
+
+
+
+inline VkPipelineColorBlendStateCreateInfo blendStateEnabled(
+		VkPipelineColorBlendAttachmentState* attachmentStates,  
+		uint32_t attachmentCount) 
+{
+	VkPipelineColorBlendStateCreateInfo blendState = {};
+	blendState.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+	blendState.logicOpEnable = VK_FALSE;
+	blendState.logicOp = VK_LOGIC_OP_NO_OP;
+	blendState.attachmentCount = attachmentCount;
+	blendState.pAttachments = attachmentStates;
+	blendState.blendConstants[0] = 1.0f;
+	blendState.blendConstants[1] = 1.0f;
+	blendState.blendConstants[2] = 1.0f;
+	blendState.blendConstants[3] = 1.0f;
 	
 	return blendState;
 }
@@ -195,6 +231,102 @@ inline VkPipelineDepthStencilStateCreateInfo depthStencilStateDepthLessOrEqualNo
 	return depthStencil;
 }
 
+inline VkPipelineDepthStencilStateCreateInfo depthStencilStateGBufferStencilPass() 
+{
+	/*
+	VkStencilOpState front = {};
+	front.compareOp = VK_COMPARE_OP_ALWAYS;
+	front.passOp = VK_STENCIL_OP_KEEP;
+	front.failOp = VK_STENCIL_OP_KEEP;
+	front.depthFailOp = VK_STENCIL_OP_DECREMENT_AND_WRAP;
+	front.writeMask = 0x0;
+	front.reference = 0;
+	
+	VkStencilOpState back = {};
+	back.compareOp = VK_COMPARE_OP_ALWAYS;
+	back.passOp = VK_STENCIL_OP_KEEP;
+	back.failOp = VK_STENCIL_OP_KEEP;
+	back.depthFailOp = VK_STENCIL_OP_INCREMENT_AND_WRAP;
+	back.writeMask = 0x0;
+	back.reference = 0;
+	*/
+
+	VkStencilOpState front = {};
+	front.compareOp = VK_COMPARE_OP_ALWAYS;
+	front.passOp = VK_STENCIL_OP_KEEP;
+	front.failOp = VK_STENCIL_OP_KEEP;
+	front.depthFailOp = VK_STENCIL_OP_KEEP;
+	front.writeMask = 0xffffffff;
+	front.reference = 0;
+	
+	VkStencilOpState back = {};
+	back.compareOp = VK_COMPARE_OP_ALWAYS;
+	back.passOp = VK_STENCIL_OP_KEEP;
+	back.failOp = VK_STENCIL_OP_KEEP;
+	back.depthFailOp = VK_STENCIL_OP_KEEP;
+	back.writeMask = 0xffffffff;
+	back.reference = 0;
+
+
+	VkPipelineDepthStencilStateCreateInfo depthStencil = {};
+	depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	depthStencil.depthTestEnable = VK_TRUE;
+	depthStencil.depthWriteEnable = VK_TRUE;
+	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+	depthStencil.depthBoundsTestEnable = VK_FALSE;
+	depthStencil.stencilTestEnable = VK_FALSE;
+	depthStencil.front = front;
+	depthStencil.back = back;
+
+	return depthStencil;
+}
+
+inline VkPipelineDepthStencilStateCreateInfo depthStencilStateGBufferLightPass() 
+{
+	/*
+	VkStencilOpState front = {};
+	front.compareOp = VK_COMPARE_OP_NOT_EQUAL;
+	front.passOp = VK_STENCIL_OP_KEEP;
+	front.failOp = VK_STENCIL_OP_KEEP;
+	front.depthFailOp = VK_STENCIL_OP_KEEP;
+	front.writeMask = 0xff;
+	front.reference = 0;
+
+	VkStencilOpState back = {};
+	back.compareOp = VK_COMPARE_OP_NOT_EQUAL;
+	back.passOp = VK_STENCIL_OP_KEEP;
+	back.failOp = VK_STENCIL_OP_KEEP;
+	back.depthFailOp = VK_STENCIL_OP_KEEP;
+	back.writeMask = 0xff;
+	back.reference = 0;
+
+	*/
+
+	VkStencilOpState front = {};
+	front.compareOp = VK_COMPARE_OP_NOT_EQUAL;
+	front.passOp = VK_STENCIL_OP_KEEP;
+	front.failOp = VK_STENCIL_OP_KEEP;
+	front.depthFailOp = VK_STENCIL_OP_ZERO;
+	front.writeMask = 0x00;
+	front.reference = 0;
+
+	
+
+	VkPipelineDepthStencilStateCreateInfo depthStencil = {};
+	depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	depthStencil.depthTestEnable = VK_TRUE;
+	depthStencil.depthWriteEnable = VK_TRUE;
+	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+	depthStencil.depthBoundsTestEnable = VK_FALSE;
+	depthStencil.stencilTestEnable = VK_TRUE;
+	depthStencil.front = front;
+	depthStencil.back = front;
+
+	return depthStencil;
+}
+
+
+
 inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() 
 {
 	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
@@ -253,12 +385,28 @@ inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone()
 	rasterizationState.rasterizerDiscardEnable = VK_FALSE;
 	rasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
 	rasterizationState.lineWidth = 1.0f;
-	rasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
+	rasterizationState.cullMode = VK_CULL_MODE_NONE;
 	rasterizationState.frontFace = VK_FRONT_FACE_CLOCKWISE;
 	rasterizationState.depthBiasEnable = VK_FALSE;
 
 	return rasterizationState;
 }
+
+inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNoneCCW() 
+{
+	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
+	rasterizationState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	rasterizationState.depthClampEnable = VK_FALSE;
+	rasterizationState.rasterizerDiscardEnable = VK_FALSE;
+	rasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
+	rasterizationState.lineWidth = 1.0f;
+	rasterizationState.cullMode = VK_CULL_MODE_NONE;
+	rasterizationState.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+	rasterizationState.depthBiasEnable = VK_FALSE;
+
+	return rasterizationState;
+}
+
 
 inline VkPipelineRasterizationStateCreateInfo rasterizationStateWireframeCullNoneCW() 
 {

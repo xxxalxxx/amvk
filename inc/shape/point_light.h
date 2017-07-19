@@ -28,6 +28,13 @@ public:
 	};
 
 	PointLight(UBO& ubo, LightUBO& lightUbo);
+	
+	float getRadius() const;
+	glm::vec3 getPosition() const;
+	
+	void setRadius(float radius);
+	void setPosition(const glm::vec3& position);
+	
 	void update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera);
 	void draw(VkCommandBuffer& cmdBuffer);
 	void init(
@@ -39,8 +46,8 @@ public:
 
 	UBO* ubo;
 	LightUBO* lightUbo;
+
 private:
-	void setRadius(float radius);
 
 	VulkanState* mState;
 };

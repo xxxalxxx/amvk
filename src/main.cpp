@@ -142,6 +142,7 @@ int main() {
         double dt = timer.tick();
         engine.handleMovement(dt);
         vulkanManager.updateUniformBuffers(timer, camera);
+		//vulkanManager.buildCommandBuffers(timer, camera);
         vulkanManager.draw();
     }
     vulkanManager.waitIdle();
