@@ -11,5 +11,5 @@ layout(location = 0) out vec4 outColor;
 
 void main() {
     //outColor = texture(texSampler, fragTexCoord);
-	outColor = vec4(texture(texSampler, fragTexCoord).rgb, 0.5);
+	outColor = vec4(texture(texSampler, fragTexCoord).rgb, 0.3);
 }

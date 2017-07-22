@@ -30,6 +30,7 @@
 #include "fullscreen_quad.h"
 #include "point_light.h"
 #include "scene_lights.h"
+#include "g_buffer.h"
 
 class VulkanManager { 
 	friend class Engine;
@@ -62,6 +63,7 @@ private:
 	Skinned dwarf;
 	FullscreenQuad fullscreenQuad;
 	SceneLights sceneLights;
+	GBuffer gBuffer;
 	uint32_t imageIndex;
 };
 

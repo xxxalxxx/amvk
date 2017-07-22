@@ -270,16 +270,27 @@ inline VkFormat findSupportedFormat(
 		&& (props.optimalTilingFeatures & features) == features)
 			return format;
 	}
-	throw new std::runtime_error("failed to find supported format");
+	throw std::runtime_error("failed to find supported format");
 }
 
-inline VkFormat findDepthFormat(const VulkanState& state)
+inline VkFormat findDepthStencilFormat(const VkPhysicalDevice& physicalDevice) 
 {
-	return findSupportedFormat(
-			state,
-			{VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
+	std::vector<VkFormat> depthStencilFormats = {
+		VK_FORMAT_D32_SFLOAT_S8_UINT,
+		//VK_FORMAT_D32_SFLOAT,
+		VK_FORMAT_D24_UNORM_S8_UINT,
+		VK_FORMAT_D16_UNORM_S8_UINT,
+		//VK_FORMAT_D16_UNORM
+	};
+
+
+	for (auto& format : depthStencilFormats) {
+		VkFormatProperties formatProps;
+		vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &formatProps);
+		if (formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
+			return format;
+	}
+	throw std::runtime_error("Unable to find supported depth stencil format");
 }
 
 
@@ -300,7 +311,7 @@ inline VkFormat findSupportedFormat(
 		&& (props.optimalTilingFeatures & features) == features)
 			return format;
 	}
-	throw new std::runtime_error("failed to find supported format");
+	throw std::runtime_error("failed to find supported format");
 }
 
 
@@ -403,7 +414,7 @@ inline void createStagedImage(
 	samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
 	samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
 	samplerInfo.anisotropyEnable = state.deviceInfo.samplerAnisotropy;
-	samplerInfo.maxAnisotropy = state.deviceInfo.samplerAnisotropy ? 16.f : 1.f;
+	samplerInfo.maxAnisotropy = state.deviceInfo.samplerAnisotropy ? 1.f : 1.f;
 	samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
 	samplerInfo.unnormalizedCoordinates = VK_FALSE;
 	samplerInfo.compareEnable = VK_FALSE;

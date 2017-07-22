@@ -511,6 +511,7 @@ AMVK_DEVICE_QUEUE_INDICES	inc/device_queue_indices.h	2;"	d
 AMVK_ENGINE_H	inc/engine.h	2;"	d
 AMVK_FILE_MANAGER	inc/file_manager.h	2;"	d
 AMVK_FULLSCREEN_QUAD_H	inc/shape/fullscreen_quad.h	2;"	d
+AMVK_G_BUFFER_H	inc/g_buffer.h	2;"	d
 AMVK_INPUT_MANAGER_H	inc/input_manager.h	2;"	d
 AMVK_LIGHTS_H	inc/lights.h	2;"	d
 AMVK_MACROS_H	inc/macro.h	3;"	d
@@ -585,6 +586,7 @@ ASSIMP_CFLAGS_STLPORT	lib/__assimp/version.h	87;"	d
 ASSIMP_CFLAGS_STLPORT	lib/assimp/version.h	86;"	d
 ASSIMP_DEFAULT_LOG_NAME	lib/__assimp/DefaultLogger.hpp	57;"	d
 ASSIMP_DEFAULT_LOG_NAME	lib/assimp/DefaultLogger.hpp	57;"	d
+ATTACHMENT_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t ATTACHMENT_COUNT = 4;$/;"	m	class:GBuffer	access:public
 AccessQualifier	lib/vulkan/spirv.hpp	/^enum AccessQualifier {$/;"	g	namespace:spv
 AccessQualifierMax	lib/vulkan/spirv.hpp	/^    AccessQualifierMax = 0x7fffffff,$/;"	e	enum:spv::AccessQualifier
 AccessQualifierReadOnly	lib/vulkan/spirv.hpp	/^    AccessQualifierReadOnly = 0,$/;"	e	enum:spv::AccessQualifier
@@ -891,7 +893,7 @@ BufferHelper::createStagingBuffer	inc/creator/buffer_helper.h	/^inline void crea
 BufferHelper::createUniformBuffer	inc/creator/buffer_helper.h	/^inline void createUniformBuffer(const VulkanState& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
 BufferHelper::createVertexAndIndexBuffer	inc/creator/buffer_helper.h	/^inline void createVertexAndIndexBuffer(const VulkanState& state, BufferInfo& bufferInfo) $/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
 BufferHelper::createVertexBuffer	inc/creator/buffer_helper.h	/^inline void createVertexBuffer(const VulkanState& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
-BufferHelper::getMemoryType	inc/creator/buffer_helper.h	/^inline uint32_t getMemoryType($/;"	f	namespace:BufferHelper	signature:( const VkPhysicalDevice& physicalDevice, uint32_t typeFilter, VkMemoryPropertyFlags& flags)
+BufferHelper::getMemoryType	inc/creator/buffer_helper.h	/^inline uint32_t getMemoryType($/;"	f	namespace:BufferHelper	signature:( const VkPhysicalDevice& physicalDevice, uint32_t typeFilter, VkMemoryPropertyFlags flags)
 BufferHelper::mapMemory	inc/creator/buffer_helper.h	/^inline void mapMemory($/;"	f	namespace:BufferHelper	signature:( const VkDevice& device, VkDeviceMemory& memory, VkDeviceSize offset, VkDeviceSize size, const void* src)
 BufferHelper::mapMemory	inc/creator/buffer_helper.h	/^inline void mapMemory($/;"	f	namespace:BufferHelper	signature:( const VulkanState& state, VkDeviceMemory& memory, VkDeviceSize offset, VkDeviceSize size, const void* src)
 BufferHelper::mapMemory	inc/creator/buffer_helper.h	/^inline void mapMemory(const VulkanState& state, BufferInfo& bufferInfo, const void* src) $/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo, const void* src)
@@ -1180,6 +1182,7 @@ DEFAULT_TICKS_DURATION	src/shape/anim_node.cpp	/^const double AnimNode::DEFAULT_
 DEFAULT_TICKS_PER_SECOND	inc/shape/anim_node.h	/^    const static double DEFAULT_TICKS_PER_SECOND;$/;"	m	struct:AnimNode	access:public
 DEFAULT_TICKS_PER_SECOND	src/shape/anim_node.cpp	/^const double AnimNode::DEFAULT_TICKS_PER_SECOND = 25.0;$/;"	m	class:AnimNode	file:
 DEPS	Makefile	/^DEPS=$(patsubst %.cpp,$(OBJ_DIR)\/%.d, $(SRCS_NO_PATH))$/;"	m
+DEPTH_ATTACHMENT_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t DEPTH_ATTACHMENT_COUNT = 1;$/;"	m	class:GBuffer	access:public
 DLS_DEBUGGER	lib/__assimp/types.h	455;"	d
 DLS_DEBUGGER	lib/assimp/types.h	454;"	d
 DLS_FILE	lib/__assimp/types.h	452;"	d
@@ -1540,6 +1543,11 @@ FloatPropertyMap	lib/assimp/Exporter.hpp	/^    typedef std::map<KeyType, float> 
 FlushMappedMemoryRanges	lib/vulkan/vk_layer.h	/^    PFN_vkFlushMappedMemoryRanges FlushMappedMemoryRanges;$/;"	m	struct:VkLayerDispatchTable_	access:public
 FlushProc	lib/__assimp/cfileio.h	/^    aiFileFlushProc FlushProc;$/;"	m	struct:aiFile	access:public
 FlushProc	lib/assimp/cfileio.h	/^    aiFileFlushProc FlushProc;$/;"	m	struct:aiFile	access:public
+FramebufferAttachment	inc/g_buffer.h	/^struct FramebufferAttachment {$/;"	s
+FramebufferAttachment::format	inc/g_buffer.h	/^	VkFormat format;$/;"	m	struct:FramebufferAttachment	access:public
+FramebufferAttachment::image	inc/g_buffer.h	/^	VkImage image;$/;"	m	struct:FramebufferAttachment	access:public
+FramebufferAttachment::memory	inc/g_buffer.h	/^	VkDeviceMemory memory;$/;"	m	struct:FramebufferAttachment	access:public
+FramebufferAttachment::view	inc/g_buffer.h	/^	VkImageView view;$/;"	m	struct:FramebufferAttachment	access:public
 FreeCommandBuffers	lib/vulkan/vk_layer.h	/^    PFN_vkFreeCommandBuffers FreeCommandBuffers;$/;"	m	struct:VkLayerDispatchTable_	access:public
 FreeDescriptorSets	lib/vulkan/vk_layer.h	/^    PFN_vkFreeDescriptorSets FreeDescriptorSets;$/;"	m	struct:VkLayerDispatchTable_	access:public
 FreeMemory	lib/vulkan/vk_layer.h	/^    PFN_vkFreeMemory FreeMemory;$/;"	m	struct:VkLayerDispatchTable_	access:public
@@ -1574,6 +1582,38 @@ FunctionParameterAttributeNoWrite	lib/vulkan/spirv.hpp	/^    FunctionParameterAt
 FunctionParameterAttributeSext	lib/vulkan/spirv.hpp	/^    FunctionParameterAttributeSext = 1,$/;"	e	enum:spv::FunctionParameterAttribute
 FunctionParameterAttributeSret	lib/vulkan/spirv.hpp	/^    FunctionParameterAttributeSret = 3,$/;"	e	enum:spv::FunctionParameterAttribute
 FunctionParameterAttributeZext	lib/vulkan/spirv.hpp	/^    FunctionParameterAttributeZext = 0,$/;"	e	enum:spv::FunctionParameterAttribute
+GBuffer	inc/g_buffer.h	/^class GBuffer {$/;"	c
+GBuffer	src/g_buffer.cpp	/^GBuffer::GBuffer() $/;"	f	class:GBuffer	signature:()
+GBuffer::ATTACHMENT_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t ATTACHMENT_COUNT = 4;$/;"	m	class:GBuffer	access:public
+GBuffer::DEPTH_ATTACHMENT_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t DEPTH_ATTACHMENT_COUNT = 1;$/;"	m	class:GBuffer	access:public
+GBuffer::GBuffer	src/g_buffer.cpp	/^GBuffer::GBuffer() $/;"	f	class:GBuffer	signature:()
+GBuffer::INDEX_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_ALBEDO   = 2;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_DEPTH    = 3;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_NORMAL	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_NORMAL   = 1;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_POSITION	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_POSITION = 0;$/;"	m	class:GBuffer	access:public
+GBuffer::albedo	inc/g_buffer.h	/^	inline FramebufferAttachment& albedo() { return attachments[INDEX_ALBEDO]; }$/;"	f	class:GBuffer	access:public	signature:()
+GBuffer::attachments	inc/g_buffer.h	/^	std::array<FramebufferAttachment, ATTACHMENT_COUNT> attachments;$/;"	m	class:GBuffer	access:public
+GBuffer::clearValues	inc/g_buffer.h	/^	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;$/;"	m	class:GBuffer	access:public
+GBuffer::cmdBuffer	inc/g_buffer.h	/^	VkCommandBuffer cmdBuffer;$/;"	m	class:GBuffer	access:public
+GBuffer::createAttachment	src/g_buffer.cpp	/^void GBuffer::createAttachment($/;"	f	class:GBuffer	signature:( const VkPhysicalDevice& physicalDevice, const VkDevice& device, FramebufferAttachment& attachment, VkFormat format, VkImageUsageFlagBits usage)
+GBuffer::createClearValues	src/g_buffer.cpp	/^void GBuffer::createClearValues() $/;"	f	class:GBuffer	signature:()
+GBuffer::createCmdBuffer	src/g_buffer.cpp	/^void GBuffer::createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool)$/;"	f	class:GBuffer	signature:(const VkDevice& device, const VkCommandPool& cmdPool)
+GBuffer::createColorAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format) $/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
+GBuffer::createDepthAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat format)$/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
+GBuffer::createFramebuffers	src/g_buffer.cpp	/^void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const VkDevice& device) $/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device)
+GBuffer::createSampler	src/g_buffer.cpp	/^void GBuffer::createSampler(const VkDevice& device)$/;"	f	class:GBuffer	signature:(const VkDevice& device)
+GBuffer::depth	inc/g_buffer.h	/^	inline FramebufferAttachment& depth() { return attachments[INDEX_DEPTH]; }$/;"	f	class:GBuffer	access:public	signature:()
+GBuffer::frameBuffer	inc/g_buffer.h	/^	VkFramebuffer frameBuffer;$/;"	m	class:GBuffer	access:public
+GBuffer::height	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	access:public
+GBuffer::init	src/g_buffer.cpp	/^void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)$/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)
+GBuffer::normal	inc/g_buffer.h	/^	inline FramebufferAttachment& normal() { return attachments[INDEX_NORMAL]; }$/;"	f	class:GBuffer	access:public	signature:()
+GBuffer::offscreenSemaphore	inc/g_buffer.h	/^	VkSemaphore offscreenSemaphore;$/;"	m	class:GBuffer	access:public
+GBuffer::position	inc/g_buffer.h	/^	inline FramebufferAttachment& position() { return attachments[INDEX_POSITION]; }$/;"	f	class:GBuffer	access:public	signature:()
+GBuffer::renderPass	inc/g_buffer.h	/^	VkRenderPass renderPass;$/;"	m	class:GBuffer	access:public
+GBuffer::sampler	inc/g_buffer.h	/^	VkSampler sampler;$/;"	m	class:GBuffer	access:public
+GBuffer::texturesDescriptor	inc/g_buffer.h	/^	VkDescriptorSet texturesDescriptor;$/;"	m	class:GBuffer	access:public
+GBuffer::width	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	access:public
+GBuffer::~GBuffer	src/g_buffer.cpp	/^GBuffer::~GBuffer() $/;"	f	class:GBuffer	signature:()
 GLFW_INCLUDE_VULKAN	inc/window.h	8;"	d
 GLM_ALIGN	lib/glm/detail/setup.hpp	645;"	d
 GLM_ALIGN	lib/glm/detail/setup.hpp	657;"	d
@@ -2284,8 +2324,12 @@ INCLUDED_AI_NULLLOGGER_H	lib/assimp/NullLogger.hpp	46;"	d
 INCLUDED_AI_PROGRESSHANDLER_H	lib/assimp/ProgressHandler.hpp	45;"	d
 INCLUDED_AI_VERSION_H	lib/assimp/version.h	47;"	d
 INC_DIR	Makefile	/^INC_DIR := inc$/;"	m
+INDEX_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_ALBEDO   = 2;$/;"	m	class:GBuffer	access:public
 INDEX_COMPUTE	inc/device_queue_indices.h	/^		INDEX_COMPUTE = 2,$/;"	m	class:DeviceQueueIndicies	access:public
+INDEX_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_DEPTH    = 3;$/;"	m	class:GBuffer	access:public
 INDEX_GRAPHICS	inc/device_queue_indices.h	/^		INDEX_GRAPHICS = 0,$/;"	m	class:DeviceQueueIndicies	access:public
+INDEX_NORMAL	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_NORMAL   = 1;$/;"	m	class:GBuffer	access:public
+INDEX_POSITION	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_POSITION = 0;$/;"	m	class:GBuffer	access:public
 INDEX_SUPPORTED	inc/device_queue_indices.h	/^		INDEX_SUPPORTED = 1,$/;"	m	class:DeviceQueueIndicies	access:public
 INDEX_TRANSFER	inc/device_queue_indices.h	/^		INDEX_TRANSFER = 3,$/;"	m	class:DeviceQueueIndicies	access:public
 INDEX_UNSET	inc/device_queue_indices.h	/^		INDEX_UNSET = -1;$/;"	m	class:DeviceQueueIndicies	access:public
@@ -2490,7 +2534,7 @@ ImageHelper::createImageView	inc/creator/image_helper.h	/^inline void createImag
 ImageHelper::createImageView	inc/creator/image_helper.h	/^inline void createImageView($/;"	f	namespace:ImageHelper	signature:( const VkDevice& device, VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkImageView& imageView)
 ImageHelper::createStagedImage	inc/creator/image_helper.h	/^inline void createStagedImage($/;"	f	namespace:ImageHelper	signature:( ImageInfo& imageInfo, const TextureData& textureData, VulkanState& state, const VkCommandPool& cmdPool, const VkQueue& cmdQueue)
 ImageHelper::findDepthFormat	inc/creator/image_helper.h	/^inline VkFormat findDepthFormat(VkPhysicalDevice& physicalDevice)$/;"	f	namespace:ImageHelper	signature:(VkPhysicalDevice& physicalDevice)
-ImageHelper::findDepthFormat	inc/creator/image_helper.h	/^inline VkFormat findDepthFormat(const VulkanState& state)$/;"	f	namespace:ImageHelper	signature:(const VulkanState& state)
+ImageHelper::findDepthStencilFormat	inc/creator/image_helper.h	/^inline VkFormat findDepthStencilFormat(const VkPhysicalDevice& physicalDevice) $/;"	f	namespace:ImageHelper	signature:(const VkPhysicalDevice& physicalDevice)
 ImageHelper::findSupportedFormat	inc/creator/image_helper.h	/^inline VkFormat findSupportedFormat($/;"	f	namespace:ImageHelper	signature:( const VkPhysicalDevice& physicalDevice, const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
 ImageHelper::findSupportedFormat	inc/creator/image_helper.h	/^inline VkFormat findSupportedFormat($/;"	f	namespace:ImageHelper	signature:( const VulkanState& state, const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
 ImageHelper::transitionLayout	inc/creator/image_helper.h	/^inline void transitionLayout($/;"	f	namespace:ImageHelper	signature:( VkCommandBuffer& cmdBuffer, VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags barrierAspectMask, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask)
@@ -3460,7 +3504,7 @@ PipelineCreator::layout	inc/creator/pipeline_creator.h	/^inline VkPipelineLayout
 PipelineCreator::multisampleStateNoMultisampleNoSampleShading	inc/creator/pipeline_creator.h	/^inline VkPipelineMultisampleStateCreateInfo multisampleStateNoMultisampleNoSampleShading()$/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::pipelineCache	inc/creator/pipeline_creator.h	/^inline void pipelineCache(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)$/;"	f	namespace:PipelineCreator	signature:(const VkDevice& device, const std::vector<char>& cache, VkPipelineCacheCreateInfo& out)
 PipelineCreator::pushConstantRange	inc/creator/pipeline_creator.h	/^inline VkPushConstantRange pushConstantRange(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)$/;"	f	namespace:PipelineCreator	signature:(const VulkanState& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)
-PipelineCreator::rasterizationState	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationState($/;"	f	namespace:PipelineCreator	signature:( VkCullModeFlags cullMode, VkFrontFace frontFace, VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL)
+PipelineCreator::rasterizationState	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationState($/;"	f	namespace:PipelineCreator	signature:( VkCullModeFlags cullMode, VkFrontFace frontFace, VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL, VkBool32 rasterizationDiscardEnable = VK_FALSE)
 PipelineCreator::rasterizationStateCullBackCCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::rasterizationStateCullBackCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW() $/;"	f	namespace:PipelineCreator	signature:()
 PipelineCreator::rasterizationStateCullNone	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone() $/;"	f	namespace:PipelineCreator	signature:()
@@ -3478,12 +3522,12 @@ PipelineInfo::cache	inc/vulkan_state.h	/^	VkPipelineCache cache;$/;"	m	struct:Pi
 PipelineInfo::layout	inc/vulkan_state.h	/^	VkPipelineLayout layout;$/;"	m	struct:PipelineInfo	access:public
 PipelineInfo::pipeline	inc/vulkan_state.h	/^	VkPipeline pipeline;$/;"	m	struct:PipelineInfo	access:public
 PipelineManager	inc/creator/pipeline_manager.h	/^namespace PipelineManager$/;"	n
-PipelineManager::createFullscreenQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
-PipelineManager::createModelPipeline	inc/creator/pipeline_manager.h	/^inline void createModelPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
-PipelineManager::createPipelines	inc/creator/pipeline_manager.h	/^inline void createPipelines(VulkanState& state)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state)
-PipelineManager::createPointLightPipeline	inc/creator/pipeline_manager.h	/^inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info) $/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
-PipelineManager::createSkinnedPipeline	inc/creator/pipeline_manager.h	/^inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
-PipelineManager::createTQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
+PipelineManager::createFullscreenQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+PipelineManager::createModelPipeline	inc/creator/pipeline_manager.h	/^inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+PipelineManager::createPipelines	inc/creator/pipeline_manager.h	/^inline void createPipelines(VulkanState& state, GBuffer& gBuffer)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, GBuffer& gBuffer)
+PipelineManager::createPointLightPipeline	inc/creator/pipeline_manager.h	/^inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+PipelineManager::createSkinnedPipeline	inc/creator/pipeline_manager.h	/^inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+PipelineManager::createTQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 Pipelines	inc/vulkan_state.h	/^struct Pipelines {$/;"	s
 Pipelines::fullscreenQuad	inc/vulkan_state.h	/^	PipelineInfo fullscreenQuad;$/;"	m	struct:Pipelines	access:public
 Pipelines::model	inc/vulkan_state.h	/^	PipelineInfo model;$/;"	m	struct:Pipelines	access:public
@@ -4792,9 +4836,11 @@ SwapchainManager::createSurface	src/swapchain_manager.cpp	/^void SwapchainManage
 SwapchainManager::createSwapChain	src/swapchain_manager.cpp	/^void SwapchainManager::createSwapChain()$/;"	f	class:SwapchainManager	signature:()
 SwapchainManager::framebuffers	inc/swapchain_manager.h	/^	std::vector<VkFramebuffer> framebuffers;$/;"	m	class:SwapchainManager	access:public
 SwapchainManager::getExtent	src/swapchain_manager.cpp	/^VkExtent2D SwapchainManager::getExtent(VkSurfaceCapabilitiesKHR& surfaceCapabilities) const$/;"	f	class:SwapchainManager	signature:(VkSurfaceCapabilitiesKHR& surfaceCapabilities) const
+SwapchainManager::getHeight	src/swapchain_manager.cpp	/^uint32_t SwapchainManager::getHeight() const$/;"	f	class:SwapchainManager	signature:() const
 SwapchainManager::getPresentMode	src/swapchain_manager.cpp	/^VkPresentModeKHR SwapchainManager::getPresentMode(const std::vector<VkPresentModeKHR>& presentModes) const$/;"	f	class:SwapchainManager	signature:(const std::vector<VkPresentModeKHR>& presentModes) const
 SwapchainManager::getSurfaceFormat	src/swapchain_manager.cpp	/^VkSurfaceFormatKHR SwapchainManager::getSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surfaceFormats) const $/;"	f	class:SwapchainManager	signature:(const std::vector<VkSurfaceFormatKHR>& surfaceFormats) const
 SwapchainManager::getSwapChainDesc	src/swapchain_manager.cpp	/^SwapChainDesc SwapchainManager::getSwapChainDesc(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface)$/;"	f	class:SwapchainManager	signature:(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface)
+SwapchainManager::getWidth	src/swapchain_manager.cpp	/^uint32_t SwapchainManager::getWidth() const$/;"	f	class:SwapchainManager	signature:() const
 SwapchainManager::mDepthImageDesc	inc/swapchain_manager.h	/^	ImageInfo mDepthImageDesc;$/;"	m	class:SwapchainManager	access:private
 SwapchainManager::mImageAvailableSemaphore	inc/swapchain_manager.h	/^	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;$/;"	m	class:SwapchainManager	access:public
 SwapchainManager::mRenderFinishedSemaphore	inc/swapchain_manager.h	/^	VkSemaphore mImageAvailableSemaphore, mRenderFinishedSemaphore;$/;"	m	class:SwapchainManager	access:public
@@ -7555,6 +7601,7 @@ VulkanManager::buildCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::
 VulkanManager::draw	src/vulkan_manager.cpp	/^void VulkanManager::draw() $/;"	f	class:VulkanManager	signature:()
 VulkanManager::dwarf	inc/vulkan_manager.h	/^	Skinned dwarf;$/;"	m	class:VulkanManager	access:private
 VulkanManager::fullscreenQuad	inc/vulkan_manager.h	/^	FullscreenQuad fullscreenQuad;$/;"	m	class:VulkanManager	access:private
+VulkanManager::gBuffer	inc/vulkan_manager.h	/^	GBuffer gBuffer;$/;"	m	class:VulkanManager	access:private
 VulkanManager::guard	inc/vulkan_manager.h	/^	Skinned guard;$/;"	m	class:VulkanManager	access:private
 VulkanManager::imageIndex	inc/vulkan_manager.h	/^	uint32_t imageIndex;$/;"	m	class:VulkanManager	access:private
 VulkanManager::init	src/vulkan_manager.cpp	/^void VulkanManager::init() $/;"	f	class:VulkanManager	signature:()
@@ -9286,6 +9333,7 @@ ai_real	lib/__assimp/defs.h	/^    typedef double ai_real;$/;"	t
 ai_real	lib/__assimp/defs.h	/^    typedef float ai_real;$/;"	t
 ai_uint	lib/__assimp/defs.h	/^    typedef unsigned int ai_uint;$/;"	t
 ai_uint	lib/__assimp/defs.h	/^    typedef unsigned long long int ai_uint;$/;"	t
+albedo	inc/g_buffer.h	/^	inline FramebufferAttachment& albedo() { return attachments[INDEX_ALBEDO]; }$/;"	f	class:GBuffer	access:public	signature:()
 aligned	lib/glm/detail/precision.hpp	/^			aligned = aligned_highp,$/;"	e	enum:glm::precision
 aligned_bvec1	lib/glm/gtc/type_aligned.hpp	/^	typedef aligned_highp_bvec1			aligned_bvec1;$/;"	t	namespace:glm
 aligned_bvec1	lib/glm/gtc/type_aligned.hpp	/^	typedef aligned_lowp_bvec1			aligned_bvec1;$/;"	t	namespace:glm
@@ -9452,6 +9500,7 @@ attachment	lib/vulkan/vulkan.h	/^    uint32_t         attachment;$/;"	m	struct:V
 attachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                                      attachmentCount;$/;"	m	struct:VkPipelineColorBlendStateCreateInfo	access:public
 attachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                          attachmentCount;$/;"	m	struct:VkRenderPassCreateInfo	access:public
 attachmentCount	lib/vulkan/vulkan.h	/^    uint32_t                    attachmentCount;$/;"	m	struct:VkFramebufferCreateInfo	access:public
+attachments	inc/g_buffer.h	/^	std::array<FramebufferAttachment, ATTACHMENT_COUNT> attachments;$/;"	m	class:GBuffer	access:public
 b	lib/__assimp/color4.h	/^    TReal r, g, b, a;$/;"	m	class:aiColor4t	access:public
 b	lib/__assimp/color4.h	/^    ai_real r, g, b, a;$/;"	m	struct:aiColor4D	access:public
 b	lib/__assimp/texture.h	/^    unsigned char b,g,r,a;$/;"	m	struct:aiTexel	access:public
@@ -9647,7 +9696,9 @@ char_type	lib/glm/gtx/io.hpp	/^			typedef CTy char_type;$/;"	t	class:glm::io::fo
 char_type	lib/glm/gtx/io.hpp	/^			typedef typename state_type::char_type char_type;$/;"	t	class:glm::io::basic_state_saver	access:private
 clearValue	lib/vulkan/vulkan.h	/^    VkClearValue          clearValue;$/;"	m	struct:VkClearAttachment	access:public
 clearValueCount	lib/vulkan/vulkan.h	/^    uint32_t               clearValueCount;$/;"	m	struct:VkRenderPassBeginInfo	access:public
+clearValues	inc/g_buffer.h	/^	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;$/;"	m	class:GBuffer	access:public
 clipped	lib/vulkan/vulkan.h	/^    VkBool32                         clipped;$/;"	m	struct:VkSwapchainCreateInfoKHR	access:public
+cmdBuffer	inc/g_buffer.h	/^	VkCommandBuffer cmdBuffer;$/;"	m	class:GBuffer	access:public
 cmdBuffers	inc/swapchain_manager.h	/^	std::vector<VkCommandBuffer> cmdBuffers;$/;"	m	class:SwapchainManager	access:public
 code	lib/stb/stb_image.h	/^   stbi__uint16 code[256];$/;"	m	struct:__anon62	access:public
 code	lib/vulkan/libspirv.h	/^  const uint32_t* code;$/;"	m	struct:spv_const_binary_t	access:public
@@ -9742,16 +9793,21 @@ copyImage	inc/creator/image_helper.h	/^inline void copyImage(VkCommandBuffer& cm
 copyImage	inc/creator/image_helper.h	/^inline void copyImage(const VulkanState& state, VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height)$/;"	f	namespace:ImageHelper	signature:(const VulkanState& state, VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height)
 countof	lib/glm/detail/setup.hpp	/^		constexpr std::size_t countof(T const (&)[N])$/;"	f	namespace:glm	signature:(T const (&)[N])
 createAnimNode	src/shape/skinned.cpp	/^void Skinned::createAnimNode(aiNode* node, AnimNode* parent)$/;"	f	class:Skinned	signature:(aiNode* node, AnimNode* parent)
+createAttachment	src/g_buffer.cpp	/^void GBuffer::createAttachment($/;"	f	class:GBuffer	signature:( const VkPhysicalDevice& physicalDevice, const VkDevice& device, FramebufferAttachment& attachment, VkFormat format, VkImageUsageFlagBits usage)
 createBuffer	inc/creator/buffer_helper.h	/^inline void createBuffer($/;"	f	namespace:BufferHelper	signature:( const VkPhysicalDevice& physicalDevice, const VkDevice& device, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory, VkBufferUsageFlags usage, VkMemoryPropertyFlags prop)
 createBuffer	inc/creator/buffer_helper.h	/^inline void createBuffer($/;"	f	namespace:BufferHelper	signature:( const VulkanState& state, BufferInfo& bufferInfo, VkBufferUsageFlags usage, VkMemoryPropertyFlags prop)
 createBuffer	inc/creator/buffer_helper.h	/^inline void createBuffer($/;"	f	namespace:BufferHelper	signature:( const VulkanState& state, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory, VkBufferUsageFlags usage, VkMemoryPropertyFlags prop)
 createBuffers	src/shape/sphere.cpp	/^void Sphere::createBuffers(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Sphere	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 createBuffers	src/shape/tquad.cpp	/^void TQuad::createBuffers()$/;"	f	class:TQuad	signature:()
+createClearValues	src/g_buffer.cpp	/^void GBuffer::createClearValues() $/;"	f	class:GBuffer	signature:()
+createCmdBuffer	src/g_buffer.cpp	/^void GBuffer::createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool)$/;"	f	class:GBuffer	signature:(const VkDevice& device, const VkCommandPool& cmdPool)
+createColorAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format) $/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
 createCommandBuffers	src/swapchain_manager.cpp	/^void SwapchainManager::createCommandBuffers()$/;"	f	class:SwapchainManager	signature:()
 createCommandPool	src/swapchain_manager.cpp	/^void SwapchainManager::createCommandPool()$/;"	f	class:SwapchainManager	signature:()
 createCommonBuffer	inc/creator/buffer_helper.h	/^inline void createCommonBuffer(const VulkanState& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
 createCommonBuffer	src/shape/model.cpp	/^void Model::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Model	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 createCommonBuffer	src/shape/skinned.cpp	/^void Skinned::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Skinned	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
+createDepthAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat format)$/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
 createDepthResources	src/swapchain_manager.cpp	/^void SwapchainManager::createDepthResources() $/;"	f	class:SwapchainManager	signature:()
 createDescriptorPool	inc/creator/descriptor_manager.h	/^inline void createDescriptorPool(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createDescriptorPool	src/scene_lights.cpp	/^void SceneLights::createDescriptorPool() $/;"	f	class:SceneLights	signature:()
@@ -9766,8 +9822,9 @@ createDescriptorSets	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::create
 createDynamicUniformBuffer	inc/creator/buffer_helper.h	/^inline void createDynamicUniformBuffer(const VulkanState& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
 createDynamicUniformFragmentDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createDynamicUniformFragmentDescriptorSetLayout(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createDynamicUniformVertexDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createDynamicUniformVertexDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
+createFramebuffers	src/g_buffer.cpp	/^void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const VkDevice& device) $/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device)
 createFramebuffers	src/swapchain_manager.cpp	/^void SwapchainManager::createFramebuffers(VkRenderPass renderPass)$/;"	f	class:SwapchainManager	signature:(VkRenderPass renderPass)
-createFullscreenQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
+createFullscreenQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 createImage	inc/creator/image_helper.h	/^inline void createImage($/;"	f	namespace:ImageHelper	signature:( VulkanState& state, ImageInfo& imageDesc, VkFormat format, VkImageTiling tiling, VkImageLayout initialLayout, VkImageUsageFlags usage, VkMemoryPropertyFlags properties)
 createImageView	inc/creator/image_helper.h	/^inline void createImageView($/;"	f	namespace:ImageHelper	signature:( const VkDevice& device, ImageInfo& imageDesc, VkFormat format, VkImageAspectFlags aspectFlags)
 createImageView	inc/creator/image_helper.h	/^inline void createImageView($/;"	f	namespace:ImageHelper	signature:( const VkDevice& device, VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, VkImageView& imageView)
@@ -9777,19 +9834,20 @@ createIndexBuffer	src/shape/tquad.cpp	/^void TQuad::createIndexBuffer()$/;"	f	cl
 createInfo	inc/pipeline_cache.h	/^    VkPipelineCacheCreateInfo createInfo;$/;"	m	struct:PipelineCacheInfo	access:public
 createLogicalDevice	src/device_manager.cpp	/^void DeviceManager::createLogicalDevice() $/;"	f	class:DeviceManager	signature:()
 createModelDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createModelDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
-createModelPipeline	inc/creator/pipeline_manager.h	/^inline void createModelPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
+createModelPipeline	inc/creator/pipeline_manager.h	/^inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 createPhysicalDevice	src/device_manager.cpp	/^void DeviceManager::createPhysicalDevice(SwapchainManager& swapchainManager) $/;"	f	class:DeviceManager	signature:(SwapchainManager& swapchainManager)
-createPipelines	inc/creator/pipeline_manager.h	/^inline void createPipelines(VulkanState& state)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state)
+createPipelines	inc/creator/pipeline_manager.h	/^inline void createPipelines(VulkanState& state, GBuffer& gBuffer)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, GBuffer& gBuffer)
 createPointLight	src/scene_lights.cpp	/^PointLight& SceneLights::createPointLight() $/;"	f	class:SceneLights	signature:()
 createPointLight	src/scene_lights.cpp	/^PointLight& SceneLights::createPointLight(PointLight::UBO& ubo, PointLight::LightUBO& lightUbo) $/;"	f	class:SceneLights	signature:(PointLight::UBO& ubo, PointLight::LightUBO& lightUbo)
 createPointLightDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createPointLightDescriptorSetLayout(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
-createPointLightPipeline	inc/creator/pipeline_manager.h	/^inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info) $/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
+createPointLightPipeline	inc/creator/pipeline_manager.h	/^inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 createRenderPass	src/swapchain_manager.cpp	/^void SwapchainManager::createRenderPass()$/;"	f	class:SwapchainManager	signature:()
+createSampler	src/g_buffer.cpp	/^void GBuffer::createSampler(const VkDevice& device)$/;"	f	class:GBuffer	signature:(const VkDevice& device)
 createSamplerDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createSamplerDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createSamplerListDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createSamplerListDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createSemaphores	src/swapchain_manager.cpp	/^void SwapchainManager::createSemaphores()$/;"	f	class:SwapchainManager	signature:()
 createShaders	inc/creator/shader_manager.h	/^inline void createShaders(VulkanState& state)$/;"	f	namespace:ShaderManager	signature:(VulkanState& state)
-createSkinnedPipeline	inc/creator/pipeline_manager.h	/^inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
+createSkinnedPipeline	inc/creator/pipeline_manager.h	/^inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 createStagedImage	inc/creator/image_helper.h	/^inline void createStagedImage($/;"	f	namespace:ImageHelper	signature:( ImageInfo& imageInfo, const TextureData& textureData, VulkanState& state, const VkCommandPool& cmdPool, const VkQueue& cmdQueue)
 createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffer($/;"	f	namespace:BufferHelper	signature:( const VkPhysicalDevice& physicalDevice, const VkDevice& device, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory)
 createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffer($/;"	f	namespace:BufferHelper	signature:( const VulkanState& state, BufferInfo& bufferInfo)
@@ -9797,7 +9855,7 @@ createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffe
 createSurface	src/swapchain_manager.cpp	/^void SwapchainManager::createSurface()$/;"	f	class:SwapchainManager	signature:()
 createSwapChain	src/swapchain_manager.cpp	/^void SwapchainManager::createSwapChain()$/;"	f	class:SwapchainManager	signature:()
 createTQuadDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createTQuadDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
-createTQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info)
+createTQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 createUniformBuffer	inc/creator/buffer_helper.h	/^inline void createUniformBuffer(const VulkanState& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
 createUniformBuffer	src/scene_lights.cpp	/^void SceneLights::createUniformBuffer() $/;"	f	class:SceneLights	signature:()
 createUniformBuffer	src/shape/tquad.cpp	/^void TQuad::createUniformBuffer()$/;"	f	class:TQuad	signature:()
@@ -9906,6 +9964,7 @@ delimeter	lib/glm/gtx/io.hpp	/^		struct delimeter$/;"	s	namespace:glm::io
 delta	lib/stb/stb_image.h	/^   int    delta[17];   \/\/ old 'firstsymbol' - old 'firstcode'$/;"	m	struct:__anon62	access:public
 dependencyCount	lib/vulkan/vulkan.h	/^    uint32_t                          dependencyCount;$/;"	m	struct:VkRenderPassCreateInfo	access:public
 dependencyFlags	lib/vulkan/vulkan.h	/^    VkDependencyFlags       dependencyFlags;$/;"	m	struct:VkSubpassDependency	access:public
+depth	inc/g_buffer.h	/^	inline FramebufferAttachment& depth() { return attachments[INDEX_DEPTH]; }$/;"	f	class:GBuffer	access:public	signature:()
 depth	lib/stb/stb_image.h	/^   int depth;$/;"	m	struct:__anon69	access:public
 depth	lib/vulkan/vulkan.h	/^    float       depth;$/;"	m	struct:VkClearDepthStencilValue	access:public
 depth	lib/vulkan/vulkan.h	/^    uint32_t    depth;$/;"	m	struct:VkExtent3D	access:public
@@ -10287,7 +10346,7 @@ fillModeNonSolid	lib/vulkan/vulkan.h	/^    VkBool32    fillModeNonSolid;$/;"	m	s
 fill_	lib/glm/gtx/io.hpp	/^			char_type       fill_;$/;"	m	class:glm::io::basic_state_saver	access:private
 finalLayout	lib/vulkan/vulkan.h	/^    VkImageLayout                   finalLayout;$/;"	m	struct:VkAttachmentDescription	access:public
 findDepthFormat	inc/creator/image_helper.h	/^inline VkFormat findDepthFormat(VkPhysicalDevice& physicalDevice)$/;"	f	namespace:ImageHelper	signature:(VkPhysicalDevice& physicalDevice)
-findDepthFormat	inc/creator/image_helper.h	/^inline VkFormat findDepthFormat(const VulkanState& state)$/;"	f	namespace:ImageHelper	signature:(const VulkanState& state)
+findDepthStencilFormat	inc/creator/image_helper.h	/^inline VkFormat findDepthStencilFormat(const VkPhysicalDevice& physicalDevice) $/;"	f	namespace:ImageHelper	signature:(const VkPhysicalDevice& physicalDevice)
 findSupportedFormat	inc/creator/image_helper.h	/^inline VkFormat findSupportedFormat($/;"	f	namespace:ImageHelper	signature:( const VkPhysicalDevice& physicalDevice, const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
 findSupportedFormat	inc/creator/image_helper.h	/^inline VkFormat findSupportedFormat($/;"	f	namespace:ImageHelper	signature:( const VulkanState& state, const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
 first	lib/stb/stb_image.h	/^   stbi_uc first;$/;"	m	struct:__anon73	access:public
@@ -10438,6 +10497,7 @@ fmat4x4	lib/glm/fwd.hpp	/^	typedef highp_f32mat4x4			fmat4x4;$/;"	t	namespace:gl
 fmat4x4	lib/glm/fwd.hpp	/^	typedef lowp_f32mat4x4			fmat4x4;$/;"	t	namespace:glm
 fmat4x4	lib/glm/fwd.hpp	/^	typedef mediump_f32mat4x4		fmat4x4;$/;"	t	namespace:glm
 fmat4x4	lib/glm/gtc/type_precision.hpp	/^	typedef mat<4, 4, f32, defaultp> fmat4x4;$/;"	t	namespace:glm
+format	inc/g_buffer.h	/^	VkFormat format;$/;"	m	struct:FramebufferAttachment	access:public
 format	lib/vulkan/vulkan.h	/^    VkFormat                        format;$/;"	m	struct:VkAttachmentDescription	access:public
 format	lib/vulkan/vulkan.h	/^    VkFormat                   format;$/;"	m	struct:VkBufferViewCreateInfo	access:public
 format	lib/vulkan/vulkan.h	/^    VkFormat                   format;$/;"	m	struct:VkImageViewCreateInfo	access:public
@@ -10456,6 +10516,7 @@ fquat	lib/glm/fwd.hpp	/^	typedef mediump_f32quat			fquat;$/;"	t	namespace:glm
 fquat	lib/glm/fwd.hpp	/^	typedef quat				fquat;$/;"	t	namespace:glm
 fragment	inc/vulkan_state.h	/^	VkPipelineShaderStageCreateInfo fragment;$/;"	m	struct:ShaderInfo	access:public
 fragmentStoresAndAtomics	lib/vulkan/vulkan.h	/^    VkBool32    fragmentStoresAndAtomics;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
+frameBuffer	inc/g_buffer.h	/^	VkFramebuffer frameBuffer;$/;"	m	class:GBuffer	access:public
 framebuffer	lib/vulkan/vulkan.h	/^    VkFramebuffer                    framebuffer;$/;"	m	struct:VkCommandBufferInheritanceInfo	access:public
 framebuffer	lib/vulkan/vulkan.h	/^    VkFramebuffer          framebuffer;$/;"	m	struct:VkRenderPassBeginInfo	access:public
 framebufferColorSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    framebufferColorSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
@@ -10518,6 +10579,7 @@ g	lib/glm/detail/type_vec3.hpp	/^			union { T y, g, t; };$/;"	m	union:glm::vec::
 g	lib/glm/detail/type_vec4.hpp	/^				struct { T r, g, b, a; };$/;"	m	struct:glm::vec::__anon35::__anon37	access:public
 g	lib/glm/detail/type_vec4.hpp	/^			union { T y, g, t; };$/;"	m	union:glm::vec::__anon40	access:public
 g	lib/vulkan/vulkan.h	/^    VkComponentSwizzle    g;$/;"	m	struct:VkComponentMapping	access:public
+gBuffer	inc/vulkan_manager.h	/^	GBuffer gBuffer;$/;"	m	class:VulkanManager	access:private
 genType	lib/glm/detail/type_gentype.hpp	/^	struct genType$/;"	s	namespace:glm::detail
 geometry	inc/vulkan_state.h	/^	VkPipelineShaderStageCreateInfo geometry;$/;"	m	struct:ShaderInfo	access:public
 geometryShader	lib/vulkan/vulkan.h	/^    VkBool32    geometryShader;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
@@ -10538,6 +10600,7 @@ getExtent	src/swapchain_manager.cpp	/^VkExtent2D SwapchainManager::getExtent(VkS
 getFilePath	src/file_manager.cpp	/^std::string FileManager::getFilePath(const char* filename) $/;"	f	class:FileManager	signature:(const char* filename)
 getFilePath	src/file_manager.cpp	/^std::string FileManager::getFilePath(const std::string& filename)$/;"	f	class:FileManager	signature:(const std::string& filename)
 getGraphicsQueueIndex	src/device_queue_indices.cpp	/^int DeviceQueueIndicies::getGraphicsQueueIndex()$/;"	f	class:DeviceQueueIndicies	signature:()
+getHeight	src/swapchain_manager.cpp	/^uint32_t SwapchainManager::getHeight() const$/;"	f	class:SwapchainManager	signature:() const
 getHeight	src/texture_data.cpp	/^int TextureData::getHeight() const $/;"	f	class:TextureData	signature:() const
 getHeight	src/window.cpp	/^unsigned Window::getHeight() const $/;"	f	class:Window	signature:() const
 getInputManager	src/window.cpp	/^InputManager& Window::getInputManager()$/;"	f	class:Window	signature:()
@@ -10545,7 +10608,7 @@ getInstance	src/file_manager.cpp	/^FileManager& FileManager::getInstance()$/;"	f
 getInstance	src/texture_manager.cpp	/^TextureManager& TextureManager::getInstance() $/;"	f	class:TextureManager	signature:()
 getLogSeverity	lib/__assimp/Logger.hpp	/^inline Logger::LogSeverity Logger::getLogSeverity() const {$/;"	f	class:Assimp::Logger	signature:() const
 getLogSeverity	lib/assimp/Logger.hpp	/^inline Logger::LogSeverity Logger::getLogSeverity() const {$/;"	f	class:Assimp::Logger	signature:() const
-getMemoryType	inc/creator/buffer_helper.h	/^inline uint32_t getMemoryType($/;"	f	namespace:BufferHelper	signature:( const VkPhysicalDevice& physicalDevice, uint32_t typeFilter, VkMemoryPropertyFlags& flags)
+getMemoryType	inc/creator/buffer_helper.h	/^inline uint32_t getMemoryType($/;"	f	namespace:BufferHelper	signature:( const VkPhysicalDevice& physicalDevice, uint32_t typeFilter, VkMemoryPropertyFlags flags)
 getModelsPath	src/file_manager.cpp	/^std::string FileManager::getModelsPath(std::string&& path) $/;"	f	class:FileManager	signature:(std::string&& path)
 getPixels	src/texture_data.cpp	/^stbi_uc* TextureData::getPixels()$/;"	f	class:TextureData	signature:()
 getPosition	src/shape/point_light.cpp	/^glm::vec3 PointLight::getPosition() const$/;"	f	class:PointLight	signature:() const
@@ -10566,6 +10629,7 @@ getTranslation	src/shape/anim_node.cpp	/^aiMatrix4x4 AnimNode::getTranslation(fl
 getVkResultString	src/vulkan_utils.cpp	/^const char* VulkanUtils::getVkResultString(VkResult result)$/;"	f	class:VulkanUtils	signature:(VkResult result)
 getVkResultString	src/vulkan_utils.cpp	/^const char* VulkanUtils::getVkResultString(int result)$/;"	f	class:VulkanUtils	signature:(int result)
 getVulkanManager	src/engine.cpp	/^VulkanManager& Engine::getVulkanManager()$/;"	f	class:Engine	signature:()
+getWidth	src/swapchain_manager.cpp	/^uint32_t SwapchainManager::getWidth() const$/;"	f	class:SwapchainManager	signature:() const
 getWidth	src/texture_data.cpp	/^int TextureData::getWidth() const $/;"	f	class:TextureData	signature:() const
 getWidth	src/window.cpp	/^unsigned Window::getWidth() const  $/;"	f	class:Window	signature:() const
 getWindow	src/engine.cpp	/^Window& Engine::getWindow()$/;"	f	class:Engine	signature:()
@@ -13365,6 +13429,7 @@ hash	lib/glm/gtx/hash.hpp	/^	struct hash<glm::vec<4, T,P> >$/;"	s	namespace:std
 hd	lib/stb/stb_image.h	/^      int hd,ha;$/;"	m	struct:__anon63::__anon64	access:public
 hdata	lib/glm/detail/type_half.hpp	/^	typedef short hdata;$/;"	t	namespace:glm::detail
 heapIndex	lib/vulkan/vulkan.h	/^    uint32_t                 heapIndex;$/;"	m	struct:VkMemoryType	access:public
+height	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	access:public
 height	inc/texture_data.h	/^	int width, height, channels, size;$/;"	m	class:TextureData	access:public
 height	inc/vulkan_image_info.h	/^	uint32_t width, height;$/;"	m	class:ImageInfo	access:public
 height	lib/vulkan/vulkan.h	/^    float    height;$/;"	m	struct:VkViewport	access:public
@@ -13697,6 +13762,7 @@ id	lib/glm/gtx/io.hpp	/^			static std::locale::id id;$/;"	m	class:glm::io::forma
 id	lib/stb/stb_image.h	/^      int id;$/;"	m	struct:__anon63::__anon64	access:public
 idata	lib/stb/stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon69	access:public
 idct_block_kernel	lib/stb/stb_image.h	/^   void (*idct_block_kernel)(stbi_uc *out, int out_stride, short data[64]);$/;"	m	struct:__anon63	access:public
+image	inc/g_buffer.h	/^	VkImage image;$/;"	m	struct:FramebufferAttachment	access:public
 image	inc/shape/skinned.h	/^		ImageInfo* image;$/;"	m	struct:Skinned::MaterialTexture	access:public
 image	inc/vulkan_image_info.h	/^	VkImage image;$/;"	m	class:ImageInfo	access:public
 image	lib/vulkan/vulkan.h	/^    VkImage                           image;$/;"	m	struct:VkSparseImageMemoryBindInfo	access:public
@@ -13793,6 +13859,7 @@ info	lib/assimp/Logger.hpp	/^inline void Logger::info(const std::string &message
 inheritedQueries	lib/vulkan/vulkan.h	/^    VkBool32    inheritedQueries;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 init	src/engine.cpp	/^void Engine::init()$/;"	f	class:Engine	signature:()
 init	src/engine.cpp	/^void Engine::init(android_app* state)$/;"	f	class:Engine	signature:(android_app* state)
+init	src/g_buffer.cpp	/^void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)$/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)
 init	src/scene_lights.cpp	/^void SceneLights::init() $/;"	f	class:SceneLights	signature:()
 init	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::init() $/;"	f	class:FullscreenQuad	signature:()
 init	src/shape/model.cpp	/^void Model::init(const char* modelPath, unsigned int pFlags)$/;"	f	class:Model	signature:(const char* modelPath, unsigned int pFlags)
@@ -15084,6 +15151,7 @@ mediump_vec3	lib/glm/fwd.hpp	/^	typedef vec<3, float, mediump> mediump_vec3;$/;"
 mediump_vec4	lib/glm/detail/type_vec.hpp	/^	typedef vec<4, float, mediump>	mediump_vec4;$/;"	t	namespace:glm
 mediump_vec4	lib/glm/fwd.hpp	/^	typedef vec<4, float, mediump> mediump_vec4;$/;"	t	namespace:glm
 memory	inc/buffer_info.h	/^	VkDeviceMemory memory;$/;"	m	class:BufferInfo	access:public
+memory	inc/g_buffer.h	/^	VkDeviceMemory memory;$/;"	m	struct:FramebufferAttachment	access:public
 memory	inc/vulkan_image_info.h	/^	VkDeviceMemory memory;$/;"	m	class:ImageInfo	access:public
 memory	lib/vulkan/vulkan.h	/^    VkDeviceMemory             memory;$/;"	m	struct:VkSparseImageMemoryBind	access:public
 memory	lib/vulkan/vulkan.h	/^    VkDeviceMemory             memory;$/;"	m	struct:VkSparseMemoryBind	access:public
@@ -15165,6 +15233,7 @@ nodes	lib/__assimp/types.h	/^    unsigned int nodes;$/;"	m	struct:aiMemoryInfo	a
 nodes	lib/assimp/types.h	/^    unsigned int nodes;$/;"	m	struct:aiMemoryInfo	access:public
 nomore	lib/stb/stb_image.h	/^   int            nomore;      \/\/ flag if we saw a marker so must stop$/;"	m	struct:__anon63	access:public
 nonCoherentAtomSize	lib/vulkan/vulkan.h	/^    VkDeviceSize          nonCoherentAtomSize;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
+normal	inc/g_buffer.h	/^	inline FramebufferAttachment& normal() { return attachments[INDEX_NORMAL]; }$/;"	f	class:GBuffer	access:public	signature:()
 normal	inc/shape/model.h	/^		glm::vec3 normal;$/;"	m	struct:Model::Vertex	access:public
 normal	inc/shape/skinned.h	/^		glm::vec3 normal;$/;"	m	struct:Skinned::Vertex	access:public
 null	lib/glm/detail/type_gentype.hpp	/^		enum ctor{null};$/;"	e	enum:glm::detail::genType::ctor
@@ -15193,6 +15262,7 @@ objectType	lib/vulkan/vulkan.h	/^    VkDebugReportObjectTypeEXT    objectType;$/
 objectType	lib/vulkan/vulkan.h	/^    VkDebugReportObjectTypeEXT    objectType;$/;"	m	struct:VkDebugMarkerObjectTagInfoEXT	access:public
 occlusionQueryEnable	lib/vulkan/vulkan.h	/^    VkBool32                         occlusionQueryEnable;$/;"	m	struct:VkCommandBufferInheritanceInfo	access:public
 occlusionQueryPrecise	lib/vulkan/vulkan.h	/^    VkBool32    occlusionQueryPrecise;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
+offscreenSemaphore	inc/g_buffer.h	/^	VkSemaphore offscreenSemaphore;$/;"	m	class:GBuffer	access:public
 offset	lib/stb/stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon71	access:public
 offset	lib/vulkan/libspirv.h	/^  uint16_t offset;$/;"	m	struct:spv_parsed_operand_t	access:public
 offset	lib/vulkan/vulkan.h	/^    VkDeviceSize               offset;$/;"	m	struct:VkBufferViewCreateInfo	access:public
@@ -15573,6 +15643,7 @@ pos	inc/shape/skinned.h	/^		glm::vec3 pos;$/;"	m	struct:Skinned::Vertex	access:p
 pos	inc/shape/tquad.h	/^		glm::vec3 pos;$/;"	m	struct:TQuad::Vertex	access:public
 pos	lib/__assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	access:public
 pos	lib/assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	access:public
+position	inc/g_buffer.h	/^	inline FramebufferAttachment& position() { return attachments[INDEX_POSITION]; }$/;"	f	class:GBuffer	access:public	signature:()
 position	inc/shape/point_light.h	/^		glm::vec3 position;$/;"	m	struct:PointLight::LightUBO	access:public
 position	inc/shape/sphere.h	/^		glm::vec3 position;$/;"	m	struct:Sphere::Vertex	access:public
 position	lib/vulkan/libspirv.h	/^  spv_position_t position;$/;"	m	struct:spv_diagnostic_t	access:public
@@ -15652,7 +15723,7 @@ range	lib/vulkan/vulkan.h	/^    VkDeviceSize               range;$/;"	m	struct:V
 range	lib/vulkan/vulkan.h	/^    VkDeviceSize    range;$/;"	m	struct:VkDescriptorBufferInfo	access:public
 rasterizationOrder	lib/vulkan/vulkan.h	/^    VkRasterizationOrderAMD    rasterizationOrder;$/;"	m	struct:VkPipelineRasterizationStateRasterizationOrderAMD	access:public
 rasterizationSamples	lib/vulkan/vulkan.h	/^    VkSampleCountFlagBits                    rasterizationSamples;$/;"	m	struct:VkPipelineMultisampleStateCreateInfo	access:public
-rasterizationState	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationState($/;"	f	namespace:PipelineCreator	signature:( VkCullModeFlags cullMode, VkFrontFace frontFace, VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL)
+rasterizationState	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationState($/;"	f	namespace:PipelineCreator	signature:( VkCullModeFlags cullMode, VkFrontFace frontFace, VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL, VkBool32 rasterizationDiscardEnable = VK_FALSE)
 rasterizationStateCullBackCCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCCW() $/;"	f	namespace:PipelineCreator	signature:()
 rasterizationStateCullBackCW	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW() $/;"	f	namespace:PipelineCreator	signature:()
 rasterizationStateCullNone	inc/creator/pipeline_creator.h	/^inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone() $/;"	f	namespace:PipelineCreator	signature:()
@@ -15676,6 +15747,7 @@ reference	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> & reference;
 reference	lib/vulkan/vulkan.h	/^    uint32_t       reference;$/;"	m	struct:VkStencilOpState	access:public
 refreshRate	lib/vulkan/vulkan.h	/^    uint32_t      refreshRate;$/;"	m	struct:VkDisplayModeParametersKHR	access:public
 renderArea	lib/vulkan/vulkan.h	/^    VkRect2D               renderArea;$/;"	m	struct:VkRenderPassBeginInfo	access:public
+renderPass	inc/g_buffer.h	/^	VkRenderPass renderPass;$/;"	m	class:GBuffer	access:public
 renderPass	inc/vulkan_state.h	/^	VkRenderPass renderPass;$/;"	m	struct:VulkanState	access:public
 renderPass	lib/vulkan/vulkan.h	/^    VkRenderPass                                     renderPass;$/;"	m	struct:VkGraphicsPipelineCreateInfo	access:public
 renderPass	lib/vulkan/vulkan.h	/^    VkRenderPass                     renderPass;$/;"	m	struct:VkCommandBufferInheritanceInfo	access:public
@@ -15808,6 +15880,7 @@ sampledImageColorSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sa
 sampledImageDepthSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sampledImageDepthSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 sampledImageIntegerSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sampledImageIntegerSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 sampledImageStencilSampleCounts	lib/vulkan/vulkan.h	/^    VkSampleCountFlags    sampledImageStencilSampleCounts;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
+sampler	inc/g_buffer.h	/^	VkSampler sampler;$/;"	m	class:GBuffer	access:public
 sampler	inc/vulkan_image_info.h	/^	VkSampler sampler;$/;"	m	class:ImageInfo	access:public
 sampler	inc/vulkan_state.h	/^	VkDescriptorSetLayout sampler;$/;"	m	struct:DescriptorSetLayouts	access:public
 sampler	lib/vulkan/vulkan.h	/^    VkSampler        sampler;$/;"	m	struct:VkDescriptorImageInfo	access:public
@@ -17197,6 +17270,7 @@ textureManager	inc/texture_manager.h	/^	void operator=(const TextureManager& tex
 textures	inc/shape/skinned.h	/^		std::vector<MaterialTexture> textures;$/;"	m	struct:Skinned::Material	access:public
 textures	lib/__assimp/types.h	/^    unsigned int textures;$/;"	m	struct:aiMemoryInfo	access:public
 textures	lib/assimp/types.h	/^    unsigned int textures;$/;"	m	struct:aiMemoryInfo	access:public
+texturesDescriptor	inc/g_buffer.h	/^	VkDescriptorSet texturesDescriptor;$/;"	m	class:GBuffer	access:public
 throwError	src/shape/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
 throwError	src/shape/model.cpp	/^void Model::throwError(std::string& error) $/;"	f	class:Model	signature:(std::string& error)
 throwError	src/shape/skinned.cpp	/^void Skinned::throwError(const char* error) $/;"	f	class:Skinned	signature:(const char* error)
@@ -17589,6 +17663,7 @@ vertexCount	lib/vulkan/vulkan.h	/^    uint32_t    vertexCount;$/;"	m	struct:VkDr
 vertexInputState	inc/creator/pipeline_creator.h	/^inline VkPipelineVertexInputStateCreateInfo vertexInputState($/;"	f	namespace:PipelineCreator	signature:( VkVertexInputBindingDescription* bindings, uint32_t bindingsCount, VkVertexInputAttributeDescription* attributes, uint32_t attributesCount)
 vertexOffset	lib/vulkan/vulkan.h	/^    int32_t     vertexOffset;$/;"	m	struct:VkDrawIndexedIndirectCommand	access:public
 vertexPipelineStoresAndAtomics	lib/vulkan/vulkan.h	/^    VkBool32    vertexPipelineStoresAndAtomics;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
+view	inc/g_buffer.h	/^	VkImageView view;$/;"	m	struct:FramebufferAttachment	access:public
 view	inc/shape/model.h	/^		glm::mat4 view;$/;"	m	struct:Model::UBO	access:public
 view	inc/shape/skinned.h	/^		glm::mat4 view;$/;"	m	struct:Skinned::UBO	access:public
 view	inc/shape/tquad.h	/^		glm::mat4 view;$/;"	m	struct:TQuad::UBO	access:public
@@ -17625,6 +17700,7 @@ warn	lib/assimp/Logger.hpp	/^inline void Logger::warn(const std::string &message
 weights	inc/shape/skinned.h	/^		glm::vec4 weights;$/;"	m	struct:Skinned::Vertex	access:public
 wformat_saver	lib/glm/gtx/io.hpp	/^		typedef basic_format_saver<wchar_t> wformat_saver;$/;"	t	namespace:glm::io
 wideLines	lib/vulkan/vulkan.h	/^    VkBool32    wideLines;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
+width	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	access:public
 width	inc/texture_data.h	/^	int width, height, channels, size;$/;"	m	class:TextureData	access:public
 width	inc/vulkan_image_info.h	/^	uint32_t width, height;$/;"	m	class:ImageInfo	access:public
 width	lib/glm/gtx/io.hpp	/^			unsigned   width;$/;"	m	class:glm::io::format_punct	access:public
@@ -18222,6 +18298,7 @@ zzzz	lib/glm/gtx/vec_swizzle.hpp	/^	GLM_INLINE glm::vec<4, T, P> zzzz(const glm:
 ~CmdPass	src/cmd_pass.cpp	/^CmdPass::~CmdPass()$/;"	f	class:CmdPass	signature:()
 ~DeviceQueueIndicies	src/device_queue_indices.cpp	/^DeviceQueueIndicies::~DeviceQueueIndicies()$/;"	f	class:DeviceQueueIndicies	signature:()
 ~Engine	src/engine.cpp	/^Engine::~Engine() $/;"	f	class:Engine	signature:()
+~GBuffer	src/g_buffer.cpp	/^GBuffer::~GBuffer() $/;"	f	class:GBuffer	signature:()
 ~IOStream	lib/__assimp/IOStream.hpp	/^inline IOStream::~IOStream()$/;"	f	class:Assimp::IOStream	signature:()
 ~IOStream	lib/assimp/IOStream.hpp	/^inline IOStream::~IOStream()$/;"	f	class:Assimp::IOStream	signature:()
 ~IOSystem	lib/__assimp/IOSystem.hpp	/^AI_FORCE_INLINE IOSystem::~IOSystem()$/;"	f	class:Assimp::IOSystem	signature:()

@@ -33,6 +33,8 @@ public:
 	void createCommandBuffers();
 	void createSemaphores();
 	void createRenderPass();
+	uint32_t getWidth() const;
+	uint32_t getHeight() const;
 
 	VkSurfaceFormatKHR getSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& surfaceFormats) const; 
 	VkPresentModeKHR getPresentMode(const std::vector<VkPresentModeKHR>& presentModes) const;

@@ -253,10 +253,10 @@ inline VkPipelineDepthStencilStateCreateInfo depthStencilStateGBufferStencilPass
 
 	VkStencilOpState front = {};
 	front.compareOp = VK_COMPARE_OP_ALWAYS;
-	front.passOp = VK_STENCIL_OP_KEEP;
+	front.passOp = VK_STENCIL_OP_INCREMENT_AND_WRAP;
 	front.failOp = VK_STENCIL_OP_KEEP;
 	front.depthFailOp = VK_STENCIL_OP_KEEP;
-	front.writeMask = 0xffffffff;
+	front.writeMask = 0xff;
 	front.reference = 0;
 	
 	VkStencilOpState back = {};
@@ -264,7 +264,7 @@ inline VkPipelineDepthStencilStateCreateInfo depthStencilStateGBufferStencilPass
 	back.passOp = VK_STENCIL_OP_KEEP;
 	back.failOp = VK_STENCIL_OP_KEEP;
 	back.depthFailOp = VK_STENCIL_OP_KEEP;
-	back.writeMask = 0xffffffff;
+	back.writeMask = 0xff;
 	back.reference = 0;
 
 
@@ -274,7 +274,7 @@ inline VkPipelineDepthStencilStateCreateInfo depthStencilStateGBufferStencilPass
 	depthStencil.depthWriteEnable = VK_TRUE;
 	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
 	depthStencil.depthBoundsTestEnable = VK_FALSE;
-	depthStencil.stencilTestEnable = VK_FALSE;
+	depthStencil.stencilTestEnable = VK_TRUE;
 	depthStencil.front = front;
 	depthStencil.back = back;
 
@@ -306,21 +306,27 @@ inline VkPipelineDepthStencilStateCreateInfo depthStencilStateGBufferLightPass()
 	front.compareOp = VK_COMPARE_OP_NOT_EQUAL;
 	front.passOp = VK_STENCIL_OP_KEEP;
 	front.failOp = VK_STENCIL_OP_KEEP;
-	front.depthFailOp = VK_STENCIL_OP_ZERO;
+	front.depthFailOp = VK_STENCIL_OP_KEEP;
 	front.writeMask = 0x00;
-	front.reference = 0;
+	front.reference = 1;
 
-	
+	VkStencilOpState back = {};
+	back.compareOp = VK_COMPARE_OP_NOT_EQUAL;
+	back.passOp = VK_STENCIL_OP_KEEP;
+	back.failOp = VK_STENCIL_OP_KEEP;
+	back.depthFailOp = VK_STENCIL_OP_KEEP;
+	back.writeMask = 0x00;
+	back.reference = 1;
 
 	VkPipelineDepthStencilStateCreateInfo depthStencil = {};
 	depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-	depthStencil.depthTestEnable = VK_TRUE;
+	depthStencil.depthTestEnable = VK_FALSE;
 	depthStencil.depthWriteEnable = VK_TRUE;
 	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
 	depthStencil.depthBoundsTestEnable = VK_FALSE;
-	depthStencil.stencilTestEnable = VK_TRUE;
+	depthStencil.stencilTestEnable = VK_FALSE;
 	depthStencil.front = front;
-	depthStencil.back = front;
+	depthStencil.back = back;
 
 	return depthStencil;
 }
@@ -360,12 +366,13 @@ inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullBackCW()
 inline VkPipelineRasterizationStateCreateInfo rasterizationState(
 		VkCullModeFlags cullMode, 
 		VkFrontFace frontFace,
-		VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL) 
+		VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL,
+		VkBool32 rasterizationDiscardEnable = VK_FALSE) 
 {
 	VkPipelineRasterizationStateCreateInfo rasterizationState = {};
 	rasterizationState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
 	rasterizationState.depthClampEnable = VK_FALSE;
-	rasterizationState.rasterizerDiscardEnable = VK_FALSE;
+	rasterizationState.rasterizerDiscardEnable = rasterizationDiscardEnable;
 	rasterizationState.polygonMode = polygonMode;
 	rasterizationState.lineWidth = 1.0f;
 	rasterizationState.cullMode = cullMode;
@@ -374,8 +381,6 @@ inline VkPipelineRasterizationStateCreateInfo rasterizationState(
 
 	return rasterizationState;
 }
-
-
 
 inline VkPipelineRasterizationStateCreateInfo rasterizationStateCullNone() 
 {

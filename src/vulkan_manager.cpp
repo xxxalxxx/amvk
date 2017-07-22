@@ -39,8 +39,9 @@ void VulkanManager::init()
 	ShaderManager::createShaders(mState);
 	DescriptorManager::createDescriptorSetLayouts(mState);
 	DescriptorManager::createDescriptorPool(mState);
-    PipelineManager::createPipelines(mState);
-
+    PipelineManager::createPipelines(mState, gBuffer);
+	gBuffer.init(mState.physicalDevice, mState.device, mSwapChainManager.getWidth(), mSwapChainManager.getHeight());
+	gBuffer.createCmdBuffer(mState.device, mState.commandPool);
 
 	tquad.init();
 	fullscreenQuad.init();
@@ -93,7 +94,7 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 
 	VkClearValue clearValues[] ={
 		{{0.4f, 0.1f, 0.1f, 1.0f}},	// VkClearColorValue color; 
-		{{1.0f, 1}} // VkClearDepthStencilValue depthStencil 
+		{{1.0f, 0}} // VkClearDepthStencilValue depthStencil 
 	};
 
 
@@ -134,9 +135,10 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 		//tquad.draw(cmdBuffer);
 		 //fullscreenQuad.draw(cmdBuffer);
 		//sceneLights.draw(cmdBuffer);
+	dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
 		suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
-		dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
-        guard.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
+	
+        //guard.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
 		vkCmdEndRenderPass(cmdBuffer);
 		VK_CHECK_RESULT(vkEndCommandBuffer(cmdBuffer));
 	}
@@ -160,6 +162,7 @@ void VulkanManager::draw()
 		VkSemaphore signalSemaphores[] = { mSwapChainManager.mRenderFinishedSemaphore };
 		VkSwapchainKHR swapChains[] = { mState.swapChain };
 		VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+
 		submitInfo.waitSemaphoreCount = 1;
 		submitInfo.pWaitSemaphores = waitSemaphores;
 		submitInfo.pWaitDstStageMask = stageFlags;

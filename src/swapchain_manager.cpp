@@ -31,11 +31,8 @@ void SwapchainManager::createSurface()
 
 void SwapchainManager::createSwapChain()
 {
-	//(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR* pSurfaceCapabilities);
 	VkSurfaceCapabilitiesKHR surfaceCapabilities;
-	LOG("Before surface capabilities");
 	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(mVulkanState.physicalDevice, mVulkanState.surface, &surfaceCapabilities);
-	LOG("After surface capabilities");
 
 	VkSurfaceFormatKHR surfaceFormat = getSurfaceFormat(mVulkanState.swapChainDesc.surfaceFormats);
 	VkPresentModeKHR presentMode = getPresentMode(mVulkanState.swapChainDesc.presentModes);
@@ -261,8 +258,10 @@ void SwapchainManager::createRenderPass()
 	depthAtt.samples = VK_SAMPLE_COUNT_1_BIT;
 	depthAtt.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	depthAtt.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	depthAtt.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	depthAtt.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	depthAtt.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	depthAtt.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+	//depthAtt.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	//depthAtt.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 	depthAtt.initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	depthAtt.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
@@ -342,4 +341,15 @@ void SwapchainManager::createSemaphores()
 	VK_CHECK_RESULT(vkCreateSemaphore(mVulkanState.device, &createInfo, nullptr, &mImageAvailableSemaphore));
 	VK_CHECK_RESULT(vkCreateSemaphore(mVulkanState.device, &createInfo, nullptr, &mRenderFinishedSemaphore));
 	LOG("SEMAPHORES CREATED");
+}
+
+
+uint32_t SwapchainManager::getWidth() const
+{
+	return mWindow.getWidth();
+}
+
+uint32_t SwapchainManager::getHeight() const
+{
+	return mWindow.getHeight();
 }

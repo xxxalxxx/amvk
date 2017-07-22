@@ -11,11 +11,12 @@
 #include "model.h"
 #include "skinned.h"
 #include "point_light.h"
+#include "g_buffer.h"
 
 namespace PipelineManager
 {
 
-inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)
+inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 {
     VkPipelineShaderStageCreateInfo stages[] = {
             state.shaders.tquad.vertex,
@@ -80,8 +81,8 @@ inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)
     pipelineInfo.pColorBlendState = &blendState;
     pipelineInfo.pDynamicState = &dynamicInfo;
     pipelineInfo.layout = info.layout;
-    pipelineInfo.renderPass = state.renderPass;
-    pipelineInfo.subpass = 0;
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &info.pipeline));
@@ -90,7 +91,7 @@ inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info)
 }
 
 
-inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info)
+inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 {
     VkPipelineShaderStageCreateInfo stages[] = {
             state.shaders.fullscreenQuad.vertex,
@@ -137,8 +138,8 @@ inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info)
     pipelineInfo.pColorBlendState = &blendState;
     pipelineInfo.pDynamicState = &dynamicInfo;
     pipelineInfo.layout = info.layout;
-    pipelineInfo.renderPass = state.renderPass;
-    pipelineInfo.subpass = 0;
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &info.pipeline));
@@ -146,7 +147,8 @@ inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info)
     cacheInfo.saveCache(state.device);
 }
 
-inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info) 
+inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+
 {
     VkPipelineShaderStageCreateInfo stages[] = {
             state.shaders.pointLight.vertex,
@@ -217,8 +219,8 @@ inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info)
     pipelineInfo.pColorBlendState = &blendState;
     pipelineInfo.pDynamicState = &dynamicInfo;
     pipelineInfo.layout = info.layout;
-    pipelineInfo.renderPass = state.renderPass;
-    pipelineInfo.subpass = 0;
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &info.pipeline));
@@ -227,7 +229,7 @@ inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info)
 }
 
 
-inline void createModelPipeline(VulkanState& state, PipelineInfo& info)
+inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 {
     VkPipelineShaderStageCreateInfo stages[] = {
             state.shaders.model.vertex,
@@ -260,19 +262,55 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info)
 
     VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
     VkPipelineRasterizationStateCreateInfo rasterizationState = 
-		PipelineCreator::rasterizationStateCullNoneCCW();
-		//PipelineCreator::rasterizationStateCullBackCCW();
-    VkPipelineDepthStencilStateCreateInfo depthStencil = 
-		//PipelineCreator::depthStencilStateGBufferLightPass();
-		PipelineCreator::depthStencilStateDepthLessNoStencil();
+		PipelineCreator::rasterizationState(
+				VK_CULL_MODE_NONE, 
+				VK_FRONT_FACE_COUNTER_CLOCKWISE, 
+				VK_POLYGON_MODE_FILL, 
+				VK_FALSE);
+    //VkPipelineDepthStencilStateCreateInfo depthStencil = 
+	//	PipelineCreator::depthStencilStateGBufferStencilPass();
+	//	PipelineCreator::depthStencilStateGBufferLightPass();
+		//PipelineCreator::depthStencilStateDepthLessNoStencil();
+
+
+	VkStencilOpState front = {};
+	front.compareOp = VK_COMPARE_OP_EQUAL;
+	front.passOp = VK_STENCIL_OP_KEEP;
+	front.failOp = VK_STENCIL_OP_KEEP;
+	front.depthFailOp = VK_STENCIL_OP_KEEP;
+	front.writeMask = 0x0;
+	front.compareMask = 0xffffffff;
+	front.reference = 1;
+
+	VkStencilOpState back = {};
+	back.compareOp = VK_COMPARE_OP_NEVER;
+	back.passOp = VK_STENCIL_OP_KEEP;
+	back.failOp = VK_STENCIL_OP_KEEP;
+	back.depthFailOp = VK_STENCIL_OP_KEEP;
+	back.writeMask = 0x0;
+	back.compareMask = 0xffffffff;
+	back.reference = 1;
+
+	VkPipelineDepthStencilStateCreateInfo depthStencil = {};
+	depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	depthStencil.depthTestEnable = VK_TRUE;
+	depthStencil.depthWriteEnable = VK_TRUE;
+	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+	depthStencil.depthBoundsTestEnable = VK_FALSE;
+	depthStencil.stencilTestEnable = VK_TRUE;
+	depthStencil.front = front;
+	depthStencil.back = back;
+
+
+
     VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
     VkPipelineColorBlendAttachmentState blendAttachmentState =
 		PipelineCreator::blendAttachmentSrcAlpha();
 		//	PipelineCreator::blendAttachmentStateDisabled();
 
     VkPipelineColorBlendStateCreateInfo blendState = 
-		//PipelineCreator::blendStateEnabled(&blendAttachmentState, 1);
-		PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
+		PipelineCreator::blendStateEnabled(&blendAttachmentState, 1);
+		//PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
 
     VkDescriptorSetLayout layouts[] = {
             state.descriptorSetLayouts.uniformVertex,
@@ -298,8 +336,8 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info)
     pipelineInfo.pColorBlendState = &blendState;
     pipelineInfo.pDynamicState = &dynamicInfo;
     pipelineInfo.layout = info.layout;
-    pipelineInfo.renderPass = state.renderPass;
-    pipelineInfo.subpass = 0;
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &info.pipeline));
@@ -311,7 +349,7 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info)
 }
 
 
-inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)
+inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 {
     VkPipelineShaderStageCreateInfo stages[] = {
             state.shaders.skinned.vertex,
@@ -346,12 +384,60 @@ inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)
     };
 
     VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
-    VkPipelineRasterizationStateCreateInfo rasterizationState = PipelineCreator::rasterizationStateCullBackCCW();
-    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessNoStencil();
-    VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
-    VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
+    VkPipelineRasterizationStateCreateInfo rasterizationState = 
+			PipelineCreator::rasterizationState(
+				VK_CULL_MODE_BACK_BIT, 
+				VK_FRONT_FACE_COUNTER_CLOCKWISE, 
+				VK_POLYGON_MODE_FILL);
+		//PipelineCreator::rasterizationStateCullBackCCW();
+   // VkPipelineDepthStencilStateCreateInfo depthStencil = 
+	//	PipelineCreator::depthStencilStateGBufferLightPass();
+		//PipelineCreator::depthStencilStateDepthLessNoStencil();
 
-    VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
+
+
+
+
+	VkStencilOpState front = {};
+	front.compareOp = VK_COMPARE_OP_ALWAYS;
+	front.passOp = VK_STENCIL_OP_INCREMENT_AND_WRAP;
+	front.failOp = VK_STENCIL_OP_KEEP;
+	front.depthFailOp = VK_STENCIL_OP_KEEP;
+	front.writeMask = 0xffffffff;
+	front.compareMask = 0xffffffff;
+	front.reference = 0;
+	
+	VkStencilOpState back = {};
+	back.compareOp = VK_COMPARE_OP_ALWAYS;
+	back.passOp = VK_STENCIL_OP_KEEP;
+	back.failOp = VK_STENCIL_OP_KEEP;
+	back.depthFailOp = VK_STENCIL_OP_KEEP;
+	back.writeMask = 0xff;
+	back.compareMask = 0xffffffff;
+	back.reference = 0;
+
+
+
+	VkPipelineDepthStencilStateCreateInfo depthStencil = {};
+	depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	depthStencil.depthTestEnable = VK_TRUE;
+	depthStencil.depthWriteEnable = VK_TRUE;
+	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+	depthStencil.depthBoundsTestEnable = VK_FALSE;
+	depthStencil.stencilTestEnable = VK_TRUE;
+	depthStencil.front = front;
+	depthStencil.back = back;
+
+
+
+    VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
+    VkPipelineColorBlendAttachmentState blendAttachmentState = 
+		//PipelineCreator::blendAttachmentSrcAlpha();
+		PipelineCreator::blendAttachmentStateDisabled();
+
+    VkPipelineColorBlendStateCreateInfo blendState = 
+		//	PipelineCreator::blendStateEnabled(&blendAttachmentState, 1);
+		PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
 
     VkDescriptorSetLayout layouts[] = {
             state.descriptorSetLayouts.uniformVertex,
@@ -377,8 +463,8 @@ inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)
     pipelineInfo.pColorBlendState = &blendState;
     pipelineInfo.pDynamicState = &dynamicInfo;
     pipelineInfo.layout = info.layout;
-    pipelineInfo.renderPass = state.renderPass;
-    pipelineInfo.subpass = 0;
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &info.pipeline));
@@ -390,13 +476,13 @@ inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info)
 }
 
 
-inline void createPipelines(VulkanState& state)
+inline void createPipelines(VulkanState& state, GBuffer& gBuffer)
 {
-    createTQuadPipeline(state, state.pipelines.tquad);
-	createPointLightPipeline(state, state.pipelines.pointLight);
-	createFullscreenQuadPipeline(state, state.pipelines.fullscreenQuad);
-    createModelPipeline(state, state.pipelines.model);
-    createSkinnedPipeline(state, state.pipelines.skinned);
+    createTQuadPipeline(state, state.pipelines.tquad, state.renderPass, 0);
+	createPointLightPipeline(state, state.pipelines.pointLight, state.renderPass, 0);
+	createFullscreenQuadPipeline(state, state.pipelines.fullscreenQuad, state.renderPass, 0);
+    createModelPipeline(state, state.pipelines.model, state.renderPass, 0);
+    createSkinnedPipeline(state, state.pipelines.skinned, state.renderPass, 0);
 }
 
 };

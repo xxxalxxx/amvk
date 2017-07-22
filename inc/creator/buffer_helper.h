@@ -21,7 +21,7 @@ namespace BufferHelper
 inline uint32_t getMemoryType(
 		const VkPhysicalDevice& physicalDevice, 
 		uint32_t typeFilter, 
-		VkMemoryPropertyFlags& flags)
+		VkMemoryPropertyFlags flags)
 {
 	VkPhysicalDeviceMemoryProperties memProps;
 	vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProps);

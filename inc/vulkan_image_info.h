@@ -15,7 +15,7 @@ public:
 	ImageInfo();
 	ImageInfo(VkDevice& vkDevice);
 	ImageInfo(VkDevice& vkDevice, uint32_t width, uint32_t height);
-	~ImageInfo();
+	virtual ~ImageInfo();
 	
 	ImageInfo& operator=(ImageInfo other);
 
