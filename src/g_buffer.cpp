@@ -62,12 +62,12 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 	attRefs[INDEX_ALBEDO]   = { INDEX_ALBEDO, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 	attRefs[INDEX_DEPTH]    = { INDEX_DEPTH, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
-	std::array<VkAttachmentReference, ATTACHMENT_COUNT - DEPTH_ATTACHMENT_COUNT> colorRefs = {};
+	std::array<VkAttachmentReference, COLOR_ATTACHMENT_COUNT> colorRefs = {};
 	colorRefs[INDEX_POSITION] = { INDEX_POSITION, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 	colorRefs[INDEX_NORMAL]   = { INDEX_NORMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 	colorRefs[INDEX_ALBEDO]   = { INDEX_ALBEDO, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 	VkAttachmentReference depthRef = { INDEX_DEPTH, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
-
+	LOG("color attachments: %u", colorRefs.size());
 	VkSubpassDescription subpass = {};
 	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 	subpass.pColorAttachments = colorRefs.data();
@@ -98,7 +98,7 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 	renderPassInfo.attachmentCount = attDescs.size();
 	renderPassInfo.subpassCount = 1;
 	renderPassInfo.pSubpasses = &subpass;
-	renderPassInfo.dependencyCount = 2;
+	renderPassInfo.dependencyCount = dependencies.size();
 	renderPassInfo.pDependencies = dependencies.data();
 
 	VK_CHECK_RESULT(vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass));
@@ -164,7 +164,9 @@ void GBuffer::createAttachment(
 		imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 	}
 	if (usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT) {
-		aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+		aspectMask = 
+			VK_IMAGE_ASPECT_DEPTH_BIT;
+			//VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
 		imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	}
 
@@ -276,10 +278,10 @@ void GBuffer::createDescriptors()
 
 	VK_CHECK_RESULT(vkAllocateDescriptorSets(mState->device, &samplerAllocInfo, &mDescriptorSet));
 
-	std::array<VkWriteDescriptorSet, COLOR_ATTACHMENT_COUNT> writeSets = {};
-	std::array<VkDescriptorImageInfo, COLOR_ATTACHMENT_COUNT> imageInfos = {};
+	std::array<VkWriteDescriptorSet, ATTACHMENT_COUNT> writeSets = {};
+	std::array<VkDescriptorImageInfo, ATTACHMENT_COUNT> imageInfos = {};
 
-	for (size_t i = 0; i < COLOR_ATTACHMENT_COUNT; ++i) {
+	for (size_t i = 0; i < ATTACHMENT_COUNT; ++i) {
 		VkDescriptorImageInfo& descriptorInfo = imageInfos[i];
 		descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 		descriptorInfo.imageView = attachments[i].view;
@@ -303,9 +305,9 @@ void GBuffer::drawDeferredQuad(VkCommandBuffer& cmdBuffer)
 {
 	deferredQuad.draw(
 		cmdBuffer, 
-		mState->pipelines.fullscreenQuad.pipeline, 
-		mState->pipelines.fullscreenQuad.layout, 
-		&deferredQuad.mDescriptorSet, 
+		mState->pipelines.deferred.pipeline, 
+		mState->pipelines.deferred.layout, 
+		&mDescriptorSet, 
 		1);
 }
 

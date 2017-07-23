@@ -78,8 +78,11 @@ void Skinned::processMeshVertices(std::vector<Vertex>& vertices, aiMesh& mesh, M
 
 		if (hasPositions) 
 			convertVector(mesh.mVertices[j], vertex.pos);
-		if (hasNormals) 
+		if (hasNormals) { 
 			convertVector(mesh.mNormals[j], vertex.normal);
+			if (mModelFlags & ModelFlag_flipNormals) 
+				vertex.normal *= -1;
+		}
 		if (hasTangentsAndBitangents) {
 			convertVector(mesh.mTangents[j], vertex.tangent);
 			convertVector(mesh.mBitangents[j], vertex.bitangent);

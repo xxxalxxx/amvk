@@ -40,9 +40,9 @@ void VulkanManager::init()
 	ShaderManager::createShaders(mState);
 	DescriptorManager::createDescriptorSetLayouts(mState);
 	DescriptorManager::createDescriptorPool(mState);
-    PipelineManager::createPipelines(mState, gBuffer);
-	gBuffer.init(mState.physicalDevice, mState.device, mSwapChainManager.getWidth(), mSwapChainManager.getHeight());
 
+	gBuffer.init(mState.physicalDevice, mState.device, mSwapChainManager.getWidth(), mSwapChainManager.getHeight());
+    PipelineManager::createPipelines(mState, gBuffer);
 	tquad.init();
 	//fullscreenQuad.init();
 
@@ -55,17 +55,17 @@ void VulkanManager::init()
 
     dwarf.ubo.model = glm::scale(glm::vec3(0.15f, 0.15f, 0.15f));
     dwarf.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(1.f, 0.f, 0.f)) * dwarf.ubo.model;
-    dwarf.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(0.f, 1.f, 0.f)) * dwarf.ubo.model;
-    dwarf.ubo.model = glm::translate(glm::vec3(2.0f, 4.0f, 8.0f))  * dwarf.ubo.model;
+    dwarf.ubo.model = glm::rotate(glm::radians(0.f), glm::vec3(0.f, 1.f, 0.f)) * dwarf.ubo.model;
+    dwarf.ubo.model = glm::translate(glm::vec3(8.0f, 0.0f, -4.0f))  * dwarf.ubo.model;
     dwarf.animSpeedScale = 0.5f;
 
 	guard.init(FileManager::getModelsPath("guard/boblampclean.md5mesh"),
-               Skinned::DEFAULT_FLAGS | aiProcess_FlipUVs | aiProcess_FlipWindingOrder,
-               0);
+               Skinned::DEFAULT_FLAGS | aiProcess_FlipUVs | aiProcess_FlipWindingOrder | aiProcess_FixInfacingNormals,
+               Skinned::ModelFlag_flipNormals);
     guard.ubo.model = glm::scale(glm::vec3(0.18f, 0.18f, 0.18f));
     guard.ubo.model = glm::rotate(glm::radians(180.f), glm::vec3(1.f, 0.f, 0.f)) * guard.ubo.model;
-    guard.ubo.model = glm::rotate(glm::radians(-30.f), glm::vec3(0.f, 1.f, 0.f)) * guard.ubo.model;
-    guard.ubo.model = glm::translate(glm::vec3(-9.0f, 4.0f, 8.0f))  * guard.ubo.model;
+    guard.ubo.model = glm::rotate(glm::radians(-180.f), glm::vec3(0.f, 1.f, 0.f)) * guard.ubo.model;
+    guard.ubo.model = glm::translate(glm::vec3(-9.0f, 0.0f, -8.0f))  * guard.ubo.model;
 
 	sceneLights.init();
 
@@ -109,7 +109,7 @@ void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera)
 
 	VkCommandBufferBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+	//beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 
 	VkCommandBuffer& cmdBuffer = gBuffer.cmdBuffer;
 
@@ -132,6 +132,7 @@ void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera)
 	vkCmdSetViewport(cmdBuffer, 0, 1, &viewport);
 	vkCmdSetScissor(cmdBuffer, 0, 1, &scissor);
 
+    guard.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
 	dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
 	suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
 
@@ -190,8 +191,8 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 		//tquad.draw(cmdBuffer);
 		 //fullscreenQuad.draw(cmdBuffer);
 		//sceneLights.draw(cmdBuffer);
-		dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
-		suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
+		//dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
+		//suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
 
         //guard.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
 		/*
@@ -202,7 +203,7 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 				&gBuffer.deferredQuad.mDescriptorSet, 
 				1);
 		*/
-		//gBuffer.drawDeferredQuad(cmdBuffer);
+		gBuffer.drawDeferredQuad(cmdBuffer);
 
 		vkCmdEndRenderPass(cmdBuffer);
 		VK_CHECK_RESULT(vkEndCommandBuffer(cmdBuffer));
@@ -222,10 +223,58 @@ void VulkanManager::draw()
 	} else if (result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR) {
 		VkSubmitInfo submitInfo = {};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	
+		VkSemaphore waitSemaphores[] = { 
+			mSwapChainManager.mImageAvailableSemaphore 
+		};
 		
-		VkSemaphore waitSemaphores[] = { mSwapChainManager.mImageAvailableSemaphore };
-		VkSemaphore signalSemaphores[] = { mSwapChainManager.mRenderFinishedSemaphore };
-		VkSwapchainKHR swapChains[] = { mState.swapChain };
+		VkSemaphore signalSemaphores[] = { 
+			mSwapChainManager.mRenderFinishedSemaphore 
+		};
+		
+		VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+
+		submitInfo.waitSemaphoreCount = 1;
+		submitInfo.pWaitSemaphores = &mSwapChainManager.mImageAvailableSemaphore;
+		submitInfo.pWaitDstStageMask = stageFlags;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &gBuffer.cmdBuffer;
+		submitInfo.signalSemaphoreCount = 1;
+		submitInfo.pSignalSemaphores = &gBuffer.offscreenSemaphore;
+
+		VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
+
+		submitInfo.waitSemaphoreCount = 1;
+		submitInfo.pWaitSemaphores = &gBuffer.offscreenSemaphore;
+		submitInfo.pWaitDstStageMask = stageFlags;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &mSwapChainManager.cmdBuffers[imageIndex];
+		submitInfo.signalSemaphoreCount = 1;
+		submitInfo.pSignalSemaphores = &mSwapChainManager.mRenderFinishedSemaphore;
+
+		VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
+		
+		VkPresentInfoKHR presentInfo = {};
+		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+		presentInfo.waitSemaphoreCount = 1;
+		presentInfo.pWaitSemaphores = &mSwapChainManager.mRenderFinishedSemaphore;
+		presentInfo.swapchainCount = 1;
+		presentInfo.pSwapchains = &mState.swapChain;
+		presentInfo.pImageIndices = &imageIndex;
+
+		VK_CHECK_RESULT(vkQueuePresentKHR(mState.presentQueue, &presentInfo));
+
+		/*VkSubmitInfo submitInfo = {};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		
+		VkSemaphore waitSemaphores[] = { 
+			mSwapChainManager.mImageAvailableSemaphore 
+		};
+		
+		VkSemaphore signalSemaphores[] = { 
+			mSwapChainManager.mRenderFinishedSemaphore 
+		};
+		
 		VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 
 		submitInfo.waitSemaphoreCount = 1;
@@ -243,10 +292,10 @@ void VulkanManager::draw()
 		presentInfo.waitSemaphoreCount = 1;
 		presentInfo.pWaitSemaphores = signalSemaphores;
 		presentInfo.swapchainCount = 1;
-		presentInfo.pSwapchains = swapChains;
+		presentInfo.pSwapchains = &mState.swapChain;
 		presentInfo.pImageIndices = &imageIndex;
 
-		VK_CHECK_RESULT(vkQueuePresentKHR(mState.presentQueue, &presentInfo));
+		VK_CHECK_RESULT(vkQueuePresentKHR(mState.presentQueue, &presentInfo));*/
 	} else {
 		VK_THROW_RESULT_ERROR("Failed vkAcquireNextImageKHR", result);
 	}

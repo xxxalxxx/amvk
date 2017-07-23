@@ -135,6 +135,7 @@ int main() {
     Timer& timer = engine.getTimer();
     Camera& camera = engine.getCamera();
 
+	vulkanManager.buildGBuffers(timer, camera);
     vulkanManager.buildCommandBuffers(timer, camera);
 
     while (window.isOpen()) {

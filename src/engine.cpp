@@ -27,6 +27,7 @@ void Engine::init(android_app* state)
     mCamera.setAspect(mWindow.mAspect);
     mVulkanManager.init();
     mVulkanManager.buildCommandBuffers(mTimer, mCamera);
+	mVulkanManager.buildGBuffers(mTimer, mCamera);
 
     JNIEnv* jni;
     state->activity->vm->AttachCurrentThread(&jni, NULL);

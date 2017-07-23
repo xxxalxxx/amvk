@@ -1,13 +1,9 @@
 #ifndef AMVK_VULKAN_PIPELINE_CREATOR_H
 #define AMVK_VULKAN_PIPELINE_CREATOR_H
 
+#include <array>
 
-#ifdef __ANDROID__
-#include "vulkan_wrapper.h"
-#else
-#include <vulkan/vulkan.h>
-#endif
-
+#include "vulkan.h"
 #include "macro.h"
 #include "file_manager.h"
 #include "vulkan_utils.h"
@@ -147,7 +143,15 @@ inline VkPipelineColorBlendStateCreateInfo blendStateDisabled(
 	return blendState;
 }
 
-
+inline std::array<VkPipelineColorBlendAttachmentState, 3> gBufferColorBlendAttachments() 
+{
+	std::array<VkPipelineColorBlendAttachmentState, 3> attachments = {{
+		blendAttachmentStateDisabled(),
+		blendAttachmentStateDisabled(),
+		blendAttachmentStateDisabled()
+	}};
+	return attachments;
+}
 
 inline VkPipelineColorBlendStateCreateInfo blendStateEnabled(
 		VkPipelineColorBlendAttachmentState* attachmentStates,  

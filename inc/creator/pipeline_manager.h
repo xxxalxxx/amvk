@@ -360,14 +360,16 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRender
 
 
     VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
-    VkPipelineColorBlendAttachmentState blendAttachmentState =
+    auto blendAttachmentState =
+		PipelineCreator::gBufferColorBlendAttachments();
 		//PipelineCreator::blendAttachmentSrcAlpha();
-			PipelineCreator::blendAttachmentStateDisabled();
+		//	PipelineCreator::blendAttachmentStateDisabled();
+
 
     VkPipelineColorBlendStateCreateInfo blendState = 
 		//PipelineCreator::blendStateEnabled(&blendAttachmentState, 1);
-		PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
-
+		//PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
+		PipelineCreator::blendStateDisabled(blendAttachmentState.data(), blendAttachmentState.size());
     VkDescriptorSetLayout layouts[] = {
             state.descriptorSetLayouts.uniformVertex,
             state.descriptorSetLayouts.sampler
@@ -487,13 +489,15 @@ inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info, VkRend
 
 
     VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
-    VkPipelineColorBlendAttachmentState blendAttachmentState = 
+    auto blendAttachmentState = 
+		PipelineCreator::gBufferColorBlendAttachments();
 		//PipelineCreator::blendAttachmentSrcAlpha();
-		PipelineCreator::blendAttachmentStateDisabled();
+		//PipelineCreator::blendAttachmentStateDisabled();
 
     VkPipelineColorBlendStateCreateInfo blendState = 
+		PipelineCreator::blendStateDisabled(blendAttachmentState.data(), blendAttachmentState.size());
 		//	PipelineCreator::blendStateEnabled(&blendAttachmentState, 1);
-		PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
+		//PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
 
     VkDescriptorSetLayout layouts[] = {
             state.descriptorSetLayouts.uniformVertex,
@@ -537,8 +541,8 @@ inline void createPipelines(VulkanState& state, GBuffer& gBuffer)
     createTQuadPipeline(state, state.pipelines.tquad, state.renderPass, 0);
 	createPointLightPipeline(state, state.pipelines.pointLight, state.renderPass, 0);
 	createFullscreenQuadPipeline(state, state.pipelines.fullscreenQuad, state.renderPass, 0);
-    createModelPipeline(state, state.pipelines.model, state.renderPass, 0);
-    createSkinnedPipeline(state, state.pipelines.skinned, state.renderPass, 0);
+    createModelPipeline(state, state.pipelines.model, gBuffer.renderPass, 0);
+    createSkinnedPipeline(state, state.pipelines.skinned, gBuffer.renderPass, 0);
     createDeferredPipeline(state, state.pipelines.deferred, state.renderPass, 0);
 
 }

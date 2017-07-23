@@ -46,9 +46,10 @@
 
 class Skinned {
 public:
-	typedef int ModelFlags;
-	static constexpr int ModelFlag_stripFullPath = 1;
-	
+	typedef uint32_t ModelFlags;
+	static constexpr ModelFlags ModelFlag_stripFullPath = 1;
+	static constexpr ModelFlags ModelFlag_flipNormals = 1 << 1;
+
 	static const aiTextureType* TEXTURE_TYPES;
 	static const uint32_t NUM_TEXTURE_TYPES;
 
