@@ -42,6 +42,8 @@ public:
 	void init();
 
 	void buildCommandBuffers(const Timer &timer, Camera &camera);
+	void buildGBuffers(const Timer &timer, Camera &camera);
+	void buildComputeBuffers(const Timer &timer, Camera &camera); 
 	void updateUniformBuffers(const Timer& timer, Camera& camera);
 	void draw();
 	

@@ -1259,6 +1259,7 @@ DescriptorManager::createTQuadDescriptorSetLayout	inc/creator/descriptor_manager
 DescriptorManager::createUniformFragmentDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createUniformFragmentDescriptorSetLayout(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createUniformVertexDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createUniformVertexDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorSetLayouts	inc/vulkan_state.h	/^struct DescriptorSetLayouts {$/;"	s
+DescriptorSetLayouts::deferred	inc/vulkan_state.h	/^	VkDescriptorSetLayout deferred;$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSetLayouts::dynamicUniformFragment	inc/vulkan_state.h	/^	VkDescriptorSetLayout dynamicUniformFragment;$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSetLayouts::dynamicUniformVertex	inc/vulkan_state.h	/^	VkDescriptorSetLayout dynamicUniformVertex;$/;"	m	struct:DescriptorSetLayouts	access:public
 DescriptorSetLayouts::fullscreenQuad	inc/vulkan_state.h	/^	VkDescriptorSetLayout fullscreenQuad;$/;"	m	struct:DescriptorSetLayouts	access:public
@@ -1555,9 +1556,10 @@ FullscreenQuad	inc/shape/fullscreen_quad.h	/^class FullscreenQuad {$/;"	c
 FullscreenQuad	src/shape/fullscreen_quad.cpp	/^FullscreenQuad::FullscreenQuad(VulkanState& state):$/;"	f	class:FullscreenQuad	signature:(VulkanState& state)
 FullscreenQuad::FullscreenQuad	src/shape/fullscreen_quad.cpp	/^FullscreenQuad::FullscreenQuad(VulkanState& state):$/;"	f	class:FullscreenQuad	signature:(VulkanState& state)
 FullscreenQuad::createDescriptorSets	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::createDescriptorSets() $/;"	f	class:FullscreenQuad	signature:()
+FullscreenQuad::draw	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::draw($/;"	f	class:FullscreenQuad	signature:( VkCommandBuffer& cmdBuffer, VkPipeline pipeline, VkPipelineLayout layout, VkDescriptorSet* descriptors, uint32_t numDescriptors)
 FullscreenQuad::draw	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::draw(VkCommandBuffer& cmdBuffer) $/;"	f	class:FullscreenQuad	signature:(VkCommandBuffer& cmdBuffer)
 FullscreenQuad::init	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::init() $/;"	f	class:FullscreenQuad	signature:()
-FullscreenQuad::mDescriptorSet	inc/shape/fullscreen_quad.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:FullscreenQuad	access:private
+FullscreenQuad::mDescriptorSet	inc/shape/fullscreen_quad.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:FullscreenQuad	access:public
 FullscreenQuad::mImageInfo	inc/shape/fullscreen_quad.h	/^	ImageInfo* mImageInfo;$/;"	m	class:FullscreenQuad	access:private
 FullscreenQuad::mState	inc/shape/fullscreen_quad.h	/^	VulkanState& mState;$/;"	m	class:FullscreenQuad	access:private
 FunctionControlConstMask	lib/vulkan/spirv.hpp	/^    FunctionControlConstMask = 0x00000008,$/;"	e	enum:spv::FunctionControlMask
@@ -3524,11 +3526,13 @@ PipelineInfo::pipeline	inc/vulkan_state.h	/^	VkPipeline pipeline;$/;"	m	struct:P
 PipelineManager	inc/creator/pipeline_manager.h	/^namespace PipelineManager$/;"	n
 PipelineManager::createFullscreenQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 PipelineManager::createModelPipeline	inc/creator/pipeline_manager.h	/^inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+PipelineManager::createMrtPipeline	inc/creator/pipeline_manager.h	/^inline void createMrtPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 PipelineManager::createPipelines	inc/creator/pipeline_manager.h	/^inline void createPipelines(VulkanState& state, GBuffer& gBuffer)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, GBuffer& gBuffer)
 PipelineManager::createPointLightPipeline	inc/creator/pipeline_manager.h	/^inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 PipelineManager::createSkinnedPipeline	inc/creator/pipeline_manager.h	/^inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 PipelineManager::createTQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createTQuadPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 Pipelines	inc/vulkan_state.h	/^struct Pipelines {$/;"	s
+Pipelines::deferred	inc/vulkan_state.h	/^	PipelineInfo deferred;$/;"	m	struct:Pipelines	access:public
 Pipelines::fullscreenQuad	inc/vulkan_state.h	/^	PipelineInfo fullscreenQuad;$/;"	m	struct:Pipelines	access:public
 Pipelines::model	inc/vulkan_state.h	/^	PipelineInfo model;$/;"	m	struct:Pipelines	access:public
 Pipelines::pointLight	inc/vulkan_state.h	/^	PipelineInfo pointLight;$/;"	m	struct:Pipelines	access:public
@@ -3845,6 +3849,7 @@ ShaderInfo::vertex	inc/vulkan_state.h	/^	VkPipelineShaderStageCreateInfo vertex;
 ShaderManager	inc/creator/shader_manager.h	/^namespace ShaderManager $/;"	n
 ShaderManager::createShaders	inc/creator/shader_manager.h	/^inline void createShaders(VulkanState& state)$/;"	f	namespace:ShaderManager	signature:(VulkanState& state)
 Shaders	inc/vulkan_state.h	/^struct Shaders {$/;"	s
+Shaders::deferred	inc/vulkan_state.h	/^	ShaderInfo deferred;$/;"	m	struct:Shaders	access:public
 Shaders::fullscreenQuad	inc/vulkan_state.h	/^	ShaderInfo fullscreenQuad;$/;"	m	struct:Shaders	access:public
 Shaders::model	inc/vulkan_state.h	/^	ShaderInfo model;$/;"	m	struct:Shaders	access:public
 Shaders::pointLight	inc/vulkan_state.h	/^	ShaderInfo pointLight;$/;"	m	struct:Shaders	access:public
@@ -7598,6 +7603,8 @@ VulkanManager	inc/vulkan_manager.h	/^class VulkanManager { $/;"	c
 VulkanManager	src/vulkan_manager.cpp	/^VulkanManager::VulkanManager(Window& window):$/;"	f	class:VulkanManager	signature:(Window& window)
 VulkanManager::VulkanManager	src/vulkan_manager.cpp	/^VulkanManager::VulkanManager(Window& window):$/;"	f	class:VulkanManager	signature:(Window& window)
 VulkanManager::buildCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)$/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
+VulkanManager::buildComputeBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildComputeBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
+VulkanManager::buildGBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
 VulkanManager::draw	src/vulkan_manager.cpp	/^void VulkanManager::draw() $/;"	f	class:VulkanManager	signature:()
 VulkanManager::dwarf	inc/vulkan_manager.h	/^	Skinned dwarf;$/;"	m	class:VulkanManager	access:private
 VulkanManager::fullscreenQuad	inc/vulkan_manager.h	/^	FullscreenQuad fullscreenQuad;$/;"	m	class:VulkanManager	access:private
@@ -9625,6 +9632,8 @@ bufferRowLength	lib/vulkan/vulkan.h	/^    uint32_t                    bufferRowL
 buffer_start	lib/stb/stb_image.h	/^   stbi_uc buffer_start[128];$/;"	m	struct:__anon60	access:public
 buflen	lib/stb/stb_image.h	/^   int buflen;$/;"	m	struct:__anon60	access:public
 buildCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)$/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
+buildComputeBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildComputeBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
+buildGBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
 bvec1	lib/glm/gtc/vec1.hpp	/^	typedef highp_bvec1				bvec1;$/;"	t	namespace:glm
 bvec1	lib/glm/gtc/vec1.hpp	/^	typedef lowp_bvec1				bvec1;$/;"	t	namespace:glm
 bvec1	lib/glm/gtc/vec1.hpp	/^	typedef mediump_bvec1			bvec1;$/;"	t	namespace:glm
@@ -9835,6 +9844,7 @@ createInfo	inc/pipeline_cache.h	/^    VkPipelineCacheCreateInfo createInfo;$/;"	
 createLogicalDevice	src/device_manager.cpp	/^void DeviceManager::createLogicalDevice() $/;"	f	class:DeviceManager	signature:()
 createModelDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createModelDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createModelPipeline	inc/creator/pipeline_manager.h	/^inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+createMrtPipeline	inc/creator/pipeline_manager.h	/^inline void createMrtPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 createPhysicalDevice	src/device_manager.cpp	/^void DeviceManager::createPhysicalDevice(SwapchainManager& swapchainManager) $/;"	f	class:DeviceManager	signature:(SwapchainManager& swapchainManager)
 createPipelines	inc/creator/pipeline_manager.h	/^inline void createPipelines(VulkanState& state, GBuffer& gBuffer)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, GBuffer& gBuffer)
 createPointLight	src/scene_lights.cpp	/^PointLight& SceneLights::createPointLight() $/;"	f	class:SceneLights	signature:()
@@ -9957,6 +9967,9 @@ debugCb	src/device_manager.cpp	/^VKAPI_ATTR VkBool32 VKAPI_CALL debugCb($/;"	f	s
 dedicatedAllocation	lib/vulkan/vulkan.h	/^    VkBool32           dedicatedAllocation;$/;"	m	struct:VkDedicatedAllocationBufferCreateInfoNV	access:public
 dedicatedAllocation	lib/vulkan/vulkan.h	/^    VkBool32           dedicatedAllocation;$/;"	m	struct:VkDedicatedAllocationImageCreateInfoNV	access:public
 defaultp	lib/glm/detail/precision.hpp	/^			defaultp = aligned_highp$/;"	e	enum:glm::precision
+deferred	inc/vulkan_state.h	/^	PipelineInfo deferred;$/;"	m	struct:Pipelines	access:public
+deferred	inc/vulkan_state.h	/^	ShaderInfo deferred;$/;"	m	struct:Shaders	access:public
+deferred	inc/vulkan_state.h	/^	VkDescriptorSetLayout deferred;$/;"	m	struct:DescriptorSetLayouts	access:public
 delay	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon74	access:public
 delim_left	lib/glm/gtx/io.hpp	/^			char_type  delim_left;$/;"	m	class:glm::io::format_punct	access:public
 delim_right	lib/glm/gtx/io.hpp	/^			char_type  delim_right;$/;"	m	class:glm::io::format_punct	access:public
@@ -10089,6 +10102,7 @@ dquat	lib/glm/fwd.hpp	/^	typedef highp_dquat			dquat;$/;"	t	namespace:glm
 dquat	lib/glm/fwd.hpp	/^	typedef lowp_dquat			dquat;$/;"	t	namespace:glm
 dquat	lib/glm/fwd.hpp	/^	typedef mediump_dquat		dquat;$/;"	t	namespace:glm
 draw	src/scene_lights.cpp	/^void SceneLights::draw(VkCommandBuffer& cmdBuffer)$/;"	f	class:SceneLights	signature:(VkCommandBuffer& cmdBuffer)
+draw	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::draw($/;"	f	class:FullscreenQuad	signature:( VkCommandBuffer& cmdBuffer, VkPipeline pipeline, VkPipelineLayout layout, VkDescriptorSet* descriptors, uint32_t numDescriptors)
 draw	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::draw(VkCommandBuffer& cmdBuffer) $/;"	f	class:FullscreenQuad	signature:(VkCommandBuffer& cmdBuffer)
 draw	src/shape/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 draw	src/shape/skinned.cpp	/^void Skinned::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Skinned	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
@@ -14417,7 +14431,7 @@ mDescription	lib/assimp/Exporter.hpp	/^        aiExportFormatDesc mDescription;$
 mDescriptorPool	inc/scene_lights.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:SceneLights	access:private
 mDescriptorPool	inc/shape/model.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:Model	access:protected
 mDescriptorPool	inc/shape/skinned.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:Skinned	access:protected
-mDescriptorSet	inc/shape/fullscreen_quad.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:FullscreenQuad	access:private
+mDescriptorSet	inc/shape/fullscreen_quad.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:FullscreenQuad	access:public
 mDeviceManager	inc/vulkan_manager.h	/^	DeviceManager mDeviceManager;$/;"	m	class:VulkanManager	access:private
 mDeviceQueueIndices	inc/device_manager.h	/^	DeviceQueueIndicies mDeviceQueueIndices;$/;"	m	class:DeviceManager	access:private
 mDeviceQueueIndiciesArr	inc/device_queue_indices.h	/^	int *mDeviceQueueIndiciesArr[NUM_DEVICE_QUEUE_INDICES];$/;"	m	class:DeviceQueueIndicies	access:private

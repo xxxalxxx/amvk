@@ -48,6 +48,7 @@ struct Pipelines {
 	PipelineInfo tquad;
 	PipelineInfo model;
 	PipelineInfo skinned;
+	PipelineInfo deferred;
 };
 
 struct DescriptorSets {
@@ -66,6 +67,7 @@ struct DescriptorSetLayouts {
 	VkDescriptorSetLayout dynamicUniformFragment;
 	VkDescriptorSetLayout sampler;
 	VkDescriptorSetLayout samplerList;
+	VkDescriptorSetLayout deferred;
 };
 
 struct Shaders {
@@ -75,6 +77,7 @@ struct Shaders {
 	ShaderInfo pointLight;
 	ShaderInfo model;
 	ShaderInfo skinned;
+	ShaderInfo deferred;
 };
 
 struct VulkanState {

@@ -63,4 +63,25 @@ void FullscreenQuad::draw(VkCommandBuffer& cmdBuffer)
 	vkCmdDraw(cmdBuffer, 3, 1, 0, 0);
 }
 
+void FullscreenQuad::draw(
+		VkCommandBuffer& cmdBuffer, 
+		VkPipeline pipeline, 
+		VkPipelineLayout layout, 
+		VkDescriptorSet* descriptors, 
+		uint32_t numDescriptors) 
+{
+	vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+	
+	vkCmdBindDescriptorSets(
+			cmdBuffer, 
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+            layout,
+			0, 
+			numDescriptors, 
+			descriptors, 
+			0, 
+			nullptr);
+
+	vkCmdDraw(cmdBuffer, 3, 1, 0, 0);
+}
 

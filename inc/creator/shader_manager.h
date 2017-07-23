@@ -28,6 +28,9 @@ inline void createShaders(VulkanState& state)
 	
 	shaders.pointLight.vertex = PipelineCreator::shaderStage(state.device, "point_light.vert", VK_SHADER_STAGE_VERTEX_BIT);
 	shaders.pointLight.fragment = PipelineCreator::shaderStage(state.device, "point_light.frag", VK_SHADER_STAGE_FRAGMENT_BIT);
+
+	shaders.deferred.vertex = PipelineCreator::shaderStage(state.device, "deferred.vert", VK_SHADER_STAGE_VERTEX_BIT);
+	shaders.deferred.fragment = PipelineCreator::shaderStage(state.device, "deferred.frag", VK_SHADER_STAGE_FRAGMENT_BIT);
 }
 
 

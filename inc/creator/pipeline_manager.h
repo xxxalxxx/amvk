@@ -147,6 +147,62 @@ inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info,
     cacheInfo.saveCache(state.device);
 }
 
+inline void createMrtPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+{
+    VkPipelineShaderStageCreateInfo stages[] = {
+            state.shaders.deferred.vertex,
+            state.shaders.deferred.fragment
+    };
+
+    auto vertexInputInfo = PipelineCreator::vertexInputState(nullptr, 0, nullptr, 0);
+
+    VkPipelineInputAssemblyStateCreateInfo assemblyInfo = PipelineCreator::inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+    VkPipelineViewportStateCreateInfo viewportState = PipelineCreator::viewportStateDynamic();
+
+    VkDynamicState dynamicStates[] = {
+            VK_DYNAMIC_STATE_VIEWPORT,
+            VK_DYNAMIC_STATE_SCISSOR
+    };
+
+    VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
+    VkPipelineRasterizationStateCreateInfo rasterizationState = 
+		//PipelineCreator::rasterizationStateCullNone();
+		//PipelineCreator::rasterizationStateCullBackCCW();
+		PipelineCreator::rasterizationStateCullBackCW();
+    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineCreator::depthStencilStateDepthLessOrEqualNoStencil();
+    VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
+    VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineCreator::blendAttachmentStateDisabled();
+
+    VkPipelineColorBlendStateCreateInfo blendState = PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
+
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineCreator::layout(&state.descriptorSetLayouts.deferred, 1, nullptr, 0);
+    VK_CHECK_RESULT(vkCreatePipelineLayout(state.device, &pipelineLayoutInfo, nullptr, &info.layout));
+
+    PipelineCacheInfo cacheInfo("deferred", info.cache);
+    cacheInfo.getCache(state.device);
+
+    VkGraphicsPipelineCreateInfo pipelineInfo = {};
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    pipelineInfo.stageCount = ARRAY_SIZE(stages);
+    pipelineInfo.pStages = stages;
+    pipelineInfo.pVertexInputState = &vertexInputInfo;
+    pipelineInfo.pInputAssemblyState = &assemblyInfo;
+    pipelineInfo.pViewportState = &viewportState;
+    pipelineInfo.pRasterizationState = &rasterizationState;
+    pipelineInfo.pMultisampleState = &multisampleState;
+    pipelineInfo.pDepthStencilState = &depthStencil;
+    pipelineInfo.pColorBlendState = &blendState;
+    pipelineInfo.pDynamicState = &dynamicInfo;
+    pipelineInfo.layout = info.layout;
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.subpass = subpass;
+    pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+    VK_CHECK_RESULT(vkCreateGraphicsPipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &info.pipeline));
+
+    cacheInfo.saveCache(state.device);
+}
+
 inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 
 {
@@ -297,7 +353,7 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRender
 	depthStencil.depthWriteEnable = VK_TRUE;
 	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
 	depthStencil.depthBoundsTestEnable = VK_FALSE;
-	depthStencil.stencilTestEnable = VK_TRUE;
+	depthStencil.stencilTestEnable = VK_FALSE;
 	depthStencil.front = front;
 	depthStencil.back = back;
 
@@ -424,7 +480,7 @@ inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info, VkRend
 	depthStencil.depthWriteEnable = VK_TRUE;
 	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
 	depthStencil.depthBoundsTestEnable = VK_FALSE;
-	depthStencil.stencilTestEnable = VK_TRUE;
+	depthStencil.stencilTestEnable = VK_FALSE;
 	depthStencil.front = front;
 	depthStencil.back = back;
 

@@ -22,10 +22,18 @@ public:
 	FullscreenQuad(VulkanState& state);
 	void init();
 	void draw(VkCommandBuffer& cmdBuffer); 
+
+	void draw(
+		VkCommandBuffer& cmdBuffer, 
+		VkPipeline pipeline, 
+		VkPipelineLayout layout, 
+		VkDescriptorSet* descriptors, 
+		uint32_t numDescriptors);
+	VkDescriptorSet mDescriptorSet;
 private:
 	void createDescriptorSets();
 	VulkanState& mState;
-	VkDescriptorSet mDescriptorSet;
+
 	ImageInfo* mImageInfo;
 };
 

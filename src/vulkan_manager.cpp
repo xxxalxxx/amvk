@@ -89,6 +89,61 @@ void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)
 	sceneLights.update(cmd.buffer, timer, camera);
 }
 
+void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera) 
+{
+	std::array<VkClearValue, GBuffer::ATTACHMENT_COUNT> clearValues;
+	clearValues[GBuffer::INDEX_POSITION].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
+	clearValues[GBuffer::INDEX_NORMAL].color   = { { 0.0f, 0.0f, 0.0f, 0.0f } };
+	clearValues[GBuffer::INDEX_ALBEDO].color   = { { 0.0f, 0.0f, 0.0f, 0.0f } };
+	clearValues[GBuffer::INDEX_DEPTH].depthStencil = { 1.0f, 0 };
+
+	VkRenderPassBeginInfo renderPassBeginInfo = {};
+	renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	renderPassBeginInfo.framebuffer = gBuffer.frameBuffer;
+	renderPassBeginInfo.renderPass = gBuffer.renderPass;
+	renderPassBeginInfo.renderArea.offset = {0, 0};
+	renderPassBeginInfo.renderArea.extent.width = gBuffer.width;
+	renderPassBeginInfo.renderArea.extent.height = gBuffer.height;
+	renderPassBeginInfo.clearValueCount = clearValues.size();
+	renderPassBeginInfo.pClearValues = clearValues.data();
+
+	VkCommandBufferBeginInfo beginInfo = {};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+
+	VkCommandBuffer& cmdBuffer = gBuffer.cmdBuffer;
+
+	VK_CHECK_RESULT(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
+
+	vkCmdBeginRenderPass(cmdBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+
+	VkViewport viewport = {};
+	viewport.width = (float) gBuffer.width;
+	viewport.height = (float) gBuffer.height;
+	viewport.minDepth = 0.0f;
+	viewport.maxDepth = 1.0f;
+	
+	VkRect2D scissor = {};
+	scissor.offset = {0, 0};
+	scissor.extent.width = gBuffer.width;
+	scissor.extent.height = gBuffer.height;
+
+	vkCmdSetViewport(cmdBuffer, 0, 1, &viewport);
+	vkCmdSetScissor(cmdBuffer, 0, 1, &scissor);
+
+	dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
+	suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
+
+	vkCmdEndRenderPass(cmdBuffer);
+	VK_CHECK_RESULT(vkEndCommandBuffer(cmdBuffer));
+}
+
+void VulkanManager::buildComputeBuffers(const Timer &timer, Camera &camera) 
+{
+
+}
+
 void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 {
 
@@ -135,7 +190,7 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 		//tquad.draw(cmdBuffer);
 		 //fullscreenQuad.draw(cmdBuffer);
 		//sceneLights.draw(cmdBuffer);
-	dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
+		dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
 		suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
 	
         //guard.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
