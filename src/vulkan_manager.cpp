@@ -194,12 +194,15 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 		suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
 
         //guard.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
-		gBuffer.deferredQuad.draw(
+		/*
+		   gBuffer.deferredQuad.draw(
 				cmdBuffer, 
 				mState.pipelines.fullscreenQuad.pipeline, 
 				mState.pipelines.fullscreenQuad.layout, 
 				&gBuffer.deferredQuad.mDescriptorSet, 
 				1);
+		*/
+		//gBuffer.drawDeferredQuad(cmdBuffer);
 
 		vkCmdEndRenderPass(cmdBuffer);
 		VK_CHECK_RESULT(vkEndCommandBuffer(cmdBuffer));

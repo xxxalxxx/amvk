@@ -38,7 +38,7 @@ public:
 
 	void init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height);
 	void createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool);
-
+	void drawDeferredQuad(VkCommandBuffer& cmdBuffer);
 
 	std::array<FramebufferAttachment, ATTACHMENT_COUNT> attachments;
 	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;

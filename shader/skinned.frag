@@ -8,6 +8,9 @@ layout(set = 1, binding = 0) uniform sampler2D texSampler[SAMPLER_LIST_SIZE];
 
 layout(location = 0) in vec2 fragTexCoord;
 layout(location = 1) flat in uvec4 samplerIndices;
+layout(location = 2) in vec3 inWorldPos;
+layout(location = 3) in vec3 inNormal;
+
 layout(location = 0) out vec4 outColor;
 
 void main() {

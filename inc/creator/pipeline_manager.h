@@ -147,7 +147,7 @@ inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info,
     cacheInfo.saveCache(state.device);
 }
 
-inline void createMrtPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+inline void createDeferredPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 {
     VkPipelineShaderStageCreateInfo stages[] = {
             state.shaders.deferred.vertex,
@@ -319,7 +319,7 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRender
     VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineCreator::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
     VkPipelineRasterizationStateCreateInfo rasterizationState = 
 		PipelineCreator::rasterizationState(
-				VK_CULL_MODE_NONE, 
+				VK_CULL_MODE_BACK_BIT, 
 				VK_FRONT_FACE_COUNTER_CLOCKWISE, 
 				VK_POLYGON_MODE_FILL, 
 				VK_FALSE);
@@ -361,12 +361,12 @@ inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRender
 
     VkPipelineMultisampleStateCreateInfo multisampleState = PipelineCreator::multisampleStateNoMultisampleNoSampleShading();
     VkPipelineColorBlendAttachmentState blendAttachmentState =
-		PipelineCreator::blendAttachmentSrcAlpha();
-		//	PipelineCreator::blendAttachmentStateDisabled();
+		//PipelineCreator::blendAttachmentSrcAlpha();
+			PipelineCreator::blendAttachmentStateDisabled();
 
     VkPipelineColorBlendStateCreateInfo blendState = 
-		PipelineCreator::blendStateEnabled(&blendAttachmentState, 1);
-		//PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
+		//PipelineCreator::blendStateEnabled(&blendAttachmentState, 1);
+		PipelineCreator::blendStateDisabled(&blendAttachmentState, 1);
 
     VkDescriptorSetLayout layouts[] = {
             state.descriptorSetLayouts.uniformVertex,
@@ -539,6 +539,8 @@ inline void createPipelines(VulkanState& state, GBuffer& gBuffer)
 	createFullscreenQuadPipeline(state, state.pipelines.fullscreenQuad, state.renderPass, 0);
     createModelPipeline(state, state.pipelines.model, state.renderPass, 0);
     createSkinnedPipeline(state, state.pipelines.skinned, state.renderPass, 0);
+    createDeferredPipeline(state, state.pipelines.deferred, state.renderPass, 0);
+
 }
 
 };

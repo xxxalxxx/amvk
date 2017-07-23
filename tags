@@ -539,7 +539,7 @@ AMVK_VULKAN_PIPELINE_CREATOR_H	inc/creator/pipeline_creator.h	2;"	d
 AMVK_VULKAN_STATE_H	inc/vulkan_state.h	2;"	d
 AMVK_VULKAN_UTILS_H	inc/vulkan_utils.h	2;"	d
 AMVK_WINDOW_H	inc/window.h	2;"	d
-ARRAY_SIZE	inc/macro.h	31;"	d
+ARRAY_SIZE	inc/macro.h	46;"	d
 ASSIMP_API	lib/__assimp/defs.h	125;"	d
 ASSIMP_API	lib/__assimp/defs.h	131;"	d
 ASSIMP_API	lib/__assimp/defs.h	140;"	d
@@ -1610,6 +1610,7 @@ GBuffer::createFramebuffers	src/g_buffer.cpp	/^void GBuffer::createFramebuffers(
 GBuffer::createSampler	src/g_buffer.cpp	/^void GBuffer::createSampler(const VkDevice& device)$/;"	f	class:GBuffer	signature:(const VkDevice& device)
 GBuffer::deferredQuad	inc/g_buffer.h	/^	FullscreenQuad deferredQuad;$/;"	m	class:GBuffer	access:public
 GBuffer::depth	inc/g_buffer.h	/^	inline FramebufferAttachment& depth() { return attachments[INDEX_DEPTH]; }$/;"	f	class:GBuffer	access:public	signature:()
+GBuffer::drawDeferredQuad	src/g_buffer.cpp	/^void GBuffer::drawDeferredQuad(VkCommandBuffer& cmdBuffer)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer)
 GBuffer::frameBuffer	inc/g_buffer.h	/^	VkFramebuffer frameBuffer;$/;"	m	class:GBuffer	access:public
 GBuffer::height	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	access:public
 GBuffer::init	src/g_buffer.cpp	/^void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)$/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)
@@ -2653,8 +2654,9 @@ LAST_CONCRETE	lib/vulkan/libspirv.h	95;"	d
 LAST_VARIABLE	lib/vulkan/libspirv.h	/^  LAST_VARIABLE(SPV_OPERAND_TYPE_VARIABLE_ID_LITERAL_INTEGER),$/;"	e	enum:spv_operand_type_t
 LAST_VARIABLE	lib/vulkan/libspirv.h	174;"	d
 LDLIBS	Makefile	/^LDLIBS=$(shell pkg-config --static --libs glfw3) -L$(VULKAN_LIB_PATH) -lvulkan -lassimp$/;"	m
-LOG	inc/macro.h	22;"	d
-LOG	inc/macro.h	25;"	d
+LOG	inc/macro.h	23;"	d
+LOG	inc/macro.h	27;"	d
+LOG_TITLE	inc/macro.h	34;"	d
 LONG_LONG_MAX	lib/__assimp/Compiler/pstdint.h	549;"	d
 LONG_LONG_MAX	lib/assimp/Compiler/pstdint.h	524;"	d
 LightUBO	inc/shape/point_light.h	/^	struct LightUBO {$/;"	s	class:PointLight	access:public
@@ -3531,9 +3533,9 @@ PipelineInfo::cache	inc/vulkan_state.h	/^	VkPipelineCache cache;$/;"	m	struct:Pi
 PipelineInfo::layout	inc/vulkan_state.h	/^	VkPipelineLayout layout;$/;"	m	struct:PipelineInfo	access:public
 PipelineInfo::pipeline	inc/vulkan_state.h	/^	VkPipeline pipeline;$/;"	m	struct:PipelineInfo	access:public
 PipelineManager	inc/creator/pipeline_manager.h	/^namespace PipelineManager$/;"	n
+PipelineManager::createDeferredPipeline	inc/creator/pipeline_manager.h	/^inline void createDeferredPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 PipelineManager::createFullscreenQuadPipeline	inc/creator/pipeline_manager.h	/^inline void createFullscreenQuadPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 PipelineManager::createModelPipeline	inc/creator/pipeline_manager.h	/^inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
-PipelineManager::createMrtPipeline	inc/creator/pipeline_manager.h	/^inline void createMrtPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 PipelineManager::createPipelines	inc/creator/pipeline_manager.h	/^inline void createPipelines(VulkanState& state, GBuffer& gBuffer)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, GBuffer& gBuffer)
 PipelineManager::createPointLightPipeline	inc/creator/pipeline_manager.h	/^inline void createPointLightPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 PipelineManager::createSkinnedPipeline	inc/creator/pipeline_manager.h	/^inline void createSkinnedPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
@@ -3598,7 +3600,7 @@ ResetDescriptorPool	lib/vulkan/vk_layer.h	/^    PFN_vkResetDescriptorPool ResetD
 ResetEvent	lib/vulkan/vk_layer.h	/^    PFN_vkResetEvent ResetEvent;$/;"	m	struct:VkLayerDispatchTable_	access:public
 ResetFences	lib/vulkan/vk_layer.h	/^    PFN_vkResetFences ResetFences;$/;"	m	struct:VkLayerDispatchTable_	access:public
 Revision	lib/vulkan/spirv.hpp	/^static const unsigned int Revision = 2;$/;"	m	namespace:spv
-SAMPLER_LIST_SIZE	inc/macro.h	33;"	d
+SAMPLER_LIST_SIZE	inc/macro.h	48;"	d
 SHADER_DIR	inc/file_manager.h	/^	static constexpr const char* SHADER_DIR = "shader\/spv\/";$/;"	m	class:FileManager	access:private
 SHADER_DIR	inc/file_manager.h	/^	static constexpr const char* SHADER_DIR = "shaders\/";$/;"	m	class:FileManager	access:private
 SHADER_SPV_DIR	Makefile	/^SHADER_SPV_DIR := shader\/spv$/;"	m
@@ -7606,30 +7608,30 @@ VkXlibSurfaceCreateInfoKHR::flags	lib/vulkan/vulkan.h	/^    VkXlibSurfaceCreateF
 VkXlibSurfaceCreateInfoKHR::pNext	lib/vulkan/vulkan.h	/^    const void*                    pNext;$/;"	m	struct:VkXlibSurfaceCreateInfoKHR	access:public
 VkXlibSurfaceCreateInfoKHR::sType	lib/vulkan/vulkan.h	/^    VkStructureType                sType;$/;"	m	struct:VkXlibSurfaceCreateInfoKHR	access:public
 VkXlibSurfaceCreateInfoKHR::window	lib/vulkan/vulkan.h	/^    Window                         window;$/;"	m	struct:VkXlibSurfaceCreateInfoKHR	access:public
+VulkanManager	/home/al/amvk/src/vulkan_manager.cpp	/^VulkanManager::VulkanManager(Window& window):$/;"	f	class:VulkanManager	signature:(Window& window)
 VulkanManager	inc/vulkan_manager.h	/^class VulkanManager { $/;"	c
-VulkanManager	src/vulkan_manager.cpp	/^VulkanManager::VulkanManager(Window& window):$/;"	f	class:VulkanManager	signature:(Window& window)
-VulkanManager::VulkanManager	src/vulkan_manager.cpp	/^VulkanManager::VulkanManager(Window& window):$/;"	f	class:VulkanManager	signature:(Window& window)
-VulkanManager::buildCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)$/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
-VulkanManager::buildComputeBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildComputeBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
-VulkanManager::buildGBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
-VulkanManager::draw	src/vulkan_manager.cpp	/^void VulkanManager::draw() $/;"	f	class:VulkanManager	signature:()
+VulkanManager::VulkanManager	/home/al/amvk/src/vulkan_manager.cpp	/^VulkanManager::VulkanManager(Window& window):$/;"	f	class:VulkanManager	signature:(Window& window)
+VulkanManager::buildCommandBuffers	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)$/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
+VulkanManager::buildComputeBuffers	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::buildComputeBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
+VulkanManager::buildGBuffers	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
+VulkanManager::draw	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::draw() $/;"	f	class:VulkanManager	signature:()
 VulkanManager::dwarf	inc/vulkan_manager.h	/^	Skinned dwarf;$/;"	m	class:VulkanManager	access:private
 VulkanManager::fullscreenQuad	inc/vulkan_manager.h	/^	FullscreenQuad fullscreenQuad;$/;"	m	class:VulkanManager	access:private
 VulkanManager::gBuffer	inc/vulkan_manager.h	/^	GBuffer gBuffer;$/;"	m	class:VulkanManager	access:private
 VulkanManager::guard	inc/vulkan_manager.h	/^	Skinned guard;$/;"	m	class:VulkanManager	access:private
 VulkanManager::imageIndex	inc/vulkan_manager.h	/^	uint32_t imageIndex;$/;"	m	class:VulkanManager	access:private
-VulkanManager::init	src/vulkan_manager.cpp	/^void VulkanManager::init() $/;"	f	class:VulkanManager	signature:()
+VulkanManager::init	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::init() $/;"	f	class:VulkanManager	signature:()
 VulkanManager::mDeviceManager	inc/vulkan_manager.h	/^	DeviceManager mDeviceManager;$/;"	m	class:VulkanManager	access:private
 VulkanManager::mState	inc/vulkan_manager.h	/^	VulkanState mState;$/;"	m	class:VulkanManager	access:private
 VulkanManager::mSwapChainManager	inc/vulkan_manager.h	/^	SwapchainManager mSwapChainManager;$/;"	m	class:VulkanManager	access:private
 VulkanManager::mWindow	inc/vulkan_manager.h	/^	Window& mWindow;$/;"	m	class:VulkanManager	access:private
-VulkanManager::recreateSwapChain	src/vulkan_manager.cpp	/^void VulkanManager::recreateSwapChain()$/;"	f	class:VulkanManager	signature:()
+VulkanManager::recreateSwapChain	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::recreateSwapChain()$/;"	f	class:VulkanManager	signature:()
 VulkanManager::sceneLights	inc/vulkan_manager.h	/^	SceneLights sceneLights;$/;"	m	class:VulkanManager	access:private
 VulkanManager::suit	inc/vulkan_manager.h	/^	Model suit;$/;"	m	class:VulkanManager	access:private
 VulkanManager::tquad	inc/vulkan_manager.h	/^	TQuad tquad;$/;"	m	class:VulkanManager	access:private
-VulkanManager::updateUniformBuffers	src/vulkan_manager.cpp	/^void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)$/;"	f	class:VulkanManager	signature:(const Timer& timer, Camera& camera)
-VulkanManager::waitIdle	src/vulkan_manager.cpp	/^void VulkanManager::waitIdle() $/;"	f	class:VulkanManager	signature:()
-VulkanManager::~VulkanManager	src/vulkan_manager.cpp	/^VulkanManager::~VulkanManager()$/;"	f	class:VulkanManager	signature:()
+VulkanManager::updateUniformBuffers	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)$/;"	f	class:VulkanManager	signature:(const Timer& timer, Camera& camera)
+VulkanManager::waitIdle	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::waitIdle() $/;"	f	class:VulkanManager	signature:()
+VulkanManager::~VulkanManager	/home/al/amvk/src/vulkan_manager.cpp	/^VulkanManager::~VulkanManager()$/;"	f	class:VulkanManager	signature:()
 VulkanState	inc/vulkan_state.h	/^	VulkanState(): $/;"	f	struct:VulkanState	access:public	signature:()
 VulkanState	inc/vulkan_state.h	/^struct VulkanState {$/;"	s
 VulkanState::UBO	inc/vulkan_state.h	/^	struct UBO {$/;"	s	struct:VulkanState	access:public
@@ -9638,9 +9640,9 @@ bufferOffset	lib/vulkan/vulkan.h	/^    VkDeviceSize                bufferOffset;
 bufferRowLength	lib/vulkan/vulkan.h	/^    uint32_t                    bufferRowLength;$/;"	m	struct:VkBufferImageCopy	access:public
 buffer_start	lib/stb/stb_image.h	/^   stbi_uc buffer_start[128];$/;"	m	struct:__anon60	access:public
 buflen	lib/stb/stb_image.h	/^   int buflen;$/;"	m	struct:__anon60	access:public
-buildCommandBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)$/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
-buildComputeBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildComputeBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
-buildGBuffers	src/vulkan_manager.cpp	/^void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
+buildCommandBuffers	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)$/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
+buildComputeBuffers	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::buildComputeBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
+buildGBuffers	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera) $/;"	f	class:VulkanManager	signature:(const Timer &timer, Camera &camera)
 bvec1	lib/glm/gtc/vec1.hpp	/^	typedef highp_bvec1				bvec1;$/;"	t	namespace:glm
 bvec1	lib/glm/gtc/vec1.hpp	/^	typedef lowp_bvec1				bvec1;$/;"	t	namespace:glm
 bvec1	lib/glm/gtc/vec1.hpp	/^	typedef mediump_bvec1			bvec1;$/;"	t	namespace:glm
@@ -9823,6 +9825,7 @@ createCommonBuffer	inc/creator/buffer_helper.h	/^inline void createCommonBuffer(
 createCommonBuffer	src/shape/model.cpp	/^void Model::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Model	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 createCommonBuffer	src/shape/skinned.cpp	/^void Skinned::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Skinned	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 createDeferredDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createDeferredDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
+createDeferredPipeline	inc/creator/pipeline_manager.h	/^inline void createDeferredPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 createDepthAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat format)$/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
 createDepthResources	src/swapchain_manager.cpp	/^void SwapchainManager::createDepthResources() $/;"	f	class:SwapchainManager	signature:()
 createDescriptorPool	inc/creator/descriptor_manager.h	/^inline void createDescriptorPool(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
@@ -9853,7 +9856,6 @@ createInfo	inc/pipeline_cache.h	/^    VkPipelineCacheCreateInfo createInfo;$/;"	
 createLogicalDevice	src/device_manager.cpp	/^void DeviceManager::createLogicalDevice() $/;"	f	class:DeviceManager	signature:()
 createModelDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createModelDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createModelPipeline	inc/creator/pipeline_manager.h	/^inline void createModelPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
-createMrtPipeline	inc/creator/pipeline_manager.h	/^inline void createMrtPipeline(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 createPhysicalDevice	src/device_manager.cpp	/^void DeviceManager::createPhysicalDevice(SwapchainManager& swapchainManager) $/;"	f	class:DeviceManager	signature:(SwapchainManager& swapchainManager)
 createPipelines	inc/creator/pipeline_manager.h	/^inline void createPipelines(VulkanState& state, GBuffer& gBuffer)$/;"	f	namespace:PipelineManager	signature:(VulkanState& state, GBuffer& gBuffer)
 createPointLight	src/scene_lights.cpp	/^PointLight& SceneLights::createPointLight() $/;"	f	class:SceneLights	signature:()
@@ -10111,13 +10113,14 @@ dpy	lib/vulkan/vulkan.h	/^    Display*                       dpy;$/;"	m	struct:V
 dquat	lib/glm/fwd.hpp	/^	typedef highp_dquat			dquat;$/;"	t	namespace:glm
 dquat	lib/glm/fwd.hpp	/^	typedef lowp_dquat			dquat;$/;"	t	namespace:glm
 dquat	lib/glm/fwd.hpp	/^	typedef mediump_dquat		dquat;$/;"	t	namespace:glm
+draw	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::draw() $/;"	f	class:VulkanManager	signature:()
 draw	src/scene_lights.cpp	/^void SceneLights::draw(VkCommandBuffer& cmdBuffer)$/;"	f	class:SceneLights	signature:(VkCommandBuffer& cmdBuffer)
 draw	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::draw($/;"	f	class:FullscreenQuad	signature:( VkCommandBuffer& cmdBuffer, VkPipeline pipeline, VkPipelineLayout layout, VkDescriptorSet* descriptors, uint32_t numDescriptors)
 draw	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::draw(VkCommandBuffer& cmdBuffer) $/;"	f	class:FullscreenQuad	signature:(VkCommandBuffer& cmdBuffer)
 draw	src/shape/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 draw	src/shape/skinned.cpp	/^void Skinned::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Skinned	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 draw	src/shape/tquad.cpp	/^void TQuad::draw(VkCommandBuffer& commandBuffer)$/;"	f	class:TQuad	signature:(VkCommandBuffer& commandBuffer)
-draw	src/vulkan_manager.cpp	/^void VulkanManager::draw() $/;"	f	class:VulkanManager	signature:()
+drawDeferredQuad	src/g_buffer.cpp	/^void GBuffer::drawDeferredQuad(VkCommandBuffer& cmdBuffer)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer)
 drawIndirectFirstInstance	lib/vulkan/vulkan.h	/^    VkBool32    drawIndirectFirstInstance;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 driverVersion	lib/vulkan/vulkan.h	/^    uint32_t                            driverVersion;$/;"	m	struct:VkPhysicalDeviceProperties	access:public
 dstAccessMask	lib/vulkan/vulkan.h	/^    VkAccessFlags              dstAccessMask;$/;"	m	struct:VkImageMemoryBarrier	access:public
@@ -13881,6 +13884,7 @@ indexCount	lib/vulkan/vulkan.h	/^    uint32_t    indexCount;$/;"	m	struct:VkDraw
 info	lib/__assimp/Logger.hpp	/^inline void Logger::info(const std::string &message)$/;"	f	class:Assimp::Logger	signature:(const std::string &message)
 info	lib/assimp/Logger.hpp	/^inline void Logger::info(const std::string &message)$/;"	f	class:Assimp::Logger	signature:(const std::string &message)
 inheritedQueries	lib/vulkan/vulkan.h	/^    VkBool32    inheritedQueries;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
+init	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::init() $/;"	f	class:VulkanManager	signature:()
 init	src/engine.cpp	/^void Engine::init()$/;"	f	class:Engine	signature:()
 init	src/engine.cpp	/^void Engine::init(android_app* state)$/;"	f	class:Engine	signature:(android_app* state)
 init	src/g_buffer.cpp	/^void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)$/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)
@@ -13893,7 +13897,6 @@ init	src/shape/skinned.cpp	/^void Skinned::init(const char* modelPath, unsigned 
 init	src/shape/skinned.cpp	/^void Skinned::init(std::string modelPath, unsigned int pFlags, ModelFlags modelFlags) $/;"	f	class:Skinned	signature:(std::string modelPath, unsigned int pFlags, ModelFlags modelFlags)
 init	src/shape/sphere.cpp	/^void Sphere::init(uint32_t numStacks, uint32_t numSlices, float radius \/* = 1.0f *\/)$/;"	f	class:Sphere	signature:(uint32_t numStacks, uint32_t numSlices, float radius )
 init	src/shape/tquad.cpp	/^void TQuad::init()$/;"	f	class:TQuad	signature:()
-init	src/vulkan_manager.cpp	/^void VulkanManager::init() $/;"	f	class:VulkanManager	signature:()
 initBinPath	src/file_manager.cpp	/^void FileManager::initBinPath()$/;"	f	class:FileManager	signature:()
 initPrevPos	inc/camera.h	/^	bool initPrevPos;	$/;"	m	class:Camera	access:private
 initWindow	src/window.cpp	/^void Window::initWindow(Engine& engine)$/;"	f	class:Window	signature:(Engine& engine)
@@ -15768,7 +15771,7 @@ read_from_callbacks	lib/stb/stb_image.h	/^   int read_from_callbacks;$/;"	m	stru
 real	lib/glm/gtx/dual_quaternion.hpp	/^		glm::tquat<T, P> real, dual;$/;"	m	struct:glm::tdualquat	access:public
 rebuildPerspective	src/camera.cpp	/^void Camera::rebuildPerspective()$/;"	f	class:Camera	signature:()
 rebuildView	src/camera.cpp	/^void Camera::rebuildView()$/;"	f	class:Camera	signature:()
-recreateSwapChain	src/vulkan_manager.cpp	/^void VulkanManager::recreateSwapChain()$/;"	f	class:VulkanManager	signature:()
+recreateSwapChain	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::recreateSwapChain()$/;"	f	class:VulkanManager	signature:()
 rect	lib/vulkan/vulkan.h	/^    VkRect2D    rect;$/;"	m	struct:VkClearRect	access:public
 reference	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> & reference;$/;"	t	struct:glm::detail::genType	access:public
 reference	lib/vulkan/vulkan.h	/^    uint32_t       reference;$/;"	m	struct:VkStencilOpState	access:public
@@ -17587,7 +17590,7 @@ update	src/shape/skinned.cpp	/^void Skinned::update(VkCommandBuffer& cmdBuffer, 
 update	src/shape/tquad.cpp	/^void TQuad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera)$/;"	f	class:TQuad	signature:(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera)
 updateFOV	src/camera.cpp	/^void Camera::updateFOV(float scrollDirection)$/;"	f	class:Camera	signature:(float scrollDirection)
 updateOrientation	src/camera.cpp	/^void Camera::updateOrientation(double mouseX, double mouseY)$/;"	f	class:Camera	signature:(double mouseX, double mouseY)
-updateUniformBuffers	src/vulkan_manager.cpp	/^void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)$/;"	f	class:VulkanManager	signature:(const Timer& timer, Camera& camera)
+updateUniformBuffers	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)$/;"	f	class:VulkanManager	signature:(const Timer& timer, Camera& camera)
 updateViewAngles	src/camera.cpp	/^void Camera::updateViewAngles()$/;"	f	class:Camera	signature:()
 usage	lib/vulkan/vulkan.h	/^    VkBufferUsageFlags     usage;$/;"	m	struct:VkBufferCreateInfo	access:public
 usage	lib/vulkan/vulkan.h	/^    VkImageUsageFlags        usage;$/;"	m	struct:VkImageCreateInfo	access:public
@@ -17717,7 +17720,7 @@ w	lib/glm/gtc/quaternion.hpp	/^			T x, y, z, w;$/;"	m	struct:glm::tquat	access:p
 w	lib/stb/stb_image.h	/^   int w,h;$/;"	m	struct:__anon74	access:public
 w2	lib/stb/stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon63::__anon64	access:public
 w_lores	lib/stb/stb_image.h	/^   int w_lores; \/\/ horizontal pixels pre-expansion$/;"	m	struct:__anon65	access:public
-waitIdle	src/vulkan_manager.cpp	/^void VulkanManager::waitIdle() $/;"	f	class:VulkanManager	signature:()
+waitIdle	/home/al/amvk/src/vulkan_manager.cpp	/^void VulkanManager::waitIdle() $/;"	f	class:VulkanManager	signature:()
 waitSemaphoreCount	lib/vulkan/vulkan.h	/^    uint32_t                                    waitSemaphoreCount;$/;"	m	struct:VkBindSparseInfo	access:public
 waitSemaphoreCount	lib/vulkan/vulkan.h	/^    uint32_t                       waitSemaphoreCount;$/;"	m	struct:VkSubmitInfo	access:public
 waitSemaphoreCount	lib/vulkan/vulkan.h	/^    uint32_t                 waitSemaphoreCount;$/;"	m	struct:VkPresentInfoKHR	access:public
@@ -18346,7 +18349,7 @@ zzzz	lib/glm/gtx/vec_swizzle.hpp	/^	GLM_INLINE glm::vec<4, T, P> zzzz(const glm:
 ~TaskManager	src/task_manager.cpp	/^TaskManager::~TaskManager() $/;"	f	class:TaskManager	signature:()
 ~TextureData	src/texture_data.cpp	/^TextureData::~TextureData()$/;"	f	class:TextureData	signature:()
 ~TextureManager	src/texture_manager.cpp	/^TextureManager::~TextureManager()$/;"	f	class:TextureManager	signature:()
-~VulkanManager	src/vulkan_manager.cpp	/^VulkanManager::~VulkanManager()$/;"	f	class:VulkanManager	signature:()
+~VulkanManager	/home/al/amvk/src/vulkan_manager.cpp	/^VulkanManager::~VulkanManager()$/;"	f	class:VulkanManager	signature:()
 ~Window	src/window.cpp	/^Window::~Window() $/;"	f	class:Window	signature:()
 ~aiAnimMesh	lib/__assimp/mesh.h	/^    ~aiAnimMesh()$/;"	f	struct:aiAnimMesh	access:public	signature:()
 ~aiAnimMesh	lib/assimp/mesh.h	/^    ~aiAnimMesh()$/;"	f	struct:aiAnimMesh	access:public	signature:()

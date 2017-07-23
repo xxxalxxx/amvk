@@ -16,6 +16,7 @@ GBuffer::~GBuffer()
 
 void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)
 {
+	LOG_TITLE("G-BUFFER");
 	this->width = width;
 	this->height = height;
 	createFramebuffers(physicalDevice, device);
@@ -295,5 +296,16 @@ void GBuffer::createDescriptors()
 	}
 	vkUpdateDescriptorSets(mState->device, writeSets.size(), writeSets.data(), 0, nullptr);
 	LOG("G-Buffer descriptors created");
+}
+
+
+void GBuffer::drawDeferredQuad(VkCommandBuffer& cmdBuffer)
+{
+	deferredQuad.draw(
+		cmdBuffer, 
+		mState->pipelines.fullscreenQuad.pipeline, 
+		mState->pipelines.fullscreenQuad.layout, 
+		&deferredQuad.mDescriptorSet, 
+		1);
 }
 
