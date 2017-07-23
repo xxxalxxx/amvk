@@ -1,7 +1,7 @@
-#include "vulkan_manager.h"
+#include "renderer.h"
 
 
-VulkanManager::VulkanManager(Window& window):
+Renderer::Renderer(Window& window):
 	mWindow(window),
 	mDeviceManager(mState),
 	mSwapChainManager(mState, mWindow),
@@ -17,12 +17,13 @@ VulkanManager::VulkanManager(Window& window):
 	
 }
 
-VulkanManager::~VulkanManager()
+Renderer::~Renderer()
 {
 }
 
-void VulkanManager::init() 
+void Renderer::init()
 {
+	LOG_TITLE("Device Manager");
 	mDeviceManager.createVkInstance();
 #ifdef AMVK_DEBUG
 	mDeviceManager.enableDebug();
@@ -31,18 +32,20 @@ void VulkanManager::init()
 	mDeviceManager.createPhysicalDevice(mSwapChainManager);
 	mDeviceManager.createLogicalDevice();
 
+	LOG_TITLE("Swapchain");
+
 	mSwapChainManager.createSwapChain();
 	mSwapChainManager.createImageViews();
 	
 	mSwapChainManager.createRenderPass();
 	mSwapChainManager.createCommandPool();
 
-	ShaderManager::createShaders(mState);
-	DescriptorManager::createDescriptorSetLayouts(mState);
-	DescriptorManager::createDescriptorPool(mState);
+	ShaderCreator::createShaders(mState);
+	DescriptorCreator::createDescriptorSetLayouts(mState);
+	DescriptorCreator::createDescriptorPool(mState);
 
 	gBuffer.init(mState.physicalDevice, mState.device, mSwapChainManager.getWidth(), mSwapChainManager.getHeight());
-    PipelineManager::createPipelines(mState, gBuffer);
+    PipelineCreator::createPipelines(mState, gBuffer);
 	tquad.init();
 	//fullscreenQuad.init();
 
@@ -71,15 +74,15 @@ void VulkanManager::init()
 
 	mSwapChainManager.createDepthResources();
 	mSwapChainManager.createFramebuffers(mState.renderPass);
-
 	mSwapChainManager.createCommandBuffers();
-	mSwapChainManager.createSemaphores();
+
+	createSemaphores();
 	
 	LOG("INIT SUCCESSFUL");
 }
 
 
-void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)
+void Renderer::updateUniformBuffers(const Timer& timer, Camera& camera)
 {
 	CmdPass cmd(mState.device, mState.commandPool, mState.graphicsQueue);
 	tquad.update(cmd.buffer, timer, camera);
@@ -89,7 +92,7 @@ void VulkanManager::updateUniformBuffers(const Timer& timer, Camera& camera)
 	sceneLights.update(cmd.buffer, timer, camera);
 }
 
-void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera) 
+void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
 {
 	std::array<VkClearValue, GBuffer::ATTACHMENT_COUNT> clearValues;
 	clearValues[GBuffer::INDEX_POSITION].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
@@ -140,12 +143,12 @@ void VulkanManager::buildGBuffers(const Timer &timer, Camera &camera)
 	VK_CHECK_RESULT(vkEndCommandBuffer(cmdBuffer));
 }
 
-void VulkanManager::buildComputeBuffers(const Timer &timer, Camera &camera) 
+void Renderer::buildComputeBuffers(const Timer &timer, Camera &camera)
 {
 
 }
 
-void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
+void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 {
 
 	VkClearValue clearValues[] ={
@@ -210,54 +213,46 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 	}
 }
 
-void VulkanManager::draw() 
+void Renderer::draw()
 {
 	VkResult result = vkAcquireNextImageKHR(mState.device,
                                             mState.swapChain,
-										  std::numeric_limits<uint64_t>::max(), 
-										  mSwapChainManager.mImageAvailableSemaphore, 
-										  VK_NULL_HANDLE, 
-										  &imageIndex);
+                                            std::numeric_limits<uint64_t>::max(),
+                                            imageAquiredSemaphore,
+                                            VK_NULL_HANDLE,
+                                            &imageIndex);
 	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 		recreateSwapChain();
 	} else if (result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR) {
 		VkSubmitInfo submitInfo = {};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	
-		VkSemaphore waitSemaphores[] = { 
-			mSwapChainManager.mImageAvailableSemaphore 
-		};
-		
-		VkSemaphore signalSemaphores[] = { 
-			mSwapChainManager.mRenderFinishedSemaphore 
-		};
 		
 		VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 
 		submitInfo.waitSemaphoreCount = 1;
-		submitInfo.pWaitSemaphores = &mSwapChainManager.mImageAvailableSemaphore;
+		submitInfo.pWaitSemaphores = &imageAquiredSemaphore;
 		submitInfo.pWaitDstStageMask = stageFlags;
 		submitInfo.commandBufferCount = 1;
 		submitInfo.pCommandBuffers = &gBuffer.cmdBuffer;
 		submitInfo.signalSemaphoreCount = 1;
-		submitInfo.pSignalSemaphores = &gBuffer.offscreenSemaphore;
+		submitInfo.pSignalSemaphores = &offscreenSemaphore;
 
 		VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
 
 		submitInfo.waitSemaphoreCount = 1;
-		submitInfo.pWaitSemaphores = &gBuffer.offscreenSemaphore;
+		submitInfo.pWaitSemaphores = &offscreenSemaphore;
 		submitInfo.pWaitDstStageMask = stageFlags;
 		submitInfo.commandBufferCount = 1;
 		submitInfo.pCommandBuffers = &mSwapChainManager.cmdBuffers[imageIndex];
 		submitInfo.signalSemaphoreCount = 1;
-		submitInfo.pSignalSemaphores = &mSwapChainManager.mRenderFinishedSemaphore;
+		submitInfo.pSignalSemaphores = &renderFinishedSemaphore;
 
 		VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
 		
 		VkPresentInfoKHR presentInfo = {};
 		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 		presentInfo.waitSemaphoreCount = 1;
-		presentInfo.pWaitSemaphores = &mSwapChainManager.mRenderFinishedSemaphore;
+		presentInfo.pWaitSemaphores = &renderFinishedSemaphore;
 		presentInfo.swapchainCount = 1;
 		presentInfo.pSwapchains = &mState.swapChain;
 		presentInfo.pImageIndices = &imageIndex;
@@ -301,12 +296,27 @@ void VulkanManager::draw()
 	}
 }
 
-void VulkanManager::waitIdle() 
+void Renderer::createSemaphores()
+{
+	VkSemaphoreCreateInfo createInfo = {};
+	createInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+	VK_CHECK_RESULT(vkCreateSemaphore(mState.device, &createInfo, nullptr, &imageAquiredSemaphore));
+	VK_CHECK_RESULT(vkCreateSemaphore(mState.device, &createInfo, nullptr, &offscreenSemaphore));
+	VK_CHECK_RESULT(vkCreateSemaphore(mState.device, &createInfo, nullptr, &renderFinishedSemaphore));
+	LOG("SEMAPHORES CREATED");
+}
+
+void Renderer::waitIdle()
 {
 	vkDeviceWaitIdle(mState.device);
 }
 
-void VulkanManager::recreateSwapChain()
+void Renderer::onWindowSizeChanged(uint32_t width, uint32_t height)
+{
+    recreateSwapChain();
+}
+
+void Renderer::recreateSwapChain()
 {
 /*	vkQueueWaitIdle(mState.graphicsQueue);
 	vkDeviceWaitIdle(mState.device);

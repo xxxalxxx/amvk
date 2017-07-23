@@ -8,18 +8,14 @@
 
 #include "macro.h"
 
-#ifdef __ANDROID__
-#include "vulkan_wrapper.h"
-#else
-#include <vulkan/vulkan.h>
-#endif
+#include "vulkan.h"
 
-#include "vulkan_state.h"
+#include "state.h"
 #include "texture_manager.h"
 
 class FullscreenQuad {
 public:
-	FullscreenQuad(VulkanState& state);
+	FullscreenQuad(State& state);
 	void init();
 	void draw(VkCommandBuffer& cmdBuffer); 
 
@@ -32,7 +28,7 @@ public:
 	VkDescriptorSet mDescriptorSet;
 private:
 	void createDescriptorSets();
-	VulkanState& mState;
+	State& mState;
 
 	ImageInfo* mImageInfo;
 };

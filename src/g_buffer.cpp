@@ -1,6 +1,6 @@
 #include "g_buffer.h"
 
-GBuffer::GBuffer(VulkanState& state):
+GBuffer::GBuffer(State& state):
 	mState(&state),
 	deferredQuad(state)
 {
@@ -231,11 +231,6 @@ void GBuffer::createSampler(const VkDevice& device)
 
 void GBuffer::createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool)
 {
-	VkSemaphoreCreateInfo semaphoreCreateInfo = {};
-	semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-	VK_CHECK_RESULT(vkCreateSemaphore(device, &semaphoreCreateInfo, nullptr, &offscreenSemaphore));
-
-
 	VkCommandBufferAllocateInfo cmdBufferAllocInfo = {};
 	cmdBufferAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	cmdBufferAllocInfo.commandPool = cmdPool;

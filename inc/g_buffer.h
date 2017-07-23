@@ -7,7 +7,7 @@
 #include "vulkan.h"
 #include "buffer_helper.h"
 #include "image_helper.h"
-#include "vulkan_state.h"
+#include "state.h"
 #include "fullscreen_quad.h"
 
 struct FramebufferAttachment {
@@ -33,7 +33,7 @@ public:
 	inline FramebufferAttachment& albedo() { return attachments[INDEX_ALBEDO]; }
 	inline FramebufferAttachment& depth() { return attachments[INDEX_DEPTH]; }
 
-	GBuffer(VulkanState& state);
+	GBuffer(State& state);
 	virtual ~GBuffer();
 
 	void init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height);
@@ -47,9 +47,6 @@ public:
 	VkRenderPass renderPass;
 	VkSampler sampler;
 	VkCommandBuffer cmdBuffer;
-	VkSemaphore offscreenSemaphore;
-
-
 
 private:
 	void createFramebuffers(const VkPhysicalDevice& physicalDevice, const VkDevice& device);
@@ -67,7 +64,7 @@ private:
 	void createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format);
 	void createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat format);
 
-	const VulkanState* mState;
+	const State* mState;
 	VkDescriptorPool mDescriptorPool;
 	VkDescriptorSet mDescriptorSet;
 public:

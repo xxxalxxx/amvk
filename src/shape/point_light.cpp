@@ -7,7 +7,7 @@ PointLight::PointLight(UBO& ubo, LightUBO& lightUbo):
 
 }
 
-void PointLight::init(VulkanState& state, const glm::vec3& color, const glm::vec3& position, float radius, float specPower /* = 1.0f */)
+void PointLight::init(State& state, const glm::vec3& color, const glm::vec3& position, float radius, float specPower /* = 1.0f */)
 {
 	mState = &state;
 	

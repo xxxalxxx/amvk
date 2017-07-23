@@ -1,6 +1,6 @@
 #include "scene_lights.h"
 
-SceneLights::SceneLights(VulkanState& state):
+SceneLights::SceneLights(State& state):
 	mState(&state),
 	mUniformBufferInfo(state.device),
 	mSphere(state),
@@ -78,9 +78,9 @@ void SceneLights::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera&
 {
 	mState->ubo.view = camera.view();
 	mState->ubo.proj = camera.proj();
-	*((VulkanState::UBO*) ubo) = mState->ubo;
+	*((State::UBO*) ubo) = mState->ubo;
 
-	//memcpy(ubo, &(mState->ubo), sizeof(VulkanState::UBO));
+	//memcpy(ubo, &(mState->ubo), sizeof(State::UBO));
 
 	for (size_t i = 0; i < pointLights.size(); ++i) {
 		uint32_t uboOffset = sceneAlignment + i * mDynamicAlignmentSize;
@@ -108,7 +108,7 @@ void SceneLights::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera&
 
 void SceneLights::createUniformBuffer() 
 {
-	sceneAlignment = calcAlignment(sizeof(VulkanState::UBO));
+	sceneAlignment = calcAlignment(sizeof(State::UBO));
 	pointLightUboAlignment = calcAlignment(sizeof(PointLight::UBO));
 	pointLightLightAlignment = calcAlignment(sizeof(PointLight::LightUBO));
 
@@ -153,7 +153,7 @@ void SceneLights::createDescriptorSets()
 	VkDescriptorBufferInfo sceneInfo = {};
 	sceneInfo.buffer = mUniformBufferInfo.buffer;
 	sceneInfo.offset = 0;
-	sceneInfo.range = sizeof(VulkanState::UBO);
+	sceneInfo.range = sizeof(State::UBO);
 
 	VkDescriptorBufferInfo buffInfo = {};
 	buffInfo.buffer = mUniformBufferInfo.buffer;
@@ -213,7 +213,7 @@ void SceneLights::createDescriptorSets()
 	VkDescriptorBufferInfo sceneInfo = {};
 	sceneInfo.buffer = mUniformBufferInfo.buffer;
 	sceneInfo.offset = 0;
-	sceneInfo.range = sizeof(VulkanState::UBO);
+	sceneInfo.range = sizeof(State::UBO);
 
 	VkDeviceSize offset = sceneAlignment;
 

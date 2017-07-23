@@ -2,13 +2,13 @@
 #define AMVK_DESCRIPTOR_MANAGER_H
 
 #include "macro.h"
-#include "vulkan_state.h"
-#include "pipeline_creator.h"
+#include "state.h"
+#include "pipeline_builder.h"
 
-namespace DescriptorManager 
+namespace DescriptorCreator
 {
 
-inline void createTQuadDescriptorSetLayout(VulkanState& state)
+inline void createTQuadDescriptorSetLayout(State& state)
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
 	descSetBinding.binding = 0;
@@ -37,7 +37,7 @@ inline void createTQuadDescriptorSetLayout(VulkanState& state)
 	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.tquad));
 }
 
-inline void createPointLightDescriptorSetLayout(VulkanState& state) 
+inline void createPointLightDescriptorSetLayout(State& state)
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
 	descSetBinding.binding = 0;
@@ -74,7 +74,7 @@ inline void createPointLightDescriptorSetLayout(VulkanState& state)
 	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.pointLight));
 }
 
-inline void createSamplerDescriptorSetLayout(VulkanState& state)
+inline void createSamplerDescriptorSetLayout(State& state)
 {
 	VkDescriptorSetLayoutBinding samplerLayoutBinding = {};
 	samplerLayoutBinding.binding = 0;
@@ -91,7 +91,7 @@ inline void createSamplerDescriptorSetLayout(VulkanState& state)
 	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.sampler));
 }
 
-inline void createDeferredDescriptorSetLayout(VulkanState& state)
+inline void createDeferredDescriptorSetLayout(State& state)
 {
 /*
 	uint32_t              binding;
@@ -118,7 +118,7 @@ inline void createDeferredDescriptorSetLayout(VulkanState& state)
 
 
 
-inline void createSamplerListDescriptorSetLayout(VulkanState& state)
+inline void createSamplerListDescriptorSetLayout(State& state)
 {
 	VkDescriptorSetLayoutBinding samplerLayoutBinding = {};
 	samplerLayoutBinding.binding = 0;
@@ -137,7 +137,7 @@ inline void createSamplerListDescriptorSetLayout(VulkanState& state)
 
 
 
-inline void createUniformVertexDescriptorSetLayout(VulkanState& state)
+inline void createUniformVertexDescriptorSetLayout(State& state)
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
 	descSetBinding.binding = 0;
@@ -154,7 +154,7 @@ inline void createUniformVertexDescriptorSetLayout(VulkanState& state)
 	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.uniformVertex));
 }
 
-inline void createUniformFragmentDescriptorSetLayout(VulkanState& state) 
+inline void createUniformFragmentDescriptorSetLayout(State& state)
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
 	descSetBinding.binding = 0;
@@ -171,7 +171,7 @@ inline void createUniformFragmentDescriptorSetLayout(VulkanState& state)
 	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.uniformFragment));
 }
 
-inline void createDynamicUniformVertexDescriptorSetLayout(VulkanState& state)
+inline void createDynamicUniformVertexDescriptorSetLayout(State& state)
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
 	descSetBinding.binding = 0;
@@ -188,7 +188,7 @@ inline void createDynamicUniformVertexDescriptorSetLayout(VulkanState& state)
 	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.dynamicUniformVertex));
 }
 
-inline void createDynamicUniformFragmentDescriptorSetLayout(VulkanState& state) 
+inline void createDynamicUniformFragmentDescriptorSetLayout(State& state)
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
 	descSetBinding.binding = 0;
@@ -205,7 +205,7 @@ inline void createDynamicUniformFragmentDescriptorSetLayout(VulkanState& state)
 	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.dynamicUniformFragment));
 }
 
-inline void createModelDescriptorSetLayout(VulkanState& state)
+inline void createModelDescriptorSetLayout(State& state)
 {
 	VkDescriptorSetLayoutBinding descSetBinding = {};
 	descSetBinding.binding = 0;
@@ -260,7 +260,7 @@ inline void createModelDescriptorSetLayout(VulkanState& state)
 	LOG("MODEL DESC LAYOUT CREATED");
 }
 
-inline void createDescriptorPool(VulkanState& state) 
+inline void createDescriptorPool(State& state)
 {
 	VkDescriptorPoolSize uboSize = {};
 	uboSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -284,8 +284,11 @@ inline void createDescriptorPool(VulkanState& state)
 	VK_CHECK_RESULT(vkCreateDescriptorPool(state.device, &poolInfo, nullptr, &state.descriptorPool));
 }
 
-inline void createDescriptorSetLayouts(VulkanState& state)
+inline void createDescriptorSetLayouts(State& state)
 {
+
+	LOG_TITLE("Descriptor Creator");
+
 	createTQuadDescriptorSetLayout(state);
 	createPointLightDescriptorSetLayout(state);
 	createModelDescriptorSetLayout(state);

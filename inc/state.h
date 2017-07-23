@@ -1,13 +1,9 @@
 #ifndef AMVK_VULKAN_STATE_H
 #define AMVK_VULKAN_STATE_H
 
-#ifdef __ANDROID__
-#include "vulkan_wrapper.h"
-#else
-#include <vulkan/vulkan.h>
-#endif
+#include "vulkan.h"
 
-#include "swap_chain_desc.h"
+#include <vector>
 #include <glm/glm.hpp>
 
 struct DeviceInfo {
@@ -20,6 +16,14 @@ struct DeviceInfo {
 	uint32_t maxPushConstantsSize;
 	VkDeviceSize minUniformBufferOffsetAlignment;
 	uint32_t maxDescriptorSetUniformBuffersDynamic;
+
+	VkSurfaceCapabilitiesKHR surfaceCapabilities;
+	std::vector<VkSurfaceFormatKHR> surfaceFormats;
+	std::vector<VkPresentModeKHR> presentModes;
+};
+
+struct SurfaceInfo {
+
 };
 
 struct PipelineInfo {
@@ -80,7 +84,7 @@ struct Shaders {
 	ShaderInfo deferred;
 };
 
-struct VulkanState {
+struct State {
 	
 	struct UBO {
 		glm::mat4 view;
@@ -89,7 +93,7 @@ struct VulkanState {
 
 	UBO ubo;
 
-	VulkanState(): 
+	State():
 		instance(VK_NULL_HANDLE), 
 		physicalDevice(VK_NULL_HANDLE), 
 		device(VK_NULL_HANDLE), 
@@ -100,10 +104,10 @@ struct VulkanState {
 		descriptorPool(VK_NULL_HANDLE)
 	{};
 	
-	// Disallow copy constructor for VulkanState.
-	// Only references for VulkanState are allowed
-	VulkanState(VulkanState const& vulkanState) = delete;
-    VulkanState& operator=(VulkanState const& vulkanState) = delete;
+	// Disallow copy constructor for State.
+	// Only references for State are allowed
+	State(State const& vulkanState) = delete;
+    State& operator=(State const& vulkanState) = delete;
 	
 	VkInstance instance;
 	VkSurfaceKHR surface;
@@ -111,13 +115,19 @@ struct VulkanState {
 	VkDevice device;
 	
 	VkSwapchainKHR swapChain;
-	SwapChainDesc swapChainDesc;
+
 	VkFormat swapChainImageFormat;
 	VkExtent2D swapChainExtent;
+
 	VkQueue graphicsQueue;
-	VkQueue presentQueue; 
+	VkQueue presentQueue;
+	VkQueue transferQueue;
+	VkQueue computeQueue;
+
 	uint32_t graphicsQueueIndex;
 	uint32_t presentQueueIndex;
+	uint32_t transferQueueIndex;
+	uint32_t computeQueueIndex;
 
 	VkRenderPass renderPass;
 	

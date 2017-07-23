@@ -1,6 +1,6 @@
 #include "sphere.h"
 
-Sphere::Sphere(VulkanState& state): 
+Sphere::Sphere(State& state):
 	vertexBufferOffset(0),
 	indexBufferOffset(0),
 	mState(state),

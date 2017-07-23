@@ -1,6 +1,6 @@
 #include "fullscreen_quad.h"
 
-FullscreenQuad::FullscreenQuad(VulkanState& state):
+FullscreenQuad::FullscreenQuad(State& state):
 	mState(state),
 	mDescriptorSet(VK_NULL_HANDLE),
 	mImageInfo(nullptr)

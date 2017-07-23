@@ -4,17 +4,17 @@
 #include "vulkan.h"
 #include <stdexcept>
 #include "cmd_pass.h"
-#include "vulkan_state.h"
+#include "state.h"
 #include "vulkan_utils.h"
 #include "buffer_helper.h"
-#include "vulkan_image_info.h"
+#include "image_info.h"
 #include "texture_data.h"
 #include "macro.h"
 
 namespace ImageHelper {
 
 inline void createImage(
-		VulkanState& state,
+		State& state,
 		ImageInfo& imageDesc, 
 		VkFormat format, 
 		VkImageTiling tiling,
@@ -84,7 +84,7 @@ inline void createImageView(
 /*
 void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) const
 {
-	CmdPass cmdPass(mVulkanState.device, mVulkanState.commandPool, mVulkanState.graphicsQueue);
+	CmdPass cmdPass(mState.device, mState.commandPool, mState.graphicsQueue);
 
 	VkImageMemoryBarrier barrier = {};
 	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -179,7 +179,7 @@ inline void transitionLayout(
 }
 
 inline void transitionLayout(
-		VulkanState& state,
+		State& state,
 		VkImage image, 
 		VkFormat format, 
 		VkImageLayout oldLayout, 
@@ -229,7 +229,7 @@ inline void copyImage(VkCommandBuffer& cmdBuffer, VkImage srcImage, VkImage dstI
 			&copy);
 }
 
-inline void copyImage(const VulkanState& state, VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height)
+inline void copyImage(const State& state, VkImage srcImage, VkImage dstImage, uint32_t width, uint32_t height)
 {
 	CmdPass cmd(state.device, state.commandPool, state.graphicsQueue);
 	copyImage(cmd.buffer, srcImage, dstImage, width, height);
@@ -238,7 +238,7 @@ inline void copyImage(const VulkanState& state, VkImage srcImage, VkImage dstIma
 
 	
 inline void copyImage(
-			VulkanState& state, 
+			State& state,
 			ImageInfo& srcImage, 
 			ImageInfo& dstImage) 
 {
@@ -247,7 +247,7 @@ inline void copyImage(
 
 
 inline VkFormat findSupportedFormat(
-		const VulkanState& state, 
+		const State& state,
 		const std::vector<VkFormat>& candidates, 
 		VkImageTiling tiling, 
 		VkFormatFeatureFlags features)
@@ -321,7 +321,7 @@ inline VkFormat findDepthFormat(VkPhysicalDevice& physicalDevice)
 inline void createStagedImage(
 		ImageInfo& imageInfo, 
 		const TextureData& textureData,
-		VulkanState& state,  
+		State& state,
 		const VkCommandPool& cmdPool, 
 		const VkQueue& cmdQueue) 
  

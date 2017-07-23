@@ -11,7 +11,7 @@ const aiTextureType* Skinned::TEXTURE_TYPES = Skinned_TEXTURE_TYPES;
 
 const uint32_t Skinned::NUM_TEXTURE_TYPES = ARRAY_SIZE(Skinned_TEXTURE_TYPES);
 
-Skinned::Skinned(VulkanState& vulkanState):
+Skinned::Skinned(State& vulkanState):
 	animSpeedScale(1.f),
 	numVertices(0),
 	numIndices(0),

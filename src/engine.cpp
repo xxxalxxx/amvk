@@ -10,7 +10,7 @@ Engine::~Engine()
 #ifdef __ANDROID__
 
 Engine::Engine():
-        mVulkanManager(mWindow),
+        mRenderer(mWindow),
         isReady(false),
         hasFocus(false)
 {
@@ -25,9 +25,9 @@ void Engine::init(android_app* state)
     mWindow.initWindow(*this);
     LOG("WINDOW ASPECT %f width: %u height: %u", mWindow.mAspect, mWindow.mWidth, mWindow.mHeight);
     mCamera.setAspect(mWindow.mAspect);
-    mVulkanManager.init();
-    mVulkanManager.buildCommandBuffers(mTimer, mCamera);
-	mVulkanManager.buildGBuffers(mTimer, mCamera);
+    mRenderer.init();
+    mRenderer.buildCommandBuffers(mTimer, mCamera);
+    mRenderer.buildGBuffers(mTimer, mCamera);
 
     JNIEnv* jni;
     state->activity->vm->AttachCurrentThread(&jni, NULL);
@@ -112,23 +112,27 @@ void Engine::handleCmd(struct android_app *app, int32_t cmd)
 #else
 
 Engine::Engine():
-	mVulkanManager(mWindow)
+	mRenderer(mWindow)
 {
 
 }
 
 void onWindowResized(GLFWwindow* window, int width, int height) {
+    if (width < 0)
+        width = 0;
+    if (height < 0)
+        height = 0;
 	if (width * height == 0)
 		return;
 
 	Engine* eng = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
 	Window& engWindow = eng->getWindow();
 	Camera& engCamera = eng->getCamera();
-
 	engWindow.setDimens(width, height);
     engCamera.setAspect(engWindow.getAspect());
     engCamera.rebuildPerspective();
-	eng->getVulkanManager().recreateSwapChain();
+    
+	eng->getRenderer().onWindowSizeChanged((uint32_t) width, (uint32_t) height);
 }
 
 void cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
@@ -214,7 +218,7 @@ void Engine::init()
 	mCamera.mPrevMouseX = -400.0f;
 	mCamera.mPrevMouseY = 200.0f;
 
-	mVulkanManager.init();
+	mRenderer.init();
 }
 
 #endif
@@ -255,9 +259,9 @@ TaskManager& Engine::getTaskManager()
 	return mTaskManager;
 } 
 
-VulkanManager& Engine::getVulkanManager()
+Renderer& Engine::getRenderer()
 {
-	return mVulkanManager;
+	return mRenderer;
 }
 
 Timer& Engine::getTimer()

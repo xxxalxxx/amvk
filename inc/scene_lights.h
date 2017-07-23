@@ -17,7 +17,7 @@ public:
 		VkDeviceSize lightOffset;
 	};
 
-	SceneLights(VulkanState& state);
+	SceneLights(State& state);
 	virtual ~SceneLights();
 	void init();
 	void update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera);
@@ -56,7 +56,7 @@ private:
 	std::array<VkDescriptorSet, NUM_POINT_LIGHT_DESCRIPTORS> descriptors;
 
 
-	VulkanState* mState;
+	State* mState;
 	VkDescriptorPool mDescriptorPool;
 	BufferInfo mUniformBufferInfo;
 	Sphere mSphere;

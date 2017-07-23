@@ -2,11 +2,7 @@
 #define VULKAN_IMAGE_INFO
 
 
-#ifdef __ANDROID__
-#include "vulkan_wrapper.h"
-#else
-#include <vulkan/vulkan.h>
-#endif
+#include "vulkan.h"
 
 #include "macro.h"
 

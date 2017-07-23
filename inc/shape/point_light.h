@@ -2,7 +2,7 @@
 #define AMVK_POINT_LIGHT_H
 
 #include "vulkan.h"
-#include "vulkan_state.h"
+#include "state.h"
 #include "sphere.h"
 #include "timer.h"
 #include "camera.h"
@@ -38,7 +38,7 @@ public:
 	void update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera);
 	void draw(VkCommandBuffer& cmdBuffer);
 	void init(
-			VulkanState& state, 
+			State& state,
 			const glm::vec3& color, 
 			const glm::vec3& position, 
 			float radius, 
@@ -49,7 +49,7 @@ public:
 
 private:
 
-	VulkanState* mState;
+	State* mState;
 };
 
 #endif

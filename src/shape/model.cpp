@@ -11,7 +11,7 @@ const aiTextureType* Model::TEXTURE_TYPES = Model_TEXTURE_TYPES;
 
 const uint32_t Model::NUM_TEXTURE_TYPES = ARRAY_SIZE(Model_TEXTURE_TYPES);
 
-Model::Model(VulkanState& vulkanState):
+Model::Model(State& vulkanState):
 	numVertices(0),
 	numIndices(0),
 	uniformBufferOffset(0),
