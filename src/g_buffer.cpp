@@ -1,6 +1,8 @@
 #include "g_buffer.h"
 
-GBuffer::GBuffer() 
+GBuffer::GBuffer(VulkanState& state):
+	mState(&state),
+	deferredQuad(state)
 {
 
 }
@@ -16,9 +18,12 @@ void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& devic
 {
 	this->width = width;
 	this->height = height;
-	createClearValues();
 	createFramebuffers(physicalDevice, device);
 	createSampler(device);
+	createCmdBuffer(device, mState->commandPool);
+	createDescriptorPool();
+	createDescriptors();
+	deferredQuad.init();
 }
 
 
@@ -117,14 +122,6 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 	VK_CHECK_RESULT(vkCreateFramebuffer(device, &fbufCreateInfo, nullptr, &frameBuffer));
 
 	LOG("G-BUFFER FRAMEBUFFER CREATED");
-}
-
-void GBuffer::createClearValues() 
-{
-	clearValues[INDEX_POSITION].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
-	clearValues[INDEX_NORMAL].color =   { { 0.0f, 0.0f, 0.0f, 0.0f } };
-	clearValues[INDEX_ALBEDO].color =   { { 0.0f, 0.0f, 0.0f, 0.0f } };
-	clearValues[INDEX_DEPTH].depthStencil = { 1.0f, 0 };
 }
 
 void GBuffer::createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format) 
@@ -244,5 +241,59 @@ void GBuffer::createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPo
 
 	VK_CHECK_RESULT(vkAllocateCommandBuffers(device, &cmdBufferAllocInfo, &cmdBuffer));
 	LOG("G-BUFFER CMD BUFFER CREATED");
+}
+
+void GBuffer::createDescriptorPool()
+{
+	// VkDescriptorType    type;
+	// uint32_t            descriptorCount;
+
+	VkDescriptorPoolSize poolSizes[] = {
+		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, ATTACHMENT_COUNT }
+	};
+	uint32_t maxSets = ATTACHMENT_COUNT;
+	VkDescriptorPoolCreateInfo poolInfo = {};
+	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+	poolInfo.poolSizeCount = ARRAY_SIZE(poolSizes);
+	poolInfo.pPoolSizes = poolSizes;
+	poolInfo.maxSets = maxSets;
+
+	VK_CHECK_RESULT(vkCreateDescriptorPool(mState->device, &poolInfo, nullptr, &mDescriptorPool));
+}
+
+void GBuffer::createDescriptors()
+{
+	VkDescriptorSetLayout layouts[] = {
+		mState->descriptorSetLayouts.deferred
+	};
+
+	VkDescriptorSetAllocateInfo samplerAllocInfo = {};
+	samplerAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	samplerAllocInfo.descriptorPool = mDescriptorPool;
+	samplerAllocInfo.descriptorSetCount = ARRAY_SIZE(layouts);
+	samplerAllocInfo.pSetLayouts = layouts;
+
+	VK_CHECK_RESULT(vkAllocateDescriptorSets(mState->device, &samplerAllocInfo, &mDescriptorSet));
+
+	std::array<VkWriteDescriptorSet, COLOR_ATTACHMENT_COUNT> writeSets = {};
+	std::array<VkDescriptorImageInfo, COLOR_ATTACHMENT_COUNT> imageInfos = {};
+
+	for (size_t i = 0; i < COLOR_ATTACHMENT_COUNT; ++i) {
+		VkDescriptorImageInfo& descriptorInfo = imageInfos[i];
+		descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		descriptorInfo.imageView = attachments[i].view;
+		descriptorInfo.sampler = sampler;
+		
+		VkWriteDescriptorSet& writeSet = writeSets[i];
+		writeSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		writeSet.dstSet = mDescriptorSet;
+		writeSet.dstBinding = i;
+		writeSet.dstArrayElement = 0;
+		writeSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		writeSet.descriptorCount = 1;
+		writeSet.pImageInfo = &descriptorInfo;
+	}
+	vkUpdateDescriptorSets(mState->device, writeSets.size(), writeSets.data(), 0, nullptr);
+	LOG("G-Buffer descriptors created");
 }
 

@@ -959,6 +959,7 @@ CASE	lib/stb/stb_image.h	4084;"	d
 CASE	lib/stb/stb_image.h	4097;"	d
 CASE	lib/stb/stb_image.h	4101;"	d
 CASE	lib/stb/stb_image.h	4114;"	d
+COLOR_ATTACHMENT_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t COLOR_ATTACHMENT_COUNT = ATTACHMENT_COUNT - DEPTH_ATTACHMENT_COUNT;$/;"	m	class:GBuffer	access:public
 COMBO	lib/stb/stb_image.h	1359;"	d
 CURRENT_LOADER_ICD_INTERFACE_VERSION	lib/vulkan/vk_icd.h	31;"	d
 CXX	Makefile	/^CXX=g++$/;"	m
@@ -1247,6 +1248,7 @@ DefaultIOSystem	lib/__assimp/DefaultIOSystem.h	/^class ASSIMP_API DefaultIOSyste
 DefaultLogger	lib/__assimp/DefaultLogger.hpp	/^class ASSIMP_API DefaultLogger :$/;"	c	namespace:Assimp	inherits:Logger
 DefaultLogger	lib/assimp/DefaultLogger.hpp	/^class ASSIMP_API DefaultLogger :$/;"	c	namespace:Assimp	inherits:Logger
 DescriptorManager	inc/creator/descriptor_manager.h	/^namespace DescriptorManager $/;"	n
+DescriptorManager::createDeferredDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createDeferredDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createDescriptorPool	inc/creator/descriptor_manager.h	/^inline void createDescriptorPool(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createDescriptorSetLayouts	inc/creator/descriptor_manager.h	/^inline void createDescriptorSetLayouts(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 DescriptorManager::createDynamicUniformFragmentDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createDynamicUniformFragmentDescriptorSetLayout(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
@@ -1585,10 +1587,11 @@ FunctionParameterAttributeSext	lib/vulkan/spirv.hpp	/^    FunctionParameterAttri
 FunctionParameterAttributeSret	lib/vulkan/spirv.hpp	/^    FunctionParameterAttributeSret = 3,$/;"	e	enum:spv::FunctionParameterAttribute
 FunctionParameterAttributeZext	lib/vulkan/spirv.hpp	/^    FunctionParameterAttributeZext = 0,$/;"	e	enum:spv::FunctionParameterAttribute
 GBuffer	inc/g_buffer.h	/^class GBuffer {$/;"	c
-GBuffer	src/g_buffer.cpp	/^GBuffer::GBuffer() $/;"	f	class:GBuffer	signature:()
+GBuffer	src/g_buffer.cpp	/^GBuffer::GBuffer(VulkanState& state):$/;"	f	class:GBuffer	signature:(VulkanState& state)
 GBuffer::ATTACHMENT_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t ATTACHMENT_COUNT = 4;$/;"	m	class:GBuffer	access:public
+GBuffer::COLOR_ATTACHMENT_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t COLOR_ATTACHMENT_COUNT = ATTACHMENT_COUNT - DEPTH_ATTACHMENT_COUNT;$/;"	m	class:GBuffer	access:public
 GBuffer::DEPTH_ATTACHMENT_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t DEPTH_ATTACHMENT_COUNT = 1;$/;"	m	class:GBuffer	access:public
-GBuffer::GBuffer	src/g_buffer.cpp	/^GBuffer::GBuffer() $/;"	f	class:GBuffer	signature:()
+GBuffer::GBuffer	src/g_buffer.cpp	/^GBuffer::GBuffer(VulkanState& state):$/;"	f	class:GBuffer	signature:(VulkanState& state)
 GBuffer::INDEX_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_ALBEDO   = 2;$/;"	m	class:GBuffer	access:public
 GBuffer::INDEX_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_DEPTH    = 3;$/;"	m	class:GBuffer	access:public
 GBuffer::INDEX_NORMAL	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_NORMAL   = 1;$/;"	m	class:GBuffer	access:public
@@ -1598,22 +1601,26 @@ GBuffer::attachments	inc/g_buffer.h	/^	std::array<FramebufferAttachment, ATTACHM
 GBuffer::clearValues	inc/g_buffer.h	/^	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;$/;"	m	class:GBuffer	access:public
 GBuffer::cmdBuffer	inc/g_buffer.h	/^	VkCommandBuffer cmdBuffer;$/;"	m	class:GBuffer	access:public
 GBuffer::createAttachment	src/g_buffer.cpp	/^void GBuffer::createAttachment($/;"	f	class:GBuffer	signature:( const VkPhysicalDevice& physicalDevice, const VkDevice& device, FramebufferAttachment& attachment, VkFormat format, VkImageUsageFlagBits usage)
-GBuffer::createClearValues	src/g_buffer.cpp	/^void GBuffer::createClearValues() $/;"	f	class:GBuffer	signature:()
 GBuffer::createCmdBuffer	src/g_buffer.cpp	/^void GBuffer::createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool)$/;"	f	class:GBuffer	signature:(const VkDevice& device, const VkCommandPool& cmdPool)
 GBuffer::createColorAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format) $/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
 GBuffer::createDepthAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat format)$/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
+GBuffer::createDescriptorPool	src/g_buffer.cpp	/^void GBuffer::createDescriptorPool()$/;"	f	class:GBuffer	signature:()
+GBuffer::createDescriptors	src/g_buffer.cpp	/^void GBuffer::createDescriptors()$/;"	f	class:GBuffer	signature:()
 GBuffer::createFramebuffers	src/g_buffer.cpp	/^void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const VkDevice& device) $/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device)
 GBuffer::createSampler	src/g_buffer.cpp	/^void GBuffer::createSampler(const VkDevice& device)$/;"	f	class:GBuffer	signature:(const VkDevice& device)
+GBuffer::deferredQuad	inc/g_buffer.h	/^	FullscreenQuad deferredQuad;$/;"	m	class:GBuffer	access:public
 GBuffer::depth	inc/g_buffer.h	/^	inline FramebufferAttachment& depth() { return attachments[INDEX_DEPTH]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::frameBuffer	inc/g_buffer.h	/^	VkFramebuffer frameBuffer;$/;"	m	class:GBuffer	access:public
 GBuffer::height	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	access:public
 GBuffer::init	src/g_buffer.cpp	/^void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)$/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)
+GBuffer::mDescriptorPool	inc/g_buffer.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:GBuffer	access:private
+GBuffer::mDescriptorSet	inc/g_buffer.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:GBuffer	access:private
+GBuffer::mState	inc/g_buffer.h	/^	const VulkanState* mState;$/;"	m	class:GBuffer	access:private
 GBuffer::normal	inc/g_buffer.h	/^	inline FramebufferAttachment& normal() { return attachments[INDEX_NORMAL]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::offscreenSemaphore	inc/g_buffer.h	/^	VkSemaphore offscreenSemaphore;$/;"	m	class:GBuffer	access:public
 GBuffer::position	inc/g_buffer.h	/^	inline FramebufferAttachment& position() { return attachments[INDEX_POSITION]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::renderPass	inc/g_buffer.h	/^	VkRenderPass renderPass;$/;"	m	class:GBuffer	access:public
 GBuffer::sampler	inc/g_buffer.h	/^	VkSampler sampler;$/;"	m	class:GBuffer	access:public
-GBuffer::texturesDescriptor	inc/g_buffer.h	/^	VkDescriptorSet texturesDescriptor;$/;"	m	class:GBuffer	access:public
 GBuffer::width	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	access:public
 GBuffer::~GBuffer	src/g_buffer.cpp	/^GBuffer::~GBuffer() $/;"	f	class:GBuffer	signature:()
 GLFW_INCLUDE_VULKAN	inc/window.h	8;"	d
@@ -9808,7 +9815,6 @@ createBuffer	inc/creator/buffer_helper.h	/^inline void createBuffer($/;"	f	names
 createBuffer	inc/creator/buffer_helper.h	/^inline void createBuffer($/;"	f	namespace:BufferHelper	signature:( const VulkanState& state, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory, VkBufferUsageFlags usage, VkMemoryPropertyFlags prop)
 createBuffers	src/shape/sphere.cpp	/^void Sphere::createBuffers(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Sphere	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 createBuffers	src/shape/tquad.cpp	/^void TQuad::createBuffers()$/;"	f	class:TQuad	signature:()
-createClearValues	src/g_buffer.cpp	/^void GBuffer::createClearValues() $/;"	f	class:GBuffer	signature:()
 createCmdBuffer	src/g_buffer.cpp	/^void GBuffer::createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool)$/;"	f	class:GBuffer	signature:(const VkDevice& device, const VkCommandPool& cmdPool)
 createColorAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format) $/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
 createCommandBuffers	src/swapchain_manager.cpp	/^void SwapchainManager::createCommandBuffers()$/;"	f	class:SwapchainManager	signature:()
@@ -9816,9 +9822,11 @@ createCommandPool	src/swapchain_manager.cpp	/^void SwapchainManager::createComma
 createCommonBuffer	inc/creator/buffer_helper.h	/^inline void createCommonBuffer(const VulkanState& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
 createCommonBuffer	src/shape/model.cpp	/^void Model::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Model	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 createCommonBuffer	src/shape/skinned.cpp	/^void Skinned::createCommonBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Skinned	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
+createDeferredDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createDeferredDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createDepthAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat format)$/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
 createDepthResources	src/swapchain_manager.cpp	/^void SwapchainManager::createDepthResources() $/;"	f	class:SwapchainManager	signature:()
 createDescriptorPool	inc/creator/descriptor_manager.h	/^inline void createDescriptorPool(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
+createDescriptorPool	src/g_buffer.cpp	/^void GBuffer::createDescriptorPool()$/;"	f	class:GBuffer	signature:()
 createDescriptorPool	src/scene_lights.cpp	/^void SceneLights::createDescriptorPool() $/;"	f	class:SceneLights	signature:()
 createDescriptorPool	src/shape/model.cpp	/^void Model::createDescriptorPool() $/;"	f	class:Model	signature:()
 createDescriptorPool	src/shape/skinned.cpp	/^void Skinned::createDescriptorPool() $/;"	f	class:Skinned	signature:()
@@ -9828,6 +9836,7 @@ createDescriptorSet	src/shape/tquad.cpp	/^void TQuad::createDescriptorSet()$/;"	
 createDescriptorSetLayouts	inc/creator/descriptor_manager.h	/^inline void createDescriptorSetLayouts(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createDescriptorSets	src/scene_lights.cpp	/^void SceneLights::createDescriptorSets() $/;"	f	class:SceneLights	signature:()
 createDescriptorSets	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::createDescriptorSets() $/;"	f	class:FullscreenQuad	signature:()
+createDescriptors	src/g_buffer.cpp	/^void GBuffer::createDescriptors()$/;"	f	class:GBuffer	signature:()
 createDynamicUniformBuffer	inc/creator/buffer_helper.h	/^inline void createDynamicUniformBuffer(const VulkanState& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const VulkanState& state, BufferInfo& bufferInfo)
 createDynamicUniformFragmentDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createDynamicUniformFragmentDescriptorSetLayout(VulkanState& state) $/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
 createDynamicUniformVertexDescriptorSetLayout	inc/creator/descriptor_manager.h	/^inline void createDynamicUniformVertexDescriptorSetLayout(VulkanState& state)$/;"	f	namespace:DescriptorManager	signature:(VulkanState& state)
@@ -9970,6 +9979,7 @@ defaultp	lib/glm/detail/precision.hpp	/^			defaultp = aligned_highp$/;"	e	enum:g
 deferred	inc/vulkan_state.h	/^	PipelineInfo deferred;$/;"	m	struct:Pipelines	access:public
 deferred	inc/vulkan_state.h	/^	ShaderInfo deferred;$/;"	m	struct:Shaders	access:public
 deferred	inc/vulkan_state.h	/^	VkDescriptorSetLayout deferred;$/;"	m	struct:DescriptorSetLayouts	access:public
+deferredQuad	inc/g_buffer.h	/^	FullscreenQuad deferredQuad;$/;"	m	class:GBuffer	access:public
 delay	lib/stb/stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags, delay;$/;"	m	struct:__anon74	access:public
 delim_left	lib/glm/gtx/io.hpp	/^			char_type  delim_left;$/;"	m	class:glm::io::format_punct	access:public
 delim_right	lib/glm/gtx/io.hpp	/^			char_type  delim_right;$/;"	m	class:glm::io::format_punct	access:public
@@ -14428,9 +14438,11 @@ mDebugReportCallback	inc/device_manager.h	/^	VkDebugReportCallbackEXT mDebugRepo
 mDepthImageDesc	inc/swapchain_manager.h	/^	ImageInfo mDepthImageDesc;$/;"	m	class:SwapchainManager	access:private
 mDescription	lib/__assimp/Exporter.hpp	/^        aiExportFormatDesc mDescription;$/;"	m	struct:Assimp::Exporter::ExportFormatEntry	access:public
 mDescription	lib/assimp/Exporter.hpp	/^        aiExportFormatDesc mDescription;$/;"	m	struct:Assimp::Exporter::ExportFormatEntry	access:public
+mDescriptorPool	inc/g_buffer.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:GBuffer	access:private
 mDescriptorPool	inc/scene_lights.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:SceneLights	access:private
 mDescriptorPool	inc/shape/model.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:Model	access:protected
 mDescriptorPool	inc/shape/skinned.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:Skinned	access:protected
+mDescriptorSet	inc/g_buffer.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:GBuffer	access:private
 mDescriptorSet	inc/shape/fullscreen_quad.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:FullscreenQuad	access:public
 mDeviceManager	inc/vulkan_manager.h	/^	DeviceManager mDeviceManager;$/;"	m	class:VulkanManager	access:private
 mDeviceQueueIndices	inc/device_manager.h	/^	DeviceQueueIndicies mDeviceQueueIndices;$/;"	m	class:DeviceManager	access:private
@@ -14668,6 +14680,7 @@ mSidewaysMovementScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewa
 mSize	lib/__assimp/light.h	/^    C_STRUCT aiVector2D mSize;$/;"	m	struct:aiLight	access:public
 mSphere	inc/scene_lights.h	/^	Sphere mSphere;$/;"	m	class:SceneLights	access:private
 mStartTime	inc/timer.h	/^	std::chrono::high_resolution_clock::time_point mStartTime;$/;"	m	class:Timer	access:private
+mState	inc/g_buffer.h	/^	const VulkanState* mState;$/;"	m	class:GBuffer	access:private
 mState	inc/scene_lights.h	/^	VulkanState* mState;$/;"	m	class:SceneLights	access:private
 mState	inc/shape/fullscreen_quad.h	/^	VulkanState& mState;$/;"	m	class:FullscreenQuad	access:private
 mState	inc/shape/model.h	/^	VulkanState& mState;$/;"	m	class:Model	access:protected
@@ -17284,7 +17297,6 @@ textureManager	inc/texture_manager.h	/^	void operator=(const TextureManager& tex
 textures	inc/shape/skinned.h	/^		std::vector<MaterialTexture> textures;$/;"	m	struct:Skinned::Material	access:public
 textures	lib/__assimp/types.h	/^    unsigned int textures;$/;"	m	struct:aiMemoryInfo	access:public
 textures	lib/assimp/types.h	/^    unsigned int textures;$/;"	m	struct:aiMemoryInfo	access:public
-texturesDescriptor	inc/g_buffer.h	/^	VkDescriptorSet texturesDescriptor;$/;"	m	class:GBuffer	access:public
 throwError	src/shape/model.cpp	/^void Model::throwError(const char* error) $/;"	f	class:Model	signature:(const char* error)
 throwError	src/shape/model.cpp	/^void Model::throwError(std::string& error) $/;"	f	class:Model	signature:(std::string& error)
 throwError	src/shape/skinned.cpp	/^void Skinned::throwError(const char* error) $/;"	f	class:Skinned	signature:(const char* error)

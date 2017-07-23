@@ -11,6 +11,7 @@ VulkanManager::VulkanManager(Window& window):
 	dwarf(mState),
 	fullscreenQuad(mState),
 	sceneLights(mState),
+	gBuffer(mState),
 	imageIndex(0)
 {
 	
@@ -41,10 +42,9 @@ void VulkanManager::init()
 	DescriptorManager::createDescriptorPool(mState);
     PipelineManager::createPipelines(mState, gBuffer);
 	gBuffer.init(mState.physicalDevice, mState.device, mSwapChainManager.getWidth(), mSwapChainManager.getHeight());
-	gBuffer.createCmdBuffer(mState.device, mState.commandPool);
 
 	tquad.init();
-	fullscreenQuad.init();
+	//fullscreenQuad.init();
 
     suit.init(FileManager::getModelsPath("nanosuit/nanosuit.obj"),
               Model::DEFAULT_FLAGS | aiProcess_FlipUVs);
@@ -192,8 +192,15 @@ void VulkanManager::buildCommandBuffers(const Timer &timer, Camera &camera)
 		//sceneLights.draw(cmdBuffer);
 		dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
 		suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
-	
+
         //guard.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
+		gBuffer.deferredQuad.draw(
+				cmdBuffer, 
+				mState.pipelines.fullscreenQuad.pipeline, 
+				mState.pipelines.fullscreenQuad.layout, 
+				&gBuffer.deferredQuad.mDescriptorSet, 
+				1);
+
 		vkCmdEndRenderPass(cmdBuffer);
 		VK_CHECK_RESULT(vkEndCommandBuffer(cmdBuffer));
 	}

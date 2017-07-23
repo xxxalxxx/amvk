@@ -91,6 +91,31 @@ inline void createSamplerDescriptorSetLayout(VulkanState& state)
 	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.sampler));
 }
 
+inline void createDeferredDescriptorSetLayout(VulkanState& state)
+{
+/*
+	uint32_t              binding;
+    VkDescriptorType      descriptorType;
+    uint32_t              descriptorCount;
+    VkShaderStageFlags    stageFlags;
+    const VkSampler*      pImmutableSamplers;
+*/
+
+	VkDescriptorSetLayoutBinding bindings[] = {
+		{ 0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr },
+		{ 1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr },
+		{ 2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr },
+	//	{ 3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr }
+	};
+
+	VkDescriptorSetLayoutCreateInfo descSetLayoutInfo = {};
+	descSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	descSetLayoutInfo.bindingCount = ARRAY_SIZE(bindings); 
+	descSetLayoutInfo.pBindings = bindings;
+
+	VK_CHECK_RESULT(vkCreateDescriptorSetLayout(state.device, &descSetLayoutInfo, nullptr, &state.descriptorSetLayouts.deferred));
+}
+
 
 
 inline void createSamplerListDescriptorSetLayout(VulkanState& state)
@@ -270,6 +295,7 @@ inline void createDescriptorSetLayouts(VulkanState& state)
 	createUniformFragmentDescriptorSetLayout(state);
 	createDynamicUniformVertexDescriptorSetLayout(state);
 	createDynamicUniformFragmentDescriptorSetLayout(state);
+	createDeferredDescriptorSetLayout(state);
 	LOG("DESC LAYOUTS CREATED");
 }
 

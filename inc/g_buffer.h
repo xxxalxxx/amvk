@@ -7,6 +7,8 @@
 #include "vulkan.h"
 #include "buffer_helper.h"
 #include "image_helper.h"
+#include "vulkan_state.h"
+#include "fullscreen_quad.h"
 
 struct FramebufferAttachment {
 	VkImage image;
@@ -24,13 +26,14 @@ public:
 
 	static const constexpr uint32_t DEPTH_ATTACHMENT_COUNT = 1;
 	static const constexpr uint32_t ATTACHMENT_COUNT = 4;
+	static const constexpr uint32_t COLOR_ATTACHMENT_COUNT = ATTACHMENT_COUNT - DEPTH_ATTACHMENT_COUNT;
 
 	inline FramebufferAttachment& position() { return attachments[INDEX_POSITION]; }
 	inline FramebufferAttachment& normal() { return attachments[INDEX_NORMAL]; }
 	inline FramebufferAttachment& albedo() { return attachments[INDEX_ALBEDO]; }
 	inline FramebufferAttachment& depth() { return attachments[INDEX_DEPTH]; }
 
-	GBuffer();
+	GBuffer(VulkanState& state);
 	virtual ~GBuffer();
 
 	void init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height);
@@ -45,7 +48,9 @@ public:
 	VkSampler sampler;
 	VkCommandBuffer cmdBuffer;
 	VkSemaphore offscreenSemaphore;
-	VkDescriptorSet texturesDescriptor;
+
+
+
 private:
 	void createFramebuffers(const VkPhysicalDevice& physicalDevice, const VkDevice& device);
 	
@@ -56,12 +61,17 @@ private:
 		VkFormat format,  
 		VkImageUsageFlagBits usage);
 
-
-	void createClearValues();
 	void createSampler(const VkDevice& device);
+	void createDescriptorPool();
+	void createDescriptors();
 	void createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format);
 	void createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat format);
 
+	const VulkanState* mState;
+	VkDescriptorPool mDescriptorPool;
+	VkDescriptorSet mDescriptorSet;
+public:
+	FullscreenQuad deferredQuad;
 };
 
 
