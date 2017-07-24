@@ -9,6 +9,8 @@
 #include "image_helper.h"
 #include "state.h"
 #include "fullscreen_quad.h"
+#include "camera.h"
+#include "timer.h"
 
 struct FramebufferAttachment {
 	VkImage image;
@@ -40,6 +42,9 @@ public:
 	void createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool);
 	void drawDeferredQuad(VkCommandBuffer& cmdBuffer);
 
+	void update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera);
+
+
 	std::array<FramebufferAttachment, ATTACHMENT_COUNT> attachments;
 	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;
 	int32_t width, height;
@@ -51,6 +56,7 @@ public:
 private:
 	void createFramebuffers(const VkPhysicalDevice& physicalDevice, const VkDevice& device);
 	
+	void createUniformBuffer();
 	void createAttachment(
 		const VkPhysicalDevice& physicalDevice, 
 		const VkDevice& device,
@@ -64,9 +70,10 @@ private:
 	void createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format);
 	void createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat format);
 
-	const State* mState;
+	State* mState;
 	VkDescriptorPool mDescriptorPool;
 	VkDescriptorSet mDescriptorSet;
+	BufferInfo mUniformBufferInfo;
 public:
 	FullscreenQuad deferredQuad;
 };

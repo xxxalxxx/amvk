@@ -90,6 +90,7 @@ void Renderer::updateUniformBuffers(const Timer& timer, Camera& camera)
 	dwarf.update(cmd.buffer, timer, camera);
 	guard.update(cmd.buffer, timer, camera);
 	sceneLights.update(cmd.buffer, timer, camera);
+	gBuffer.update(cmd.buffer, timer, camera);
 }
 
 void Renderer::buildGBuffers(const Timer &timer, Camera &camera)

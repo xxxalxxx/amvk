@@ -2,6 +2,7 @@
 
 GBuffer::GBuffer(State& state):
 	mState(&state),
+	mUniformBufferInfo(state.device),
 	deferredQuad(state)
 {
 
@@ -22,6 +23,7 @@ void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& devic
 	createFramebuffers(physicalDevice, device);
 	createSampler(device);
 	createCmdBuffer(device, mState->commandPool);
+	createUniformBuffer();
 	createDescriptorPool();
 	createDescriptors();
 	deferredQuad.init();
@@ -247,9 +249,10 @@ void GBuffer::createDescriptorPool()
 	// uint32_t            descriptorCount;
 
 	VkDescriptorPoolSize poolSizes[] = {
-		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, ATTACHMENT_COUNT }
+		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, ATTACHMENT_COUNT + 1 },
+		{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ATTACHMENT_COUNT + 1 }
 	};
-	uint32_t maxSets = ATTACHMENT_COUNT;
+	uint32_t maxSets = ATTACHMENT_COUNT + 1;
 	VkDescriptorPoolCreateInfo poolInfo = {};
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	poolInfo.poolSizeCount = ARRAY_SIZE(poolSizes);
@@ -273,7 +276,7 @@ void GBuffer::createDescriptors()
 
 	VK_CHECK_RESULT(vkAllocateDescriptorSets(mState->device, &samplerAllocInfo, &mDescriptorSet));
 
-	std::array<VkWriteDescriptorSet, ATTACHMENT_COUNT> writeSets = {};
+	std::array<VkWriteDescriptorSet, ATTACHMENT_COUNT + 1> writeSets = {};
 	std::array<VkDescriptorImageInfo, ATTACHMENT_COUNT> imageInfos = {};
 
 	for (size_t i = 0; i < ATTACHMENT_COUNT; ++i) {
@@ -291,6 +294,21 @@ void GBuffer::createDescriptors()
 		writeSet.descriptorCount = 1;
 		writeSet.pImageInfo = &descriptorInfo;
 	}
+
+	VkDescriptorBufferInfo buffInfo = {};
+	buffInfo.buffer = mUniformBufferInfo.buffer;
+	buffInfo.offset = 0;
+	buffInfo.range = sizeof(State::UBO);
+
+	VkWriteDescriptorSet& uniformSet = writeSets[ATTACHMENT_COUNT];
+	uniformSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	uniformSet.dstSet = mDescriptorSet;
+	uniformSet.dstBinding = ATTACHMENT_COUNT;
+	uniformSet.dstArrayElement = 0;
+	uniformSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	uniformSet.descriptorCount = 1;
+	uniformSet.pBufferInfo = &buffInfo;
+
 	vkUpdateDescriptorSets(mState->device, writeSets.size(), writeSets.data(), 0, nullptr);
 	LOG("G-Buffer descriptors created");
 }
@@ -306,3 +324,24 @@ void GBuffer::drawDeferredQuad(VkCommandBuffer& cmdBuffer)
 		1);
 }
 
+void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
+{
+	mState->ubo.view = camera.view();
+	mState->ubo.proj = camera.proj();
+
+	vkCmdUpdateBuffer(
+			cmdBuffer,
+			mUniformBufferInfo.buffer,
+			0,
+			sizeof(State::UBO),
+			&mState->ubo);
+	//LOG("G-Buffer update");
+
+}
+
+void GBuffer::createUniformBuffer()
+{	
+	mUniformBufferInfo.size = sizeof(State::UBO);
+	BufferHelper::createUniformBuffer(*mState, mUniformBufferInfo);
+	LOG("G-Buffer uniform created");
+}

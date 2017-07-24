@@ -1581,6 +1581,7 @@ GBuffer::createDescriptorPool	src/g_buffer.cpp	/^void GBuffer::createDescriptorP
 GBuffer::createDescriptors	src/g_buffer.cpp	/^void GBuffer::createDescriptors()$/;"	f	class:GBuffer	signature:()
 GBuffer::createFramebuffers	src/g_buffer.cpp	/^void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const VkDevice& device) $/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device)
 GBuffer::createSampler	src/g_buffer.cpp	/^void GBuffer::createSampler(const VkDevice& device)$/;"	f	class:GBuffer	signature:(const VkDevice& device)
+GBuffer::createUniformBuffer	src/g_buffer.cpp	/^void GBuffer::createUniformBuffer()$/;"	f	class:GBuffer	signature:()
 GBuffer::deferredQuad	inc/g_buffer.h	/^	FullscreenQuad deferredQuad;$/;"	m	class:GBuffer	access:public
 GBuffer::depth	inc/g_buffer.h	/^	inline FramebufferAttachment& depth() { return attachments[INDEX_DEPTH]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::drawDeferredQuad	src/g_buffer.cpp	/^void GBuffer::drawDeferredQuad(VkCommandBuffer& cmdBuffer)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer)
@@ -1589,11 +1590,13 @@ GBuffer::height	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	acc
 GBuffer::init	src/g_buffer.cpp	/^void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)$/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)
 GBuffer::mDescriptorPool	inc/g_buffer.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:GBuffer	access:private
 GBuffer::mDescriptorSet	inc/g_buffer.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:GBuffer	access:private
-GBuffer::mState	inc/g_buffer.h	/^	const State* mState;$/;"	m	class:GBuffer	access:private
+GBuffer::mState	inc/g_buffer.h	/^	State* mState;$/;"	m	class:GBuffer	access:private
+GBuffer::mUniformBufferInfo	inc/g_buffer.h	/^	BufferInfo mUniformBufferInfo;$/;"	m	class:GBuffer	access:private
 GBuffer::normal	inc/g_buffer.h	/^	inline FramebufferAttachment& normal() { return attachments[INDEX_NORMAL]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::position	inc/g_buffer.h	/^	inline FramebufferAttachment& position() { return attachments[INDEX_POSITION]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::renderPass	inc/g_buffer.h	/^	VkRenderPass renderPass;$/;"	m	class:GBuffer	access:public
 GBuffer::sampler	inc/g_buffer.h	/^	VkSampler sampler;$/;"	m	class:GBuffer	access:public
+GBuffer::update	src/g_buffer.cpp	/^void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 GBuffer::width	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	access:public
 GBuffer::~GBuffer	src/g_buffer.cpp	/^GBuffer::~GBuffer() $/;"	f	class:GBuffer	signature:()
 GLFW_INCLUDE_VULKAN	inc/window.h	8;"	d
@@ -9846,6 +9849,7 @@ createSwapChain	src/swapchain_manager.cpp	/^void SwapchainManager::createSwapCha
 createTQuadDescriptorSetLayout	inc/creator/descriptor_creator.h	/^inline void createTQuadDescriptorSetLayout(State& state)$/;"	f	namespace:DescriptorCreator	signature:(State& state)
 createTQuadPipeline	inc/creator/pipeline_creator.h	/^inline void createTQuadPipeline(State& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineCreator	signature:(State& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
 createUniformBuffer	inc/creator/buffer_helper.h	/^inline void createUniformBuffer(const State& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const State& state, BufferInfo& bufferInfo)
+createUniformBuffer	src/g_buffer.cpp	/^void GBuffer::createUniformBuffer()$/;"	f	class:GBuffer	signature:()
 createUniformBuffer	src/scene_lights.cpp	/^void SceneLights::createUniformBuffer() $/;"	f	class:SceneLights	signature:()
 createUniformBuffer	src/shape/tquad.cpp	/^void TQuad::createUniformBuffer()$/;"	f	class:TQuad	signature:()
 createUniformFragmentDescriptorSetLayout	inc/creator/descriptor_creator.h	/^inline void createUniformFragmentDescriptorSetLayout(State& state)$/;"	f	namespace:DescriptorCreator	signature:(State& state)
@@ -14643,7 +14647,7 @@ mSize	lib/__assimp/light.h	/^    C_STRUCT aiVector2D mSize;$/;"	m	struct:aiLight
 mSphere	inc/scene_lights.h	/^	Sphere mSphere;$/;"	m	class:SceneLights	access:private
 mStartTime	inc/timer.h	/^	std::chrono::high_resolution_clock::time_point mStartTime;$/;"	m	class:Timer	access:private
 mState	inc/device_manager.h	/^	State& mState;$/;"	m	class:DeviceManager	access:private
-mState	inc/g_buffer.h	/^	const State* mState;$/;"	m	class:GBuffer	access:private
+mState	inc/g_buffer.h	/^	State* mState;$/;"	m	class:GBuffer	access:private
 mState	inc/renderer.h	/^	State mState;$/;"	m	class:Renderer	access:private
 mState	inc/scene_lights.h	/^	State* mState;$/;"	m	class:SceneLights	access:private
 mState	inc/shape/fullscreen_quad.h	/^	State& mState;$/;"	m	class:FullscreenQuad	access:private
@@ -14694,6 +14698,7 @@ mType	lib/assimp/light.h	/^    C_ENUM aiLightSourceType mType;$/;"	m	struct:aiLi
 mType	lib/assimp/material.h	/^    C_ENUM aiPropertyTypeInfo mType;$/;"	m	struct:aiMaterialProperty	access:public
 mType	lib/assimp/metadata.h	/^    aiMetadataType mType;$/;"	m	struct:aiMetadataEntry	access:public
 mUniformBufferDesc	inc/shape/tquad.h	/^	BufferInfo mVertexBufferDesc, mIndexBufferDesc, mUniformBufferDesc, mUniformStagingBufferDesc;$/;"	m	class:TQuad	access:public
+mUniformBufferInfo	inc/g_buffer.h	/^	BufferInfo mUniformBufferInfo;$/;"	m	class:GBuffer	access:private
 mUniformBufferInfo	inc/scene_lights.h	/^	BufferInfo mUniformBufferInfo;$/;"	m	class:SceneLights	access:private
 mUniformBufferOffset	inc/shape/tquad.h	/^				 mUniformBufferOffset;$/;"	m	class:TQuad	access:public
 mUniformDescriptorSet	inc/shape/model.h	/^	VkDescriptorSet mUniformDescriptorSet;$/;"	m	class:Model	access:protected
@@ -17533,6 +17538,7 @@ uniformFragment	inc/state.h	/^	VkDescriptorSetLayout uniformFragment;$/;"	m	stru
 uniformVertex	inc/state.h	/^	VkDescriptorSetLayout uniformVertex;$/;"	m	struct:DescriptorSetLayouts	access:public
 uninitialize	lib/glm/detail/setup.hpp	/^	enum ctor{uninitialize};$/;"	e	enum:glm::ctor
 unnormalizedCoordinates	lib/vulkan/vulkan.h	/^    VkBool32                unnormalizedCoordinates;$/;"	m	struct:VkSamplerCreateInfo	access:public
+update	src/g_buffer.cpp	/^void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 update	src/scene_lights.cpp	/^void SceneLights::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:SceneLights	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 update	src/shape/model.cpp	/^void Model::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:Model	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 update	src/shape/skinned.cpp	/^void Skinned::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera, uint32_t animationIndex \/* = 0 *\/)$/;"	f	class:Skinned	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera, uint32_t animationIndex )
