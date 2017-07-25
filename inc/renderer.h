@@ -30,6 +30,7 @@
 #include "point_light.h"
 #include "scene_lights.h"
 #include "g_buffer.h"
+#include "tiled_renderer.h"
 
 class Renderer {
 	friend class Engine;
@@ -55,7 +56,8 @@ public:
 private:
 	void updateUniformBuffer(const Timer& timer);
 	void createSemaphores();
-
+	void createFences();
+	
 	Window& mWindow;
 	State mState;
 	DeviceManager mDeviceManager;
@@ -67,11 +69,15 @@ private:
 	FullscreenQuad fullscreenQuad;
 	SceneLights sceneLights;
 	GBuffer gBuffer;
+	TiledRenderer tiledRenderer;
 	uint32_t imageIndex;
 
 	VkSemaphore imageAquiredSemaphore;
 	VkSemaphore offscreenSemaphore;
 	VkSemaphore renderFinishedSemaphore;
+	VkSemaphore tilingFinishedSemaphore;
+
+	VkFence tilingFence;
 };
 
 #endif

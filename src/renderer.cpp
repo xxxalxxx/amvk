@@ -12,6 +12,7 @@ Renderer::Renderer(Window& window):
 	fullscreenQuad(mState),
 	sceneLights(mState),
 	gBuffer(mState),
+	tiledRenderer(mState, gBuffer),
 	imageIndex(0)
 {
 	
@@ -76,6 +77,7 @@ void Renderer::init()
 	mSwapChainManager.createFramebuffers(mState.renderPass);
 	mSwapChainManager.createCommandBuffers();
 
+	createFences();
 	createSemaphores();
 	
 	LOG("INIT SUCCESSFUL");
@@ -91,6 +93,9 @@ void Renderer::updateUniformBuffers(const Timer& timer, Camera& camera)
 	guard.update(cmd.buffer, timer, camera);
 	sceneLights.update(cmd.buffer, timer, camera);
 	gBuffer.update(cmd.buffer, timer, camera);
+
+	//CmdPass tilingCmd(mState.device, tiledRenderer.cmdPool, mState.computeQueue);
+	//tiledRenderer.update(tilingCmd.buffer, timer, camera);
 }
 
 void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
@@ -173,6 +178,46 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 	for (size_t i = 0; i < mSwapChainManager.cmdBuffers.size(); ++i) {
         VkCommandBuffer& cmdBuffer = mSwapChainManager.cmdBuffers[i];
 		VK_CHECK_RESULT(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
+
+
+
+	/*	VkImageSubresourceLayers subres = {};
+		subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		subres.mipLevel = 0;
+		subres.baseArrayLayer = 0;
+		subres.layerCount = 1;
+
+		VkImageBlit blit = {};
+		blit.srcSubresource = subres;
+		blit.srcOffsets[0] = {0, 0, 0};
+		blit.srcOffsets[1] = {gBuffer.width, gBuffer.height, 1};
+		blit.dstSubresource = subres;
+		blit.dstOffsets[0] = {0, 0, 0};
+		blit.dstOffsets[1] = {gBuffer.width, gBuffer.height, 1};
+
+		vkCmdBlitImage(
+				cmdBuffer, 
+				gBuffer.albedo().image, 
+				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+				mSwapChainManager.mSwapChainImages[i],
+				VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+				1,
+				&blit,
+				VK_FILTER_NEAREST);
+
+		subres.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	
+		vkCmdBlitImage(
+				cmdBuffer, 
+				gBuffer.depth().image, 
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+				mSwapChainManager.mDepthImageDesc.image,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+				1,
+				&blit,
+				VK_FILTER_NEAREST);
+		*/
+		
 		renderPassBeginInfo.framebuffer = mSwapChainManager.framebuffers[i];
 		vkCmdBeginRenderPass(cmdBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -192,6 +237,7 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 		vkCmdSetScissor(cmdBuffer, 0, 1, &scissor);
 
 
+
 		//tquad.draw(cmdBuffer);
 		 //fullscreenQuad.draw(cmdBuffer);
 		//sceneLights.draw(cmdBuffer);
@@ -209,7 +255,10 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 		*/
 		gBuffer.drawDeferredQuad(cmdBuffer);
 
+
+
 		vkCmdEndRenderPass(cmdBuffer);
+
 		VK_CHECK_RESULT(vkEndCommandBuffer(cmdBuffer));
 	}
 }
@@ -304,7 +353,17 @@ void Renderer::createSemaphores()
 	VK_CHECK_RESULT(vkCreateSemaphore(mState.device, &createInfo, nullptr, &imageAquiredSemaphore));
 	VK_CHECK_RESULT(vkCreateSemaphore(mState.device, &createInfo, nullptr, &offscreenSemaphore));
 	VK_CHECK_RESULT(vkCreateSemaphore(mState.device, &createInfo, nullptr, &renderFinishedSemaphore));
+	VK_CHECK_RESULT(vkCreateSemaphore(mState.device, &createInfo, nullptr, &tilingFinishedSemaphore));
+
 	LOG("SEMAPHORES CREATED");
+}
+
+void Renderer::createFences() 
+{
+	VkFenceCreateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+	info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+	VK_CHECK_RESULT(vkCreateFence(mState.device, &info, nullptr, &tilingFence));
 }
 
 void Renderer::waitIdle()

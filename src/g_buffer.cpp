@@ -38,11 +38,12 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 	attFormats[INDEX_ALBEDO]   = VK_FORMAT_R8G8B8A8_UNORM;
 	attFormats[INDEX_DEPTH]    = ImageHelper::findDepthStencilFormat(physicalDevice);
 
-	std::array<VkImageUsageFlagBits, ATTACHMENT_COUNT> attUsages = {};
+	
+	std::array<VkImageUsageFlags, ATTACHMENT_COUNT> attUsages = {};
 	attUsages[INDEX_POSITION] = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 	attUsages[INDEX_NORMAL]   = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 	attUsages[INDEX_ALBEDO]   = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-	attUsages[INDEX_DEPTH]    = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+	attUsages[INDEX_DEPTH]    = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 
 	for (size_t i = 0; i < ATTACHMENT_COUNT; ++i)
 		createAttachment(
@@ -156,7 +157,7 @@ void GBuffer::createAttachment(
 		const VkDevice& device,
 		FramebufferAttachment& attachment,
 		VkFormat format,  
-		VkImageUsageFlagBits usage)
+		VkImageUsageFlags usage)
 {
 	VkImageAspectFlags aspectMask = 0;
 	VkImageLayout imageLayout;

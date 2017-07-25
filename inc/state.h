@@ -54,7 +54,7 @@ struct Pipelines {
 	PipelineInfo model;
 	PipelineInfo skinned;
 	PipelineInfo deferred;
-	PipelineInfo tiledRenderer;
+	PipelineInfo tiling;
 };
 
 struct DescriptorSets {
@@ -74,6 +74,7 @@ struct DescriptorSetLayouts {
 	VkDescriptorSetLayout sampler;
 	VkDescriptorSetLayout samplerList;
 	VkDescriptorSetLayout deferred;
+	VkDescriptorSetLayout tiling;
 };
 
 struct Shaders {

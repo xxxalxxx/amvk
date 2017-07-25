@@ -62,7 +62,7 @@ private:
 		const VkDevice& device,
 		FramebufferAttachment& attachment,
 		VkFormat format,  
-		VkImageUsageFlagBits usage);
+		VkImageUsageFlags usage);
 
 	void createSampler(const VkDevice& device);
 	void createDescriptorPool();

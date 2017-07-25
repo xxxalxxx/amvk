@@ -169,7 +169,7 @@ inline void createDeferredPipeline(State& state, PipelineInfo& info, VkRenderPas
 		//PipelineBuilder::rasterizationStateCullNone();
 		//PipelineBuilder::rasterizationStateCullBackCCW();
 		PipelineBuilder::rasterizationStateCullBackCW();
-    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineBuilder::depthStencilStateDepthLessOrEqualNoStencil();
+    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineBuilder::depthStencilStateNoDepthNoStencil(); 
     VkPipelineMultisampleStateCreateInfo multisampleState = PipelineBuilder::multisampleStateNoMultisampleNoSampleShading();
     VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineBuilder::blendAttachmentStateDisabled();
 
@@ -535,56 +535,26 @@ inline void createSkinnedPipeline(State& state, PipelineInfo& info, VkRenderPass
 
 }
 
-inline void createTiledRendererPipeline(State& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+inline void createTilingPipeline(State& state, PipelineInfo& info)
 {
-    VkPipelineShaderStageCreateInfo stages[] = {
-             state.shaders.tquad.fragment
-    };
 
-    VkPipelineInputAssemblyStateCreateInfo assemblyInfo = PipelineBuilder::inputAssemblyNoRestart(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-    VkPipelineViewportStateCreateInfo viewportState = PipelineBuilder::viewportStateDynamic();
-
-    VkPipelineRasterizationStateCreateInfo rasterizationState = 
-		//PipelineBuilder::rasterizationStateCullNone();
-		PipelineBuilder::rasterizationStateCullBackCCW();
-		//PipelineBuilder::rasterizationStateCullBackCW();
-    VkPipelineDepthStencilStateCreateInfo depthStencil = PipelineBuilder::depthStencilStateDepthLessOrEqualNoStencil();
-    VkPipelineMultisampleStateCreateInfo multisampleState = PipelineBuilder::multisampleStateNoMultisampleNoSampleShading();
-    VkPipelineColorBlendAttachmentState blendAttachmentState = PipelineBuilder::blendAttachmentStateDisabled();
-
-    VkPipelineColorBlendStateCreateInfo blendState = PipelineBuilder::blendStateDisabled(&blendAttachmentState, 1);
-
-    VkPushConstantRange pushConstantRange = PipelineBuilder::pushConstantRange(
-            state,
-            VK_SHADER_STAGE_VERTEX_BIT,
-            0,
-            sizeof(TQuad::PushConstants));
-
-    VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineBuilder::layout(&state.descriptorSetLayouts.tquad, 1, &pushConstantRange, 1);
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo = PipelineBuilder::layout(&state.descriptorSetLayouts.tiling, 1, nullptr, 0);
     VK_CHECK_RESULT(vkCreatePipelineLayout(state.device, &pipelineLayoutInfo, nullptr, &info.layout));
 
-    PipelineCacheInfo cacheInfo("tiled_renderer", info.cache);
+    PipelineCacheInfo cacheInfo("tiling", info.cache);
     cacheInfo.getCache(state.device);
 
     VkComputePipelineCreateInfo pipelineInfo = {};
-    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
     pipelineInfo.stage = state.shaders.deferred.compute;
-    pipelineInfo.pStages = stages;
-    pipelineInfo.pVertexInputState = &vertexInputInfo;
-    pipelineInfo.pInputAssemblyState = &assemblyInfo;
-    pipelineInfo.pViewportState = &viewportState;
-    pipelineInfo.pRasterizationState = &rasterizationState;
-    pipelineInfo.pMultisampleState = &multisampleState;
-    pipelineInfo.pDepthStencilState = &depthStencil;
-    pipelineInfo.pColorBlendState = &blendState;
-    pipelineInfo.pDynamicState = &dynamicInfo;
     pipelineInfo.layout = info.layout;
+	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
     VK_CHECK_RESULT(vkCreateComputePipelines(state.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &info.pipeline));
 
     cacheInfo.saveCache(state.device);
+
+	LOG("Tiling pipeline created");
 }
-
-
 
 inline void createPipelines(State& state, GBuffer& gBuffer)
 {
@@ -596,6 +566,7 @@ inline void createPipelines(State& state, GBuffer& gBuffer)
     createModelPipeline(state, state.pipelines.model, gBuffer.renderPass, 0);
     createSkinnedPipeline(state, state.pipelines.skinned, gBuffer.renderPass, 0);
     createDeferredPipeline(state, state.pipelines.deferred, state.renderPass, 0);
+	createTilingPipeline(state, state.pipelines.tiling);
 
 }
 
