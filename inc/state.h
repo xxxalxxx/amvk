@@ -43,6 +43,7 @@ struct ShaderInfo {
 	VkPipelineShaderStageCreateInfo vertex;
 	VkPipelineShaderStageCreateInfo fragment;
 	VkPipelineShaderStageCreateInfo geometry;
+	VkPipelineShaderStageCreateInfo compute;
 };
 
 struct Pipelines {
@@ -53,6 +54,7 @@ struct Pipelines {
 	PipelineInfo model;
 	PipelineInfo skinned;
 	PipelineInfo deferred;
+	PipelineInfo tiledRenderer;
 };
 
 struct DescriptorSets {
