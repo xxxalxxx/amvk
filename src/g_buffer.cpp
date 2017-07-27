@@ -27,6 +27,7 @@ void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& devic
 	this->height = height;
 
 	createTilingCmdPool();
+	createTilingResultImage();
 	//throw std::runtime_error("STOP");
 	createFramebuffers(physicalDevice, device);
 	createSampler(device);
@@ -383,11 +384,16 @@ void GBuffer::createDescriptors()
 	uniformSet.descriptorCount = 1;
 	uniformSet.pBufferInfo = &buffInfo;
 
+	std::array<VkImageView, ATTACHMENT_COUNT> tilingImageViews = {};
+	tilingImageViews[INDEX_POSITION] = tilingImage.view;
+	tilingImageViews[INDEX_NORMAL]   = attachments[INDEX_NORMAL].view;
+	tilingImageViews[INDEX_ALBEDO]   = attachments[INDEX_ALBEDO].view;
+
 	std::array<VkDescriptorImageInfo, TILING_IMAGE_COUNT> tilingImageInfos = {};
 	for (size_t i = 0; i < TILING_IMAGE_COUNT; ++i) {
 		VkDescriptorImageInfo& descriptorInfo = tilingImageInfos[i];
 		descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
-		descriptorInfo.imageView = attachments[i].view;
+		descriptorInfo.imageView = tilingImageViews[i];
 		
 		writeSets.push_back(VkWriteDescriptorSet());
 		VkWriteDescriptorSet& writeSet = writeSets.back();
