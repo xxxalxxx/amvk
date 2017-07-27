@@ -527,7 +527,6 @@ AMVK_SWAPCHAIN_MANAGER_H	inc/swapchain_manager.h	2;"	d
 AMVK_TASK_MANAGER_H	inc/task_manager.h	4;"	d
 AMVK_TEXTURE_DATA_H	inc/texture_data.h	2;"	d
 AMVK_TEXTURE_MANAGER_H	inc/texture_manager.h	2;"	d
-AMVK_TILED_RENDERER_H	inc/tiled_renderer.h	2;"	d
 AMVK_TIMER_H	inc/timer.h	2;"	d
 AMVK_TQUAD_H	inc/shape/tquad.h	2;"	d
 AMVK_UTIL_H	inc/util.h	2;"	d
@@ -889,6 +888,7 @@ BufferHelper::createIndexBuffer	inc/creator/buffer_helper.h	/^inline void create
 BufferHelper::createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffer($/;"	f	namespace:BufferHelper	signature:( const State& state, BufferInfo& bufferInfo)
 BufferHelper::createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffer($/;"	f	namespace:BufferHelper	signature:( const State& state, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory)
 BufferHelper::createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffer($/;"	f	namespace:BufferHelper	signature:( const VkPhysicalDevice& physicalDevice, const VkDevice& device, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory)
+BufferHelper::createStorageBuffer	inc/creator/buffer_helper.h	/^inline void createStorageBuffer(const State& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const State& state, BufferInfo& bufferInfo)
 BufferHelper::createUniformBuffer	inc/creator/buffer_helper.h	/^inline void createUniformBuffer(const State& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const State& state, BufferInfo& bufferInfo)
 BufferHelper::createVertexAndIndexBuffer	inc/creator/buffer_helper.h	/^inline void createVertexAndIndexBuffer(const State& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const State& state, BufferInfo& bufferInfo)
 BufferHelper::createVertexBuffer	inc/creator/buffer_helper.h	/^inline void createVertexBuffer(const State& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const State& state, BufferInfo& bufferInfo)
@@ -1572,11 +1572,31 @@ GBuffer::INDEX_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_AL
 GBuffer::INDEX_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_DEPTH    = 3;$/;"	m	class:GBuffer	access:public
 GBuffer::INDEX_NORMAL	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_NORMAL   = 1;$/;"	m	class:GBuffer	access:public
 GBuffer::INDEX_POSITION	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_POSITION = 0;$/;"	m	class:GBuffer	access:public
+GBuffer::MAX_LIGHTS	inc/g_buffer.h	/^	static const constexpr uint32_t MAX_LIGHTS = 1024;$/;"	m	class:GBuffer	access:public
+GBuffer::PointLight	inc/g_buffer.h	/^	struct PointLight {$/;"	s	class:GBuffer	access:public
+GBuffer::PointLight::color	inc/g_buffer.h	/^		glm::vec3 color;$/;"	m	struct:GBuffer::PointLight	access:public
+GBuffer::PointLight::intensity	inc/g_buffer.h	/^		float intensity;$/;"	m	struct:GBuffer::PointLight	access:public
+GBuffer::PointLight::position	inc/g_buffer.h	/^		glm::vec3 position;$/;"	m	struct:GBuffer::PointLight	access:public
+GBuffer::PointLight::radius	inc/g_buffer.h	/^		float radius;$/;"	m	struct:GBuffer::PointLight	access:public
+GBuffer::STORAGE_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t STORAGE_BUFFER_COUNT = 1;$/;"	m	class:GBuffer	access:public
+GBuffer::TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 3;$/;"	m	class:GBuffer	access:public
+GBuffer::TilingImage	inc/g_buffer.h	/^	struct TilingImage {$/;"	s	class:GBuffer	access:public
+GBuffer::TilingImage::image	inc/g_buffer.h	/^		VkImage image;$/;"	m	struct:GBuffer::TilingImage	access:public
+GBuffer::TilingImage::memory	inc/g_buffer.h	/^		VkDeviceMemory memory;$/;"	m	struct:GBuffer::TilingImage	access:public
+GBuffer::TilingImage::view	inc/g_buffer.h	/^		VkImageView view;$/;"	m	struct:GBuffer::TilingImage	access:public
+GBuffer::TilingUBO	inc/g_buffer.h	/^	struct TilingUBO {$/;"	s	class:GBuffer	access:public
+GBuffer::TilingUBO::eyePos	inc/g_buffer.h	/^		glm::vec3 eyePos;$/;"	m	struct:GBuffer::TilingUBO	access:public
+GBuffer::TilingUBO::proj	inc/g_buffer.h	/^		glm::mat4 proj;$/;"	m	struct:GBuffer::TilingUBO	access:public
+GBuffer::TilingUBO::textureDimens	inc/g_buffer.h	/^		glm::vec2 textureDimens;$/;"	m	struct:GBuffer::TilingUBO	access:public
+GBuffer::TilingUBO::view	inc/g_buffer.h	/^		glm::mat4 view;$/;"	m	struct:GBuffer::TilingUBO	access:public
+GBuffer::UNIFORM_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t UNIFORM_BUFFER_COUNT = 2;$/;"	m	class:GBuffer	access:public
+GBuffer::WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:GBuffer	access:public
 GBuffer::albedo	inc/g_buffer.h	/^	inline FramebufferAttachment& albedo() { return attachments[INDEX_ALBEDO]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::attachments	inc/g_buffer.h	/^	std::array<FramebufferAttachment, ATTACHMENT_COUNT> attachments;$/;"	m	class:GBuffer	access:public
 GBuffer::clearValues	inc/g_buffer.h	/^	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;$/;"	m	class:GBuffer	access:public
 GBuffer::cmdBuffer	inc/g_buffer.h	/^	VkCommandBuffer cmdBuffer;$/;"	m	class:GBuffer	access:public
 GBuffer::createAttachment	src/g_buffer.cpp	/^void GBuffer::createAttachment($/;"	f	class:GBuffer	signature:( const VkPhysicalDevice& physicalDevice, const VkDevice& device, FramebufferAttachment& attachment, VkFormat format, VkImageUsageFlags usage)
+GBuffer::createBuffers	src/g_buffer.cpp	/^void GBuffer::createBuffers()$/;"	f	class:GBuffer	signature:()
 GBuffer::createCmdBuffer	src/g_buffer.cpp	/^void GBuffer::createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool)$/;"	f	class:GBuffer	signature:(const VkDevice& device, const VkCommandPool& cmdPool)
 GBuffer::createColorAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format) $/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
 GBuffer::createDepthAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat format)$/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
@@ -1584,22 +1604,33 @@ GBuffer::createDescriptorPool	src/g_buffer.cpp	/^void GBuffer::createDescriptorP
 GBuffer::createDescriptors	src/g_buffer.cpp	/^void GBuffer::createDescriptors()$/;"	f	class:GBuffer	signature:()
 GBuffer::createFramebuffers	src/g_buffer.cpp	/^void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const VkDevice& device) $/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device)
 GBuffer::createSampler	src/g_buffer.cpp	/^void GBuffer::createSampler(const VkDevice& device)$/;"	f	class:GBuffer	signature:(const VkDevice& device)
-GBuffer::createUniformBuffer	src/g_buffer.cpp	/^void GBuffer::createUniformBuffer()$/;"	f	class:GBuffer	signature:()
+GBuffer::createTilingCmdPool	src/g_buffer.cpp	/^void GBuffer::createTilingCmdPool() $/;"	f	class:GBuffer	signature:()
+GBuffer::createTilingResultImage	src/g_buffer.cpp	/^void GBuffer::createTilingResultImage() $/;"	f	class:GBuffer	signature:()
 GBuffer::deferredQuad	inc/g_buffer.h	/^	FullscreenQuad deferredQuad;$/;"	m	class:GBuffer	access:public
 GBuffer::depth	inc/g_buffer.h	/^	inline FramebufferAttachment& depth() { return attachments[INDEX_DEPTH]; }$/;"	f	class:GBuffer	access:public	signature:()
+GBuffer::dispatch	src/g_buffer.cpp	/^void GBuffer::dispatch() $/;"	f	class:GBuffer	signature:()
 GBuffer::drawDeferredQuad	src/g_buffer.cpp	/^void GBuffer::drawDeferredQuad(VkCommandBuffer& cmdBuffer)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer)
 GBuffer::frameBuffer	inc/g_buffer.h	/^	VkFramebuffer frameBuffer;$/;"	m	class:GBuffer	access:public
 GBuffer::height	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	access:public
 GBuffer::init	src/g_buffer.cpp	/^void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)$/;"	f	class:GBuffer	signature:(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)
 GBuffer::mDescriptorPool	inc/g_buffer.h	/^	VkDescriptorPool mDescriptorPool;$/;"	m	class:GBuffer	access:private
 GBuffer::mDescriptorSet	inc/g_buffer.h	/^	VkDescriptorSet mDescriptorSet;$/;"	m	class:GBuffer	access:private
+GBuffer::mPointLightsBufferInfo	inc/g_buffer.h	/^	BufferInfo mPointLightsBufferInfo;$/;"	m	class:GBuffer	access:private
 GBuffer::mState	inc/g_buffer.h	/^	State* mState;$/;"	m	class:GBuffer	access:private
+GBuffer::mTilingDescriptorSet	inc/g_buffer.h	/^	VkDescriptorSet mTilingDescriptorSet;$/;"	m	class:GBuffer	access:private
+GBuffer::mTilingUniformBufferInfo	inc/g_buffer.h	/^	BufferInfo mTilingUniformBufferInfo;$/;"	m	class:GBuffer	access:private
 GBuffer::mUniformBufferInfo	inc/g_buffer.h	/^	BufferInfo mUniformBufferInfo;$/;"	m	class:GBuffer	access:private
 GBuffer::normal	inc/g_buffer.h	/^	inline FramebufferAttachment& normal() { return attachments[INDEX_NORMAL]; }$/;"	f	class:GBuffer	access:public	signature:()
+GBuffer::pointLights	inc/g_buffer.h	/^	std::vector<PointLight> pointLights;$/;"	m	class:GBuffer	access:public
 GBuffer::position	inc/g_buffer.h	/^	inline FramebufferAttachment& position() { return attachments[INDEX_POSITION]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::renderPass	inc/g_buffer.h	/^	VkRenderPass renderPass;$/;"	m	class:GBuffer	access:public
 GBuffer::sampler	inc/g_buffer.h	/^	VkSampler sampler;$/;"	m	class:GBuffer	access:public
+GBuffer::tilingCmdBuffer	inc/g_buffer.h	/^	VkCommandBuffer tilingCmdBuffer;$/;"	m	class:GBuffer	access:public
+GBuffer::tilingCmdPool	inc/g_buffer.h	/^	VkCommandPool tilingCmdPool;$/;"	m	class:GBuffer	access:public
+GBuffer::tilingImage	inc/g_buffer.h	/^	} tilingImage;$/;"	m	class:GBuffer	typeref:struct:GBuffer::TilingImage	access:public
+GBuffer::ubo	inc/g_buffer.h	/^	TilingUBO ubo;$/;"	m	class:GBuffer	access:public
 GBuffer::update	src/g_buffer.cpp	/^void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
+GBuffer::updateTiling	src/g_buffer.cpp	/^void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 GBuffer::width	inc/g_buffer.h	/^	int32_t width, height;$/;"	m	class:GBuffer	access:public
 GBuffer::~GBuffer	src/g_buffer.cpp	/^GBuffer::~GBuffer() $/;"	f	class:GBuffer	signature:()
 GLFW_INCLUDE_VULKAN	inc/window.h	8;"	d
@@ -2667,7 +2698,7 @@ MAX_BONES	inc/shape/skinned.h	/^	static constexpr uint32_t const MAX_BONES = 64;
 MAX_BONES_PER_VERTEX	inc/shape/skinned.h	/^	static constexpr uint32_t const MAX_BONES_PER_VERTEX = 4;$/;"	m	class:Skinned	access:public
 MAX_FOV_RADIANS	inc/camera.h	/^    const static float MAX_FOV_RADIANS, MIN_FOV_RADIANS;$/;"	m	class:Camera	access:private
 MAX_FOV_RADIANS	src/camera.cpp	/^const float Camera::MAX_FOV_RADIANS = M_PI_2;$/;"	m	class:Camera	file:
-MAX_LIGHTS	inc/tiled_renderer.h	/^	static const constexpr uint32_t MAX_LIGHTS = 1024;$/;"	m	class:TiledRenderer	access:public
+MAX_LIGHTS	inc/g_buffer.h	/^	static const constexpr uint32_t MAX_LIGHTS = 1024;$/;"	m	class:GBuffer	access:public
 MAX_LOG_MESSAGE_LENGTH	lib/__assimp/Logger.hpp	54;"	d
 MAX_LOG_MESSAGE_LENGTH	lib/assimp/Logger.hpp	52;"	d
 MAX_SAMPLERS_PER_VERTEX	inc/shape/skinned.h	41;"	d
@@ -3526,8 +3557,8 @@ Pipelines::quad	inc/state.h	/^	PipelineInfo quad;$/;"	m	struct:Pipelines	access:
 Pipelines::skinned	inc/state.h	/^	PipelineInfo skinned;$/;"	m	struct:Pipelines	access:public
 Pipelines::tiling	inc/state.h	/^	PipelineInfo tiling;$/;"	m	struct:Pipelines	access:public
 Pipelines::tquad	inc/state.h	/^	PipelineInfo tquad;$/;"	m	struct:Pipelines	access:public
+PointLight	inc/g_buffer.h	/^	struct PointLight {$/;"	s	class:GBuffer	access:public
 PointLight	inc/shape/point_light.h	/^class PointLight {$/;"	c
-PointLight	inc/tiled_renderer.h	/^	struct PointLight {$/;"	s	class:TiledRenderer	access:public
 PointLight	src/shape/point_light.cpp	/^PointLight::PointLight(UBO& ubo, LightUBO& lightUbo):$/;"	f	class:PointLight	signature:(UBO& ubo, LightUBO& lightUbo)
 PointLight::LightUBO	inc/shape/point_light.h	/^	struct LightUBO {$/;"	s	class:PointLight	access:public
 PointLight::LightUBO::color	inc/shape/point_light.h	/^		glm::vec3 color;$/;"	m	struct:PointLight::LightUBO	access:public
@@ -3600,7 +3631,6 @@ Renderer::recreateSwapChain	src/renderer.cpp	/^void Renderer::recreateSwapChain(
 Renderer::renderFinishedSemaphore	inc/renderer.h	/^	VkSemaphore renderFinishedSemaphore;$/;"	m	class:Renderer	access:private
 Renderer::sceneLights	inc/renderer.h	/^	SceneLights sceneLights;$/;"	m	class:Renderer	access:private
 Renderer::suit	inc/renderer.h	/^	Model suit;$/;"	m	class:Renderer	access:private
-Renderer::tiledRenderer	inc/renderer.h	/^	TiledRenderer tiledRenderer;$/;"	m	class:Renderer	access:private
 Renderer::tilingFence	inc/renderer.h	/^	VkFence tilingFence;$/;"	m	class:Renderer	access:private
 Renderer::tilingFinishedSemaphore	inc/renderer.h	/^	VkSemaphore tilingFinishedSemaphore;$/;"	m	class:Renderer	access:private
 Renderer::tquad	inc/renderer.h	/^	TQuad tquad;$/;"	m	class:Renderer	access:private
@@ -3784,6 +3814,7 @@ STDINT_H_UINTPTR_T_DEFINED	lib/__assimp/Compiler/pstdint.h	740;"	d
 STDINT_H_UINTPTR_T_DEFINED	lib/__assimp/Compiler/pstdint.h	794;"	d
 STDINT_H_UINTPTR_T_DEFINED	lib/assimp/Compiler/pstdint.h	706;"	d
 STDINT_H_UINTPTR_T_DEFINED	lib/assimp/Compiler/pstdint.h	765;"	d
+STORAGE_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t STORAGE_BUFFER_COUNT = 1;$/;"	m	class:GBuffer	access:public
 STR	lib/__assimp/Compiler/pstdint.h	892;"	d
 SamplerAddressingMode	lib/vulkan/spirv.hpp	/^enum SamplerAddressingMode {$/;"	g	namespace:spv
 SamplerAddressingModeClamp	lib/vulkan/spirv.hpp	/^    SamplerAddressingModeClamp = 2,$/;"	e	enum:spv::SamplerAddressingMode
@@ -4907,6 +4938,7 @@ TEXTURE_TYPES	inc/shape/model.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;
 TEXTURE_TYPES	inc/shape/skinned.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;"	m	class:Skinned	access:public
 TEXTURE_TYPES	src/shape/model.cpp	/^const aiTextureType* Model::TEXTURE_TYPES = Model_TEXTURE_TYPES;$/;"	m	class:Model	file:
 TEXTURE_TYPES	src/shape/skinned.cpp	/^const aiTextureType* Skinned::TEXTURE_TYPES = Skinned_TEXTURE_TYPES;$/;"	m	class:Skinned	file:
+TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 3;$/;"	m	class:GBuffer	access:public
 TQuad	inc/shape/tquad.h	/^class TQuad {$/;"	c
 TQuad	src/shape/tquad.cpp	/^TQuad::TQuad(State& vulkanState):$/;"	f	class:TQuad	signature:(State& vulkanState)
 TQuad::PushConstants	inc/shape/tquad.h	/^	struct PushConstants {$/;"	s	class:TQuad	access:public
@@ -4990,39 +5022,8 @@ TextureManager::mPool	inc/texture_manager.h	/^	std::unordered_map<TextureDesc, I
 TextureManager::textureManager	inc/texture_manager.h	/^	TextureManager(const TextureManager& textureManager) = delete;$/;"	m	class:TextureManager	access:public
 TextureManager::textureManager	inc/texture_manager.h	/^	void operator=(const TextureManager& textureManager) = delete;$/;"	m	class:TextureManager	access:public
 TextureManager::~TextureManager	src/texture_manager.cpp	/^TextureManager::~TextureManager()$/;"	f	class:TextureManager	signature:()
-TiledRenderer	inc/tiled_renderer.h	/^class TiledRenderer {$/;"	c
-TiledRenderer	src/tiled_renderer.cpp	/^TiledRenderer::TiledRenderer(State& state, GBuffer& gBuffer): $/;"	f	class:TiledRenderer	signature:(State& state, GBuffer& gBuffer)
-TiledRenderer::MAX_LIGHTS	inc/tiled_renderer.h	/^	static const constexpr uint32_t MAX_LIGHTS = 1024;$/;"	m	class:TiledRenderer	access:public
-TiledRenderer::PointLight	inc/tiled_renderer.h	/^	struct PointLight {$/;"	s	class:TiledRenderer	access:public
-TiledRenderer::PointLight::color	inc/tiled_renderer.h	/^		glm::vec3 color;$/;"	m	struct:TiledRenderer::PointLight	access:public
-TiledRenderer::PointLight::intensity	inc/tiled_renderer.h	/^		float intensity;$/;"	m	struct:TiledRenderer::PointLight	access:public
-TiledRenderer::PointLight::position	inc/tiled_renderer.h	/^		glm::vec3 position;$/;"	m	struct:TiledRenderer::PointLight	access:public
-TiledRenderer::PointLight::radius	inc/tiled_renderer.h	/^		float radius;$/;"	m	struct:TiledRenderer::PointLight	access:public
-TiledRenderer::TiledRenderer	src/tiled_renderer.cpp	/^TiledRenderer::TiledRenderer(State& state, GBuffer& gBuffer): $/;"	f	class:TiledRenderer	signature:(State& state, GBuffer& gBuffer)
-TiledRenderer::UBO	inc/tiled_renderer.h	/^	struct UBO {$/;"	s	class:TiledRenderer	access:public
-TiledRenderer::UBO::eyePos	inc/tiled_renderer.h	/^		glm::vec3 eyePos;$/;"	m	struct:TiledRenderer::UBO	access:public
-TiledRenderer::UBO::proj	inc/tiled_renderer.h	/^		glm::mat4 proj;$/;"	m	struct:TiledRenderer::UBO	access:public
-TiledRenderer::UBO::textureDimens	inc/tiled_renderer.h	/^		glm::vec2 textureDimens;$/;"	m	struct:TiledRenderer::UBO	access:public
-TiledRenderer::UBO::view	inc/tiled_renderer.h	/^		glm::mat4 view;$/;"	m	struct:TiledRenderer::UBO	access:public
-TiledRenderer::WORK_GROUP_SIZE	inc/tiled_renderer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:TiledRenderer	access:public
-TiledRenderer::cmdBuffer	inc/tiled_renderer.h	/^	VkCommandBuffer cmdBuffer;$/;"	m	class:TiledRenderer	access:public
-TiledRenderer::cmdPool	inc/tiled_renderer.h	/^	VkCommandPool cmdPool;$/;"	m	class:TiledRenderer	access:public
-TiledRenderer::createCmdBuffer	src/tiled_renderer.cpp	/^void TiledRenderer::createCmdBuffer()$/;"	f	class:TiledRenderer	signature:()
-TiledRenderer::createCmdPool	src/tiled_renderer.cpp	/^void TiledRenderer::createCmdPool() $/;"	f	class:TiledRenderer	signature:()
-TiledRenderer::createDescriptorPool	src/tiled_renderer.cpp	/^void TiledRenderer::createDescriptorPool() $/;"	f	class:TiledRenderer	signature:()
-TiledRenderer::createDescriptorSet	src/tiled_renderer.cpp	/^void TiledRenderer::createDescriptorSet()$/;"	f	class:TiledRenderer	signature:()
-TiledRenderer::createStoreImages	src/tiled_renderer.cpp	/^void TiledRenderer::createStoreImages() $/;"	f	class:TiledRenderer	signature:()
-TiledRenderer::createUniformBuffers	src/tiled_renderer.cpp	/^void TiledRenderer::createUniformBuffers() $/;"	f	class:TiledRenderer	signature:()
-TiledRenderer::descriptorPool	inc/tiled_renderer.h	/^	VkDescriptorPool descriptorPool;$/;"	m	class:TiledRenderer	access:private
-TiledRenderer::descriptorSet	inc/tiled_renderer.h	/^	VkDescriptorSet descriptorSet;$/;"	m	class:TiledRenderer	access:private
-TiledRenderer::draw	src/tiled_renderer.cpp	/^void TiledRenderer::draw() $/;"	f	class:TiledRenderer	signature:()
-TiledRenderer::init	src/tiled_renderer.cpp	/^void TiledRenderer::init() $/;"	f	class:TiledRenderer	signature:()
-TiledRenderer::mGBuffer	inc/tiled_renderer.h	/^	GBuffer& mGBuffer;$/;"	m	class:TiledRenderer	access:private
-TiledRenderer::mState	inc/tiled_renderer.h	/^	State& mState;$/;"	m	class:TiledRenderer	access:private
-TiledRenderer::pointLights	inc/tiled_renderer.h	/^	std::vector<PointLight> pointLights;$/;"	m	class:TiledRenderer	access:public
-TiledRenderer::ubo	inc/tiled_renderer.h	/^	UBO ubo;$/;"	m	class:TiledRenderer	access:public
-TiledRenderer::update	src/tiled_renderer.cpp	/^void TiledRenderer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:TiledRenderer	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
-TiledRenderer::~TiledRenderer	src/tiled_renderer.cpp	/^TiledRenderer::~TiledRenderer() $/;"	f	class:TiledRenderer	signature:()
+TilingImage	inc/g_buffer.h	/^	struct TilingImage {$/;"	s	class:GBuffer	access:public
+TilingUBO	inc/g_buffer.h	/^	struct TilingUBO {$/;"	s	class:GBuffer	access:public
 Timer	inc/timer.h	/^class Timer {$/;"	c
 Timer	src/timer.cpp	/^Timer::Timer()$/;"	f	class:Timer	signature:()
 Timer::FPS	src/timer.cpp	/^uint32_t Timer::FPS() const$/;"	f	class:Timer	signature:() const
@@ -5042,7 +5043,6 @@ UBO	inc/shape/point_light.h	/^	struct UBO {$/;"	s	class:PointLight	access:public
 UBO	inc/shape/skinned.h	/^	struct UBO {$/;"	s	class:Skinned	access:public
 UBO	inc/shape/tquad.h	/^	struct UBO {$/;"	s	class:TQuad	access:public
 UBO	inc/state.h	/^	struct UBO {$/;"	s	struct:State	access:public
-UBO	inc/tiled_renderer.h	/^	struct UBO {$/;"	s	class:TiledRenderer	access:public
 UINT16_C	lib/__assimp/Compiler/pstdint.h	311;"	d
 UINT16_C	lib/__assimp/Compiler/pstdint.h	403;"	d
 UINT16_C	lib/__assimp/Compiler/pstdint.h	406;"	d
@@ -5114,6 +5114,7 @@ UINT_LEAST8_MAX	lib/assimp/Compiler/pstdint.h	627;"	d
 UINT_MAX	lib/__assimp/Defines.h	47;"	d
 ULONG_LONG_MAX	lib/__assimp/Compiler/pstdint.h	552;"	d
 ULONG_LONG_MAX	lib/assimp/Compiler/pstdint.h	527;"	d
+UNIFORM_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t UNIFORM_BUFFER_COUNT = 2;$/;"	m	class:GBuffer	access:public
 UP	inc/camera.h	/^    const static glm::vec3 UP, RIGHT;$/;"	m	class:Camera	access:private
 UP	src/camera.cpp	/^const glm::vec3 Camera::UP = glm::vec3(0.0f, 1.0f, 0.0f);$/;"	m	class:Camera	file:
 UnmapMemory	lib/vulkan/vk_layer.h	/^    PFN_vkUnmapMemory UnmapMemory;$/;"	m	struct:VkLayerDispatchTable_	access:public
@@ -7685,7 +7686,7 @@ WCHAR_MAX	lib/__assimp/Compiler/pstdint.h	730;"	d
 WCHAR_MAX	lib/assimp/Compiler/pstdint.h	696;"	d
 WCHAR_MIN	lib/__assimp/Compiler/pstdint.h	727;"	d
 WCHAR_MIN	lib/assimp/Compiler/pstdint.h	693;"	d
-WORK_GROUP_SIZE	inc/tiled_renderer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:TiledRenderer	access:public
+WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:GBuffer	access:public
 WaitForFences	lib/vulkan/vk_layer.h	/^    PFN_vkWaitForFences WaitForFences;$/;"	m	struct:VkLayerDispatchTable_	access:public
 Warn	lib/__assimp/Logger.hpp	/^        Warn        = 4,    \/\/!< Warn log message$/;"	e	enum:Assimp::Logger::ErrorSeverity
 Warn	lib/assimp/Logger.hpp	/^        Warn        = 4,    \/\/!< Warn log message$/;"	e	enum:Assimp::Logger::ErrorSeverity
@@ -9734,9 +9735,7 @@ clearValueCount	lib/vulkan/vulkan.h	/^    uint32_t               clearValueCount
 clearValues	inc/g_buffer.h	/^	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;$/;"	m	class:GBuffer	access:public
 clipped	lib/vulkan/vulkan.h	/^    VkBool32                         clipped;$/;"	m	struct:VkSwapchainCreateInfoKHR	access:public
 cmdBuffer	inc/g_buffer.h	/^	VkCommandBuffer cmdBuffer;$/;"	m	class:GBuffer	access:public
-cmdBuffer	inc/tiled_renderer.h	/^	VkCommandBuffer cmdBuffer;$/;"	m	class:TiledRenderer	access:public
 cmdBuffers	inc/swapchain_manager.h	/^	std::vector<VkCommandBuffer> cmdBuffers;$/;"	m	class:SwapchainManager	access:public
-cmdPool	inc/tiled_renderer.h	/^	VkCommandPool cmdPool;$/;"	m	class:TiledRenderer	access:public
 code	lib/stb/stb_image.h	/^   stbi__uint16 code[256];$/;"	m	struct:__anon62	access:public
 code	lib/vulkan/libspirv.h	/^  const uint32_t* code;$/;"	m	struct:spv_const_binary_t	access:public
 code	lib/vulkan/libspirv.h	/^  uint32_t* code;$/;"	m	struct:spv_binary_t	access:public
@@ -9757,9 +9756,9 @@ col_type	lib/glm/detail/type_mat3x4.hpp	/^		typedef vec<4, T, P> col_type;$/;"	t
 col_type	lib/glm/detail/type_mat4x2.hpp	/^		typedef vec<2, T, P> col_type;$/;"	t	struct:glm::mat	access:public
 col_type	lib/glm/detail/type_mat4x3.hpp	/^		typedef vec<3, T, P> col_type;$/;"	t	struct:glm::mat	access:public
 col_type	lib/glm/detail/type_mat4x4.hpp	/^		typedef vec<4, T, P> col_type;$/;"	t	struct:glm::mat	access:public
+color	inc/g_buffer.h	/^		glm::vec3 color;$/;"	m	struct:GBuffer::PointLight	access:public
 color	inc/shape/point_light.h	/^		glm::vec3 color;$/;"	m	struct:PointLight::LightUBO	access:public
 color	inc/shape/tquad.h	/^		glm::vec3 color;$/;"	m	struct:TQuad::Vertex	access:public
-color	inc/tiled_renderer.h	/^		glm::vec3 color;$/;"	m	struct:TiledRenderer::PointLight	access:public
 color	lib/vulkan/vulkan.h	/^    VkClearColorValue           color;$/;"	m	union:VkClearValue	access:public
 color	lib/vulkan/vulkan.h	/^    float              color[4];$/;"	m	struct:VkDebugMarkerMarkerInfoEXT	access:public
 colorAttachment	lib/vulkan/vulkan.h	/^    uint32_t              colorAttachment;$/;"	m	struct:VkClearAttachment	access:public
@@ -9838,11 +9837,10 @@ createAttachment	src/g_buffer.cpp	/^void GBuffer::createAttachment($/;"	f	class:
 createBuffer	inc/creator/buffer_helper.h	/^inline void createBuffer($/;"	f	namespace:BufferHelper	signature:( const State& state, BufferInfo& bufferInfo, VkBufferUsageFlags usage, VkMemoryPropertyFlags prop)
 createBuffer	inc/creator/buffer_helper.h	/^inline void createBuffer($/;"	f	namespace:BufferHelper	signature:( const State& state, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory, VkBufferUsageFlags usage, VkMemoryPropertyFlags prop)
 createBuffer	inc/creator/buffer_helper.h	/^inline void createBuffer($/;"	f	namespace:BufferHelper	signature:( const VkPhysicalDevice& physicalDevice, const VkDevice& device, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory, VkBufferUsageFlags usage, VkMemoryPropertyFlags prop)
+createBuffers	src/g_buffer.cpp	/^void GBuffer::createBuffers()$/;"	f	class:GBuffer	signature:()
 createBuffers	src/shape/sphere.cpp	/^void Sphere::createBuffers(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)$/;"	f	class:Sphere	signature:(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 createBuffers	src/shape/tquad.cpp	/^void TQuad::createBuffers()$/;"	f	class:TQuad	signature:()
 createCmdBuffer	src/g_buffer.cpp	/^void GBuffer::createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool)$/;"	f	class:GBuffer	signature:(const VkDevice& device, const VkCommandPool& cmdPool)
-createCmdBuffer	src/tiled_renderer.cpp	/^void TiledRenderer::createCmdBuffer()$/;"	f	class:TiledRenderer	signature:()
-createCmdPool	src/tiled_renderer.cpp	/^void TiledRenderer::createCmdPool() $/;"	f	class:TiledRenderer	signature:()
 createColorAttachmentDesc	src/g_buffer.cpp	/^void GBuffer::createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format) $/;"	f	class:GBuffer	signature:(VkAttachmentDescription& desc, VkFormat format)
 createCommandBuffers	src/swapchain_manager.cpp	/^void SwapchainManager::createCommandBuffers()$/;"	f	class:SwapchainManager	signature:()
 createCommandPool	src/swapchain_manager.cpp	/^void SwapchainManager::createCommandPool()$/;"	f	class:SwapchainManager	signature:()
@@ -9858,11 +9856,9 @@ createDescriptorPool	src/g_buffer.cpp	/^void GBuffer::createDescriptorPool()$/;"
 createDescriptorPool	src/scene_lights.cpp	/^void SceneLights::createDescriptorPool() $/;"	f	class:SceneLights	signature:()
 createDescriptorPool	src/shape/model.cpp	/^void Model::createDescriptorPool() $/;"	f	class:Model	signature:()
 createDescriptorPool	src/shape/skinned.cpp	/^void Skinned::createDescriptorPool() $/;"	f	class:Skinned	signature:()
-createDescriptorPool	src/tiled_renderer.cpp	/^void TiledRenderer::createDescriptorPool() $/;"	f	class:TiledRenderer	signature:()
 createDescriptorSet	src/shape/model.cpp	/^void Model::createDescriptorSet()$/;"	f	class:Model	signature:()
 createDescriptorSet	src/shape/skinned.cpp	/^void Skinned::createDescriptorSet()$/;"	f	class:Skinned	signature:()
 createDescriptorSet	src/shape/tquad.cpp	/^void TQuad::createDescriptorSet()$/;"	f	class:TQuad	signature:()
-createDescriptorSet	src/tiled_renderer.cpp	/^void TiledRenderer::createDescriptorSet()$/;"	f	class:TiledRenderer	signature:()
 createDescriptorSetLayouts	inc/creator/descriptor_creator.h	/^inline void createDescriptorSetLayouts(State& state)$/;"	f	namespace:DescriptorCreator	signature:(State& state)
 createDescriptorSets	src/scene_lights.cpp	/^void SceneLights::createDescriptorSets() $/;"	f	class:SceneLights	signature:()
 createDescriptorSets	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::createDescriptorSets() $/;"	f	class:FullscreenQuad	signature:()
@@ -9901,18 +9897,18 @@ createStagedImage	inc/creator/image_helper.h	/^inline void createStagedImage($/;
 createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffer($/;"	f	namespace:BufferHelper	signature:( const State& state, BufferInfo& bufferInfo)
 createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffer($/;"	f	namespace:BufferHelper	signature:( const State& state, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory)
 createStagingBuffer	inc/creator/buffer_helper.h	/^inline void createStagingBuffer($/;"	f	namespace:BufferHelper	signature:( const VkPhysicalDevice& physicalDevice, const VkDevice& device, VkBuffer& buffer, VkDeviceSize size, VkDeviceMemory& memory)
-createStoreImages	src/tiled_renderer.cpp	/^void TiledRenderer::createStoreImages() $/;"	f	class:TiledRenderer	signature:()
+createStorageBuffer	inc/creator/buffer_helper.h	/^inline void createStorageBuffer(const State& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const State& state, BufferInfo& bufferInfo)
 createSurface	src/swapchain_manager.cpp	/^void SwapchainManager::createSurface()$/;"	f	class:SwapchainManager	signature:()
 createSwapChain	src/swapchain_manager.cpp	/^void SwapchainManager::createSwapChain()$/;"	f	class:SwapchainManager	signature:()
 createTQuadDescriptorSetLayout	inc/creator/descriptor_creator.h	/^inline void createTQuadDescriptorSetLayout(State& state)$/;"	f	namespace:DescriptorCreator	signature:(State& state)
 createTQuadPipeline	inc/creator/pipeline_creator.h	/^inline void createTQuadPipeline(State& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)$/;"	f	namespace:PipelineCreator	signature:(State& state, PipelineInfo& info, VkRenderPass renderPass, uint32_t subpass)
+createTilingCmdPool	src/g_buffer.cpp	/^void GBuffer::createTilingCmdPool() $/;"	f	class:GBuffer	signature:()
 createTilingDescriptorSetLayout	inc/creator/descriptor_creator.h	/^inline void createTilingDescriptorSetLayout(State& state)$/;"	f	namespace:DescriptorCreator	signature:(State& state)
 createTilingPipeline	inc/creator/pipeline_creator.h	/^inline void createTilingPipeline(State& state, PipelineInfo& info)$/;"	f	namespace:PipelineCreator	signature:(State& state, PipelineInfo& info)
+createTilingResultImage	src/g_buffer.cpp	/^void GBuffer::createTilingResultImage() $/;"	f	class:GBuffer	signature:()
 createUniformBuffer	inc/creator/buffer_helper.h	/^inline void createUniformBuffer(const State& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const State& state, BufferInfo& bufferInfo)
-createUniformBuffer	src/g_buffer.cpp	/^void GBuffer::createUniformBuffer()$/;"	f	class:GBuffer	signature:()
 createUniformBuffer	src/scene_lights.cpp	/^void SceneLights::createUniformBuffer() $/;"	f	class:SceneLights	signature:()
 createUniformBuffer	src/shape/tquad.cpp	/^void TQuad::createUniformBuffer()$/;"	f	class:TQuad	signature:()
-createUniformBuffers	src/tiled_renderer.cpp	/^void TiledRenderer::createUniformBuffers() $/;"	f	class:TiledRenderer	signature:()
 createUniformFragmentDescriptorSetLayout	inc/creator/descriptor_creator.h	/^inline void createUniformFragmentDescriptorSetLayout(State& state)$/;"	f	namespace:DescriptorCreator	signature:(State& state)
 createUniformVertexDescriptorSetLayout	inc/creator/descriptor_creator.h	/^inline void createUniformVertexDescriptorSetLayout(State& state)$/;"	f	namespace:DescriptorCreator	signature:(State& state)
 createVertexAndIndexBuffer	inc/creator/buffer_helper.h	/^inline void createVertexAndIndexBuffer(const State& state, BufferInfo& bufferInfo)$/;"	f	namespace:BufferHelper	signature:(const State& state, BufferInfo& bufferInfo)
@@ -10056,9 +10052,7 @@ descriptorCount	lib/vulkan/vulkan.h	/^    uint32_t              descriptorCount;
 descriptorCount	lib/vulkan/vulkan.h	/^    uint32_t            descriptorCount;$/;"	m	struct:VkDescriptorPoolSize	access:public
 descriptorCount	lib/vulkan/vulkan.h	/^    uint32_t           descriptorCount;$/;"	m	struct:VkCopyDescriptorSet	access:public
 descriptorPool	inc/state.h	/^	VkDescriptorPool descriptorPool;$/;"	m	struct:State	access:public
-descriptorPool	inc/tiled_renderer.h	/^	VkDescriptorPool descriptorPool;$/;"	m	class:TiledRenderer	access:private
 descriptorPool	lib/vulkan/vulkan.h	/^    VkDescriptorPool                descriptorPool;$/;"	m	struct:VkDescriptorSetAllocateInfo	access:public
-descriptorSet	inc/tiled_renderer.h	/^	VkDescriptorSet descriptorSet;$/;"	m	class:TiledRenderer	access:private
 descriptorSetCount	lib/vulkan/vulkan.h	/^    uint32_t                        descriptorSetCount;$/;"	m	struct:VkDescriptorSetAllocateInfo	access:public
 descriptorSetLayouts	inc/state.h	/^	DescriptorSetLayouts descriptorSetLayouts;$/;"	m	struct:State	access:public
 descriptorType	lib/vulkan/vulkan.h	/^    VkDescriptorType                 descriptorType;$/;"	m	struct:VkWriteDescriptorSet	access:public
@@ -10094,6 +10088,7 @@ dir	lib/assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	ac
 directionForward	inc/input_manager.h	/^    float directionForward;$/;"	m	class:InputManager	access:public
 directionSideways	inc/input_manager.h	/^    float directionSideways;$/;"	m	class:InputManager	access:public
 discreteQueuePriorities	lib/vulkan/vulkan.h	/^    uint32_t              discreteQueuePriorities;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
+dispatch	src/g_buffer.cpp	/^void GBuffer::dispatch() $/;"	f	class:GBuffer	signature:()
 display	lib/vulkan/vk_icd.h	/^    struct wl_display *display;$/;"	m	struct:__anon79	typeref:struct:__anon79::wl_display	access:public
 display	lib/vulkan/vulkan.h	/^    VkDisplayKHR                  display;$/;"	m	struct:VkDisplayPropertiesKHR	access:public
 display	lib/vulkan/vulkan.h	/^    struct wl_display*                display;$/;"	m	struct:VkWaylandSurfaceCreateInfoKHR	typeref:struct:VkWaylandSurfaceCreateInfoKHR::wl_display	access:public
@@ -10157,7 +10152,6 @@ draw	src/shape/fullscreen_quad.cpp	/^void FullscreenQuad::draw(VkCommandBuffer& 
 draw	src/shape/model.cpp	/^void Model::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Model	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 draw	src/shape/skinned.cpp	/^void Skinned::draw(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)$/;"	f	class:Skinned	signature:(VkCommandBuffer& commandBuffer, VkPipeline& pipeline, VkPipelineLayout& pipelineLayout)
 draw	src/shape/tquad.cpp	/^void TQuad::draw(VkCommandBuffer& commandBuffer)$/;"	f	class:TQuad	signature:(VkCommandBuffer& commandBuffer)
-draw	src/tiled_renderer.cpp	/^void TiledRenderer::draw() $/;"	f	class:TiledRenderer	signature:()
 drawDeferredQuad	src/g_buffer.cpp	/^void GBuffer::drawDeferredQuad(VkCommandBuffer& cmdBuffer)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer)
 drawIndirectFirstInstance	lib/vulkan/vulkan.h	/^    VkBool32    drawIndirectFirstInstance;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 driverVersion	lib/vulkan/vulkan.h	/^    uint32_t                            driverVersion;$/;"	m	struct:VkPhysicalDeviceProperties	access:public
@@ -10241,7 +10235,7 @@ extent	lib/vulkan/vulkan.h	/^    VkExtent3D                  extent;$/;"	m	struc
 extent	lib/vulkan/vulkan.h	/^    VkExtent3D                  extent;$/;"	m	struct:VkImageResolve	access:public
 extent	lib/vulkan/vulkan.h	/^    VkExtent3D                 extent;$/;"	m	struct:VkSparseImageMemoryBind	access:public
 extent	lib/vulkan/vulkan.h	/^    VkExtent3D               extent;$/;"	m	struct:VkImageCreateInfo	access:public
-eyePos	inc/tiled_renderer.h	/^		glm::vec3 eyePos;$/;"	m	struct:TiledRenderer::UBO	access:public
+eyePos	inc/g_buffer.h	/^		glm::vec3 eyePos;$/;"	m	struct:GBuffer::TilingUBO	access:public
 f32	lib/glm/fwd.hpp	/^	typedef highp_float32_t f32;$/;"	t	namespace:glm
 f32	lib/glm/fwd.hpp	/^	typedef lowp_f32 f32;$/;"	t	namespace:glm
 f32	lib/glm/fwd.hpp	/^	typedef mediump_float32 f32;$/;"	t	namespace:glm
@@ -13823,6 +13817,7 @@ id	lib/glm/gtx/io.hpp	/^			static std::locale::id id;$/;"	m	class:glm::io::forma
 id	lib/stb/stb_image.h	/^      int id;$/;"	m	struct:__anon63::__anon64	access:public
 idata	lib/stb/stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon69	access:public
 idct_block_kernel	lib/stb/stb_image.h	/^   void (*idct_block_kernel)(stbi_uc *out, int out_stride, short data[64]);$/;"	m	struct:__anon63	access:public
+image	inc/g_buffer.h	/^		VkImage image;$/;"	m	struct:GBuffer::TilingImage	access:public
 image	inc/g_buffer.h	/^	VkImage image;$/;"	m	struct:FramebufferAttachment	access:public
 image	inc/image_info.h	/^	VkImage image;$/;"	m	class:ImageInfo	access:public
 image	inc/shape/skinned.h	/^		ImageInfo* image;$/;"	m	struct:Skinned::MaterialTexture	access:public
@@ -13932,7 +13927,6 @@ init	src/shape/skinned.cpp	/^void Skinned::init(const char* modelPath, unsigned 
 init	src/shape/skinned.cpp	/^void Skinned::init(std::string modelPath, unsigned int pFlags, ModelFlags modelFlags) $/;"	f	class:Skinned	signature:(std::string modelPath, unsigned int pFlags, ModelFlags modelFlags)
 init	src/shape/sphere.cpp	/^void Sphere::init(uint32_t numStacks, uint32_t numSlices, float radius \/* = 1.0f *\/)$/;"	f	class:Sphere	signature:(uint32_t numStacks, uint32_t numSlices, float radius )
 init	src/shape/tquad.cpp	/^void TQuad::init()$/;"	f	class:TQuad	signature:()
-init	src/tiled_renderer.cpp	/^void TiledRenderer::init() $/;"	f	class:TiledRenderer	signature:()
 initBinPath	src/file_manager.cpp	/^void FileManager::initBinPath()$/;"	f	class:FileManager	signature:()
 initPrevPos	inc/camera.h	/^	bool initPrevPos;	$/;"	m	class:Camera	access:private
 initWindow	src/window.cpp	/^void Window::initWindow(Engine& engine)$/;"	f	class:Window	signature:(Engine& engine)
@@ -14019,7 +14013,7 @@ int_least8_t	lib/assimp/Compiler/pstdint.h	/^  typedef   int8_t   int_least8_t;$
 int_t	lib/glm/detail/type_int.hpp	/^	typedef highp_int					int_t;$/;"	t	namespace:glm
 int_t	lib/glm/detail/type_int.hpp	/^	typedef lowp_int					int_t;$/;"	t	namespace:glm
 int_t	lib/glm/detail/type_int.hpp	/^	typedef mediump_int					int_t;$/;"	t	namespace:glm
-intensity	inc/tiled_renderer.h	/^		float intensity;$/;"	m	struct:TiledRenderer::PointLight	access:public
+intensity	inc/g_buffer.h	/^		float intensity;$/;"	m	struct:GBuffer::PointLight	access:public
 internalStoragePath	inc/file_manager.h	/^	static const char* internalStoragePath;$/;"	m	class:FileManager	access:public
 internalStoragePath	src/file_manager.cpp	/^const char* FileManager::internalStoragePath = nullptr;$/;"	m	class:FileManager	file:
 intmax_t	lib/__assimp/Compiler/pstdint.h	/^  typedef int32_t intmax_t;$/;"	t
@@ -14515,7 +14509,6 @@ mFolder	inc/shape/model.h	/^	std::string mPath, mFolder;$/;"	m	class:Model	acces
 mFolder	inc/shape/skinned.h	/^	std::string mPath, mFolder;$/;"	m	class:Skinned	access:protected
 mForwardMovementScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera	access:private
 mFrameTime	inc/timer.h	/^	double mFrameTime;$/;"	m	class:Timer	access:private
-mGBuffer	inc/tiled_renderer.h	/^	GBuffer& mGBuffer;$/;"	m	class:TiledRenderer	access:private
 mGlfwWindow	inc/input_manager.h	/^	GLFWwindow* mGlfwWindow;$/;"	m	class:InputManager	access:public
 mGlfwWindow	inc/window.h	/^	GLFWwindow* mGlfwWindow;$/;"	m	class:Window	access:public
 mHeight	inc/window.h	/^	unsigned mWidth, mHeight;$/;"	m	class:Window	access:private
@@ -14668,6 +14661,7 @@ mParent	lib/assimp/scene.h	/^    C_STRUCT aiNode* mParent;$/;"	m	struct:aiNode	a
 mPath	inc/shape/model.h	/^	std::string mPath, mFolder;$/;"	m	class:Model	access:protected
 mPath	inc/shape/skinned.h	/^	std::string mPath, mFolder;$/;"	m	class:Skinned	access:protected
 mPitch	inc/camera.h	/^    float mPitch, mYaw;$/;"	m	class:Camera	access:private
+mPointLightsBufferInfo	inc/g_buffer.h	/^	BufferInfo mPointLightsBufferInfo;$/;"	m	class:GBuffer	access:private
 mPool	inc/task_manager.h	/^	std::vector<std::thread> mPool;$/;"	m	class:TaskManager	access:private
 mPool	inc/texture_manager.h	/^	std::unordered_map<TextureDesc, ImageInfo*> mPool; $/;"	m	class:TextureManager	access:private
 mPosition	lib/__assimp/camera.h	/^    C_STRUCT aiVector3D mPosition;$/;"	m	struct:aiCamera	access:public
@@ -14726,7 +14720,6 @@ mState	inc/shape/skinned.h	/^	State& mState;$/;"	m	class:Skinned	access:protecte
 mState	inc/shape/sphere.h	/^	State& mState;$/;"	m	class:Sphere	access:private
 mState	inc/shape/tquad.h	/^	State& mState;$/;"	m	class:TQuad	access:public
 mState	inc/swapchain_manager.h	/^	State& mState;$/;"	m	class:SwapchainManager	access:private
-mState	inc/tiled_renderer.h	/^	State& mState;$/;"	m	class:TiledRenderer	access:private
 mStringProperties	lib/__assimp/Exporter.hpp	/^    StringPropertyMap mStringProperties;$/;"	m	class:Assimp::ExportProperties	access:protected
 mStringProperties	lib/assimp/Exporter.hpp	/^    StringPropertyMap mStringProperties;$/;"	m	class:Assimp::ExportProperties	access:protected
 mSwapChainImageViews	inc/swapchain_manager.h	/^	std::vector<VkImageView> mSwapChainImageViews;$/;"	m	class:SwapchainManager	access:private
@@ -14748,6 +14741,8 @@ mTextures	lib/__assimp/scene.h	/^    C_STRUCT aiTexture** mTextures;$/;"	m	struc
 mTextures	lib/assimp/scene.h	/^    C_STRUCT aiTexture** mTextures;$/;"	m	struct:aiScene	access:public
 mTicksPerSecond	lib/__assimp/anim.h	/^    double mTicksPerSecond;$/;"	m	struct:aiAnimation	access:public
 mTicksPerSecond	lib/assimp/anim.h	/^    double mTicksPerSecond;$/;"	m	struct:aiAnimation	access:public
+mTilingDescriptorSet	inc/g_buffer.h	/^	VkDescriptorSet mTilingDescriptorSet;$/;"	m	class:GBuffer	access:private
+mTilingUniformBufferInfo	inc/g_buffer.h	/^	BufferInfo mTilingUniformBufferInfo;$/;"	m	class:GBuffer	access:private
 mTime	lib/__assimp/anim.h	/^    double mTime;$/;"	m	struct:aiMeshKey	access:public
 mTime	lib/__assimp/anim.h	/^    double mTime;$/;"	m	struct:aiMeshMorphKey	access:public
 mTime	lib/__assimp/anim.h	/^    double mTime;$/;"	m	struct:aiQuatKey	access:public
@@ -15212,6 +15207,7 @@ mediump_vec3	lib/glm/fwd.hpp	/^	typedef vec<3, float, mediump> mediump_vec3;$/;"
 mediump_vec4	lib/glm/detail/type_vec.hpp	/^	typedef vec<4, float, mediump>	mediump_vec4;$/;"	t	namespace:glm
 mediump_vec4	lib/glm/fwd.hpp	/^	typedef vec<4, float, mediump> mediump_vec4;$/;"	t	namespace:glm
 memory	inc/buffer_info.h	/^	VkDeviceMemory memory;$/;"	m	class:BufferInfo	access:public
+memory	inc/g_buffer.h	/^		VkDeviceMemory memory;$/;"	m	struct:GBuffer::TilingImage	access:public
 memory	inc/g_buffer.h	/^	VkDeviceMemory memory;$/;"	m	struct:FramebufferAttachment	access:public
 memory	inc/image_info.h	/^	VkDeviceMemory memory;$/;"	m	class:ImageInfo	access:public
 memory	lib/vulkan/vulkan.h	/^    VkDeviceMemory             memory;$/;"	m	struct:VkSparseImageMemoryBind	access:public
@@ -15690,8 +15686,8 @@ pointLightLightAlignment	inc/scene_lights.h	/^	VkDeviceSize pointLightLightAlign
 pointLightLightUbos	inc/scene_lights.h	/^	std::vector<PointLight::LightUBO> pointLightLightUbos;$/;"	m	class:SceneLights	access:private
 pointLightUboAlignment	inc/scene_lights.h	/^	VkDeviceSize pointLightUboAlignment;$/;"	m	class:SceneLights	access:private
 pointLightUbos	inc/scene_lights.h	/^	std::vector<PointLight::UBO> pointLightUbos;$/;"	m	class:SceneLights	access:private
+pointLights	inc/g_buffer.h	/^	std::vector<PointLight> pointLights;$/;"	m	class:GBuffer	access:public
 pointLights	inc/scene_lights.h	/^	std::vector<PointLight> pointLights;$/;"	m	class:SceneLights	access:private
-pointLights	inc/tiled_renderer.h	/^	std::vector<PointLight> pointLights;$/;"	m	class:TiledRenderer	access:public
 pointSizeGranularity	lib/vulkan/vulkan.h	/^    float                 pointSizeGranularity;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 pointSizeRange	lib/vulkan/vulkan.h	/^    float                 pointSizeRange[2];$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 pointer	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> * pointer;$/;"	t	struct:glm::detail::genType	access:public
@@ -15704,10 +15700,10 @@ pos	inc/shape/skinned.h	/^		glm::vec3 pos;$/;"	m	struct:Skinned::Vertex	access:p
 pos	inc/shape/tquad.h	/^		glm::vec3 pos;$/;"	m	struct:TQuad::Vertex	access:public
 pos	lib/__assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	access:public
 pos	lib/assimp/types.h	/^    C_STRUCT aiVector3D pos, dir;$/;"	m	struct:aiRay	access:public
+position	inc/g_buffer.h	/^		glm::vec3 position;$/;"	m	struct:GBuffer::PointLight	access:public
 position	inc/g_buffer.h	/^	inline FramebufferAttachment& position() { return attachments[INDEX_POSITION]; }$/;"	f	class:GBuffer	access:public	signature:()
 position	inc/shape/point_light.h	/^		glm::vec3 position;$/;"	m	struct:PointLight::LightUBO	access:public
 position	inc/shape/sphere.h	/^		glm::vec3 position;$/;"	m	struct:Sphere::Vertex	access:public
-position	inc/tiled_renderer.h	/^		glm::vec3 position;$/;"	m	struct:TiledRenderer::PointLight	access:public
 position	lib/vulkan/libspirv.h	/^  spv_position_t position;$/;"	m	struct:spv_diagnostic_t	access:public
 ppEnabledExtensionNames	lib/vulkan/vulkan.h	/^    const char* const*                 ppEnabledExtensionNames;$/;"	m	struct:VkDeviceCreateInfo	access:public
 ppEnabledExtensionNames	lib/vulkan/vulkan.h	/^    const char* const*          ppEnabledExtensionNames;$/;"	m	struct:VkInstanceCreateInfo	access:public
@@ -15735,11 +15731,11 @@ processModel	src/shape/model.cpp	/^void Model::processModel(const aiScene& scene
 processModel	src/shape/skinned.cpp	/^void Skinned::processModel(const aiScene& scene) $/;"	f	class:Skinned	signature:(const aiScene& scene)
 profile	lib/glm/detail/type_gentype.hpp	/^	enum profile$/;"	g	namespace:glm
 progressive	lib/stb/stb_image.h	/^   int            progressive;$/;"	m	struct:__anon63	access:public
+proj	inc/g_buffer.h	/^		glm::mat4 proj;$/;"	m	struct:GBuffer::TilingUBO	access:public
 proj	inc/shape/model.h	/^		glm::mat4 proj;$/;"	m	struct:Model::UBO	access:public
 proj	inc/shape/skinned.h	/^		glm::mat4 proj;$/;"	m	struct:Skinned::UBO	access:public
 proj	inc/shape/tquad.h	/^		glm::mat4 proj;$/;"	m	struct:TQuad::UBO	access:public
 proj	inc/state.h	/^		glm::mat4 proj;$/;"	m	struct:State::UBO	access:public
-proj	inc/tiled_renderer.h	/^		glm::mat4 proj;$/;"	m	struct:TiledRenderer::UBO	access:public
 proj	src/camera.cpp	/^glm::mat4& Camera::proj()$/;"	f	class:Camera	signature:()
 propertyFlags	lib/vulkan/vulkan.h	/^    VkMemoryPropertyFlags    propertyFlags;$/;"	m	struct:VkMemoryType	access:public
 pushConstantRange	inc/creator/pipeline_builder.h	/^inline VkPushConstantRange pushConstantRange(const State& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)$/;"	f	namespace:PipelineBuilder	signature:(const State& state, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size)
@@ -15783,7 +15779,7 @@ r	lib/glm/detail/type_vec3.hpp	/^			union { T x, r, s; };$/;"	m	union:glm::vec::
 r	lib/glm/detail/type_vec4.hpp	/^				struct { T r, g, b, a; };$/;"	m	struct:glm::vec::__anon35::__anon37	access:public
 r	lib/glm/detail/type_vec4.hpp	/^			union { T x, r, s; };$/;"	m	union:glm::vec::__anon39	access:public
 r	lib/vulkan/vulkan.h	/^    VkComponentSwizzle    r;$/;"	m	struct:VkComponentMapping	access:public
-radius	inc/tiled_renderer.h	/^		float radius;$/;"	m	struct:TiledRenderer::PointLight	access:public
+radius	inc/g_buffer.h	/^		float radius;$/;"	m	struct:GBuffer::PointLight	access:public
 range	lib/vulkan/vulkan.h	/^    VkDeviceSize               range;$/;"	m	struct:VkBufferViewCreateInfo	access:public
 range	lib/vulkan/vulkan.h	/^    VkDeviceSize    range;$/;"	m	struct:VkDescriptorBufferInfo	access:public
 rasterizationOrder	lib/vulkan/vulkan.h	/^    VkRasterizationOrderAMD    rasterizationOrder;$/;"	m	struct:VkPipelineRasterizationStateRasterizationOrderAMD	access:public
@@ -17322,7 +17318,7 @@ texCoord	inc/shape/tquad.h	/^		glm::vec2 texCoord;$/;"	m	struct:TQuad::Vertex	ac
 textureCompressionASTC_LDR	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionASTC_LDR;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 textureCompressionBC	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionBC;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 textureCompressionETC2	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionETC2;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
-textureDimens	inc/tiled_renderer.h	/^		glm::vec2 textureDimens;$/;"	m	struct:TiledRenderer::UBO	access:public
+textureDimens	inc/g_buffer.h	/^		glm::vec2 textureDimens;$/;"	m	struct:GBuffer::TilingUBO	access:public
 textureManager	inc/texture_manager.h	/^	TextureManager(const TextureManager& textureManager) = delete;$/;"	m	class:TextureManager	access:public
 textureManager	inc/texture_manager.h	/^	void operator=(const TextureManager& textureManager) = delete;$/;"	m	class:TextureManager	access:public
 textures	inc/shape/skinned.h	/^		std::vector<MaterialTexture> textures;$/;"	m	struct:Skinned::Material	access:public
@@ -17333,12 +17329,14 @@ throwError	src/shape/model.cpp	/^void Model::throwError(std::string& error) $/;"
 throwError	src/shape/skinned.cpp	/^void Skinned::throwError(const char* error) $/;"	f	class:Skinned	signature:(const char* error)
 throwError	src/shape/skinned.cpp	/^void Skinned::throwError(std::string& error) $/;"	f	class:Skinned	signature:(std::string& error)
 tick	src/timer.cpp	/^double Timer::tick()$/;"	f	class:Timer	signature:()
-tiledRenderer	inc/renderer.h	/^	TiledRenderer tiledRenderer;$/;"	m	class:Renderer	access:private
 tiling	inc/state.h	/^	PipelineInfo tiling;$/;"	m	struct:Pipelines	access:public
 tiling	inc/state.h	/^	VkDescriptorSetLayout tiling;$/;"	m	struct:DescriptorSetLayouts	access:public
 tiling	lib/vulkan/vulkan.h	/^    VkImageTiling            tiling;$/;"	m	struct:VkImageCreateInfo	access:public
+tilingCmdBuffer	inc/g_buffer.h	/^	VkCommandBuffer tilingCmdBuffer;$/;"	m	class:GBuffer	access:public
+tilingCmdPool	inc/g_buffer.h	/^	VkCommandPool tilingCmdPool;$/;"	m	class:GBuffer	access:public
 tilingFence	inc/renderer.h	/^	VkFence tilingFence;$/;"	m	class:Renderer	access:private
 tilingFinishedSemaphore	inc/renderer.h	/^	VkSemaphore tilingFinishedSemaphore;$/;"	m	class:Renderer	access:private
+tilingImage	inc/g_buffer.h	/^	} tilingImage;$/;"	m	class:GBuffer	typeref:struct:GBuffer::TilingImage	access:public
 timestampComputeAndGraphics	lib/vulkan/vulkan.h	/^    VkBool32              timestampComputeAndGraphics;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 timestampPeriod	lib/vulkan/vulkan.h	/^    float                 timestampPeriod;$/;"	m	struct:VkPhysicalDeviceLimits	access:public
 timestampValidBits	lib/vulkan/vulkan.h	/^    uint32_t        timestampValidBits;$/;"	m	struct:VkQueueFamilyProperties	access:public
@@ -17504,12 +17502,12 @@ u8vec4	lib/glm/fwd.hpp	/^	typedef highp_u8vec4			u8vec4;$/;"	t	namespace:glm
 u8vec4	lib/glm/fwd.hpp	/^	typedef lowp_u8vec4				u8vec4;$/;"	t	namespace:glm
 u8vec4	lib/glm/fwd.hpp	/^	typedef mediump_u8vec4			u8vec4;	$/;"	t	namespace:glm
 u8vec4	lib/glm/gtc/type_precision.hpp	/^	typedef vec<4, u8, defaultp> u8vec4;$/;"	t	namespace:glm
+ubo	inc/g_buffer.h	/^	TilingUBO ubo;$/;"	m	class:GBuffer	access:public
 ubo	inc/scene_lights.h	/^	char* ubo;$/;"	m	class:SceneLights	access:private
 ubo	inc/shape/model.h	/^	UBO ubo;$/;"	m	class:Model	access:public
 ubo	inc/shape/point_light.h	/^	UBO* ubo;$/;"	m	class:PointLight	access:public
 ubo	inc/shape/skinned.h	/^	UBO ubo;$/;"	m	class:Skinned	access:public
 ubo	inc/state.h	/^	UBO ubo;$/;"	m	struct:State	access:public
-ubo	inc/tiled_renderer.h	/^	UBO ubo;$/;"	m	class:TiledRenderer	access:public
 uboOffset	inc/scene_lights.h	/^		VkDeviceSize uboOffset;$/;"	m	struct:SceneLights::PointLightInfo	access:public
 uint	lib/glm/detail/type_int.hpp	/^	typedef unsigned int				uint;$/;"	t	namespace:glm
 uint16	lib/glm/detail/type_int.hpp	/^		typedef std::uint16_t				uint16;$/;"	t	namespace:glm::detail
@@ -17624,9 +17622,9 @@ update	src/scene_lights.cpp	/^void SceneLights::update(VkCommandBuffer& cmdBuffe
 update	src/shape/model.cpp	/^void Model::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:Model	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 update	src/shape/skinned.cpp	/^void Skinned::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera, uint32_t animationIndex \/* = 0 *\/)$/;"	f	class:Skinned	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera, uint32_t animationIndex )
 update	src/shape/tquad.cpp	/^void TQuad::update(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera)$/;"	f	class:TQuad	signature:(VkCommandBuffer& commandBuffer, const Timer& timer, Camera& camera)
-update	src/tiled_renderer.cpp	/^void TiledRenderer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:TiledRenderer	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 updateFOV	src/camera.cpp	/^void Camera::updateFOV(float scrollDirection)$/;"	f	class:Camera	signature:(float scrollDirection)
 updateOrientation	src/camera.cpp	/^void Camera::updateOrientation(double mouseX, double mouseY)$/;"	f	class:Camera	signature:(double mouseX, double mouseY)
+updateTiling	src/g_buffer.cpp	/^void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 updateUniformBuffers	src/renderer.cpp	/^void Renderer::updateUniformBuffers(const Timer& timer, Camera& camera)$/;"	f	class:Renderer	signature:(const Timer& timer, Camera& camera)
 updateViewAngles	src/camera.cpp	/^void Camera::updateViewAngles()$/;"	f	class:Camera	signature:()
 usage	lib/vulkan/vulkan.h	/^    VkBufferUsageFlags     usage;$/;"	m	struct:VkBufferCreateInfo	access:public
@@ -17729,12 +17727,13 @@ vertexCount	lib/vulkan/vulkan.h	/^    uint32_t    vertexCount;$/;"	m	struct:VkDr
 vertexInputState	inc/creator/pipeline_builder.h	/^inline VkPipelineVertexInputStateCreateInfo vertexInputState($/;"	f	namespace:PipelineBuilder	signature:( VkVertexInputBindingDescription* bindings, uint32_t bindingsCount, VkVertexInputAttributeDescription* attributes, uint32_t attributesCount)
 vertexOffset	lib/vulkan/vulkan.h	/^    int32_t     vertexOffset;$/;"	m	struct:VkDrawIndexedIndirectCommand	access:public
 vertexPipelineStoresAndAtomics	lib/vulkan/vulkan.h	/^    VkBool32    vertexPipelineStoresAndAtomics;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
+view	inc/g_buffer.h	/^		VkImageView view;$/;"	m	struct:GBuffer::TilingImage	access:public
+view	inc/g_buffer.h	/^		glm::mat4 view;$/;"	m	struct:GBuffer::TilingUBO	access:public
 view	inc/g_buffer.h	/^	VkImageView view;$/;"	m	struct:FramebufferAttachment	access:public
 view	inc/shape/model.h	/^		glm::mat4 view;$/;"	m	struct:Model::UBO	access:public
 view	inc/shape/skinned.h	/^		glm::mat4 view;$/;"	m	struct:Skinned::UBO	access:public
 view	inc/shape/tquad.h	/^		glm::mat4 view;$/;"	m	struct:TQuad::UBO	access:public
 view	inc/state.h	/^		glm::mat4 view;$/;"	m	struct:State::UBO	access:public
-view	inc/tiled_renderer.h	/^		glm::mat4 view;$/;"	m	struct:TiledRenderer::UBO	access:public
 view	src/camera.cpp	/^glm::mat4& Camera::view()$/;"	f	class:Camera	signature:()
 viewType	lib/vulkan/vulkan.h	/^    VkImageViewType            viewType;$/;"	m	struct:VkImageViewCreateInfo	access:public
 viewportBoundsRange	lib/vulkan/vulkan.h	/^    float                 viewportBoundsRange[2];$/;"	m	struct:VkPhysicalDeviceLimits	access:public
@@ -18387,7 +18386,6 @@ zzzz	lib/glm/gtx/vec_swizzle.hpp	/^	GLM_INLINE glm::vec<4, T, P> zzzz(const glm:
 ~TaskManager	src/task_manager.cpp	/^TaskManager::~TaskManager() $/;"	f	class:TaskManager	signature:()
 ~TextureData	src/texture_data.cpp	/^TextureData::~TextureData()$/;"	f	class:TextureData	signature:()
 ~TextureManager	src/texture_manager.cpp	/^TextureManager::~TextureManager()$/;"	f	class:TextureManager	signature:()
-~TiledRenderer	src/tiled_renderer.cpp	/^TiledRenderer::~TiledRenderer() $/;"	f	class:TiledRenderer	signature:()
 ~Window	src/window.cpp	/^Window::~Window() $/;"	f	class:Window	signature:()
 ~aiAnimMesh	lib/__assimp/mesh.h	/^    ~aiAnimMesh()$/;"	f	struct:aiAnimMesh	access:public	signature:()
 ~aiAnimMesh	lib/assimp/mesh.h	/^    ~aiAnimMesh()$/;"	f	struct:aiAnimMesh	access:public	signature:()

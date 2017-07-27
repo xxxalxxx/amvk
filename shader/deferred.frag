@@ -33,7 +33,7 @@ void main() {
 		float projX = 2.0 * x - 1.0;
 		float projY = 2.0 * y - 1.0;
 		vec2 texCoord = 2.0 * (inTexCoord - 0.5);
-		float depth = texture(samplerDepth, texCoord).r;
+		float depth = texture(samplerNormal, texCoord).w;// - texture(samplerDepth, texCoord).r;
 		mat4 viewProjInv = inverse(ubo.proj * ubo.view);
 		vec4 position = viewProjInv * vec4(projX, projY, depth, 1.0);
 	//	outColor = vec4(position.xyz / 1.0, 1.0);

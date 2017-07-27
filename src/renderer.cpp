@@ -12,7 +12,6 @@ Renderer::Renderer(Window& window):
 	fullscreenQuad(mState),
 	sceneLights(mState),
 	gBuffer(mState),
-	tiledRenderer(mState, gBuffer),
 	imageIndex(0)
 {
 	
@@ -95,14 +94,14 @@ void Renderer::updateUniformBuffers(const Timer& timer, Camera& camera)
 	gBuffer.update(cmd.buffer, timer, camera);
 
 	//CmdPass tilingCmd(mState.device, tiledRenderer.cmdPool, mState.computeQueue);
-	//tiledRenderer.update(tilingCmd.buffer, timer, camera);
+	//gBuffer.updateTiling(tilingCmd.buffer, timer, camera);
 }
 
 void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
 {
 	std::array<VkClearValue, GBuffer::ATTACHMENT_COUNT> clearValues;
 	clearValues[GBuffer::INDEX_POSITION].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
-	clearValues[GBuffer::INDEX_NORMAL].color   = { { 0.0f, 0.0f, 0.0f, 0.0f } };
+	clearValues[GBuffer::INDEX_NORMAL].color   = { { 0.0f, 0.0f, 0.0f, 1.0f } };
 	clearValues[GBuffer::INDEX_ALBEDO].color   = { { 0.0f, 0.0f, 0.0f, 0.0f } };
 	clearValues[GBuffer::INDEX_DEPTH].depthStencil = { 1.0f, 0 };
 
@@ -178,8 +177,6 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 	for (size_t i = 0; i < mSwapChainManager.cmdBuffers.size(); ++i) {
         VkCommandBuffer& cmdBuffer = mSwapChainManager.cmdBuffers[i];
 		VK_CHECK_RESULT(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
-
-
 
 	/*	VkImageSubresourceLayers subres = {};
 		subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;

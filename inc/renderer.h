@@ -30,7 +30,6 @@
 #include "point_light.h"
 #include "scene_lights.h"
 #include "g_buffer.h"
-#include "tiled_renderer.h"
 
 class Renderer {
 	friend class Engine;
@@ -50,9 +49,6 @@ public:
 	
 	void waitIdle();
 	void recreateSwapChain();
-
-	//const VkDevice& getVkDevice() const;
-
 private:
 	void updateUniformBuffer(const Timer& timer);
 	void createSemaphores();
@@ -69,7 +65,7 @@ private:
 	FullscreenQuad fullscreenQuad;
 	SceneLights sceneLights;
 	GBuffer gBuffer;
-	TiledRenderer tiledRenderer;
+
 	uint32_t imageIndex;
 
 	VkSemaphore imageAquiredSemaphore;
