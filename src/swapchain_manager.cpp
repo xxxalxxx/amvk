@@ -212,8 +212,8 @@ void SwapchainManager::createRenderPass()
 	att.format = mState.swapChainImageFormat;
 	att.samples = VK_SAMPLE_COUNT_1_BIT;
 	att.loadOp = 
-	//	VK_ATTACHMENT_LOAD_OP_LOAD;
-	VK_ATTACHMENT_LOAD_OP_CLEAR;
+		VK_ATTACHMENT_LOAD_OP_LOAD;
+	// VK_ATTACHMENT_LOAD_OP_CLEAR;
 	att.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 	att.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 	att.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -224,9 +224,9 @@ void SwapchainManager::createRenderPass()
 	depthAtt.format = ImageHelper::findDepthFormat(mState.physicalDevice);
 	depthAtt.samples = VK_SAMPLE_COUNT_1_BIT;
 	depthAtt.loadOp = 
-	//	VK_ATTACHMENT_LOAD_OP_LOAD;
-	VK_ATTACHMENT_LOAD_OP_CLEAR;
-	depthAtt.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		VK_ATTACHMENT_LOAD_OP_LOAD;
+	//VK_ATTACHMENT_LOAD_OP_CLEAR;
+	depthAtt.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 	depthAtt.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	depthAtt.stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
 	//depthAtt.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;

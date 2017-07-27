@@ -96,7 +96,7 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 	dependencies[0].srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
 	dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 	dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
-
+	
 	dependencies[1].srcSubpass = 0;
 	dependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
 	dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
@@ -104,7 +104,7 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 	dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 	dependencies[1].dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
 	dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
-
+	
 	VkRenderPassCreateInfo renderPassInfo = {};
 	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
 	renderPassInfo.pAttachments = attDescs.data();
@@ -415,7 +415,7 @@ void GBuffer::createDescriptors()
 	VkWriteDescriptorSet& tilingUniformSet = writeSets.back();
 	tilingUniformSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 	tilingUniformSet.dstSet = mTilingDescriptorSet;
-	tilingUniformSet.dstBinding = 4;
+	tilingUniformSet.dstBinding = 3;
 	tilingUniformSet.dstArrayElement = 0;
 	tilingUniformSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 	tilingUniformSet.descriptorCount = 1;
@@ -430,7 +430,7 @@ void GBuffer::createDescriptors()
 	VkWriteDescriptorSet& pointLightsUniformSet = writeSets.back();
 	pointLightsUniformSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 	pointLightsUniformSet.dstSet = mTilingDescriptorSet;
-	pointLightsUniformSet.dstBinding = 5;
+	pointLightsUniformSet.dstBinding = 4;
 	pointLightsUniformSet.dstArrayElement = 0;
 	pointLightsUniformSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
 	pointLightsUniformSet.descriptorCount = 1;
@@ -500,6 +500,53 @@ void GBuffer::dispatch()
 {
 	vkCmdBindPipeline(tilingCmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, mState->pipelines.tiling.pipeline);
 	vkCmdBindDescriptorSets(tilingCmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, mState->pipelines.tiling.layout, 0, 1, &mTilingDescriptorSet, 0, 0);
-	vkCmdDispatch(cmdBuffer, width / WORK_GROUP_SIZE, height / WORK_GROUP_SIZE, 1);
+	vkCmdDispatch(tilingCmdBuffer, (width + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE, (height + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE, 1);
+//	vkCmdDispatch(tilingCmdBuffer, width, height, 1);
+//	vkCmdDispatch(tilingCmdBuffer, 1, 1, 1);
+
+}
+
+VkImageMemoryBarrier GBuffer::createTilingDstBarrier(VkImage image) 
+{
+	VkImageMemoryBarrier loadBarrier = {};
+	loadBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	loadBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		//VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+	loadBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	loadBarrier.oldLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	loadBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
+	loadBarrier.srcQueueFamilyIndex = mState->graphicsQueueIndex;
+	loadBarrier.dstQueueFamilyIndex = mState->computeQueueIndex;
+	loadBarrier.image = image;
+	loadBarrier.subresourceRange = {};
+	loadBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	loadBarrier.subresourceRange.baseMipLevel = 0;
+	loadBarrier.subresourceRange.levelCount = 1;
+	loadBarrier.subresourceRange.baseArrayLayer = 0;
+	loadBarrier.subresourceRange.layerCount = 1;
+
+	return loadBarrier;
+}
+
+VkImageMemoryBarrier GBuffer::createTilingSrcBarrier(VkImage image) 
+{
+	VkImageMemoryBarrier loadBarrier = {};
+	loadBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	loadBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	loadBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		//VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+	loadBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
+	loadBarrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	loadBarrier.srcQueueFamilyIndex = mState->computeQueueIndex;
+	loadBarrier.dstQueueFamilyIndex = mState->graphicsQueueIndex;
+	loadBarrier.image = image;
+	loadBarrier.subresourceRange = {};
+	loadBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	loadBarrier.subresourceRange.baseMipLevel = 0;
+	loadBarrier.subresourceRange.levelCount = 1;
+	loadBarrier.subresourceRange.baseArrayLayer = 0;
+	loadBarrier.subresourceRange.layerCount = 1;
+
+	return loadBarrier;
 }
 

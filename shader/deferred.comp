@@ -6,6 +6,11 @@
 #define MAX_LIGHTS 1024
 #define MAX_LIGHTS_PER_TILE 40
 
+// for 255 range multiply by more, since numbers like 0.999 will already be converted to 254 
+// avoid negative byte since 7 = 0111 in binary
+#define TO_FLOAT(x) (float(x) / 0x7fffffff)
+#define TO_UINT(x) uint(x * 0x7fffffff)
+
 struct PointLight {
     vec3 position;
     float radius;
@@ -13,11 +18,11 @@ struct PointLight {
     float intensity;
 };
 
-layout (binding = 0, rgba8) uniform writeonly image2D outImage;
+layout (binding = 0, rgba8) uniform image2D outImage;
 layout (binding = 1, rgba16f) uniform readonly image2D imageNormalDepth;
 layout (binding = 2, rgba16f) uniform readonly image2D imageAlbedo;
 
-layout(binding = 4) uniform UniformBufferObject {
+layout(binding = 3) uniform UniformBufferObject {
     mat4 view;
     mat4 proj;
 	vec3 eyePos;
@@ -25,7 +30,7 @@ layout(binding = 4) uniform UniformBufferObject {
 	int lightCount;
 } ubo;
 
-layout (std430, binding = 5) buffer LightsBufferObject {
+layout (std430, binding = 4) buffer LightsBufferObject {
     PointLight pointLights[];
 };
 
@@ -49,21 +54,26 @@ void main() {
 	barrier();
 	
 	ivec2 pixelPos = ivec2(gl_GlobalInvocationID.xy);
-	float depth = imageLoad(imageNormalDepth, pixelPos).w;
-    uint depthInt = uint(depth * 0xFFFFFFFF);
+
+	vec4 normalDepth = imageLoad(imageNormalDepth, pixelPos);
+	vec3 normal = vec3(normalDepth);
+	float depth = normalDepth.w;
+    uint depthInt = TO_UINT(depth);
+
+	float d = TO_FLOAT(depthInt);
 	atomicMin(minDepthInt, depthInt);
 	atomicMax(maxDepthInt, depthInt);
 
 	memoryBarrierShared();
 	barrier();
 
-	float minDepth = float(minDepthInt / float(0xFFFFFFFF));
-	float maxDepth = float(maxDepthInt / float(0xFFFFFFFF));
+	float minDepth = TO_FLOAT(minDepthInt);
+	float maxDepth = TO_FLOAT(maxDepthInt);
 
     vec2 tilePos = vec2(gl_WorkGroupID.xy * gl_WorkGroupSize.xy) / ubo.textureDimens;
-	vec4 normalColor = imageLoad(imageNormal, pixelPos);
-	vec4 albedoColor = imageLoad(imageAlbedo, pixelPos);
 
-	imageStore(outImage, pixelPos, normalColor);
+	vec4 albedoColor = imageLoad(imageAlbedo, pixelPos);
+	vec4 red = vec4(1.0, 0.0, 0.0, 1.0);
+	imageStore(outImage, pixelPos, vec4(minDepth));
 }
 

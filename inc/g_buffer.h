@@ -66,6 +66,8 @@ public:
 
 	void updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera);
 	void update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera);
+	VkImageMemoryBarrier createTilingDstBarrier(VkImage image);
+	VkImageMemoryBarrier createTilingSrcBarrier(VkImage image);
 
 
 	std::array<FramebufferAttachment, ATTACHMENT_COUNT> attachments;

@@ -150,6 +150,49 @@ void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
 
 void Renderer::buildComputeBuffers(const Timer &timer, Camera &camera)
 {
+	VkCommandBufferBeginInfo beginInfo = {};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+
+	VK_CHECK_RESULT(vkBeginCommandBuffer(gBuffer.tilingCmdBuffer, &beginInfo));
+
+	VkImageMemoryBarrier beforeDispatchBarriers[] = {
+		gBuffer.createTilingDstBarrier(gBuffer.normal().image),
+		gBuffer.createTilingDstBarrier(gBuffer.albedo().image)
+	};
+
+	vkCmdPipelineBarrier(
+		gBuffer.tilingCmdBuffer,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+		VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+		0,
+		0, 
+		nullptr,
+		0, 
+		nullptr,
+		ARRAY_SIZE(beforeDispatchBarriers),
+		beforeDispatchBarriers);
+
+	gBuffer.dispatch();
+
+	VkImageMemoryBarrier afterDispatchBarriers[] = {
+		gBuffer.createTilingSrcBarrier(gBuffer.normal().image),
+		gBuffer.createTilingSrcBarrier(gBuffer.albedo().image)
+	};
+
+	vkCmdPipelineBarrier(
+		gBuffer.tilingCmdBuffer,
+		VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+		0,
+		0, 
+		nullptr,
+		0, 
+		nullptr,
+		ARRAY_SIZE(afterDispatchBarriers),
+		afterDispatchBarriers);
+
+	VK_CHECK_RESULT(vkEndCommandBuffer(gBuffer.tilingCmdBuffer));
 
 }
 
@@ -177,6 +220,32 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 	for (size_t i = 0; i < mSwapChainManager.cmdBuffers.size(); ++i) {
         VkCommandBuffer& cmdBuffer = mSwapChainManager.cmdBuffers[i];
 		VK_CHECK_RESULT(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
+
+		VkImageSubresourceLayers subres = {};
+		subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		subres.mipLevel = 0;
+		subres.baseArrayLayer = 0;
+		subres.layerCount = 1;
+
+		VkImageBlit blit = {};
+		blit.srcSubresource = subres;
+		blit.srcOffsets[0] = {0, 0, 0};
+		blit.srcOffsets[1] = {gBuffer.width, gBuffer.height, 1};
+		blit.dstSubresource = subres;
+		blit.dstOffsets[0] = {0, 0, 0};
+		blit.dstOffsets[1] = {gBuffer.width, gBuffer.height, 1};
+
+		vkCmdBlitImage(
+				cmdBuffer, 
+				gBuffer.tilingImage.image, 
+				VK_IMAGE_LAYOUT_GENERAL,
+				mSwapChainManager.mSwapChainImages[i],
+				VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+				1,
+				&blit,
+				VK_FILTER_NEAREST);
+
+
 
 	/*	VkImageSubresourceLayers subres = {};
 		subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -250,7 +319,7 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 				&gBuffer.deferredQuad.mDescriptorSet, 
 				1);
 		*/
-		gBuffer.drawDeferredQuad(cmdBuffer);
+		//gBuffer.drawDeferredQuad(cmdBuffer);
 
 
 
@@ -270,77 +339,96 @@ void Renderer::draw()
                                             &imageIndex);
 	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 		recreateSwapChain();
-	} else if (result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR) {
-		VkSubmitInfo submitInfo = {};
-		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-		
-		VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+		return;
+	} 
 
-		submitInfo.waitSemaphoreCount = 1;
-		submitInfo.pWaitSemaphores = &imageAquiredSemaphore;
-		submitInfo.pWaitDstStageMask = stageFlags;
-		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &gBuffer.cmdBuffer;
-		submitInfo.signalSemaphoreCount = 1;
-		submitInfo.pSignalSemaphores = &offscreenSemaphore;
-
-		VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
-
-		submitInfo.waitSemaphoreCount = 1;
-		submitInfo.pWaitSemaphores = &offscreenSemaphore;
-		submitInfo.pWaitDstStageMask = stageFlags;
-		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &mSwapChainManager.cmdBuffers[imageIndex];
-		submitInfo.signalSemaphoreCount = 1;
-		submitInfo.pSignalSemaphores = &renderFinishedSemaphore;
-
-		VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
-		
-		VkPresentInfoKHR presentInfo = {};
-		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-		presentInfo.waitSemaphoreCount = 1;
-		presentInfo.pWaitSemaphores = &renderFinishedSemaphore;
-		presentInfo.swapchainCount = 1;
-		presentInfo.pSwapchains = &mState.swapChain;
-		presentInfo.pImageIndices = &imageIndex;
-
-		VK_CHECK_RESULT(vkQueuePresentKHR(mState.presentQueue, &presentInfo));
-
-		/*VkSubmitInfo submitInfo = {};
-		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-		
-		VkSemaphore waitSemaphores[] = { 
-			mSwapChainManager.mImageAvailableSemaphore 
-		};
-		
-		VkSemaphore signalSemaphores[] = { 
-			mSwapChainManager.mRenderFinishedSemaphore 
-		};
-		
-		VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-
-		submitInfo.waitSemaphoreCount = 1;
-		submitInfo.pWaitSemaphores = waitSemaphores;
-		submitInfo.pWaitDstStageMask = stageFlags;
-		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &mSwapChainManager.cmdBuffers[imageIndex];
-		submitInfo.signalSemaphoreCount = 1;
-		submitInfo.pSignalSemaphores = signalSemaphores;
-
-		VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
-		
-		VkPresentInfoKHR presentInfo = {};
-		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-		presentInfo.waitSemaphoreCount = 1;
-		presentInfo.pWaitSemaphores = signalSemaphores;
-		presentInfo.swapchainCount = 1;
-		presentInfo.pSwapchains = &mState.swapChain;
-		presentInfo.pImageIndices = &imageIndex;
-
-		VK_CHECK_RESULT(vkQueuePresentKHR(mState.presentQueue, &presentInfo));*/
-	} else {
+	if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
 		VK_THROW_RESULT_ERROR("Failed vkAcquireNextImageKHR", result);
+		return;
 	}
+		
+//		vkWaitForFences(mState.device, 1, &tilingFence, VK_TRUE, UINT64_MAX);
+//		vkResetFences(mState.device, 1, &tilingFence);
+
+	VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+	VkPipelineStageFlags tilingFlags[] = { VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
+
+
+	VkSubmitInfo submitInfo = {};
+	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+	submitInfo.waitSemaphoreCount = 1;
+	submitInfo.pWaitSemaphores = &imageAquiredSemaphore;
+	submitInfo.pWaitDstStageMask = stageFlags;
+	submitInfo.commandBufferCount = 1;
+	submitInfo.pCommandBuffers = &gBuffer.cmdBuffer;
+	submitInfo.signalSemaphoreCount = 1;
+	submitInfo.pSignalSemaphores = &offscreenSemaphore;
+
+	VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
+
+	submitInfo.waitSemaphoreCount = 1;
+	submitInfo.pWaitSemaphores = &offscreenSemaphore;
+	submitInfo.pWaitDstStageMask = stageFlags;
+	submitInfo.commandBufferCount = 1;
+	submitInfo.pCommandBuffers = &gBuffer.tilingCmdBuffer;
+	submitInfo.signalSemaphoreCount = 1;
+	submitInfo.pSignalSemaphores = &tilingFinishedSemaphore;
+
+	VK_CHECK_RESULT(vkQueueSubmit(mState.computeQueue, 1, &submitInfo, VK_NULL_HANDLE));
+
+	submitInfo.waitSemaphoreCount = 1;
+	submitInfo.pWaitSemaphores = &tilingFinishedSemaphore;
+	submitInfo.pWaitDstStageMask = tilingFlags;
+	submitInfo.commandBufferCount = 1;
+	submitInfo.pCommandBuffers = &mSwapChainManager.cmdBuffers[imageIndex];
+	submitInfo.signalSemaphoreCount = 1;
+	submitInfo.pSignalSemaphores = &renderFinishedSemaphore;
+
+	VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
+	
+	VkPresentInfoKHR presentInfo = {};
+	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+	presentInfo.waitSemaphoreCount = 1;
+	presentInfo.pWaitSemaphores = &renderFinishedSemaphore;
+	presentInfo.swapchainCount = 1;
+	presentInfo.pSwapchains = &mState.swapChain;
+	presentInfo.pImageIndices = &imageIndex;
+
+	VK_CHECK_RESULT(vkQueuePresentKHR(mState.presentQueue, &presentInfo));
+
+	/*VkSubmitInfo submitInfo = {};
+	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	
+	VkSemaphore waitSemaphores[] = { 
+		mSwapChainManager.mImageAvailableSemaphore 
+	};
+	
+	VkSemaphore signalSemaphores[] = { 
+		mSwapChainManager.mRenderFinishedSemaphore 
+	};
+	
+	VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+
+	submitInfo.waitSemaphoreCount = 1;
+	submitInfo.pWaitSemaphores = waitSemaphores;
+	submitInfo.pWaitDstStageMask = stageFlags;
+	submitInfo.commandBufferCount = 1;
+	submitInfo.pCommandBuffers = &mSwapChainManager.cmdBuffers[imageIndex];
+	submitInfo.signalSemaphoreCount = 1;
+	submitInfo.pSignalSemaphores = signalSemaphores;
+
+	VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
+	
+	VkPresentInfoKHR presentInfo = {};
+	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+	presentInfo.waitSemaphoreCount = 1;
+	presentInfo.pWaitSemaphores = signalSemaphores;
+	presentInfo.swapchainCount = 1;
+	presentInfo.pSwapchains = &mState.swapChain;
+	presentInfo.pImageIndices = &imageIndex;
+
+	VK_CHECK_RESULT(vkQueuePresentKHR(mState.presentQueue, &presentInfo));*/
 }
 
 void Renderer::createSemaphores()
