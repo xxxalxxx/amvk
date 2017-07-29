@@ -1590,7 +1590,7 @@ GBuffer::TilingUBO::proj	inc/g_buffer.h	/^		glm::mat4 proj;$/;"	m	struct:GBuffer
 GBuffer::TilingUBO::textureDimens	inc/g_buffer.h	/^		glm::vec2 textureDimens;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::view	inc/g_buffer.h	/^		glm::mat4 view;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::UNIFORM_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t UNIFORM_BUFFER_COUNT = 2;$/;"	m	class:GBuffer	access:public
-GBuffer::WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:GBuffer	access:public
+GBuffer::WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 32;$/;"	m	class:GBuffer	access:public
 GBuffer::albedo	inc/g_buffer.h	/^	inline FramebufferAttachment& albedo() { return attachments[INDEX_ALBEDO]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::attachments	inc/g_buffer.h	/^	std::array<FramebufferAttachment, ATTACHMENT_COUNT> attachments;$/;"	m	class:GBuffer	access:public
 GBuffer::clearValues	inc/g_buffer.h	/^	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;$/;"	m	class:GBuffer	access:public
@@ -4885,6 +4885,7 @@ State::swapChainImageFormat	inc/state.h	/^	VkFormat swapChainImageFormat;$/;"	m	
 State::transferQueue	inc/state.h	/^	VkQueue transferQueue;$/;"	m	struct:State	access:public
 State::transferQueueIndex	inc/state.h	/^	uint32_t transferQueueIndex;$/;"	m	struct:State	access:public
 State::ubo	inc/state.h	/^	UBO ubo;$/;"	m	struct:State	access:public
+State::uniqueIndices	inc/state.h	/^	std::vector<uint32_t> uniqueIndices;$/;"	m	struct:State	access:public
 State::vulkanState	inc/state.h	/^	State(State const& vulkanState) = delete;$/;"	m	struct:State	access:public
 State::vulkanState	inc/state.h	/^    State& operator=(State const& vulkanState) = delete;$/;"	m	struct:State	access:public
 StorageClass	lib/vulkan/spirv.hpp	/^enum StorageClass {$/;"	g	namespace:spv
@@ -7688,7 +7689,7 @@ WCHAR_MAX	lib/__assimp/Compiler/pstdint.h	730;"	d
 WCHAR_MAX	lib/assimp/Compiler/pstdint.h	696;"	d
 WCHAR_MIN	lib/__assimp/Compiler/pstdint.h	727;"	d
 WCHAR_MIN	lib/assimp/Compiler/pstdint.h	693;"	d
-WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:GBuffer	access:public
+WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 32;$/;"	m	class:GBuffer	access:public
 WaitForFences	lib/vulkan/vk_layer.h	/^    PFN_vkWaitForFences WaitForFences;$/;"	m	struct:VkLayerDispatchTable_	access:public
 Warn	lib/__assimp/Logger.hpp	/^        Warn        = 4,    \/\/!< Warn log message$/;"	e	enum:Assimp::Logger::ErrorSeverity
 Warn	lib/assimp/Logger.hpp	/^        Warn        = 4,    \/\/!< Warn log message$/;"	e	enum:Assimp::Logger::ErrorSeverity
@@ -17620,6 +17621,7 @@ uniformBufferOffset	inc/shape/skinned.h	/^	VkDeviceSize uniformBufferOffset,  $/
 uniformFragment	inc/state.h	/^	VkDescriptorSetLayout uniformFragment;$/;"	m	struct:DescriptorSetLayouts	access:public
 uniformVertex	inc/state.h	/^	VkDescriptorSetLayout uniformVertex;$/;"	m	struct:DescriptorSetLayouts	access:public
 uninitialize	lib/glm/detail/setup.hpp	/^	enum ctor{uninitialize};$/;"	e	enum:glm::ctor
+uniqueIndices	inc/state.h	/^	std::vector<uint32_t> uniqueIndices;$/;"	m	struct:State	access:public
 unnormalizedCoordinates	lib/vulkan/vulkan.h	/^    VkBool32                unnormalizedCoordinates;$/;"	m	struct:VkSamplerCreateInfo	access:public
 update	src/g_buffer.cpp	/^void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:GBuffer	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 update	src/scene_lights.cpp	/^void SceneLights::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)$/;"	f	class:SceneLights	signature:(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)

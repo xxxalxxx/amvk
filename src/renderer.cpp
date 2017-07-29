@@ -156,7 +156,22 @@ void Renderer::buildComputeBuffers(const Timer &timer, Camera &camera)
 
 	VK_CHECK_RESULT(vkBeginCommandBuffer(gBuffer.tilingCmdBuffer, &beginInfo));
 
+	VkImageMemoryBarrier imageMemoryBarrier = {};
+	imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	imageMemoryBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	imageMemoryBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
+	imageMemoryBarrier.image = gBuffer.tilingImage.image;
+	imageMemoryBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+	imageMemoryBarrier.srcAccessMask = 0;
+	imageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+	//imageMemoryBarrier.srcQueueFamilyIndex = mState.computeQueueIndex;
+	//imageMemoryBarrier.dstQueueFamilyIndex = mState.computeQueueIndex;
+
+	//imageMemoryBarrier.dstQueueFamilyIndex = mState.graphicsQueueIndex;
+
+
 	VkImageMemoryBarrier beforeDispatchBarriers[] = {
+		imageMemoryBarrier,
 		gBuffer.createTilingDstBarrier(gBuffer.normal().image),
 		gBuffer.createTilingDstBarrier(gBuffer.albedo().image)
 	};
@@ -179,6 +194,10 @@ void Renderer::buildComputeBuffers(const Timer &timer, Camera &camera)
 		gBuffer.createTilingSrcBarrier(gBuffer.normal().image),
 		gBuffer.createTilingSrcBarrier(gBuffer.albedo().image)
 	};
+	
+	//imageMemoryBarrier.srcQueueFamilyIndex = mState.computeQueueIndex;
+	//imageMemoryBarrier.dstQueueFamilyIndex = mState.computeQueueIndex;
+
 
 	vkCmdPipelineBarrier(
 		gBuffer.tilingCmdBuffer,
@@ -221,6 +240,28 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
         VkCommandBuffer& cmdBuffer = mSwapChainManager.cmdBuffers[i];
 		VK_CHECK_RESULT(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
 
+		
+		VkImageMemoryBarrier imageMemoryBarrier = {};
+		imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+		imageMemoryBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
+		imageMemoryBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		imageMemoryBarrier.image = gBuffer.tilingImage.image;
+		imageMemoryBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		imageMemoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+		imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		imageMemoryBarrier.srcQueueFamilyIndex = mState.computeQueueIndex;
+		imageMemoryBarrier.dstQueueFamilyIndex = mState.graphicsQueueIndex;
+
+		vkCmdPipelineBarrier(
+			cmdBuffer,
+			VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+			VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+			0,
+			0, nullptr,
+			0, nullptr,
+			1, &imageMemoryBarrier);
+		
+		
 		VkImageSubresourceLayers subres = {};
 		subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 		subres.mipLevel = 0;
@@ -244,22 +285,27 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 				1,
 				&blit,
 				VK_FILTER_NEAREST);
+	/*	
+		imageMemoryBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
+		imageMemoryBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+		imageMemoryBarrier.image = gBuffer.tilingImage.image;
+		imageMemoryBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+		imageMemoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+		imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		imageMemoryBarrier.srcQueueFamilyIndex = mState.computeQueueIndex;
+		imageMemoryBarrier.dstQueueFamilyIndex = mState.graphicsQueueIndex;
 
+		vkCmdPipelineBarrier(
+			cmdBuffer,
+			VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+			VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+			0,
+			0, nullptr,
+			0, nullptr,
+			1, &imageMemoryBarrier);
 
-
-	/*	VkImageSubresourceLayers subres = {};
-		subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		subres.mipLevel = 0;
-		subres.baseArrayLayer = 0;
-		subres.layerCount = 1;
-
-		VkImageBlit blit = {};
-		blit.srcSubresource = subres;
-		blit.srcOffsets[0] = {0, 0, 0};
-		blit.srcOffsets[1] = {gBuffer.width, gBuffer.height, 1};
-		blit.dstSubresource = subres;
-		blit.dstOffsets[0] = {0, 0, 0};
-		blit.dstOffsets[1] = {gBuffer.width, gBuffer.height, 1};
+*/
+        /*
 
 		vkCmdBlitImage(
 				cmdBuffer, 
@@ -270,7 +316,8 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 				1,
 				&blit,
 				VK_FILTER_NEAREST);
-
+        */
+        /*
 		subres.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
 	
 		vkCmdBlitImage(
@@ -282,7 +329,8 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 				1,
 				&blit,
 				VK_FILTER_NEAREST);
-		*/
+           */
+
 		
 		renderPassBeginInfo.framebuffer = mSwapChainManager.framebuffers[i];
 		vkCmdBeginRenderPass(cmdBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
@@ -346,9 +394,11 @@ void Renderer::draw()
 		VK_THROW_RESULT_ERROR("Failed vkAcquireNextImageKHR", result);
 		return;
 	}
-		
-//		vkWaitForFences(mState.device, 1, &tilingFence, VK_TRUE, UINT64_MAX);
-//		vkResetFences(mState.device, 1, &tilingFence);
+
+	//LOG("CNT %u", cnt++);
+
+	//vkWaitForFences(mState.device, 1, &tilingFence, VK_TRUE, UINT64_MAX);
+	//vkResetFences(mState.device, 1, &tilingFence);
 
 	VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 	VkPipelineStageFlags tilingFlags[] = { VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
@@ -396,39 +446,6 @@ void Renderer::draw()
 	presentInfo.pImageIndices = &imageIndex;
 
 	VK_CHECK_RESULT(vkQueuePresentKHR(mState.presentQueue, &presentInfo));
-
-	/*VkSubmitInfo submitInfo = {};
-	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	
-	VkSemaphore waitSemaphores[] = { 
-		mSwapChainManager.mImageAvailableSemaphore 
-	};
-	
-	VkSemaphore signalSemaphores[] = { 
-		mSwapChainManager.mRenderFinishedSemaphore 
-	};
-	
-	VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-
-	submitInfo.waitSemaphoreCount = 1;
-	submitInfo.pWaitSemaphores = waitSemaphores;
-	submitInfo.pWaitDstStageMask = stageFlags;
-	submitInfo.commandBufferCount = 1;
-	submitInfo.pCommandBuffers = &mSwapChainManager.cmdBuffers[imageIndex];
-	submitInfo.signalSemaphoreCount = 1;
-	submitInfo.pSignalSemaphores = signalSemaphores;
-
-	VK_CHECK_RESULT(vkQueueSubmit(mState.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE));
-	
-	VkPresentInfoKHR presentInfo = {};
-	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-	presentInfo.waitSemaphoreCount = 1;
-	presentInfo.pWaitSemaphores = signalSemaphores;
-	presentInfo.swapchainCount = 1;
-	presentInfo.pSwapchains = &mState.swapChain;
-	presentInfo.pImageIndices = &imageIndex;
-
-	VK_CHECK_RESULT(vkQueuePresentKHR(mState.presentQueue, &presentInfo));*/
 }
 
 void Renderer::createSemaphores()

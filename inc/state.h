@@ -132,6 +132,8 @@ struct State {
 	uint32_t transferQueueIndex;
 	uint32_t computeQueueIndex;
 
+	std::vector<uint32_t> uniqueIndices;
+
 	VkRenderPass renderPass;
 	
 	VkCommandPool commandPool;

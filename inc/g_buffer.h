@@ -35,7 +35,7 @@ public:
 
 
 	static const constexpr uint32_t MAX_LIGHTS = 1024;
-	static const constexpr uint32_t WORK_GROUP_SIZE = 16;
+	static const constexpr uint32_t WORK_GROUP_SIZE = 32;
 
 	struct TilingUBO {
 		glm::mat4 view;

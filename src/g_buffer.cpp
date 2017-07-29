@@ -140,6 +140,21 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 
 void GBuffer::createTilingResultImage() 
 {
+	VkFormatProperties formatProperties;
+	vkGetPhysicalDeviceFormatProperties(mState->physicalDevice, VK_FORMAT_R8G8B8A8_UNORM, &formatProperties);
+    if (formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT) {
+        LOG("PROP TILING SUPPORTED");
+    } else {
+        LOG("PROP TILING UNSUPPORTED");
+    }
+
+
+	if (formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) {
+        LOG("PROP BLIT SUPPORTED");
+    } else {
+        LOG("PROP BLIT UNSUPPORTED");
+    }
+
 	VkImageCreateInfo image = {};
 	image.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	image.imageType = VK_IMAGE_TYPE_2D;
@@ -500,8 +515,10 @@ void GBuffer::dispatch()
 {
 	vkCmdBindPipeline(tilingCmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, mState->pipelines.tiling.pipeline);
 	vkCmdBindDescriptorSets(tilingCmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, mState->pipelines.tiling.layout, 0, 1, &mTilingDescriptorSet, 0, 0);
-	vkCmdDispatch(tilingCmdBuffer, (width + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE, (height + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE, 1);
-//	vkCmdDispatch(tilingCmdBuffer, width, height, 1);
+	//vkCmdDispatch(tilingCmdBuffer, 2 * 256, 1, 1);
+    vkCmdDispatch(tilingCmdBuffer, (width + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE, (height + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE, 1);
+
+    //vkCmdDispatch(tilingCmdBuffer, width, height, 1);
 //	vkCmdDispatch(tilingCmdBuffer, 1, 1, 1);
 
 }

@@ -26,7 +26,7 @@ void Engine::init(android_app* state)
     LOG("WINDOW ASPECT %f width: %u height: %u", mWindow.mAspect, mWindow.mWidth, mWindow.mHeight);
     mCamera.setAspect(mWindow.mAspect);
     mRenderer.init();
-	mRenderer.buildComputeBuffers(timer, camera);
+	mRenderer.buildComputeBuffers(mTimer, mCamera);
     mRenderer.buildCommandBuffers(mTimer, mCamera);
     mRenderer.buildGBuffers(mTimer, mCamera);
 
