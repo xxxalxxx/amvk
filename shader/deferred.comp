@@ -1,6 +1,7 @@
 #version 450
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_ARB_shading_language_420pack : enable
+#extension GL_EXT_shader_image_load_store : enable
 
 #define WORK_GROUP_SIZE 16
 #define MAX_LIGHTS 1024
@@ -20,7 +21,7 @@ struct PointLight {
 
 layout (binding = 0, rgba8) uniform image2D outImage;
 layout (binding = 1, rgba16f) uniform readonly image2D imageNormalDepth;
-layout (binding = 2, rgba16f) uniform readonly image2D imageAlbedo;
+layout (binding = 2, rgba8) uniform readonly image2D imageAlbedo;
 
 layout(binding = 3) uniform UniformBufferObject {
     mat4 view;
@@ -54,6 +55,7 @@ void main() {
 	barrier();
 	
 	ivec2 pixelPos = ivec2(gl_GlobalInvocationID.xy);
+	//ivec2 pixelPos = ivec2(gl_LocalInvocationID.xy);
 
 	vec4 normalDepth = imageLoad(imageNormalDepth, pixelPos);
 	vec3 normal = vec3(normalDepth);
@@ -74,6 +76,6 @@ void main() {
 
 	vec4 albedoColor = imageLoad(imageAlbedo, pixelPos);
 	vec4 red = vec4(1.0, 0.0, 0.0, 1.0);
-	imageStore(outImage, pixelPos, vec4(minDepth));
+	imageStore(outImage, pixelPos, albedoColor);
 }
 

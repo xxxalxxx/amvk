@@ -302,19 +302,22 @@ bool DeviceManager::deviceQueueIndicesSupported(const VkPhysicalDevice& physical
 
 		if (surfaceSupported)
 			outIndices.present = i;
-        // transfer queue is optional
-		if (outIndices.graphics != UINT32_MAX
-			&& outIndices.compute != UINT32_MAX
-			&& outIndices.present != UINT32_MAX)
-			return true;
-        LOG("QUEUE INDICES:\n device: %p\n index: %u\n graphics: %s\n transfer: %s\n compute: %s\n present: %s",
+
+		LOG("QUEUE INDICES:\n device: %p\n index: %u\n graphics: %s\n transfer: %s\n compute: %s\n present: %s",
             &physicalDevice,
             i,
             outIndices.graphics != UINT32_MAX ? "true" : "false",
             outIndices.transfer != UINT32_MAX ? "true" : "false",
             outIndices.compute != UINT32_MAX ? "true" : "false",
             outIndices.present != UINT32_MAX ? "true" : "false");
-	}
+
+
+        // transfer queue is optional
+		if (outIndices.graphics != UINT32_MAX
+			&& outIndices.compute != UINT32_MAX
+			&& outIndices.present != UINT32_MAX)
+			return true;
+       	}
 	return false;
 }
 
