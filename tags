@@ -1590,7 +1590,7 @@ GBuffer::TilingUBO::eyePos	inc/g_buffer.h	/^		glm::vec3 eyePos;$/;"	m	struct:GBu
 GBuffer::TilingUBO::lightCount	inc/g_buffer.h	/^		uint32_t lightCount;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::p1	inc/g_buffer.h	/^		float p1[1];$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::proj	inc/g_buffer.h	/^		glm::mat4 proj;$/;"	m	struct:GBuffer::TilingUBO	access:public
-GBuffer::TilingUBO::textureDimens	inc/g_buffer.h	/^		glm::uvec2 textureDimens;$/;"	m	struct:GBuffer::TilingUBO	access:public
+GBuffer::TilingUBO::textureDimens	inc/g_buffer.h	/^		glm::vec2 textureDimens;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::view	inc/g_buffer.h	/^		glm::mat4 view;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::UNIFORM_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t UNIFORM_BUFFER_COUNT = 2;$/;"	m	class:GBuffer	access:public
 GBuffer::WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:GBuffer	access:public
@@ -17343,7 +17343,7 @@ texCoord	inc/shape/tquad.h	/^		glm::vec2 texCoord;$/;"	m	struct:TQuad::Vertex	ac
 textureCompressionASTC_LDR	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionASTC_LDR;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 textureCompressionBC	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionBC;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
 textureCompressionETC2	lib/vulkan/vulkan.h	/^    VkBool32    textureCompressionETC2;$/;"	m	struct:VkPhysicalDeviceFeatures	access:public
-textureDimens	inc/g_buffer.h	/^		glm::uvec2 textureDimens;$/;"	m	struct:GBuffer::TilingUBO	access:public
+textureDimens	inc/g_buffer.h	/^		glm::vec2 textureDimens;$/;"	m	struct:GBuffer::TilingUBO	access:public
 textureManager	inc/texture_manager.h	/^	TextureManager(const TextureManager& textureManager) = delete;$/;"	m	class:TextureManager	access:public
 textureManager	inc/texture_manager.h	/^	void operator=(const TextureManager& textureManager) = delete;$/;"	m	class:TextureManager	access:public
 textures	inc/shape/skinned.h	/^		std::vector<MaterialTexture> textures;$/;"	m	struct:Skinned::Material	access:public

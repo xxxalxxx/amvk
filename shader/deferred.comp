@@ -27,7 +27,7 @@ layout(binding = 3) uniform UniformBufferObject {
     mat4 view;
     mat4 proj;
 	vec3 eyePos;
-	uvec2 textureDimens;
+	vec2 textureDimens;
 	uint lightCount;
 } ubo;
 
@@ -40,12 +40,14 @@ layout (local_size_x = WORK_GROUP_SIZE, local_size_y = WORK_GROUP_SIZE) in;
 
 shared uint minDepthInt;
 shared uint maxDepthInt;
-shared uint visiblePointLights[MAX_LIGHTS];
+shared uint visiblePointLightIndices[MAX_LIGHTS];
 shared uint visiblePointLightCount;
-
+shared vec2 tilePos;
 void main() {
 
 	if (gl_LocalInvocationIndex == 0) {
+		vec2 texCoord = vec2(gl_WorkGroupID.xy * gl_WorkGroupSize.xy) / ubo.textureDimens;
+		tilePos = 2.0 * texCoord - 1.0;
 		minDepthInt = 0xFFFFFFFF;
 		maxDepthInt = 0;
 		visiblePointLightCount = 0;
@@ -71,6 +73,30 @@ void main() {
 
 	float minDepth = TO_FLOAT(minDepthInt);
 	float maxDepth = TO_FLOAT(maxDepthInt);
+
+
+	uint threadCount = WORK_GROUP_SIZE * WORK_GROUP_SIZE;
+	uint passCount = (ubo.lightCount + threadCount - 1) / threadCount;
+	
+	for (uint passIt = 0; passIt < passCount; ++passIt) {
+		uint lightIndex = passIt * threadCount + gl_LocalInvocationIndex;
+		lightIndex = min(lightIndex, ubo.lightCount);
+		
+		//if () {
+			uint offset = atomicAdd(visiblePointLightCount, 1);
+			visiblePointLightIndices[offset] = lightIndex;
+		//}
+
+	}
+
+	memoryBarrierShared();
+	barrier();
+	vec3 color = vec3(0.0);
+	/*	
+	for (uint lightIt = 0; lightIt < visiblePointLightCount; ++lightIt) {
+		uint lightIndex = visiblePointLightIndices[lightIt];
+		PointLight light = pointLights[lightIndex];
+	}*/
 
     //uvec2 tilePos = gl_WorkGroupID.xy * gl_WorkGroupSize.xy / ubo.textureDimens;
 	uvec2 tileLeftTop = gl_WorkGroupID.xy * gl_WorkGroupSize.xy; 

@@ -24,7 +24,7 @@ void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& devic
 	
 	this->width = width;
 	this->height = height;
-	ubo.textureDimens = glm::uvec2(width, height);
+	ubo.textureDimens = glm::vec2((float) width, (float) height);
 
 	createLights();
 
@@ -565,7 +565,7 @@ void GBuffer::updateTextureDimens(uint32_t width, uint32_t height)
 {
 	this->width = width;
 	this->height = height;
-	ubo.textureDimens = glm::uvec2(width, height);
+	ubo.textureDimens = glm::vec2((float) width, (float) height);
 }
 
 void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)

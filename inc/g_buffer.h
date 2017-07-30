@@ -45,7 +45,7 @@ public:
 		glm::mat4 proj;
 		glm::vec3 eyePos;
 		float p1[1];
-		glm::uvec2 textureDimens;
+		glm::vec2 textureDimens;
 		uint32_t lightCount;
 	};
 
