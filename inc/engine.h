@@ -2,7 +2,8 @@
 #define AMVK_ENGINE_H
 
 #include <vector>
-
+#include <ctime>
+#include <cstdlib>
 #include "macro.h"
 #include "task_manager.h"
 #include "renderer.h"

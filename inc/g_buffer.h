@@ -1,7 +1,7 @@
 #ifndef AMVK_G_BUFFER_H
 #define AMVK_G_BUFFER_H
 
-#include <array>
+
 
 #include "macro.h"
 #include "vulkan.h"
@@ -11,6 +11,10 @@
 #include "fullscreen_quad.h"
 #include "camera.h"
 #include "timer.h"
+#include "utils.h"
+
+#include <array>
+#include <glm/gtx/string_cast.hpp> 
 
 struct FramebufferAttachment {
 	VkImage image;
@@ -33,15 +37,16 @@ public:
 	static const constexpr uint32_t UNIFORM_BUFFER_COUNT = 2;
 	static const constexpr uint32_t STORAGE_BUFFER_COUNT = 1;
 
-
 	static const constexpr uint32_t MAX_LIGHTS = 1024;
-	static const constexpr uint32_t WORK_GROUP_SIZE = 32;
+	static const constexpr uint32_t WORK_GROUP_SIZE = 16;
 
 	struct TilingUBO {
 		glm::mat4 view;
 		glm::mat4 proj;
 		glm::vec3 eyePos;
-		glm::vec2 textureDimens;
+		float p1[1];
+		glm::uvec2 textureDimens;
+		uint32_t lightCount;
 	};
 
 	struct PointLight {
@@ -63,12 +68,9 @@ public:
 	void createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool);
 	void drawDeferredQuad(VkCommandBuffer& cmdBuffer);
 	void dispatch();
-
+	void updateTextureDimens(uint32_t width, uint32_t height);
 	void updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera);
 	void update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera);
-	VkImageMemoryBarrier createTilingDstBarrier(VkImage image);
-	VkImageMemoryBarrier createTilingSrcBarrier(VkImage image);
-
 
 	std::array<FramebufferAttachment, ATTACHMENT_COUNT> attachments;
 	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;
@@ -108,14 +110,18 @@ private:
 	void createDescriptors();
 	void createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat format);
 	void createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat format);
+	void createLights();
+    VkImageTiling getTiling(VkFormat format, VkImageUsageFlags usage);
+
+	void initColorImageTransition(CmdPass& cmd, FramebufferAttachment& attachment);
 
 	State* mState;
 	VkDescriptorPool mDescriptorPool;
 	VkDescriptorSet mDescriptorSet;
 	VkDescriptorSet mTilingDescriptorSet;
-
 	BufferInfo mUniformBufferInfo;
 	BufferInfo mTilingUniformBufferInfo;
+	BufferInfo mTilingStagingUniformBufferInfo;
 	BufferInfo mPointLightsBufferInfo;
 public:
 	FullscreenQuad deferredQuad;

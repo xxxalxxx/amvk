@@ -6,12 +6,15 @@
 #include <initializer_list>
 #include <stdio.h>
 #include <stdlib.h>
+#include "macro.h"
+
+namespace Utils {
 
 static constexpr const int MAX_SIZE_NOT_FOUND = std::numeric_limits<int>::lowest();
 static constexpr const int MIN_SIZE_NOT_FOUND = std::numeric_limits<int>::max();
 
 template <class T>
-int maxVectorSize(std::initializer_list<std::vector<T>& > vectors)
+inline int maxVectorSize(std::initializer_list<std::vector<T>& > vectors)
 {
 	int max = MAX_SIZE_NOT_FOUND;
 	for (const auto& elem : vectors)
@@ -21,7 +24,7 @@ int maxVectorSize(std::initializer_list<std::vector<T>& > vectors)
 }
 
 template <class T>
-int minVectorSize(std::initializer_list<std::vector<T>& > vectors)
+inline int minVectorSize(std::initializer_list<std::vector<T>& > vectors)
 {
 	int min = MIN_SIZE_NOT_FOUND;
 	for (const auto& elem : vectors)
@@ -29,6 +32,21 @@ int minVectorSize(std::initializer_list<std::vector<T>& > vectors)
 			min = elem.size();
 	return min;
 }
+
+inline float frand(float from, float to) 
+{
+	return from + (float) rand() / ((float) RAND_MAX / (to - from));
+}
+
+inline glm::vec3 randVec3(float from, float to) 
+{
+	float x = frand(from, to);
+	float y = frand(from, to);
+	float z = frand(from, to);
+	return glm::vec3(x, y, z);
+}
+
+
 /*
 void* alignedAlloc(size_t size, size_t alignment)
 {
@@ -52,5 +70,5 @@ void alignedFree(void* data)
 #endif
 }
 */
-
+};
 #endif

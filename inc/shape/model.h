@@ -18,7 +18,7 @@
 #include <assimp/postprocess.h>     // Post processing flags
 
 #include "macro.h"
-#include "util.h"
+#include "utils.h"
 #include "pipeline_cache.h"
 #include "buffer_helper.h"
 #include "image_helper.h"

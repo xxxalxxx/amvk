@@ -26,7 +26,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include "util.h"
+#include "utils.h"
 #include "pipeline_cache.h"
 #include "buffer_helper.h"
 #include "image_helper.h"

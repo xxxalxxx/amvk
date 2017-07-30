@@ -91,10 +91,10 @@ void Renderer::updateUniformBuffers(const Timer& timer, Camera& camera)
 	dwarf.update(cmd.buffer, timer, camera);
 	guard.update(cmd.buffer, timer, camera);
 	sceneLights.update(cmd.buffer, timer, camera);
-	gBuffer.update(cmd.buffer, timer, camera);
+	//gBuffer.update(cmd.buffer, timer, camera);
 
-	//CmdPass tilingCmd(mState.device, tiledRenderer.cmdPool, mState.computeQueue);
-	//gBuffer.updateTiling(tilingCmd.buffer, timer, camera);
+	CmdPass tilingCmd(mState.device, gBuffer.tilingCmdPool, mState.computeQueue);
+	gBuffer.updateTiling(tilingCmd.buffer, timer, camera);
 }
 
 void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
@@ -115,6 +115,8 @@ void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
 	renderPassBeginInfo.clearValueCount = clearValues.size();
 	renderPassBeginInfo.pClearValues = clearValues.data();
 
+
+
 	VkCommandBufferBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	//beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
@@ -122,6 +124,27 @@ void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
 	VkCommandBuffer& cmdBuffer = gBuffer.cmdBuffer;
 
 	VK_CHECK_RESULT(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
+
+
+    /*VkImageMemoryBarrier albedoBarrier = {};
+    albedoBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    albedoBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
+    albedoBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
+    albedoBarrier.image = gBuffer.albedo().image;
+    albedoBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+    albedoBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    albedoBarrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    albedoBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    albedoBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+
+    vkCmdPipelineBarrier(
+            cmdBuffer,
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+            0,
+            0, nullptr,
+            0, nullptr,
+            1, &albedoBarrier);*/
 
 	vkCmdBeginRenderPass(cmdBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -152,7 +175,7 @@ void Renderer::buildComputeBuffers(const Timer &timer, Camera &camera)
 {
 	VkCommandBufferBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+	//beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 
 	VK_CHECK_RESULT(vkBeginCommandBuffer(gBuffer.tilingCmdBuffer, &beginInfo));
 
@@ -164,40 +187,40 @@ void Renderer::buildComputeBuffers(const Timer &timer, Camera &camera)
 	imageMemoryBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 	imageMemoryBarrier.srcAccessMask = 0;
 	imageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+
+
+    VkImageMemoryBarrier albedoBarrier = {};
+    albedoBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    albedoBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
+    albedoBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
+    albedoBarrier.image = gBuffer.albedo().image;
+    albedoBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+    albedoBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    albedoBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    albedoBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    albedoBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+
+    vkCmdPipelineBarrier(
+            gBuffer.tilingCmdBuffer,
+            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            0,
+            0, nullptr,
+            0, nullptr,
+            1, &albedoBarrier);
+
 	//imageMemoryBarrier.srcQueueFamilyIndex = mState.computeQueueIndex;
 	//imageMemoryBarrier.dstQueueFamilyIndex = mState.computeQueueIndex;
 
 	//imageMemoryBarrier.dstQueueFamilyIndex = mState.graphicsQueueIndex;
 
-
-	VkImageMemoryBarrier beforeDispatchBarriers[] = {
-		imageMemoryBarrier,
-		gBuffer.createTilingDstBarrier(gBuffer.normal().image),
-		gBuffer.createTilingDstBarrier(gBuffer.albedo().image)
-	};
-
-	vkCmdPipelineBarrier(
-		gBuffer.tilingCmdBuffer,
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-		VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-		0,
-		0, 
-		nullptr,
-		0, 
-		nullptr,
-		ARRAY_SIZE(beforeDispatchBarriers),
-		beforeDispatchBarriers);
-
 	gBuffer.dispatch();
 
+    /*
 	VkImageMemoryBarrier afterDispatchBarriers[] = {
 		gBuffer.createTilingSrcBarrier(gBuffer.normal().image),
 		gBuffer.createTilingSrcBarrier(gBuffer.albedo().image)
 	};
-	
-	//imageMemoryBarrier.srcQueueFamilyIndex = mState.computeQueueIndex;
-	//imageMemoryBarrier.dstQueueFamilyIndex = mState.computeQueueIndex;
-
 
 	vkCmdPipelineBarrier(
 		gBuffer.tilingCmdBuffer,
@@ -210,7 +233,7 @@ void Renderer::buildComputeBuffers(const Timer &timer, Camera &camera)
 		nullptr,
 		ARRAY_SIZE(afterDispatchBarriers),
 		afterDispatchBarriers);
-
+*/
 	VK_CHECK_RESULT(vkEndCommandBuffer(gBuffer.tilingCmdBuffer));
 
 }
@@ -226,7 +249,7 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 
 	VkCommandBufferBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+	//beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 
 	VkRenderPassBeginInfo renderPassBeginInfo = {};
 	renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -241,7 +264,7 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 		VK_CHECK_RESULT(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
 
 		
-		VkImageMemoryBarrier imageMemoryBarrier = {};
+		/*VkImageMemoryBarrier imageMemoryBarrier = {};
 		imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 		imageMemoryBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
 		imageMemoryBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
@@ -260,13 +283,9 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 			0, nullptr,
 			0, nullptr,
 			1, &imageMemoryBarrier);
+		*/
 		
-		
-		VkImageSubresourceLayers subres = {};
-		subres.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		subres.mipLevel = 0;
-		subres.baseArrayLayer = 0;
-		subres.layerCount = 1;
+		VkImageSubresourceLayers subres = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1 };
 
 		VkImageBlit blit = {};
 		blit.srcSubresource = subres;
@@ -285,6 +304,7 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 				1,
 				&blit,
 				VK_FILTER_NEAREST);
+
 	/*	
 		imageMemoryBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
 		imageMemoryBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
@@ -381,7 +401,7 @@ void Renderer::draw()
 {
 	VkResult result = vkAcquireNextImageKHR(mState.device,
                                             mState.swapChain,
-                                            std::numeric_limits<uint64_t>::max(),
+                                            UINT64_MAX,
                                             imageAquiredSemaphore,
                                             VK_NULL_HANDLE,
                                             &imageIndex);
@@ -397,8 +417,8 @@ void Renderer::draw()
 
 	//LOG("CNT %u", cnt++);
 
-	//vkWaitForFences(mState.device, 1, &tilingFence, VK_TRUE, UINT64_MAX);
-	//vkResetFences(mState.device, 1, &tilingFence);
+	vkWaitForFences(mState.device, 1, &tilingFence, VK_TRUE, UINT64_MAX);
+	vkResetFences(mState.device, 1, &tilingFence);
 
 	VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 	VkPipelineStageFlags tilingFlags[] = { VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
@@ -425,7 +445,7 @@ void Renderer::draw()
 	submitInfo.signalSemaphoreCount = 1;
 	submitInfo.pSignalSemaphores = &tilingFinishedSemaphore;
 
-	VK_CHECK_RESULT(vkQueueSubmit(mState.computeQueue, 1, &submitInfo, VK_NULL_HANDLE));
+	VK_CHECK_RESULT(vkQueueSubmit(mState.computeQueue, 1, &submitInfo, tilingFence));
 
 	submitInfo.waitSemaphoreCount = 1;
 	submitInfo.pWaitSemaphores = &tilingFinishedSemaphore;

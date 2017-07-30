@@ -23,6 +23,7 @@ public:
 
 	glm::mat4& proj();
 	glm::mat4& view();
+	inline glm::vec3& eye() { return mEye; }
 
     double mPrevMouseX, mPrevMouseY;
 private:

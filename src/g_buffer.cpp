@@ -4,6 +4,7 @@ GBuffer::GBuffer(State& state):
 	mState(&state),
 	mUniformBufferInfo(state.device),
 	mTilingUniformBufferInfo(state.device),
+	mTilingStagingUniformBufferInfo(state.device),
 	mPointLightsBufferInfo(state.device),
 	deferredQuad(state)
 {
@@ -20,11 +21,14 @@ GBuffer::~GBuffer()
 void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& device, uint32_t width, uint32_t height)
 {
 	LOG_TITLE("G-BUFFER");
-
-	pointLights.push_back(PointLight());
 	
 	this->width = width;
 	this->height = height;
+	ubo.textureDimens = glm::uvec2(width, height);
+
+	createLights();
+
+	deferredQuad.init();
 
 	createTilingCmdPool();
 	createTilingResultImage();
@@ -35,7 +39,6 @@ void GBuffer::init(const VkPhysicalDevice& physicalDevice, const VkDevice& devic
 	createBuffers();
 	createDescriptorPool();
 	createDescriptors();
-	deferredQuad.init();
 }
 
 
@@ -47,7 +50,6 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 	attFormats[INDEX_ALBEDO]   = VK_FORMAT_R8G8B8A8_UNORM;
 	attFormats[INDEX_DEPTH]    = ImageHelper::findDepthStencilFormat(physicalDevice);
 
-	
 	std::array<VkImageUsageFlags, ATTACHMENT_COUNT> attUsages = {};
 	attUsages[INDEX_POSITION] = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT;
 	attUsages[INDEX_NORMAL]   = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT;
@@ -69,12 +71,6 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 	createColorAttachmentDesc(attDescs[INDEX_ALBEDO], attFormats[INDEX_ALBEDO]);
 	createDepthAttachmentDesc(attDescs[INDEX_DEPTH], attFormats[INDEX_DEPTH]);
 
-	std::array<VkAttachmentReference, ATTACHMENT_COUNT> attRefs = {};
-	attRefs[INDEX_POSITION] = { INDEX_POSITION, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
-	attRefs[INDEX_NORMAL]   = { INDEX_NORMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
-	attRefs[INDEX_ALBEDO]   = { INDEX_ALBEDO, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
-	attRefs[INDEX_DEPTH]    = { INDEX_DEPTH, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
-
 	std::array<VkAttachmentReference, COLOR_ATTACHMENT_COUNT> colorRefs = {};
 	colorRefs[INDEX_POSITION] = { INDEX_POSITION, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 	colorRefs[INDEX_NORMAL]   = { INDEX_NORMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
@@ -93,7 +89,7 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 	dependencies[0].dstSubpass = 0;
 	dependencies[0].srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 	dependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	dependencies[0].srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+	dependencies[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
 	dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 	dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 	
@@ -102,7 +98,7 @@ void GBuffer::createFramebuffers(const VkPhysicalDevice& physicalDevice, const V
 	dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 	dependencies[1].dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 	dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-	dependencies[1].dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+	dependencies[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 	dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 	
 	VkRenderPassCreateInfo renderPassInfo = {};
@@ -159,9 +155,7 @@ void GBuffer::createTilingResultImage()
 	image.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	image.imageType = VK_IMAGE_TYPE_2D;
 	image.format = VK_FORMAT_R8G8B8A8_UNORM;
-	image.extent.width = width;
-	image.extent.height = height;
-	image.extent.depth = 1;
+    image.extent = { (uint32_t) width, (uint32_t) height, 1 };
 	image.mipLevels = 1;
 	image.arrayLayers = 1;
 	image.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -183,12 +177,7 @@ void GBuffer::createTilingResultImage()
 	imageView.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 	imageView.viewType = VK_IMAGE_VIEW_TYPE_2D;
 	imageView.format = VK_FORMAT_R8G8B8A8_UNORM;
-	imageView.subresourceRange = {};
-	imageView.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	imageView.subresourceRange.baseMipLevel = 0;
-	imageView.subresourceRange.levelCount = 1;
-	imageView.subresourceRange.baseArrayLayer = 0;
-	imageView.subresourceRange.layerCount = 1;
+    imageView.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 	imageView.image = tilingImage.image;
 	VK_CHECK_RESULT(vkCreateImageView(mState->device, &imageView, nullptr, &tilingImage.view));
 
@@ -203,7 +192,7 @@ void GBuffer::createColorAttachmentDesc(VkAttachmentDescription& desc, VkFormat 
 	desc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 	desc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 	desc.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	desc.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	desc.finalLayout = VK_IMAGE_LAYOUT_GENERAL;//VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	desc.format = format;
 }
 
@@ -219,6 +208,73 @@ void GBuffer::createDepthAttachmentDesc(VkAttachmentDescription& desc, VkFormat 
 	desc.format = format;
 }
 
+void  GBuffer::initColorImageTransition(CmdPass& cmd, FramebufferAttachment& attachment) {
+    VkImageMemoryBarrier barrier = {};
+    barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    barrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
+    barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    barrier.image = attachment.image;
+    barrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
+    barrier.srcAccessMask = 0;
+    barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+
+    vkCmdPipelineBarrier(
+            cmd.buffer,
+            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+            0,
+            0, nullptr,
+            0, nullptr,
+            1, &barrier);
+}
+
+VkImageTiling GBuffer::getTiling(VkFormat format, VkImageUsageFlags usage) {
+    VkFormatProperties formatProperties;
+    vkGetPhysicalDeviceFormatProperties(mState->physicalDevice, format, &formatProperties);
+
+    VkImageUsageFlagBits usages[] = {
+            VK_IMAGE_USAGE_STORAGE_BIT,
+            VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+            VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+    };
+
+    VkFormatFeatureFlagBits features[] = {
+            VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT,
+            VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT,
+            VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT,
+    };
+
+    uint32_t totalUsages = ARRAY_SIZE(usages);
+    uint32_t numOptimals = 0;
+    uint32_t numLinears = 0;
+    uint32_t numUsages = 0;
+
+    for (uint32_t i = 0; i < totalUsages; ++i) {
+        if (usage & usages[i]) {
+            if (formatProperties.optimalTilingFeatures & features[i])
+                ++numOptimals;
+            if (formatProperties.linearTilingFeatures & features[i])
+                ++numLinears;
+            ++numUsages;
+        }
+    }
+
+    if (numUsages > 0) {
+        if (numLinears == numUsages) {
+            LOG("Linear tiling selected for format 0x%x with usages: 0x%x", format, usage);
+            return VK_IMAGE_TILING_LINEAR;
+        }
+        if (numOptimals == numUsages) {
+            LOG("Optimal tiling selected for format 0x%x with usages: 0x%x", format, usage);
+            return VK_IMAGE_TILING_OPTIMAL;
+        }
+    }
+    LOG("Usage unvalid 0x%x", usage);
+    throw std::runtime_error("Usage unvalid");
+}
+
 void GBuffer::createAttachment(
 		const VkPhysicalDevice& physicalDevice, 
 		const VkDevice& device,
@@ -227,33 +283,25 @@ void GBuffer::createAttachment(
 		VkImageUsageFlags usage)
 {
 	VkImageAspectFlags aspectMask = 0;
-	VkImageLayout imageLayout;
 
-	if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) {
+    if (usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT) {
+        aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        //VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+    } else if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) {
 		aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	}
-	if (usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT) {
-		aspectMask = 
-			VK_IMAGE_ASPECT_DEPTH_BIT;
-			//VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
-		imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-	}
-
-	if (aspectMask == 0)
-		throw std::runtime_error("Invalid usage for aspectMask");
+    } else {
+        throw std::runtime_error("Invalid usage for aspectMask");
+    }
 
 	VkImageCreateInfo image = {};
 	image.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	image.imageType = VK_IMAGE_TYPE_2D;
 	image.format = format;
-	image.extent.width = width;
-	image.extent.height = height;
-	image.extent.depth = 1;
+    image.extent = { (uint32_t) width, (uint32_t) height, 1 };
 	image.mipLevels = 1;
 	image.arrayLayers = 1;
 	image.samples = VK_SAMPLE_COUNT_1_BIT;
-	image.tiling = VK_IMAGE_TILING_OPTIMAL;
+	image.tiling = getTiling(format, usage);
 	image.usage = usage | VK_IMAGE_USAGE_SAMPLED_BIT;
 
 	VkMemoryAllocateInfo memAlloc = {};
@@ -271,18 +319,31 @@ void GBuffer::createAttachment(
 	imageView.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 	imageView.viewType = VK_IMAGE_VIEW_TYPE_2D;
 	imageView.format = format;
-	imageView.subresourceRange = {};
-	imageView.subresourceRange.aspectMask = aspectMask;
-	imageView.subresourceRange.baseMipLevel = 0;
-	imageView.subresourceRange.levelCount = 1;
-	imageView.subresourceRange.baseArrayLayer = 0;
-	imageView.subresourceRange.layerCount = 1;
+    imageView.subresourceRange = { aspectMask, 0, 1, 0, 1 };
 	imageView.image = attachment.image;
 	VK_CHECK_RESULT(vkCreateImageView(device, &imageView, nullptr, &attachment.view));
 }
 
 void GBuffer::createSampler(const VkDevice& device)
 {
+    VkSamplerCreateInfo samplerInfo = {};
+    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    samplerInfo.magFilter = VK_FILTER_LINEAR;
+    samplerInfo.minFilter = VK_FILTER_LINEAR;
+    samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerInfo.anisotropyEnable = mState->deviceInfo.samplerAnisotropy;
+    samplerInfo.maxAnisotropy = mState->deviceInfo.samplerAnisotropy ? 1.f : 1.f;
+    samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+    samplerInfo.unnormalizedCoordinates = VK_FALSE;
+    samplerInfo.compareEnable = VK_FALSE;
+    samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+    samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+
+    VK_CHECK_RESULT(vkCreateSampler(mState->device, &samplerInfo, nullptr, &sampler));
+
+    /*
 	VkSamplerCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
 	info.magFilter = VK_FILTER_NEAREST;
@@ -296,7 +357,7 @@ void GBuffer::createSampler(const VkDevice& device)
 	info.minLod = 0.0f;
 	info.maxLod = 1.0f;
 	info.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
-	VK_CHECK_RESULT(vkCreateSampler(device, &info, nullptr, &sampler));
+	VK_CHECK_RESULT(vkCreateSampler(device, &info, nullptr, &sampler));*/
 }
 
 void GBuffer::createCmdBuffer(const VkDevice& device, const VkCommandPool& cmdPool)
@@ -369,7 +430,7 @@ void GBuffer::createDescriptors()
 
 	for (size_t i = 0; i < ATTACHMENT_COUNT; ++i) {
 		VkDescriptorImageInfo& descriptorInfo = imageInfos[i];
-		descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
 		descriptorInfo.imageView = attachments[i].view;
 		descriptorInfo.sampler = sampler;
 		
@@ -401,8 +462,13 @@ void GBuffer::createDescriptors()
 
 	std::array<VkImageView, ATTACHMENT_COUNT> tilingImageViews = {};
 	tilingImageViews[INDEX_POSITION] = tilingImage.view;
-	tilingImageViews[INDEX_NORMAL]   = attachments[INDEX_NORMAL].view;
-	tilingImageViews[INDEX_ALBEDO]   = attachments[INDEX_ALBEDO].view;
+	tilingImageViews[INDEX_NORMAL]   =
+            //deferredQuad.mImageInfo->imageView;
+        attachments[INDEX_NORMAL].view;
+            //attachments[INDEX_ALBEDO].view;
+	tilingImageViews[INDEX_ALBEDO]   =
+        //    deferredQuad.mImageInfo->imageView;
+            attachments[INDEX_ALBEDO].view;
 
 	std::array<VkDescriptorImageInfo, TILING_IMAGE_COUNT> tilingImageInfos = {};
 	for (size_t i = 0; i < TILING_IMAGE_COUNT; ++i) {
@@ -481,9 +547,59 @@ void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& cam
 
 }
 
+void GBuffer::createLights() 
+{
+	for (uint32_t i = 0; i < 256; ++i) {
+		PointLight light = {};
+		light.position = Utils::randVec3(-8.0f, 8.0f);
+		light.color = Utils::randVec3(0.0f, 1.0f);
+		light.radius = Utils::frand(0.3f, 3.0f);
+		light.intensity = Utils::frand(1.0f, 3.0f);
+		pointLights.push_back(light);
+		//LOG("rand: %s", glm::to_string(light.position).c_str());
+	}
+	ubo.lightCount = pointLights.size();
+}
+
+void GBuffer::updateTextureDimens(uint32_t width, uint32_t height)
+{
+	this->width = width;
+	this->height = height;
+	ubo.textureDimens = glm::uvec2(width, height);
+}
+
 void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& camera)
 {
+	ubo.view = camera.view();
+	ubo.proj = camera.proj();
+	ubo.eyePos = camera.eye();
+	//LOG("vec3: %u uvec2: %u", sizeof(glm::vec3), sizeof(glm::uvec2)); 
+	/*void* data;
+	vkMapMemory(mState->device, mTilingStagingUniformBufferInfo.memory, 0, sizeof(TilingUBO), 0, &data);
+	memcpy(data, &ubo, sizeof(TilingUBO));
+	vkUnmapMemory(mState->device, mTilingStagingUniformBufferInfo.memory);
 
+	VkBufferCopy copy = { 0, 0, sizeof(TilingUBO) };
+	vkCmdCopyBuffer(
+			cmdBuffer, 
+			mTilingStagingUniformBufferInfo.buffer,
+			mTilingUniformBufferInfo.buffer,
+			1, &copy);
+	*/
+	//LOG("Eye: %s", glm::to_string(ubo.eyePos).c_str());
+	vkCmdUpdateBuffer(
+			cmdBuffer,
+			mTilingUniformBufferInfo.buffer,
+			0,
+			sizeof(TilingUBO),
+			&ubo);
+
+	vkCmdUpdateBuffer(
+			cmdBuffer,
+			mPointLightsBufferInfo.buffer,
+			0,
+			sizeof(PointLight) * pointLights.size(),
+			pointLights.data());
 }
 
 void GBuffer::createBuffers()
@@ -494,6 +610,9 @@ void GBuffer::createBuffers()
 
 	mTilingUniformBufferInfo.size = sizeof(TilingUBO);
 	BufferHelper::createUniformBuffer(*mState, mTilingUniformBufferInfo);
+
+	mTilingStagingUniformBufferInfo.size = sizeof(TilingUBO);
+	BufferHelper::createStagingBuffer(*mState, mTilingStagingUniformBufferInfo);
 
 	mPointLightsBufferInfo.size = sizeof(PointLight) * pointLights.size();
 	BufferHelper::createStorageBuffer(*mState, mPointLightsBufferInfo);
@@ -522,48 +641,3 @@ void GBuffer::dispatch()
 //	vkCmdDispatch(tilingCmdBuffer, 1, 1, 1);
 
 }
-
-VkImageMemoryBarrier GBuffer::createTilingDstBarrier(VkImage image) 
-{
-	VkImageMemoryBarrier loadBarrier = {};
-	loadBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-	loadBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-		//VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-	loadBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-	loadBarrier.oldLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-	loadBarrier.newLayout = VK_IMAGE_LAYOUT_GENERAL;
-	loadBarrier.srcQueueFamilyIndex = mState->graphicsQueueIndex;
-	loadBarrier.dstQueueFamilyIndex = mState->computeQueueIndex;
-	loadBarrier.image = image;
-	loadBarrier.subresourceRange = {};
-	loadBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	loadBarrier.subresourceRange.baseMipLevel = 0;
-	loadBarrier.subresourceRange.levelCount = 1;
-	loadBarrier.subresourceRange.baseArrayLayer = 0;
-	loadBarrier.subresourceRange.layerCount = 1;
-
-	return loadBarrier;
-}
-
-VkImageMemoryBarrier GBuffer::createTilingSrcBarrier(VkImage image) 
-{
-	VkImageMemoryBarrier loadBarrier = {};
-	loadBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-	loadBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-	loadBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-		//VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-	loadBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
-	loadBarrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-	loadBarrier.srcQueueFamilyIndex = mState->computeQueueIndex;
-	loadBarrier.dstQueueFamilyIndex = mState->graphicsQueueIndex;
-	loadBarrier.image = image;
-	loadBarrier.subresourceRange = {};
-	loadBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	loadBarrier.subresourceRange.baseMipLevel = 0;
-	loadBarrier.subresourceRange.levelCount = 1;
-	loadBarrier.subresourceRange.baseArrayLayer = 0;
-	loadBarrier.subresourceRange.layerCount = 1;
-
-	return loadBarrier;
-}
-

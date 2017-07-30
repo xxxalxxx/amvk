@@ -1,7 +1,7 @@
 #version 450
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_ARB_shading_language_420pack : enable
-#extension GL_EXT_shader_image_load_store : enable
+#extension GL_ARB_shader_image_load_store : enable
 
 #define WORK_GROUP_SIZE 32
 #define MAX_LIGHTS 1024
@@ -27,8 +27,8 @@ layout(binding = 3) uniform UniformBufferObject {
     mat4 view;
     mat4 proj;
 	vec3 eyePos;
-	vec2 textureDimens;
-	int lightCount;
+	uvec2 textureDimens;
+	uint lightCount;
 } ubo;
 
 layout (std430, binding = 4) buffer LightsBufferObject {
@@ -55,7 +55,7 @@ void main() {
 	barrier();
 	
 	ivec2 pixelPos = ivec2(gl_GlobalInvocationID.xy);
-	//ivec2 pixelPos = ivec2(gl_LocalInvocationID.xy);
+
 
 	vec4 normalDepth = imageLoad(imageNormalDepth, pixelPos);
 	vec3 normal = vec3(normalDepth);
@@ -72,10 +72,28 @@ void main() {
 	float minDepth = TO_FLOAT(minDepthInt);
 	float maxDepth = TO_FLOAT(maxDepthInt);
 
-    vec2 tilePos = vec2(gl_WorkGroupID.xy * gl_WorkGroupSize.xy) / ubo.textureDimens;
+    //uvec2 tilePos = gl_WorkGroupID.xy * gl_WorkGroupSize.xy / ubo.textureDimens;
+	uvec2 tileLeftTop = gl_WorkGroupID.xy * gl_WorkGroupSize.xy; 
+	uvec2 tileRightBottom = tileLeftTop + 1;
 
 	vec4 albedoColor = imageLoad(imageAlbedo, pixelPos);
 	vec4 red = vec4(1.0, 0.0, 0.0, 1.0);
-	imageStore(outImage, pixelPos, albedoColor);
+	vec2 dim = vec2(ubo.textureDimens);
+	vec4 borderColor = vec4(0.0, 1.0, 0.0, 1.0);
+	float l = float(ubo.lightCount);
+
+	vec4 result = vec4(pointLights[0].color, 1.0); 
+//albedoColor;
+
+	if (pixelPos.x - tileLeftTop.x < 1) {
+		result = borderColor;
+	}
+
+	if (pixelPos.y - tileLeftTop.y < 1) {
+		result = borderColor;
+	}
+
+
+	imageStore(outImage, pixelPos, result);
 }
 

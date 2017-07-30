@@ -19,7 +19,9 @@ Engine::Engine():
 
 void Engine::init(android_app* state)
 {
-    FileManager::activity = state->activity;
+	srand(time(0));
+    
+	FileManager::activity = state->activity;
     FileManager::assetManager = state->activity->assetManager;
     FileManager::internalStoragePath = state->activity->internalDataPath;
     mWindow.initWindow(*this);
@@ -207,6 +209,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 void Engine::init()
 {
+	srand(time(0));
 	mWindow.initWindow(*this);
 	mWindow.setWindowSizeCallback(onWindowResized);
 	InputManager& inputManager = mWindow.getInputManager();

@@ -26,11 +26,11 @@ public:
 		VkDescriptorSet* descriptors, 
 		uint32_t numDescriptors);
 	VkDescriptorSet mDescriptorSet;
+	ImageInfo* mImageInfo;
 private:
 	void createDescriptorSets();
 	State& mState;
 
-	ImageInfo* mImageInfo;
 };
 
 #endif

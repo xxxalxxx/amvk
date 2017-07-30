@@ -3,7 +3,7 @@
 
 #include "point_light.h"
 #include "buffer_helper.h"
-#include "util.h"
+#include "utils.h"
 #include "macro.h"
 #include <vector>
 
