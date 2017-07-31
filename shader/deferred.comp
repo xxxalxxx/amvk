@@ -71,9 +71,28 @@ void main() {
 	memoryBarrierShared();
 	barrier();
 
+
+	// total tiles = tileScale * 2
+	vec2 tileScale = textureDimens / float(2*WORK_GROUP_SIZE);
+	vec2 tileBias = tileScale - vec2(gl_WorkGroupID.xy);
+
+	vec4 c1 = vec4(ubo.proj[0][0] * tileScale.x, 0.0f, tileBias.x, 0.0f);
+	vec4 c2 = vec4(0.0f, -ubo.proj[1][1] * tileScale.y, tileBias.y, 0.0f);
+	vec4 c4 = vec4(0.0f, 0.0f, 1.0f, 0.0f);
+
 	float minDepth = TO_FLOAT(minDepthInt);
 	float maxDepth = TO_FLOAT(maxDepthInt);
 
+	// create view matrix
+	vec4 frustumPlanes[6];
+	// Sides
+	frustumPlanes[0] = c4 - c1; // right
+	frustumPlanes[1] = c4 + c1; // left
+	frustumPlanes[2] = c4 - c2; // bottom
+	frustumPlanes[3] = c4 + c2; // top
+	// near, far
+	frustumPlanes[4] = vec4(0.0f, 0.0f,  1.0f, -minDepthZ);
+	frustumPlanes[5] = vec4(0.0f, 0.0f, -1.0f,  maxDepthZ);
 
 	uint threadCount = WORK_GROUP_SIZE * WORK_GROUP_SIZE;
 	uint passCount = (ubo.lightCount + threadCount - 1) / threadCount;
