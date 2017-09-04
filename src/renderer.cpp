@@ -70,6 +70,11 @@ void Renderer::init()
     guard.ubo.model = glm::rotate(glm::radians(-180.f), glm::vec3(0.f, 1.f, 0.f)) * guard.ubo.model;
     guard.ubo.model = glm::translate(glm::vec3(-9.0f, 0.0f, -8.0f))  * guard.ubo.model;
 
+	for (auto& light : gBuffer.pointLights) {
+		PointLight& p = sceneLights.createPointLight();
+		p.init(mState, light.color, light.position, light.radius, light.intensity);
+	}
+
 	sceneLights.init();
 
 	mSwapChainManager.createDepthResources();
@@ -305,6 +310,20 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 				&blit,
 				VK_FILTER_NEAREST);
 
+		blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+		blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+
+		vkCmdBlitImage(
+				cmdBuffer, 
+				gBuffer.depth().image, 
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+				mSwapChainManager.mDepthImageDesc.image,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+				1,
+				&blit,
+				VK_FILTER_NEAREST);
+
+
 	/*	
 		imageMemoryBarrier.oldLayout = VK_IMAGE_LAYOUT_GENERAL;
 		imageMemoryBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
@@ -374,7 +393,7 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 
 		//tquad.draw(cmdBuffer);
 		 //fullscreenQuad.draw(cmdBuffer);
-		//sceneLights.draw(cmdBuffer);
+		sceneLights.draw(cmdBuffer);
 		//dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
 		//suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
 

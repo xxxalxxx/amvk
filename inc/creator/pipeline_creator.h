@@ -233,9 +233,9 @@ inline void createPointLightPipeline(State& state, PipelineInfo& info, VkRenderP
 
     VkPipelineDynamicStateCreateInfo dynamicInfo = PipelineBuilder::dynamicState(dynamicStates, ARRAY_SIZE(dynamicStates));
     VkPipelineRasterizationStateCreateInfo rasterizationState = 
-		PipelineBuilder::rasterizationStateCullNone();
+		//PipelineBuilder::rasterizationStateCullNone();
 
-	//	PipelineBuilder::rasterizationStateWireframeCullNoneCW();
+		PipelineBuilder::rasterizationStateWireframeCullNoneCW();
 	//	PipelineBuilder::rasterizationStateCullBackCCW();
 		//PipelineBuilder::rasterizationStateCullBackCW();
     VkPipelineDepthStencilStateCreateInfo depthStencil = 
@@ -243,12 +243,12 @@ inline void createPointLightPipeline(State& state, PipelineInfo& info, VkRenderP
 		PipelineBuilder::depthStencilStateDepthLessOrEqualNoStencil();
     VkPipelineMultisampleStateCreateInfo multisampleState = PipelineBuilder::multisampleStateNoMultisampleNoSampleShading();
     VkPipelineColorBlendAttachmentState blendAttachmentState = 
-		PipelineBuilder::blendAttachmentSrcAlpha();
-		//PipelineBuilder::blendAttachmentStateDisabled();
+	//	PipelineBuilder::blendAttachmentSrcAlpha();
+		PipelineBuilder::blendAttachmentStateDisabled();
 
     VkPipelineColorBlendStateCreateInfo blendState = 
-		PipelineBuilder::blendStateEnabled(&blendAttachmentState, 1);
-		//PipelineBuilder::blendStateDisabled(&blendAttachmentState, 1);
+		//PipelineBuilder::blendStateEnabled(&blendAttachmentState, 1);
+		PipelineBuilder::blendStateDisabled(&blendAttachmentState, 1);
 
     VkDescriptorSetLayout layouts[] = {
 		state.descriptorSetLayouts.uniformVertex,

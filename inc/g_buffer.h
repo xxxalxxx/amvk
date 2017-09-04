@@ -14,6 +14,7 @@
 #include "utils.h"
 
 #include <array>
+#include <unordered_set>
 #include <glm/gtx/string_cast.hpp> 
 
 struct FramebufferAttachment {
@@ -33,16 +34,17 @@ public:
 	static const constexpr uint32_t DEPTH_ATTACHMENT_COUNT = 1;
 	static const constexpr uint32_t ATTACHMENT_COUNT = 4;
 	static const constexpr uint32_t COLOR_ATTACHMENT_COUNT = ATTACHMENT_COUNT - DEPTH_ATTACHMENT_COUNT;
-	static const constexpr uint32_t TILING_IMAGE_COUNT = 3;
+	static const constexpr uint32_t TILING_IMAGE_COUNT = 4;
 	static const constexpr uint32_t UNIFORM_BUFFER_COUNT = 2;
 	static const constexpr uint32_t STORAGE_BUFFER_COUNT = 1;
 
 	static const constexpr uint32_t MAX_LIGHTS = 1024;
-	static const constexpr uint32_t WORK_GROUP_SIZE = 16;
+	static const constexpr uint32_t WORK_GROUP_SIZE = 32;
 
 	struct TilingUBO {
 		glm::mat4 view;
 		glm::mat4 proj;
+		glm::mat4 invViewProj;
 		glm::vec3 eyePos;
 		float p1[1];
 		glm::vec2 textureDimens;

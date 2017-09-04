@@ -1580,20 +1580,21 @@ GBuffer::PointLight::intensity	inc/g_buffer.h	/^		float intensity;$/;"	m	struct:
 GBuffer::PointLight::position	inc/g_buffer.h	/^		glm::vec3 position;$/;"	m	struct:GBuffer::PointLight	access:public
 GBuffer::PointLight::radius	inc/g_buffer.h	/^		float radius;$/;"	m	struct:GBuffer::PointLight	access:public
 GBuffer::STORAGE_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t STORAGE_BUFFER_COUNT = 1;$/;"	m	class:GBuffer	access:public
-GBuffer::TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 3;$/;"	m	class:GBuffer	access:public
+GBuffer::TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 4;$/;"	m	class:GBuffer	access:public
 GBuffer::TilingImage	inc/g_buffer.h	/^	struct TilingImage {$/;"	s	class:GBuffer	access:public
 GBuffer::TilingImage::image	inc/g_buffer.h	/^		VkImage image;$/;"	m	struct:GBuffer::TilingImage	access:public
 GBuffer::TilingImage::memory	inc/g_buffer.h	/^		VkDeviceMemory memory;$/;"	m	struct:GBuffer::TilingImage	access:public
 GBuffer::TilingImage::view	inc/g_buffer.h	/^		VkImageView view;$/;"	m	struct:GBuffer::TilingImage	access:public
 GBuffer::TilingUBO	inc/g_buffer.h	/^	struct TilingUBO {$/;"	s	class:GBuffer	access:public
 GBuffer::TilingUBO::eyePos	inc/g_buffer.h	/^		glm::vec3 eyePos;$/;"	m	struct:GBuffer::TilingUBO	access:public
+GBuffer::TilingUBO::invViewProj	inc/g_buffer.h	/^		glm::mat4 invViewProj;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::lightCount	inc/g_buffer.h	/^		uint32_t lightCount;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::p1	inc/g_buffer.h	/^		float p1[1];$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::proj	inc/g_buffer.h	/^		glm::mat4 proj;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::textureDimens	inc/g_buffer.h	/^		glm::vec2 textureDimens;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::view	inc/g_buffer.h	/^		glm::mat4 view;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::UNIFORM_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t UNIFORM_BUFFER_COUNT = 2;$/;"	m	class:GBuffer	access:public
-GBuffer::WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:GBuffer	access:public
+GBuffer::WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 32;$/;"	m	class:GBuffer	access:public
 GBuffer::albedo	inc/g_buffer.h	/^	inline FramebufferAttachment& albedo() { return attachments[INDEX_ALBEDO]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::attachments	inc/g_buffer.h	/^	std::array<FramebufferAttachment, ATTACHMENT_COUNT> attachments;$/;"	m	class:GBuffer	access:public
 GBuffer::clearValues	inc/g_buffer.h	/^	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;$/;"	m	class:GBuffer	access:public
@@ -4947,7 +4948,7 @@ TEXTURE_TYPES	inc/shape/model.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;
 TEXTURE_TYPES	inc/shape/skinned.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;"	m	class:Skinned	access:public
 TEXTURE_TYPES	src/shape/model.cpp	/^const aiTextureType* Model::TEXTURE_TYPES = Model_TEXTURE_TYPES;$/;"	m	class:Model	file:
 TEXTURE_TYPES	src/shape/skinned.cpp	/^const aiTextureType* Skinned::TEXTURE_TYPES = Skinned_TEXTURE_TYPES;$/;"	m	class:Skinned	file:
-TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 3;$/;"	m	class:GBuffer	access:public
+TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 4;$/;"	m	class:GBuffer	access:public
 TQuad	inc/shape/tquad.h	/^class TQuad {$/;"	c
 TQuad	src/shape/tquad.cpp	/^TQuad::TQuad(State& vulkanState):$/;"	f	class:TQuad	signature:(State& vulkanState)
 TQuad::PushConstants	inc/shape/tquad.h	/^	struct PushConstants {$/;"	s	class:TQuad	access:public
@@ -7702,7 +7703,7 @@ WCHAR_MAX	lib/__assimp/Compiler/pstdint.h	730;"	d
 WCHAR_MAX	lib/assimp/Compiler/pstdint.h	696;"	d
 WCHAR_MIN	lib/__assimp/Compiler/pstdint.h	727;"	d
 WCHAR_MIN	lib/assimp/Compiler/pstdint.h	693;"	d
-WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:GBuffer	access:public
+WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 32;$/;"	m	class:GBuffer	access:public
 WaitForFences	lib/vulkan/vk_layer.h	/^    PFN_vkWaitForFences WaitForFences;$/;"	m	struct:VkLayerDispatchTable_	access:public
 Warn	lib/__assimp/Logger.hpp	/^        Warn        = 4,    \/\/!< Warn log message$/;"	e	enum:Assimp::Logger::ErrorSeverity
 Warn	lib/assimp/Logger.hpp	/^        Warn        = 4,    \/\/!< Warn log message$/;"	e	enum:Assimp::Logger::ErrorSeverity
@@ -14045,6 +14046,7 @@ intptr_t	lib/__assimp/Compiler/pstdint.h	/^  typedef ptrdiff_t intptr_t;$/;"	t
 intptr_t	lib/__assimp/Compiler/pstdint.h	/^  typedef stdint_intptr_glue3( int,stdint_intptr_bits,_t)  intptr_t;$/;"	t
 intptr_t	lib/assimp/Compiler/pstdint.h	/^     typedef stdint_intptr_glue3( int,stdint_intptr_bits,_t)  intptr_t;$/;"	t
 intptr_t	lib/assimp/Compiler/pstdint.h	/^  typedef ptrdiff_t intptr_t;$/;"	t
+invViewProj	inc/g_buffer.h	/^		glm::mat4 invViewProj;$/;"	m	struct:GBuffer::TilingUBO	access:public
 io	lib/glm/gtx/io.hpp	/^	namespace io$/;"	n	namespace:glm
 io	lib/stb/stb_image.h	/^   stbi_io_callbacks io;$/;"	m	struct:__anon60	access:public
 io_user_data	lib/stb/stb_image.h	/^   void *io_user_data;$/;"	m	struct:__anon60	access:public

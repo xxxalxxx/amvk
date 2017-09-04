@@ -461,14 +461,10 @@ void GBuffer::createDescriptors()
 	uniformSet.pBufferInfo = &buffInfo;
 
 	std::array<VkImageView, ATTACHMENT_COUNT> tilingImageViews = {};
-	tilingImageViews[INDEX_POSITION] = tilingImage.view;
-	tilingImageViews[INDEX_NORMAL]   =
-            //deferredQuad.mImageInfo->imageView;
-        attachments[INDEX_NORMAL].view;
-            //attachments[INDEX_ALBEDO].view;
-	tilingImageViews[INDEX_ALBEDO]   =
-        //    deferredQuad.mImageInfo->imageView;
-            attachments[INDEX_ALBEDO].view;
+	tilingImageViews[0] = tilingImage.view;
+	tilingImageViews[1] = attachments[INDEX_NORMAL].view;
+	tilingImageViews[2] = attachments[INDEX_POSITION].view;
+	tilingImageViews[3] = attachments[INDEX_ALBEDO].view;
 
 	std::array<VkDescriptorImageInfo, TILING_IMAGE_COUNT> tilingImageInfos = {};
 	for (size_t i = 0; i < TILING_IMAGE_COUNT; ++i) {
@@ -496,7 +492,7 @@ void GBuffer::createDescriptors()
 	VkWriteDescriptorSet& tilingUniformSet = writeSets.back();
 	tilingUniformSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 	tilingUniformSet.dstSet = mTilingDescriptorSet;
-	tilingUniformSet.dstBinding = 3;
+	tilingUniformSet.dstBinding = 4;
 	tilingUniformSet.dstArrayElement = 0;
 	tilingUniformSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 	tilingUniformSet.descriptorCount = 1;
@@ -511,7 +507,7 @@ void GBuffer::createDescriptors()
 	VkWriteDescriptorSet& pointLightsUniformSet = writeSets.back();
 	pointLightsUniformSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 	pointLightsUniformSet.dstSet = mTilingDescriptorSet;
-	pointLightsUniformSet.dstBinding = 4;
+	pointLightsUniformSet.dstBinding = 5;
 	pointLightsUniformSet.dstArrayElement = 0;
 	pointLightsUniformSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
 	pointLightsUniformSet.descriptorCount = 1;
@@ -549,12 +545,27 @@ void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& cam
 
 void GBuffer::createLights() 
 {
-	for (uint32_t i = 0; i < 256; ++i) {
+	for (uint32_t i = 0; i < 8; ++i) {
 		PointLight light = {};
 		light.position = Utils::randVec3(-8.0f, 8.0f);
 		light.color = Utils::randVec3(0.0f, 1.0f);
-		light.radius = Utils::frand(0.3f, 3.0f);
+		light.radius = Utils::frand(1.0f, 4.0f);
 		light.intensity = Utils::frand(1.0f, 3.0f);
+
+		
+		if (i == 0) {
+			light.color = glm::vec3(1.0f, 0.0f, 0.0f);
+			light.position = glm::vec3(0.1f, 0.0f, 0.0f);
+			light.radius = 3.33f;
+			light.intensity = 1.0f;
+
+		}
+
+		/*if (i == 1) {
+			light.color = glm::vec3(0.0f, 0.0f, 1.0f);
+			light.position = glm::vec3(1.0f, 1.0f, 0.0f);
+		}*/
+
 		pointLights.push_back(light);
 		//LOG("rand: %s", glm::to_string(light.position).c_str());
 	}
@@ -572,6 +583,7 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 {
 	ubo.view = camera.view();
 	ubo.proj = camera.proj();
+	ubo.invViewProj = glm::inverse(ubo.proj * ubo.view);
 	ubo.eyePos = camera.eye();
 	//LOG("vec3: %u uvec2: %u", sizeof(glm::vec3), sizeof(glm::uvec2)); 
 	/*void* data;
@@ -600,6 +612,167 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 			0,
 			sizeof(PointLight) * pointLights.size(),
 			pointLights.data());
+
+	auto view = ubo.view;
+	auto proj = ubo.proj;
+	auto viewProj = proj * view;
+	auto invViewProj = glm::inverse(viewProj);
+
+	auto radius = pointLights[0].radius;
+	auto lightPosWS = pointLights[0].position;
+	auto lightPosVS = view * glm::vec4(lightPosWS, 1.0f);
+	auto lightPosPS = proj * view * glm::vec4(lightPosWS, 1.0f);
+
+	auto c1 = glm::vec4(proj[0].x, proj[1].x, proj[2].x, proj[3].x);
+	auto c2 = glm::vec4(proj[0].y, proj[1].y, proj[2].y, proj[3].y);
+	auto c3 = glm::vec4(proj[0].z, proj[1].z, proj[2].z, proj[3].z);
+	auto c4 = glm::vec4(proj[0].w, proj[1].w, proj[2].w, proj[3].w);
+
+	/*
+	   LOG("TILING:\n c1: %s\n c2: %s\n c3: %s\n c4: %s",
+		glm::to_string(c1).c_str(),
+		glm::to_string(c2).c_str(),
+		glm::to_string(c3).c_str(),
+		glm::to_string(c4).c_str()); 
+	*/
+	glm::vec4 frustumPlanes[6] = {};
+	frustumPlanes[0] = c1 + c4; // left
+	frustumPlanes[1] = c4 - c1; // right
+	frustumPlanes[2] = c4 - c2; // top
+	frustumPlanes[3] = c2 + c4; // bottom
+	frustumPlanes[4] = c3 + c4; // near
+	frustumPlanes[5] = c4 - c3; // far
+
+
+
+	std::string planeNames[6] = {};
+	planeNames[0] = "left";
+	planeNames[1] = "right";
+	planeNames[2] = "top";
+	planeNames[3] = "bottom";
+	planeNames[4] = "near";
+	planeNames[5] = "far";
+
+	for (size_t i = 0; i < 4; ++i) {
+		frustumPlanes[i] /= glm::length(frustumPlanes[i]);
+	}
+
+	bool inFrustum = true;
+
+	LOG("\n");
+	for (size_t i = 0; i < 6; ++i) {
+		auto d = glm::dot(frustumPlanes[i], lightPosVS);
+		inFrustum = inFrustum && d >= -radius;
+
+		   LOG("TILING: plane %s %s frustum, dist: %f, dot(%s, %s)", 
+				planeNames[i].c_str(), 
+				inFrustum ? "INSIDE" : "OUTSIDE", 
+				d,
+				glm::to_string(frustumPlanes[i]).c_str(),
+				glm::to_string(lightPosVS).c_str());
+
+		   //if (i == 5 && !inFrustum) 
+			//   throw std::runtime_error("FAR");
+				
+	}
+
+	//LOG("TILING: light %s frustum\n", inFrustum ? "INSIDE" : "OUTSIDE");
+
+	//LOG("TILING: view:     %s", glm::to_string(glm::normalize(lightPosVS)).c_str());
+	//LOG("TILING: viewProj: %s\n", glm::to_string(glm::normalize(lightPosPS)).c_str());
+
+	glm::ivec3 workGroupCount(
+			(width + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE, 
+			(height + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE, 
+			1);
+
+	//LOG("TILING: workGroupCount: %s", glm::to_string(workGroupCount).c_str());
+	//std::unordered_set<std::pair<uint32_t, uint32_t>> pairs;
+	//pairs.insert(std::make_pair(0, 0));
+	//pairs.insert(std::make_pair(workGroupCount.x, workGroupCount.y));
+
+	for (size_t i = 0; i <= workGroupCount.x; ++i) {
+		for (size_t j = 0; j <= workGroupCount.y; ++j) {
+			glm::ivec2 gl_WorkGroupID(i, j);
+
+			glm::vec2 tileScale = ubo.textureDimens / (2.0f * WORK_GROUP_SIZE);
+			glm::vec2 tileBias = tileScale - glm::vec2(gl_WorkGroupID);
+
+			glm::vec4 tc1(-ubo.proj[0][0] * tileScale.x, 0.0f, tileBias.x, 0.0f);
+			glm::vec4 tc2(0.0f, -ubo.proj[1][1] * tileScale.y, tileBias.y, 0.0f);
+			glm::vec4 tc4(0.0f, 0.0f, -1.0f, 0.0f);
+
+
+			glm::vec4 tfrustumPlanes[6] = {};
+			tfrustumPlanes[0] = tc1 + tc4; // left
+			tfrustumPlanes[1] = tc4 - tc1; // right
+			tfrustumPlanes[2] = tc4 - tc2; // top
+			tfrustumPlanes[3] = tc2 + tc4; // bottom
+			//tfrustumPlanes[4] = c3 + c4; // near
+			//tfrustumPlanes[5] = c4 - c3; // far
+
+			for (size_t k = 0; k < 4; ++k) {
+				tfrustumPlanes[k] /= glm::length(tfrustumPlanes[k]);
+			}
+
+//#define CMP
+#ifndef CMP
+			if (
+					//(i == workGroupCount.x / 2 && j == workGroupCount.y / 2)
+					(i == workGroupCount.x - 1 && j == workGroupCount.y - 1)
+					// (i == 0 && j == 0)
+					 //|| (i == 5 && j == 6)
+					) {
+#endif	
+				//LOG("TILING: tile(%zu, %zu) tileScale: %s tileBias: %s", i, j, glm::to_string(tileScale).c_str(), glm::to_string(tileBias).c_str());	
+				/*LOG("TILING: tile(%zu, %zu)\n tc1: %s\n tc2: %s\n tc4: %s",
+				i, j,
+				glm::to_string(tc1).c_str(),
+				glm::to_string(tc2).c_str(),
+				glm::to_string(tc4).c_str()); */
+			
+	
+				bool tinFrustum = true;
+				for (size_t k = 0; k < 6; ++k) {
+					auto d = glm::dot(tfrustumPlanes[k], lightPosVS);
+					tinFrustum = tinFrustum && d >= -radius;
+#ifdef CMP
+					for (size_t w = 0; w < 6; ++w) {
+						if (tfrustumPlanes[k] == frustumPlanes[w]) {
+
+							LOG("TILING: tile(%zu, %zu) plane %s=%s %s frustum, dist: %f, dot(%s, %s)", 
+									i, 
+									j,
+									planeNames[k].c_str(), 
+									planeNames[w].c_str(),
+									tinFrustum ? "INSIDE" : "OUTSIDE", 
+									d,
+									glm::to_string(tfrustumPlanes[k]).c_str(),
+									glm::to_string(lightPosVS).c_str());
+						}
+					}
+#else
+							LOG("TILING: tile(%zu, %zu) plane %s %s frustum, dist: %f, dot(%s, %s)", 
+									i, 
+									j,
+									planeNames[k].c_str(), 
+									tinFrustum ? "INSIDE" : "OUTSIDE", 
+									d,
+									glm::to_string(tfrustumPlanes[k]).c_str(),
+									glm::to_string(lightPosVS).c_str());
+
+#endif
+				}
+
+			//LOG("\n");
+				//LOG("TILING: tile(%zu, %zu) light %s frustum\n", i, j, tinFrustum ? "INSIDE" : "OUTSIDE");
+#ifndef CMP
+			}
+#endif
+		}
+	}
+
+
 }
 
 void GBuffer::createBuffers()

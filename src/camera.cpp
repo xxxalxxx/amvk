@@ -9,8 +9,8 @@ const float Camera::MIN_FOV_RADIANS = M_PI_4;
 
 
 Camera::Camera():
-	mNear(0.5f),
-    mFar(1000.0f),
+	mNear(0.1f),
+    mFar(100.0f),
 	mFOV(0.5f * (MAX_FOV_RADIANS + MIN_FOV_RADIANS)),
     mAspect(1.0f),
 	mPitch(0.0f),
@@ -75,7 +75,9 @@ void Camera::rebuildView()
 
     mView[3].x = -offsetX;
     mView[3].y = -offsetY;
-    mView[3].z = -offsetZ;  
+    mView[3].z = -offsetZ;
+
+	//mView = glm::lookAt(mEye, $`const vec<3, T, P> &center`, UP);
 }
 
 void Camera::rebuildPerspective()
