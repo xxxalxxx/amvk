@@ -9,6 +9,10 @@
 // avoid negative byte since 7 = 0111 in binary
 #define TO_FLOAT(x) (float(x) / 0x7fffffff)
 #define TO_UINT(x) uint(x * 0x7fffffff)
+#define LINEARIZE_DEPTH(proj, depth) (proj[3][2] / (proj[2][3] * depth - proj[2][2]))
+#define LINEARIZE_DEPTH_RH(proj, depth) (proj[3][2] / (-depth - proj[2][2]))
+#define PROJ_DEPTH(proj, vz) (proj[2][2] / proj[2][3] + proj[2][3] * proj[3][2] / vz)
+#define PROJ_DEPTH_RH(proj, vz) (-proj[2][2] - proj[3][2] / vz)
 
 struct PointLight {
     vec3 position;
@@ -42,27 +46,13 @@ shared uint minDepthInt;
 shared uint maxDepthInt;
 shared uint visiblePointLightIndices[MAX_LIGHTS];
 shared uint visiblePointLightCount;
-shared vec2 tilePos;
-
-shared uvec2 tileTopLeft; 
-shared uvec2 tileBottomRight;
-shared vec2 tileTopLeftNdc;
-shared vec2 tileBottomRightNdc;
 
 void main() {
 
-
 	if (gl_LocalInvocationIndex == 0) {
-		vec2 texCoord = vec2(gl_WorkGroupID.xy * gl_WorkGroupSize.xy) / ubo.textureDimens;
-		tilePos = 2.0 * texCoord - 1.0;
 		minDepthInt = 0xFFFFFFFF;
 		maxDepthInt = 0;
 		visiblePointLightCount = 0;
-
-		tileTopLeft = gl_WorkGroupID.xy * gl_WorkGroupSize.xy; 
-		tileBottomRight = tileTopLeft + gl_WorkGroupSize.xy;
-		tileTopLeftNdc = 2.0 * tileTopLeft / ubo.textureDimens - 1.0;
-		tileBottomRightNdc = 2.0 * tileBottomRight / ubo.textureDimens - 1.0;
 	}
 
 	memoryBarrierShared();
@@ -70,9 +60,8 @@ void main() {
 	
 	ivec2 pixelPos = ivec2(gl_GlobalInvocationID.xy);
 
-
 	vec4 normalDepth = imageLoad(imageNormalDepth, pixelPos);
-	vec3 normal = vec3(normalDepth);
+	vec3 normal = normalDepth.xyz;
 	float depth = normalDepth.w;
     uint depthInt = TO_UINT(depth);
 
@@ -84,6 +73,9 @@ void main() {
 
 	float minDepth = TO_FLOAT(minDepthInt);
 	float maxDepth = TO_FLOAT(maxDepthInt);
+
+	float linearMinDepth = LINEARIZE_DEPTH_RH(ubo.proj, minDepth);
+	float linearMaxDepth = LINEARIZE_DEPTH_RH(ubo.proj, maxDepth); 
 	
 	// D = -dot(n, p)
 	vec2 tileDimens = ubo.textureDimens / WORK_GROUP_SIZE; 
@@ -101,31 +93,33 @@ void main() {
 	frustumPlanes[1] = c4 - c1; // right
 	frustumPlanes[2] = c2 + c4; // top
 	frustumPlanes[3] = c4 - c2; // bottom
-	frustumPlanes[4] = vec4(0.0, 0.0, 1.0, -minDepth); // near
-	frustumPlanes[5] = vec4(0.0, 0.0,  -1.0,  maxDepth); // far
+	frustumPlanes[4] = vec4(0.0, 0.0, 1.0, -linearMaxDepth);  // far
+	frustumPlanes[5] = vec4(0.0, 0.0, -1.0, -linearMinDepth); // near
 
 	frustumPlanes[0] /= length(frustumPlanes[0].xyz);
 	frustumPlanes[1] /= length(frustumPlanes[1].xyz);
 	frustumPlanes[2] /= length(frustumPlanes[2].xyz);
 	frustumPlanes[3] /= length(frustumPlanes[3].xyz);
 
-
 	uint threadCount = WORK_GROUP_SIZE * WORK_GROUP_SIZE;
 	uint passCount = (ubo.lightCount + threadCount - 1) / threadCount;
 
-//	for (uint lightIndex = gl_LocalInvocationIndex; lightIndex < ubo.lightCount; lightIndex += WORK_GROUP_SIZE) {
 	for (uint passIt = 0; passIt < passCount; ++passIt) {
 		uint lightIndex = passIt * threadCount + gl_LocalInvocationIndex;
 		lightIndex = min(lightIndex, ubo.lightCount);
-		vec4 lightPos = ubo.view * vec4(pointLights[lightIndex].position, 1.0);
+		vec3 lightPosWS = pointLights[lightIndex].position;
+		vec4 lightPos = ubo.view * vec4(lightPosWS, 1.0);
 		float radius = pointLights[lightIndex].radius;
 		
 		bool inFrustum = true;
-		for (uint i = 0; i < 4; ++i) {
+		for (uint i = 0; i < 6; ++i) {
 			float d = dot(frustumPlanes[i], lightPos);
             inFrustum = inFrustum && (d >= -radius);
 		}
-		//inFrustum = true;
+
+		//inFrustum = inFrustum && linearMaxDepth - radius < lightPos.z;
+		//inFrustum = inFrustum && linearMinDepth + radius > lightPos.z;
+
 		if (inFrustum) {
 			uint offset = atomicAdd(visiblePointLightCount, 1);
 			visiblePointLightIndices[offset] = lightIndex;
@@ -134,32 +128,30 @@ void main() {
 
 	memoryBarrierShared();
 	barrier();
-	vec4 positionWS = imageLoad(imagePositionWS, pixelPos);
+
+	//vec4 positionWS = imageLoad(imagePositionWS, pixelPos);
 	vec4 albedoColor = imageLoad(imageAlbedo, pixelPos);
+
 	vec2 texCoord = vec2(pixelPos) / ubo.textureDimens;
 	vec2 proj = 2.0 * texCoord - 1.0;
 	vec4 position = ubo.invViewProj * vec4(proj, depth, 1.0); 
 	vec3 posWS = position.xyz / position.w;
-
 	vec3 color = albedoColor.rgb * 0.4;
-	vec3 c = vec3(0.0, 0.0, 0.0);
-//for (uint lightIt = 0; lightIt < ubo.lightCount; ++lightIt) {
+
 	for (uint lightIt = 0; lightIt < visiblePointLightCount; ++lightIt) {
-		uint lightIndex = 
-//lightIt;
-visiblePointLightIndices[lightIt];
+		uint lightIndex = visiblePointLightIndices[lightIt];
 		vec3 lightPosWS = pointLights[lightIndex].position;
 		float lightRadius = pointLights[lightIndex].radius;
 		vec3 lightColor = pointLights[lightIndex].color;
 
 		// Vector to light
-		vec3 L = lightPosWS - positionWS.xyz;
+		vec3 L = lightPosWS - posWS.xyz;
 		// Distance from light to fragment position
 		float dist = length(L);
 		L = normalize(L);
 
 		// Viewer to fragment
-		vec3 V = normalize(ubo.eyePos - positionWS.xyz);
+		vec3 V = normalize(ubo.eyePos - posWS.xyz);
 
 		// Attenuation
 		float atten = lightRadius / (pow(dist, 2.0) + 1.0);
@@ -171,24 +163,28 @@ visiblePointLightIndices[lightIt];
 		float NdotL = max(0.0, dot(normal, L));
 		vec3 diff = lightColor * albedoColor.rgb * NdotL * atten;
 		color += 0.5 * diff;
-		c = lightColor * NdotL * atten;	
 	}
 
-
-	vec4 red = vec4(1.0, 0.0, 0.0, 1.0);
-	vec2 dim = vec2(ubo.textureDimens);
+	vec4 red = vec4(0.5, 0.0, 0.0, 1.0);
+	vec4 blue = vec4(0.0, 0.0, 0.5, 1.0);
+	vec4 maxDepthVec = vec4(maxDepth);
 	vec4 borderColor = vec4(1.0, 1.0, 1.0, 1.0);
-	vec4 firstLight = ubo.proj * ubo.view * vec4(pointLights[0].position, 1.0);
+	float firstLightRadius = pointLights[0].radius;
 	vec4 firstLightWS = vec4(pointLights[0].position, 1.0);
-	vec4 result =
-//vec4(color, 1.0) + vec4(float(visiblePointLightCount) / ubo.lightCount); 
+	vec4 firstLightVS = ubo.view * firstLightWS;
+	vec4 firstLightCS = ubo.proj * firstLightVS;
+	vec4 firstLightNDC = firstLightCS / firstLightCS.w;
+
+	float maxDist = abs(linearMaxDepth - firstLightVS.z) / firstLightRadius;
+	vec4 farPlane = vec4(0.0, 0.0, 1.0, -linearMaxDepth);
+	float maxDistPlane = dot(farPlane, firstLightVS) / firstLightRadius;
+	vec4 result = 
+vec4(color, 1.0) + vec4(float(visiblePointLightCount) / ubo.lightCount); 
 vec4(color, 1.0); 
-//vec4(c, 1.0);
 //vec4(posWS - positionWS.xyz, 1.0);
-//vec4(float(maxDepth) - float(minDepth));
 //vec4(float(visiblePointLightCount) / ubo.lightCount);
-//albedoColor;
 //vec4(positionWS.xyz, 1.0);
+
 /*
 	if (pixelPos.x - tileTopLeft.x < 1) {
 		result = borderColor;
@@ -197,24 +193,13 @@ vec4(color, 1.0);
 	if (pixelPos.y - tileTopLeft.y < 1) {
 		result = borderColor;
 	}
-*/
 
 	if (tileBottomRight.x - pixelPos.x == 1) {
-		result = borderColor;
+		//result = borderColor;
 	}
 
 	if (tileBottomRight.y - pixelPos.y == 1) {
-		result = borderColor;
-	}
-/*
-	if (length(positionWS.xyz - pointLights[0].position) < pointLights[0].radius) {
-		result = red;
-	}
-
-/*
-	if (length(proj.x - firstLight.x / firstLight.w) < WORK_GROUP_SIZE / ubo.textureDimens.x 
-	&& length(proj.y - firstLight.y / firstLight.w) < WORK_GROUP_SIZE / ubo.textureDimens.y) {
-		result = red;
+		//result = borderColor;
 	}
 */
 

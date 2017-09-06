@@ -9,17 +9,17 @@ const float Camera::MIN_FOV_RADIANS = M_PI_4;
 
 
 Camera::Camera():
-	mNear(0.1f),
+	mNear(1.0f),
     mFar(100.0f),
 	mFOV(0.5f * (MAX_FOV_RADIANS + MIN_FOV_RADIANS)),
     mAspect(1.0f),
 	mPitch(0.0f),
     mYaw(0.0f),
-	mForwardMovementScalar(40.0f),
+	mForwardMovementScalar(10.0f),
     mSidewaysMovementScalar(40.0f),
     mMouseSensitivityScalar(0.002f),
     mScrollSensitivityScalar(0.05f),
-	mEye(0.0f, 0.0f, 4.0f),
+	mEye(0.0f, -15.0f, 4.0f),
 	initPrevPos(true)
 {
 	updateViewAngles();

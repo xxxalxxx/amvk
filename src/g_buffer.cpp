@@ -545,17 +545,17 @@ void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& cam
 
 void GBuffer::createLights() 
 {
-	for (uint32_t i = 0; i < 8; ++i) {
+	for (uint32_t i = 0; i < 16; ++i) {
 		PointLight light = {};
 		light.position = Utils::randVec3(-8.0f, 8.0f);
 		light.color = Utils::randVec3(0.0f, 1.0f);
-		light.radius = Utils::frand(1.0f, 4.0f);
+		light.radius = Utils::frand(1.0f, 10.0f);
 		light.intensity = Utils::frand(1.0f, 3.0f);
 
 		
 		if (i == 0) {
 			light.color = glm::vec3(1.0f, 0.0f, 0.0f);
-			light.position = glm::vec3(0.1f, 0.0f, 0.0f);
+			light.position = glm::vec3(0.1f, -15.0f, 1.5f);
 			light.radius = 3.33f;
 			light.intensity = 1.0f;
 
@@ -659,18 +659,67 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 
 	bool inFrustum = true;
 
+	
+
 	LOG("\n");
+	auto lightPosVS3 = glm::vec3(lightPosVS);
+	auto toLight = glm::normalize(lightPosVS3);
+	auto lightFar = lightPosVS3 + radius * toLight;
+	auto lightNear = lightPosVS3 - radius * toLight;
+	
+	auto lightDist = glm::length(lightPosVS);
+	auto lightFarDist = glm::length(lightFar);
+	auto lightNearDist = glm::length(lightNear);
+
+	auto lightFarPS = proj * glm::vec4(lightFar, 1.0);
+	auto lightNearPS = proj * glm::vec4(lightNear, 1.0);
+
+	auto lightNdc = lightPosPS / lightPosPS.w;
+	auto lightFarNdc = lightFarPS / lightFarPS.w;
+	auto lightNearNdc = lightNearPS / lightNearPS.w;
+	//LOG("TILING: DIST INFO r: %f dist: %f nearDist: %f farDist: %f ndc: %f ndcNear: %f ndcFar: %f", 
+	//		radius, lightDist, lightNearDist, lightFarDist,
+	//		lightNdc.z, lightNearNdc.z, lightFarNdc.z);
+
+	auto np = glm::vec4(0.0f, 0.0f, -1.0f, -camera.mNear);
+	auto fp = glm::vec4(0.0f, 0.0f, 1.0f, camera.mFar);
+	auto nlp = glm::vec4(0.0f, 0.0f, 1.0f, -lightNearNdc.z);
+	auto flp = glm::vec4(0.0f, 0.0f, -1.0f, lightFarNdc.z);
+
+	auto dn = glm::dot(np, lightPosVS);
+	auto df = glm::dot(fp, lightPosVS);
+	auto ldn = glm::dot(nlp, lightPosVS);
+	auto ldf = glm::dot(flp, lightPosVS);
+
+	auto texDepth = 0.0f;
+	auto texDepthVS = glm::inverse(proj) * glm::vec4(0.0f, 0.0f, texDepth, 1.0f);
+	texDepthVS.z /= texDepthVS.w;
+	auto linDepth = proj[3][2] / (proj[2][3] * texDepth - proj[2][2]);
+	auto projDepth = (proj[2][2] + proj[3][2] / lightPosVS.z) / proj[2][3];
+	auto projDepth2 = proj[2][2] / proj[2][3] + proj[2][3] * proj[3][2] / lightPosVS.z;
+	auto projDepthRH = -proj[2][2] - proj[3][2] / lightPosVS.z;
+
+	LOG("TILING: linDepth: %f ps: %s vs: %s near %s, far %s l_near %s, l_far %s", 
+			df,
+			glm::to_string(lightPosPS / lightPosPS.w).c_str(),
+			glm::to_string(lightPosVS).c_str(),
+			dn >= -radius ? "INSIDE" : "OUTSIDE",
+			df >= -radius ? "INSIDE" : "OUTSIDE",
+			ldn >= -radius ? "INSIDE" : "OUTSIDE",
+			ldf >= -radius ? "INSIDE" : "OUTSIDE");
+ 
+
 	for (size_t i = 0; i < 6; ++i) {
 		auto d = glm::dot(frustumPlanes[i], lightPosVS);
 		inFrustum = inFrustum && d >= -radius;
 
-		   LOG("TILING: plane %s %s frustum, dist: %f, dot(%s, %s)", 
+		   /*LOG("TILING: plane %s %s frustum, dist: %f, dot(%s, %s)", 
 				planeNames[i].c_str(), 
 				inFrustum ? "INSIDE" : "OUTSIDE", 
 				d,
 				glm::to_string(frustumPlanes[i]).c_str(),
 				glm::to_string(lightPosVS).c_str());
-
+			*/
 		   //if (i == 5 && !inFrustum) 
 			//   throw std::runtime_error("FAR");
 				
@@ -739,7 +788,7 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 #ifdef CMP
 					for (size_t w = 0; w < 6; ++w) {
 						if (tfrustumPlanes[k] == frustumPlanes[w]) {
-
+							/*
 							LOG("TILING: tile(%zu, %zu) plane %s=%s %s frustum, dist: %f, dot(%s, %s)", 
 									i, 
 									j,
@@ -749,9 +798,11 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 									d,
 									glm::to_string(tfrustumPlanes[k]).c_str(),
 									glm::to_string(lightPosVS).c_str());
+							*/
 						}
 					}
 #else
+					/*
 							LOG("TILING: tile(%zu, %zu) plane %s %s frustum, dist: %f, dot(%s, %s)", 
 									i, 
 									j,
@@ -760,6 +811,7 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 									d,
 									glm::to_string(tfrustumPlanes[k]).c_str(),
 									glm::to_string(lightPosVS).c_str());
+					*/
 
 #endif
 				}

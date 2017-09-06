@@ -393,7 +393,7 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 
 		//tquad.draw(cmdBuffer);
 		 //fullscreenQuad.draw(cmdBuffer);
-		sceneLights.draw(cmdBuffer);
+		//sceneLights.draw(cmdBuffer);
 		//dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
 		//suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
 

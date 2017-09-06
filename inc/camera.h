@@ -26,8 +26,9 @@ public:
 	inline glm::vec3& eye() { return mEye; }
 
     double mPrevMouseX, mPrevMouseY;
-private:
 	float mNear, mFar, mFOV, mAspect;
+private:
+
     float mPitch, mYaw;
     float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;
 

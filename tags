@@ -991,13 +991,13 @@ Camera::UP	src/camera.cpp	/^const glm::vec3 Camera::UP = glm::vec3(0.0f, 1.0f, 0
 Camera::eye	inc/camera.h	/^	inline glm::vec3& eye() { return mEye; }$/;"	f	class:Camera	access:public	signature:()
 Camera::getAspect	src/camera.cpp	/^float Camera::getAspect() const $/;"	f	class:Camera	signature:() const
 Camera::initPrevPos	inc/camera.h	/^	bool initPrevPos;	$/;"	m	class:Camera	access:private
-Camera::mAspect	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:private
+Camera::mAspect	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:public
 Camera::mEye	inc/camera.h	/^    glm::vec3 mEye; $/;"	m	class:Camera	access:private
-Camera::mFOV	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:private
-Camera::mFar	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:private
+Camera::mFOV	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:public
+Camera::mFar	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:public
 Camera::mForwardMovementScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera	access:private
 Camera::mMouseSensitivityScalar	inc/camera.h	/^    float mForwardMovementScalar, mSidewaysMovementScalar, mMouseSensitivityScalar, mScrollSensitivityScalar;$/;"	m	class:Camera	access:private
-Camera::mNear	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:private
+Camera::mNear	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:public
 Camera::mPitch	inc/camera.h	/^    float mPitch, mYaw;$/;"	m	class:Camera	access:private
 Camera::mPrevMouseX	inc/camera.h	/^    double mPrevMouseX, mPrevMouseY;$/;"	m	class:Camera	access:public
 Camera::mPrevMouseY	inc/camera.h	/^    double mPrevMouseX, mPrevMouseY;$/;"	m	class:Camera	access:public
@@ -14428,7 +14428,7 @@ mAnimations	lib/__assimp/scene.h	/^    C_STRUCT aiAnimation** mAnimations;$/;"	m
 mAnimations	lib/assimp/scene.h	/^    C_STRUCT aiAnimation** mAnimations;$/;"	m	struct:aiScene	access:public
 mApkAssetManager	lib/__assimp/port/AndroidJNI/AndroidJNIIOSystem.h	/^	AAssetManager* mApkAssetManager;$/;"	m	class:Assimp::AndroidJNIIOSystem	access:public
 mApkWorkspacePath	lib/__assimp/port/AndroidJNI/AndroidJNIIOSystem.h	/^	std::string mApkWorkspacePath;$/;"	m	class:Assimp::AndroidJNIIOSystem	access:public
-mAspect	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:private
+mAspect	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:public
 mAspect	inc/window.h	/^	float mAspect;$/;"	m	class:Window	access:private
 mAspect	lib/__assimp/camera.h	/^    float mAspect;$/;"	m	struct:aiCamera	access:public
 mAspect	lib/assimp/camera.h	/^    float mAspect;$/;"	m	struct:aiCamera	access:public
@@ -14514,11 +14514,11 @@ mEngineRoot	inc/file_manager.h	/^	std::string mBinPath, mEngineRoot, mShaderDir,
 mExportFunction	lib/__assimp/Exporter.hpp	/^        fpExportFunc mExportFunction;$/;"	m	struct:Assimp::Exporter::ExportFormatEntry	access:public
 mExportFunction	lib/assimp/Exporter.hpp	/^        fpExportFunc mExportFunction;$/;"	m	struct:Assimp::Exporter::ExportFormatEntry	access:public
 mEye	inc/camera.h	/^    glm::vec3 mEye; $/;"	m	class:Camera	access:private
-mFOV	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:private
+mFOV	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:public
 mFPS	inc/timer.h	/^	uint32_t mFPS;$/;"	m	class:Timer	access:private
 mFaces	lib/__assimp/mesh.h	/^    C_STRUCT aiFace* mFaces;$/;"	m	struct:aiMesh	access:public
 mFaces	lib/assimp/mesh.h	/^    C_STRUCT aiFace* mFaces;$/;"	m	struct:aiMesh	access:public
-mFar	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:private
+mFar	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:public
 mFile	lib/__assimp/DefaultIOStream.h	/^    FILE* mFile;$/;"	m	class:Assimp::DefaultIOStream	access:private
 mFileExtensions	lib/__assimp/importerdesc.h	/^    const char* mFileExtensions;$/;"	m	struct:aiImporterDesc	access:public
 mFileExtensions	lib/assimp/importerdesc.h	/^    const char* mFileExtensions;$/;"	m	struct:aiImporterDesc	access:public
@@ -14613,7 +14613,7 @@ mName	lib/assimp/light.h	/^    C_STRUCT aiString mName;$/;"	m	struct:aiLight	acc
 mName	lib/assimp/mesh.h	/^    C_STRUCT aiString mName;$/;"	m	struct:aiBone	access:public
 mName	lib/assimp/mesh.h	/^    C_STRUCT aiString mName;$/;"	m	struct:aiMesh	access:public
 mName	lib/assimp/scene.h	/^    C_STRUCT aiString mName;$/;"	m	struct:aiNode	access:public
-mNear	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:private
+mNear	inc/camera.h	/^	float mNear, mFar, mFOV, mAspect;$/;"	m	class:Camera	access:public
 mNodeName	lib/__assimp/anim.h	/^    C_STRUCT aiString mNodeName;$/;"	m	struct:aiNodeAnim	access:public
 mNodeName	lib/assimp/anim.h	/^    C_STRUCT aiString mNodeName;$/;"	m	struct:aiNodeAnim	access:public
 mNodeToBoneIndexMap	inc/shape/skinned.h	/^	std::unordered_map<aiNode*, uint32_t> mNodeToBoneIndexMap;$/;"	m	class:Skinned	access:protected
