@@ -16,7 +16,7 @@ layout(location = 4) in vec2 inTexCoord;
 
 layout(location = 0) out vec2 outTexCoord;
 layout(location = 1) out vec3 outWorldPos;
-layout(location = 2) out vec3 outNormal;
+layout(location = 2) out vec2 outNormal;
 
 void main() { 
 	mat3 normalTransform = transpose(inverse(mat3(ubo.model)));
@@ -24,7 +24,7 @@ void main() {
 
     outTexCoord = inTexCoord;
 	outWorldPos = vec3(worldPos);
-	outNormal = normalTransform * inNormal;
+	outNormal = vec2(normalTransform * inNormal);
 
 	gl_Position = ubo.proj * ubo.view * worldPos;
 }

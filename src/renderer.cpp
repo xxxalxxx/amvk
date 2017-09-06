@@ -72,7 +72,7 @@ void Renderer::init()
 
 	for (auto& light : gBuffer.pointLights) {
 		PointLight& p = sceneLights.createPointLight();
-		p.init(mState, light.color, light.position, light.radius, light.intensity);
+		p.init(mState, light.color, light.position, light.radius);
 	}
 
 	sceneLights.init();
@@ -108,7 +108,7 @@ void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
 {
 	std::array<VkClearValue, GBuffer::ATTACHMENT_COUNT> clearValues;
 	clearValues[GBuffer::INDEX_POSITION].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
-	clearValues[GBuffer::INDEX_NORMAL].color   = { { 0.0f, 0.0f, 0.0f, 1.0f } };
+	clearValues[GBuffer::INDEX_NORMAL].color   = { { 0.0f, 0.0f, 1.0f, 0.0f } };
 	clearValues[GBuffer::INDEX_ALBEDO].color   = { { 0.0f, 0.0f, 0.0f, 0.0f } };
 	clearValues[GBuffer::INDEX_DEPTH].depthStencil = { 1.0f, 0 };
 
@@ -394,8 +394,12 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 
 
 		//tquad.draw(cmdBuffer);
-		 //fullscreenQuad.draw(cmdBuffer);
+		//fullscreenQuad.draw(cmdBuffer);
+		
+		
 		//sceneLights.draw(cmdBuffer);
+		
+		
 		//dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);
 		//suit.draw(cmdBuffer, mState.pipelines.model.pipeline, mState.pipelines.model.layout);
 
@@ -437,17 +441,8 @@ void Renderer::draw()
 	}
 
 	//LOG("CNT %u", cnt++);
-
-
-	auto t0 = std::chrono::system_clock::now();
-	vkQueueWaitIdle(mState.computeQueue);
-
-	auto t1 = std::chrono::system_clock::now();
-	auto dt = static_cast<long>((t1 - t0).count());
-	//LOG("__TIME: %ld", dt);
-
-	vkWaitForFences(mState.device, 1, &tilingFence, VK_TRUE, UINT64_MAX);
-	vkResetFences(mState.device, 1, &tilingFence);
+	//vkWaitForFences(mState.device, 1, &tilingFence, VK_TRUE, UINT64_MAX);
+	//vkResetFences(mState.device, 1, &tilingFence);
 	
 	VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 	VkPipelineStageFlags tilingFlags[] = { VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
@@ -474,7 +469,7 @@ void Renderer::draw()
 	submitInfo.signalSemaphoreCount = 1;
 	submitInfo.pSignalSemaphores = &tilingFinishedSemaphore;
 
-	VK_CHECK_RESULT(vkQueueSubmit(mState.computeQueue, 1, &submitInfo, tilingFence));
+	VK_CHECK_RESULT(vkQueueSubmit(mState.computeQueue, 1, &submitInfo, VK_NULL_HANDLE));
 
 
 	submitInfo.waitSemaphoreCount = 1;

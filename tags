@@ -1573,14 +1573,19 @@ GBuffer::INDEX_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_AL
 GBuffer::INDEX_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_DEPTH    = 3;$/;"	m	class:GBuffer	access:public
 GBuffer::INDEX_NORMAL	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_NORMAL   = 1;$/;"	m	class:GBuffer	access:public
 GBuffer::INDEX_POSITION	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_POSITION = 0;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_TILING_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_ALBEDO       = 2;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_TILING_NORMAL_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_NORMAL_DEPTH = 1;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_TILING_OUT_IMAGE	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_OUT_IMAGE    = 0;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_TILING_POINT_LIGHTS	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_POINT_LIGHTS = 4;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_TILING_UBO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_UBO          = 3;$/;"	m	class:GBuffer	access:public
 GBuffer::MAX_LIGHTS	inc/g_buffer.h	/^	static const constexpr uint32_t MAX_LIGHTS = 1024;$/;"	m	class:GBuffer	access:public
 GBuffer::PointLight	inc/g_buffer.h	/^	struct PointLight {$/;"	s	class:GBuffer	access:public
 GBuffer::PointLight::color	inc/g_buffer.h	/^		glm::vec3 color;$/;"	m	struct:GBuffer::PointLight	access:public
-GBuffer::PointLight::intensity	inc/g_buffer.h	/^		float intensity;$/;"	m	struct:GBuffer::PointLight	access:public
+GBuffer::PointLight::p1	inc/g_buffer.h	/^		float p1[1];$/;"	m	struct:GBuffer::PointLight	access:public
 GBuffer::PointLight::position	inc/g_buffer.h	/^		glm::vec3 position;$/;"	m	struct:GBuffer::PointLight	access:public
 GBuffer::PointLight::radius	inc/g_buffer.h	/^		float radius;$/;"	m	struct:GBuffer::PointLight	access:public
 GBuffer::STORAGE_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t STORAGE_BUFFER_COUNT = 1;$/;"	m	class:GBuffer	access:public
-GBuffer::TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 4;$/;"	m	class:GBuffer	access:public
+GBuffer::TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 3;$/;"	m	class:GBuffer	access:public
 GBuffer::TilingImage	inc/g_buffer.h	/^	struct TilingImage {$/;"	s	class:GBuffer	access:public
 GBuffer::TilingImage::image	inc/g_buffer.h	/^		VkImage image;$/;"	m	struct:GBuffer::TilingImage	access:public
 GBuffer::TilingImage::memory	inc/g_buffer.h	/^		VkDeviceMemory memory;$/;"	m	struct:GBuffer::TilingImage	access:public
@@ -1594,7 +1599,7 @@ GBuffer::TilingUBO::proj	inc/g_buffer.h	/^		glm::mat4 proj;$/;"	m	struct:GBuffer
 GBuffer::TilingUBO::textureDimens	inc/g_buffer.h	/^		glm::vec2 textureDimens;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::view	inc/g_buffer.h	/^		glm::mat4 view;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::UNIFORM_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t UNIFORM_BUFFER_COUNT = 2;$/;"	m	class:GBuffer	access:public
-GBuffer::WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 32;$/;"	m	class:GBuffer	access:public
+GBuffer::WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:GBuffer	access:public
 GBuffer::albedo	inc/g_buffer.h	/^	inline FramebufferAttachment& albedo() { return attachments[INDEX_ALBEDO]; }$/;"	f	class:GBuffer	access:public	signature:()
 GBuffer::attachments	inc/g_buffer.h	/^	std::array<FramebufferAttachment, ATTACHMENT_COUNT> attachments;$/;"	m	class:GBuffer	access:public
 GBuffer::clearValues	inc/g_buffer.h	/^	std::array<VkClearValue, ATTACHMENT_COUNT> clearValues;$/;"	m	class:GBuffer	access:public
@@ -2356,6 +2361,11 @@ INDEX_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_ALBEDO   = 
 INDEX_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_DEPTH    = 3;$/;"	m	class:GBuffer	access:public
 INDEX_NORMAL	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_NORMAL   = 1;$/;"	m	class:GBuffer	access:public
 INDEX_POSITION	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_POSITION = 0;$/;"	m	class:GBuffer	access:public
+INDEX_TILING_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_ALBEDO       = 2;$/;"	m	class:GBuffer	access:public
+INDEX_TILING_NORMAL_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_NORMAL_DEPTH = 1;$/;"	m	class:GBuffer	access:public
+INDEX_TILING_OUT_IMAGE	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_OUT_IMAGE    = 0;$/;"	m	class:GBuffer	access:public
+INDEX_TILING_POINT_LIGHTS	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_POINT_LIGHTS = 4;$/;"	m	class:GBuffer	access:public
+INDEX_TILING_UBO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_UBO          = 3;$/;"	m	class:GBuffer	access:public
 INT16_C	lib/__assimp/Compiler/pstdint.h	308;"	d
 INT16_C	lib/__assimp/Compiler/pstdint.h	424;"	d
 INT16_C	lib/__assimp/Compiler/pstdint.h	430;"	d
@@ -4948,7 +4958,7 @@ TEXTURE_TYPES	inc/shape/model.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;
 TEXTURE_TYPES	inc/shape/skinned.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;"	m	class:Skinned	access:public
 TEXTURE_TYPES	src/shape/model.cpp	/^const aiTextureType* Model::TEXTURE_TYPES = Model_TEXTURE_TYPES;$/;"	m	class:Model	file:
 TEXTURE_TYPES	src/shape/skinned.cpp	/^const aiTextureType* Skinned::TEXTURE_TYPES = Skinned_TEXTURE_TYPES;$/;"	m	class:Skinned	file:
-TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 4;$/;"	m	class:GBuffer	access:public
+TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 3;$/;"	m	class:GBuffer	access:public
 TQuad	inc/shape/tquad.h	/^class TQuad {$/;"	c
 TQuad	src/shape/tquad.cpp	/^TQuad::TQuad(State& vulkanState):$/;"	f	class:TQuad	signature:(State& vulkanState)
 TQuad::PushConstants	inc/shape/tquad.h	/^	struct PushConstants {$/;"	s	class:TQuad	access:public
@@ -7703,7 +7713,7 @@ WCHAR_MAX	lib/__assimp/Compiler/pstdint.h	730;"	d
 WCHAR_MAX	lib/assimp/Compiler/pstdint.h	696;"	d
 WCHAR_MIN	lib/__assimp/Compiler/pstdint.h	727;"	d
 WCHAR_MIN	lib/assimp/Compiler/pstdint.h	693;"	d
-WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 32;$/;"	m	class:GBuffer	access:public
+WORK_GROUP_SIZE	inc/g_buffer.h	/^	static const constexpr uint32_t WORK_GROUP_SIZE = 16;$/;"	m	class:GBuffer	access:public
 WaitForFences	lib/vulkan/vk_layer.h	/^    PFN_vkWaitForFences WaitForFences;$/;"	m	struct:VkLayerDispatchTable_	access:public
 Warn	lib/__assimp/Logger.hpp	/^        Warn        = 4,    \/\/!< Warn log message$/;"	e	enum:Assimp::Logger::ErrorSeverity
 Warn	lib/assimp/Logger.hpp	/^        Warn        = 4,    \/\/!< Warn log message$/;"	e	enum:Assimp::Logger::ErrorSeverity
@@ -14035,7 +14045,6 @@ int_least8_t	lib/assimp/Compiler/pstdint.h	/^  typedef   int8_t   int_least8_t;$
 int_t	lib/glm/detail/type_int.hpp	/^	typedef highp_int					int_t;$/;"	t	namespace:glm
 int_t	lib/glm/detail/type_int.hpp	/^	typedef lowp_int					int_t;$/;"	t	namespace:glm
 int_t	lib/glm/detail/type_int.hpp	/^	typedef mediump_int					int_t;$/;"	t	namespace:glm
-intensity	inc/g_buffer.h	/^		float intensity;$/;"	m	struct:GBuffer::PointLight	access:public
 internalStoragePath	inc/file_manager.h	/^	static const char* internalStoragePath;$/;"	m	class:FileManager	access:public
 internalStoragePath	src/file_manager.cpp	/^const char* FileManager::internalStoragePath = nullptr;$/;"	m	class:FileManager	file:
 intmax_t	lib/__assimp/Compiler/pstdint.h	/^  typedef int32_t intmax_t;$/;"	t
@@ -15488,6 +15497,7 @@ p	lib/glm/detail/type_vec3.hpp	/^				struct{ T s, t, p; };$/;"	m	struct:glm::vec
 p	lib/glm/detail/type_vec3.hpp	/^			union { T z, b, p; };$/;"	m	union:glm::vec::__anon49	access:public
 p	lib/glm/detail/type_vec4.hpp	/^				struct { T s, t, p, q; };$/;"	m	struct:glm::vec::__anon35::__anon38	access:public
 p	lib/glm/detail/type_vec4.hpp	/^			union { T z, b, p; };$/;"	m	union:glm::vec::__anon41	access:public
+p1	inc/g_buffer.h	/^		float p1[1];$/;"	m	struct:GBuffer::PointLight	access:public
 p1	inc/g_buffer.h	/^		float p1[1];$/;"	m	struct:GBuffer::TilingUBO	access:public
 pApplicationInfo	lib/vulkan/vulkan.h	/^    const VkApplicationInfo*    pApplicationInfo;$/;"	m	struct:VkInstanceCreateInfo	access:public
 pApplicationName	lib/vulkan/vulkan.h	/^    const char*        pApplicationName;$/;"	m	struct:VkApplicationInfo	access:public

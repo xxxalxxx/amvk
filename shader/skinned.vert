@@ -23,7 +23,7 @@ layout(location = 7) in uvec4 inSamplerIndices;
 layout(location = 0) out vec2 outTexCoord;
 layout(location = 1) out uvec4 outSamplerIndices;
 layout(location = 2) out vec3 outWorldPos;
-layout(location = 3) out vec3 outNormal;
+layout(location = 3) out vec2 outNormal;
 
 void main() { 
 	mat4 boneTransform = ubo.bones[inBoneIndices.x] * inWeights.x;
@@ -39,7 +39,7 @@ void main() {
     outTexCoord = inTexCoord;
 	outSamplerIndices = inSamplerIndices;
 	outWorldPos = vec3(worldPos);
-	outNormal = normalTransform * inNormal;
+	outNormal = vec2(normalTransform * inNormal);
 
     gl_Position = ubo.proj * ubo.view * worldPos;
 }

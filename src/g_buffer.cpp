@@ -460,11 +460,10 @@ void GBuffer::createDescriptors()
 	uniformSet.descriptorCount = 1;
 	uniformSet.pBufferInfo = &buffInfo;
 
-	std::array<VkImageView, ATTACHMENT_COUNT> tilingImageViews = {};
-	tilingImageViews[0] = tilingImage.view;
-	tilingImageViews[1] = attachments[INDEX_NORMAL].view;
-	tilingImageViews[2] = attachments[INDEX_POSITION].view;
-	tilingImageViews[3] = attachments[INDEX_ALBEDO].view;
+	std::array<VkImageView, TILING_IMAGE_COUNT> tilingImageViews = {};
+	tilingImageViews[INDEX_TILING_OUT_IMAGE]    = tilingImage.view;
+	tilingImageViews[INDEX_TILING_NORMAL_DEPTH] = attachments[INDEX_NORMAL].view;
+	tilingImageViews[INDEX_TILING_ALBEDO]       = attachments[INDEX_ALBEDO].view;
 
 	std::array<VkDescriptorImageInfo, TILING_IMAGE_COUNT> tilingImageInfos = {};
 	for (size_t i = 0; i < TILING_IMAGE_COUNT; ++i) {
@@ -492,7 +491,7 @@ void GBuffer::createDescriptors()
 	VkWriteDescriptorSet& tilingUniformSet = writeSets.back();
 	tilingUniformSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 	tilingUniformSet.dstSet = mTilingDescriptorSet;
-	tilingUniformSet.dstBinding = 4;
+	tilingUniformSet.dstBinding = INDEX_TILING_UBO;
 	tilingUniformSet.dstArrayElement = 0;
 	tilingUniformSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 	tilingUniformSet.descriptorCount = 1;
@@ -507,7 +506,7 @@ void GBuffer::createDescriptors()
 	VkWriteDescriptorSet& pointLightsUniformSet = writeSets.back();
 	pointLightsUniformSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 	pointLightsUniformSet.dstSet = mTilingDescriptorSet;
-	pointLightsUniformSet.dstBinding = 5;
+	pointLightsUniformSet.dstBinding = INDEX_TILING_POINT_LIGHTS;
 	pointLightsUniformSet.dstArrayElement = 0;
 	pointLightsUniformSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
 	pointLightsUniformSet.descriptorCount = 1;
@@ -545,29 +544,19 @@ void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& cam
 
 void GBuffer::createLights() 
 {
-	for (uint32_t i = 0; i < 256 - 1; ++i) {
+	for (uint32_t i = 0; i < 1024 - 1; ++i) {
 		PointLight light = {};
-		light.position = Utils::randVec3(-8.0f, 8.0f);
+		light.position = Utils::randVec3(-15.0f, 15.0f);
 		light.color = Utils::randVec3(0.0f, 1.0f);
 		light.radius = Utils::frand(1.0f, 5.0f);
-		light.intensity = Utils::frand(1.0f, 3.0f);
-
 		
 		if (i == 0) {
 			light.color = glm::vec3(1.0f, 0.0f, 0.0f);
-			//light.position = glm::vec3(0.1f, 0.0f, 1.5f);
+			light.position = glm::vec3(0.1f, 0.0f, 1.5f);
 			light.radius = 3.33f;
-			light.intensity = 1.0f;
 		}
 
-	
-		/*if (i == 1) {
-			light.color = glm::vec3(0.0f, 0.0f, 1.0f);
-			light.position = glm::vec3(1.0f, 1.0f, 0.0f);
-		}*/
-
 		pointLights.push_back(light);
-		//LOG("rand: %s", glm::to_string(light.position).c_str());
 	}
 
 	PointLight light = {};
@@ -629,6 +618,7 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 	auto lightPosWS = pointLights[0].position;
 	auto lightPosVS = view * glm::vec4(lightPosWS, 1.0f);
 	auto lightPosPS = proj * view * glm::vec4(lightPosWS, 1.0f);
+	auto lightPosNDC = lightPosPS / lightPosPS.w;
 
 	auto c1 = glm::vec4(proj[0].x, proj[1].x, proj[2].x, proj[3].x);
 	auto c2 = glm::vec4(proj[0].y, proj[1].y, proj[2].y, proj[3].y);
@@ -705,17 +695,17 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 	auto projDepth = (proj[2][2] + proj[3][2] / lightPosVS.z) / proj[2][3];
 	auto projDepth2 = proj[2][2] / proj[2][3] + proj[2][3] * proj[3][2] / lightPosVS.z;
 	auto projDepthRH = -proj[2][2] - proj[3][2] / lightPosVS.z;
-
-	/*LOG("TILING: linDepth: %f ps: %s vs: %s near %s, far %s l_near %s, l_far %s", 
-			df,
-			glm::to_string(lightPosPS / lightPosPS.w).c_str(),
+	auto viewX = -lightPosVS.z * lightPosNDC.x / proj[0][0];
+/*
+	LOG("TILING: linDepth: %f ps: %s vs: %s near %s, far %s l_near %s, l_far %s", 
+			viewX,
+			glm::to_string(lightPosVS).c_str(),
 			glm::to_string(lightPosVS).c_str(),
 			dn >= -radius ? "INSIDE" : "OUTSIDE",
 			df >= -radius ? "INSIDE" : "OUTSIDE",
 			ldn >= -radius ? "INSIDE" : "OUTSIDE",
 			ldf >= -radius ? "INSIDE" : "OUTSIDE");
-	*/
-
+*/
 	for (size_t i = 0; i < 6; ++i) {
 		auto d = glm::dot(frustumPlanes[i], lightPosVS);
 		inFrustum = inFrustum && d >= -radius;
@@ -866,10 +856,5 @@ void GBuffer::dispatch()
 {
 	vkCmdBindPipeline(tilingCmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, mState->pipelines.tiling.pipeline);
 	vkCmdBindDescriptorSets(tilingCmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, mState->pipelines.tiling.layout, 0, 1, &mTilingDescriptorSet, 0, 0);
-	//vkCmdDispatch(tilingCmdBuffer, 2 * 256, 1, 1);
     vkCmdDispatch(tilingCmdBuffer, (width + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE, (height + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE, 1);
-
-    //vkCmdDispatch(tilingCmdBuffer, width, height, 1);
-//	vkCmdDispatch(tilingCmdBuffer, 1, 1, 1);
-
 }
