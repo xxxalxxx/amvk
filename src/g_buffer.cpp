@@ -545,22 +545,22 @@ void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& cam
 
 void GBuffer::createLights() 
 {
-	for (uint32_t i = 0; i < 16; ++i) {
+	for (uint32_t i = 0; i < 256 - 1; ++i) {
 		PointLight light = {};
 		light.position = Utils::randVec3(-8.0f, 8.0f);
 		light.color = Utils::randVec3(0.0f, 1.0f);
-		light.radius = Utils::frand(1.0f, 10.0f);
+		light.radius = Utils::frand(1.0f, 5.0f);
 		light.intensity = Utils::frand(1.0f, 3.0f);
 
 		
 		if (i == 0) {
 			light.color = glm::vec3(1.0f, 0.0f, 0.0f);
-			light.position = glm::vec3(0.1f, -15.0f, 1.5f);
+			//light.position = glm::vec3(0.1f, 0.0f, 1.5f);
 			light.radius = 3.33f;
 			light.intensity = 1.0f;
-
 		}
 
+	
 		/*if (i == 1) {
 			light.color = glm::vec3(0.0f, 0.0f, 1.0f);
 			light.position = glm::vec3(1.0f, 1.0f, 0.0f);
@@ -569,6 +569,13 @@ void GBuffer::createLights()
 		pointLights.push_back(light);
 		//LOG("rand: %s", glm::to_string(light.position).c_str());
 	}
+
+	PointLight light = {};
+	light.color = glm::vec3(0.0, 0.0, 0.0);
+	light.position = glm::vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+	light.radius = 0.0f;
+	pointLights.push_back(light);
+
 	ubo.lightCount = pointLights.size();
 }
 
@@ -661,7 +668,7 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 
 	
 
-	LOG("\n");
+	//LOG("\n");
 	auto lightPosVS3 = glm::vec3(lightPosVS);
 	auto toLight = glm::normalize(lightPosVS3);
 	auto lightFar = lightPosVS3 + radius * toLight;
@@ -699,7 +706,7 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 	auto projDepth2 = proj[2][2] / proj[2][3] + proj[2][3] * proj[3][2] / lightPosVS.z;
 	auto projDepthRH = -proj[2][2] - proj[3][2] / lightPosVS.z;
 
-	LOG("TILING: linDepth: %f ps: %s vs: %s near %s, far %s l_near %s, l_far %s", 
+	/*LOG("TILING: linDepth: %f ps: %s vs: %s near %s, far %s l_near %s, l_far %s", 
 			df,
 			glm::to_string(lightPosPS / lightPosPS.w).c_str(),
 			glm::to_string(lightPosVS).c_str(),
@@ -707,7 +714,7 @@ void GBuffer::updateTiling(VkCommandBuffer& cmdBuffer, const Timer& timer, Camer
 			df >= -radius ? "INSIDE" : "OUTSIDE",
 			ldn >= -radius ? "INSIDE" : "OUTSIDE",
 			ldf >= -radius ? "INSIDE" : "OUTSIDE");
- 
+	*/
 
 	for (size_t i = 0; i < 6; ++i) {
 		auto d = glm::dot(frustumPlanes[i], lightPosVS);

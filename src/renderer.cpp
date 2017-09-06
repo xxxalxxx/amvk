@@ -100,6 +100,8 @@ void Renderer::updateUniformBuffers(const Timer& timer, Camera& camera)
 
 	CmdPass tilingCmd(mState.device, gBuffer.tilingCmdPool, mState.computeQueue);
 	gBuffer.updateTiling(tilingCmd.buffer, timer, camera);
+
+	LOG("__FPS: %u", timer.FPS());
 }
 
 void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
@@ -436,9 +438,17 @@ void Renderer::draw()
 
 	//LOG("CNT %u", cnt++);
 
+
+	auto t0 = std::chrono::system_clock::now();
+	vkQueueWaitIdle(mState.computeQueue);
+
+	auto t1 = std::chrono::system_clock::now();
+	auto dt = static_cast<long>((t1 - t0).count());
+	//LOG("__TIME: %ld", dt);
+
 	vkWaitForFences(mState.device, 1, &tilingFence, VK_TRUE, UINT64_MAX);
 	vkResetFences(mState.device, 1, &tilingFence);
-
+	
 	VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 	VkPipelineStageFlags tilingFlags[] = { VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
 
@@ -465,6 +475,7 @@ void Renderer::draw()
 	submitInfo.pSignalSemaphores = &tilingFinishedSemaphore;
 
 	VK_CHECK_RESULT(vkQueueSubmit(mState.computeQueue, 1, &submitInfo, tilingFence));
+
 
 	submitInfo.waitSemaphoreCount = 1;
 	submitInfo.pWaitSemaphores = &tilingFinishedSemaphore;

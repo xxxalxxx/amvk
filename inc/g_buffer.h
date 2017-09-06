@@ -13,6 +13,7 @@
 #include "timer.h"
 #include "utils.h"
 
+#include <cfloat>
 #include <array>
 #include <unordered_set>
 #include <glm/gtx/string_cast.hpp> 

@@ -19,7 +19,7 @@ Camera::Camera():
     mSidewaysMovementScalar(40.0f),
     mMouseSensitivityScalar(0.002f),
     mScrollSensitivityScalar(0.05f),
-	mEye(0.0f, -15.0f, 4.0f),
+	mEye(0.0f, 0.0f, 4.0f),
 	initPrevPos(true)
 {
 	updateViewAngles();
