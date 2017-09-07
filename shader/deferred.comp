@@ -12,7 +12,7 @@
 #define TO_FLOAT(x) (float(x) / 0x7fffffff)
 #define TO_UINT(x) uint(x * 0x7fffffff)
 
-#define UNPACK_NORMAL_Z(n) (1.0 - n.x * n.x - n.y * n.y)
+#define UNPACK_NORMAL_Z(n) sqrt(abs(1.0 - n.x * n.x - n.y * n.y))
 
 #define LINEARIZE_DEPTH(proj, depth) (proj[3][2] / (proj[2][3] * depth - proj[2][2]))
 #define LINEARIZE_DEPTH_RH(proj, depth) (proj[3][2] / (-depth - proj[2][2]))
@@ -20,9 +20,10 @@
 #define PROJ_DEPTH(proj, vz) (proj[2][2] / proj[2][3] + proj[2][3] * proj[3][2] / vz)
 #define PROJ_DEPTH_RH(proj, vz) (-proj[2][2] - proj[3][2] / vz)
 
-#define UNPROJ_X_RH(proj, x, vz) (-vz * x / proj[0][0])
-#define UNPROJ_Y_RH(proj, y, vz) (-vz * y / proj[1][1])
-#define UNPROJ_XY_RH(proj, x, y, vz) (-vz * vec2(x / proj[0][0], y / proj[1][1]))
+#define UNPROJ_X_RH(proj, x, vz) (-(vz) * (x) / proj[0][0])
+#define UNPROJ_Y_RH(proj, y, vz) (-(vz) * (y) / proj[1][1])
+#define UNPROJ_XY_RH(proj, x, y, vz) (-vz * vec2((x) / proj[0][0], (y) / proj[1][1]))
+#define UNPROJ_XYZ_RH(proj, ndc, vz) vec3(-vz * ndc.x / proj[0][0], -vz * ndc.y / proj[1][1], vz)
 
 struct PointLight {
     vec3 position;
@@ -32,19 +33,18 @@ struct PointLight {
 };
 
 layout (binding = 0, rgba8) uniform image2D outImage;
-layout (binding = 1, rgba16f) uniform readonly image2D imageNormalDepth;
-layout (binding = 2, rgba8) uniform readonly image2D imageAlbedo;
+layout (binding = 1, rgba16f) uniform readonly image2D imageNormal;
+layout (binding = 2, r32f) uniform readonly image2D imageDepth;
+layout (binding = 3, rgba8) uniform readonly image2D imageAlbedo;
 
-layout(binding = 3) uniform UniformBufferObject {
+layout(binding = 4) uniform UniformBufferObject {
     mat4 view;
     mat4 proj;
-	mat4 invViewProj;
-	vec3 eyePos;
 	vec2 textureDimens;
 	uint lightCount;
 } ubo;
 
-layout (std430, binding = 4) buffer BufferObject {
+layout (std430, binding = 5) buffer BufferObject {
     PointLight pointLights[];
 };
 
@@ -69,10 +69,9 @@ void main() {
 	
 	ivec2 pixelPos = ivec2(gl_GlobalInvocationID.xy);
 
-	vec4 normalDepth = imageLoad(imageNormalDepth, pixelPos);
-	vec3 normal = vec3(normalDepth.xy, UNPACK_NORMAL_Z(normalDepth));
+	vec3 normal = imageLoad(imageNormal, pixelPos).xyz;
 
-	float depth = normalDepth.z;
+	float depth = imageLoad(imageDepth, pixelPos).r;
     uint depthInt = TO_UINT(depth);
 
 	atomicMin(minDepthInt, depthInt);
@@ -136,27 +135,29 @@ void main() {
 	memoryBarrierShared();
 	barrier();
 
-	vec2 texCoord = vec2(pixelPos) / ubo.textureDimens;
-	vec4 position = ubo.invViewProj * vec4(2.0 * texCoord - 1.0, depth, 1.0); 
-	vec3 posWS = position.xyz / position.w;
+	vec2 ndc = 2.0 * vec2(pixelPos) / ubo.textureDimens - 1.0;
+	float vz = LINEARIZE_DEPTH_RH(ubo.proj, depth);
+	vec3 posVS = UNPROJ_XYZ_RH(ubo.proj, ndc, vz);
 
 	vec4 albedoColor = imageLoad(imageAlbedo, pixelPos);
-	vec3 color = albedoColor.rgb * 0.4;
+	vec3 color = albedoColor.rgb * 0.2;
 
+//    bool rightHalf = pixelPos.y > ubo.textureDimens.y / 2;
+	
 	for (uint lightIt = 0; lightIt < visiblePointLightCount; ++lightIt) {
+
 		uint lightIndex = visiblePointLightIndices[lightIt];
 		float lightRadius = pointLights[lightIndex].radius;
 		vec3 lightColor = pointLights[lightIndex].color;
-		vec3 lightPos = pointLights[lightIndex].position;
 
+		vec4 lightPos = ubo.view * vec4(pointLights[lightIndex].position, 1.0);
 		// Vector to light
-		vec3 L = lightPos - posWS;
+		vec3 L = lightPos.xyz - posVS;
 		// Distance from light to fragment position
 		float dist = length(L);
 		L = normalize(L);
 		// Viewer to fragment
-		vec3 V = normalize(ubo.eyePos - posWS);
-
+		vec3 V = -normalize(posVS);
 		// Attenuation
 		float atten = lightRadius / (dist * dist + 1.0);
 		float borderAtten = lightRadius / (lightRadius * lightRadius + 1.0);
@@ -166,14 +167,10 @@ void main() {
 		// Diffuse part
 		float NdotL = max(0.0, dot(normal, L));
 		vec3 diff = lightColor * albedoColor.rgb * NdotL * atten;
-		color += 0.7 * diff;
+		color += 0.8 * diff;
 	}
-
+	
 	vec4 result = vec4(color, 1.0); 
-	if (pixelPos.x > ubo.textureDimens.x / 2) {
-		//result = result + vec4(float(visiblePointLightCount) / ubo.lightCount); 
-	}
-
 	imageStore(outImage, pixelPos, result);
 }
 

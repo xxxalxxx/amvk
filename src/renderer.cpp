@@ -100,15 +100,15 @@ void Renderer::updateUniformBuffers(const Timer& timer, Camera& camera)
 
 	CmdPass tilingCmd(mState.device, gBuffer.tilingCmdPool, mState.computeQueue);
 	gBuffer.updateTiling(tilingCmd.buffer, timer, camera);
-
-	LOG("__FPS: %u", timer.FPS());
+	uint32_t testValue = uint32_t(-0.33 * 0xFFFF);
+	LOG("__FPS: %u, %u", timer.FPS(), testValue);
 }
 
 void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
 {
 	std::array<VkClearValue, GBuffer::ATTACHMENT_COUNT> clearValues;
-	clearValues[GBuffer::INDEX_POSITION].color = { { 0.0f, 0.0f, 0.0f, 0.0f } };
-	clearValues[GBuffer::INDEX_NORMAL].color   = { { 0.0f, 0.0f, 1.0f, 0.0f } };
+	clearValues[GBuffer::INDEX_POSITION].color = { { 1.0f, 0.0f, 0.0f, 0.0f } };
+	clearValues[GBuffer::INDEX_NORMAL].color   = { { 0.0f, 0.0f, 0.0f, 0.0f } };
 	clearValues[GBuffer::INDEX_ALBEDO].color   = { { 0.0f, 0.0f, 0.0f, 0.0f } };
 	clearValues[GBuffer::INDEX_DEPTH].depthStencil = { 1.0f, 0 };
 
@@ -441,8 +441,8 @@ void Renderer::draw()
 	}
 
 	//LOG("CNT %u", cnt++);
-	//vkWaitForFences(mState.device, 1, &tilingFence, VK_TRUE, UINT64_MAX);
-	//vkResetFences(mState.device, 1, &tilingFence);
+	vkWaitForFences(mState.device, 1, &tilingFence, VK_TRUE, UINT64_MAX);
+	vkResetFences(mState.device, 1, &tilingFence);
 	
 	VkPipelineStageFlags stageFlags[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 	VkPipelineStageFlags tilingFlags[] = { VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
@@ -469,7 +469,7 @@ void Renderer::draw()
 	submitInfo.signalSemaphoreCount = 1;
 	submitInfo.pSignalSemaphores = &tilingFinishedSemaphore;
 
-	VK_CHECK_RESULT(vkQueueSubmit(mState.computeQueue, 1, &submitInfo, VK_NULL_HANDLE));
+	VK_CHECK_RESULT(vkQueueSubmit(mState.computeQueue, 1, &submitInfo, tilingFence));
 
 
 	submitInfo.waitSemaphoreCount = 1;

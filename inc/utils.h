@@ -46,6 +46,23 @@ inline glm::vec3 randVec3(float from, float to)
 	return glm::vec3(x, y, z);
 }
 
+inline glm::vec4 randVec4(float from, float to) 
+{
+	float x = frand(from, to);
+	float y = frand(from, to);
+	float z = frand(from, to);
+	float w = frand(from, to);
+	return glm::vec4(x, y, z, w);
+}
+
+inline glm::vec4 randVec4(float from, float to, float w) 
+{
+	float x = frand(from, to);
+	float y = frand(from, to);
+	float z = frand(from, to);
+	return glm::vec4(x, y, z, w);
+}
+
 
 /*
 void* alignedAlloc(size_t size, size_t alignment)

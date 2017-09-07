@@ -1573,28 +1573,26 @@ GBuffer::INDEX_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_AL
 GBuffer::INDEX_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_DEPTH    = 3;$/;"	m	class:GBuffer	access:public
 GBuffer::INDEX_NORMAL	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_NORMAL   = 1;$/;"	m	class:GBuffer	access:public
 GBuffer::INDEX_POSITION	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_POSITION = 0;$/;"	m	class:GBuffer	access:public
-GBuffer::INDEX_TILING_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_ALBEDO       = 2;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_TILING_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_ALBEDO       = 3;$/;"	m	class:GBuffer	access:public
 GBuffer::INDEX_TILING_NORMAL_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_NORMAL_DEPTH = 1;$/;"	m	class:GBuffer	access:public
 GBuffer::INDEX_TILING_OUT_IMAGE	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_OUT_IMAGE    = 0;$/;"	m	class:GBuffer	access:public
-GBuffer::INDEX_TILING_POINT_LIGHTS	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_POINT_LIGHTS = 4;$/;"	m	class:GBuffer	access:public
-GBuffer::INDEX_TILING_UBO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_UBO          = 3;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_TILING_POINT_LIGHTS	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_POINT_LIGHTS = 5;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_TILING_POSITION	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_POSITION     = 2;$/;"	m	class:GBuffer	access:public
+GBuffer::INDEX_TILING_UBO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_UBO          = 4;$/;"	m	class:GBuffer	access:public
 GBuffer::MAX_LIGHTS	inc/g_buffer.h	/^	static const constexpr uint32_t MAX_LIGHTS = 1024;$/;"	m	class:GBuffer	access:public
 GBuffer::PointLight	inc/g_buffer.h	/^	struct PointLight {$/;"	s	class:GBuffer	access:public
 GBuffer::PointLight::color	inc/g_buffer.h	/^		glm::vec3 color;$/;"	m	struct:GBuffer::PointLight	access:public
-GBuffer::PointLight::p1	inc/g_buffer.h	/^		float p1[1];$/;"	m	struct:GBuffer::PointLight	access:public
+GBuffer::PointLight::pad	inc/g_buffer.h	/^		float pad;$/;"	m	struct:GBuffer::PointLight	access:public
 GBuffer::PointLight::position	inc/g_buffer.h	/^		glm::vec3 position;$/;"	m	struct:GBuffer::PointLight	access:public
 GBuffer::PointLight::radius	inc/g_buffer.h	/^		float radius;$/;"	m	struct:GBuffer::PointLight	access:public
 GBuffer::STORAGE_BUFFER_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t STORAGE_BUFFER_COUNT = 1;$/;"	m	class:GBuffer	access:public
-GBuffer::TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 3;$/;"	m	class:GBuffer	access:public
+GBuffer::TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 4;$/;"	m	class:GBuffer	access:public
 GBuffer::TilingImage	inc/g_buffer.h	/^	struct TilingImage {$/;"	s	class:GBuffer	access:public
 GBuffer::TilingImage::image	inc/g_buffer.h	/^		VkImage image;$/;"	m	struct:GBuffer::TilingImage	access:public
 GBuffer::TilingImage::memory	inc/g_buffer.h	/^		VkDeviceMemory memory;$/;"	m	struct:GBuffer::TilingImage	access:public
 GBuffer::TilingImage::view	inc/g_buffer.h	/^		VkImageView view;$/;"	m	struct:GBuffer::TilingImage	access:public
 GBuffer::TilingUBO	inc/g_buffer.h	/^	struct TilingUBO {$/;"	s	class:GBuffer	access:public
-GBuffer::TilingUBO::eyePos	inc/g_buffer.h	/^		glm::vec3 eyePos;$/;"	m	struct:GBuffer::TilingUBO	access:public
-GBuffer::TilingUBO::invViewProj	inc/g_buffer.h	/^		glm::mat4 invViewProj;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::lightCount	inc/g_buffer.h	/^		uint32_t lightCount;$/;"	m	struct:GBuffer::TilingUBO	access:public
-GBuffer::TilingUBO::p1	inc/g_buffer.h	/^		float p1[1];$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::proj	inc/g_buffer.h	/^		glm::mat4 proj;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::textureDimens	inc/g_buffer.h	/^		glm::vec2 textureDimens;$/;"	m	struct:GBuffer::TilingUBO	access:public
 GBuffer::TilingUBO::view	inc/g_buffer.h	/^		glm::mat4 view;$/;"	m	struct:GBuffer::TilingUBO	access:public
@@ -2361,11 +2359,12 @@ INDEX_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_ALBEDO   = 
 INDEX_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_DEPTH    = 3;$/;"	m	class:GBuffer	access:public
 INDEX_NORMAL	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_NORMAL   = 1;$/;"	m	class:GBuffer	access:public
 INDEX_POSITION	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_POSITION = 0;$/;"	m	class:GBuffer	access:public
-INDEX_TILING_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_ALBEDO       = 2;$/;"	m	class:GBuffer	access:public
+INDEX_TILING_ALBEDO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_ALBEDO       = 3;$/;"	m	class:GBuffer	access:public
 INDEX_TILING_NORMAL_DEPTH	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_NORMAL_DEPTH = 1;$/;"	m	class:GBuffer	access:public
 INDEX_TILING_OUT_IMAGE	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_OUT_IMAGE    = 0;$/;"	m	class:GBuffer	access:public
-INDEX_TILING_POINT_LIGHTS	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_POINT_LIGHTS = 4;$/;"	m	class:GBuffer	access:public
-INDEX_TILING_UBO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_UBO          = 3;$/;"	m	class:GBuffer	access:public
+INDEX_TILING_POINT_LIGHTS	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_POINT_LIGHTS = 5;$/;"	m	class:GBuffer	access:public
+INDEX_TILING_POSITION	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_POSITION     = 2;$/;"	m	class:GBuffer	access:public
+INDEX_TILING_UBO	inc/g_buffer.h	/^	static const constexpr uint32_t INDEX_TILING_UBO          = 4;$/;"	m	class:GBuffer	access:public
 INT16_C	lib/__assimp/Compiler/pstdint.h	308;"	d
 INT16_C	lib/__assimp/Compiler/pstdint.h	424;"	d
 INT16_C	lib/__assimp/Compiler/pstdint.h	430;"	d
@@ -4958,7 +4957,7 @@ TEXTURE_TYPES	inc/shape/model.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;
 TEXTURE_TYPES	inc/shape/skinned.h	/^	static const aiTextureType* TEXTURE_TYPES;$/;"	m	class:Skinned	access:public
 TEXTURE_TYPES	src/shape/model.cpp	/^const aiTextureType* Model::TEXTURE_TYPES = Model_TEXTURE_TYPES;$/;"	m	class:Model	file:
 TEXTURE_TYPES	src/shape/skinned.cpp	/^const aiTextureType* Skinned::TEXTURE_TYPES = Skinned_TEXTURE_TYPES;$/;"	m	class:Skinned	file:
-TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 3;$/;"	m	class:GBuffer	access:public
+TILING_IMAGE_COUNT	inc/g_buffer.h	/^	static const constexpr uint32_t TILING_IMAGE_COUNT = 4;$/;"	m	class:GBuffer	access:public
 TQuad	inc/shape/tquad.h	/^class TQuad {$/;"	c
 TQuad	src/shape/tquad.cpp	/^TQuad::TQuad(State& vulkanState):$/;"	f	class:TQuad	signature:(State& vulkanState)
 TQuad::PushConstants	inc/shape/tquad.h	/^	struct PushConstants {$/;"	s	class:TQuad	access:public
@@ -5154,6 +5153,8 @@ Utils::frand	inc/utils.h	/^inline float frand(float from, float to) $/;"	f	names
 Utils::maxVectorSize	inc/utils.h	/^inline int maxVectorSize(std::initializer_list<std::vector<T>& > vectors)$/;"	f	namespace:Utils	signature:(std::initializer_list<std::vector<T>& > vectors)
 Utils::minVectorSize	inc/utils.h	/^inline int minVectorSize(std::initializer_list<std::vector<T>& > vectors)$/;"	f	namespace:Utils	signature:(std::initializer_list<std::vector<T>& > vectors)
 Utils::randVec3	inc/utils.h	/^inline glm::vec3 randVec3(float from, float to) $/;"	f	namespace:Utils	signature:(float from, float to)
+Utils::randVec4	inc/utils.h	/^inline glm::vec4 randVec4(float from, float to) $/;"	f	namespace:Utils	signature:(float from, float to)
+Utils::randVec4	inc/utils.h	/^inline glm::vec4 randVec4(float from, float to, float w) $/;"	f	namespace:Utils	signature:(float from, float to, float w)
 VERBOSE	lib/__assimp/Logger.hpp	/^        VERBOSE     \/\/!< Debug infos will be logged, too$/;"	e	enum:Assimp::Logger::LogSeverity
 VERBOSE	lib/assimp/Logger.hpp	/^        VERBOSE     \/\/!< Debug infos will be logged, too$/;"	e	enum:Assimp::Logger::LogSeverity
 VKAPI_ATTR	lib/vulkan/vk_platform.h	51;"	d
@@ -10264,7 +10265,6 @@ extent	lib/vulkan/vulkan.h	/^    VkExtent3D                  extent;$/;"	m	struc
 extent	lib/vulkan/vulkan.h	/^    VkExtent3D                 extent;$/;"	m	struct:VkSparseImageMemoryBind	access:public
 extent	lib/vulkan/vulkan.h	/^    VkExtent3D               extent;$/;"	m	struct:VkImageCreateInfo	access:public
 eye	inc/camera.h	/^	inline glm::vec3& eye() { return mEye; }$/;"	f	class:Camera	access:public	signature:()
-eyePos	inc/g_buffer.h	/^		glm::vec3 eyePos;$/;"	m	struct:GBuffer::TilingUBO	access:public
 f32	lib/glm/fwd.hpp	/^	typedef highp_float32_t f32;$/;"	t	namespace:glm
 f32	lib/glm/fwd.hpp	/^	typedef lowp_f32 f32;$/;"	t	namespace:glm
 f32	lib/glm/fwd.hpp	/^	typedef mediump_float32 f32;$/;"	t	namespace:glm
@@ -14055,7 +14055,6 @@ intptr_t	lib/__assimp/Compiler/pstdint.h	/^  typedef ptrdiff_t intptr_t;$/;"	t
 intptr_t	lib/__assimp/Compiler/pstdint.h	/^  typedef stdint_intptr_glue3( int,stdint_intptr_bits,_t)  intptr_t;$/;"	t
 intptr_t	lib/assimp/Compiler/pstdint.h	/^     typedef stdint_intptr_glue3( int,stdint_intptr_bits,_t)  intptr_t;$/;"	t
 intptr_t	lib/assimp/Compiler/pstdint.h	/^  typedef ptrdiff_t intptr_t;$/;"	t
-invViewProj	inc/g_buffer.h	/^		glm::mat4 invViewProj;$/;"	m	struct:GBuffer::TilingUBO	access:public
 io	lib/glm/gtx/io.hpp	/^	namespace io$/;"	n	namespace:glm
 io	lib/stb/stb_image.h	/^   stbi_io_callbacks io;$/;"	m	struct:__anon60	access:public
 io_user_data	lib/stb/stb_image.h	/^   void *io_user_data;$/;"	m	struct:__anon60	access:public
@@ -15497,8 +15496,6 @@ p	lib/glm/detail/type_vec3.hpp	/^				struct{ T s, t, p; };$/;"	m	struct:glm::vec
 p	lib/glm/detail/type_vec3.hpp	/^			union { T z, b, p; };$/;"	m	union:glm::vec::__anon49	access:public
 p	lib/glm/detail/type_vec4.hpp	/^				struct { T s, t, p, q; };$/;"	m	struct:glm::vec::__anon35::__anon38	access:public
 p	lib/glm/detail/type_vec4.hpp	/^			union { T z, b, p; };$/;"	m	union:glm::vec::__anon41	access:public
-p1	inc/g_buffer.h	/^		float p1[1];$/;"	m	struct:GBuffer::PointLight	access:public
-p1	inc/g_buffer.h	/^		float p1[1];$/;"	m	struct:GBuffer::TilingUBO	access:public
 pApplicationInfo	lib/vulkan/vulkan.h	/^    const VkApplicationInfo*    pApplicationInfo;$/;"	m	struct:VkInstanceCreateInfo	access:public
 pApplicationName	lib/vulkan/vulkan.h	/^    const char*        pApplicationName;$/;"	m	struct:VkApplicationInfo	access:public
 pAttachments	lib/vulkan/vulkan.h	/^    const VkAttachmentDescription*    pAttachments;$/;"	m	struct:VkRenderPassCreateInfo	access:public
@@ -15663,6 +15660,7 @@ packed_mediump_dvec1	lib/glm/gtc/type_aligned.hpp	/^	typedef vec<1, double, pack
 packed_mediump_ivec1	lib/glm/gtc/type_aligned.hpp	/^	typedef vec<1, int, packed_mediump>		packed_mediump_ivec1;$/;"	t	namespace:glm
 packed_mediump_uvec1	lib/glm/gtc/type_aligned.hpp	/^	typedef vec<1, uint, packed_mediump>		packed_mediump_uvec1;$/;"	t	namespace:glm
 packed_mediump_vec1	lib/glm/gtc/type_aligned.hpp	/^	typedef vec<1, float, packed_mediump>	packed_mediump_vec1;$/;"	t	namespace:glm
+pad	inc/g_buffer.h	/^		float pad;$/;"	m	struct:GBuffer::PointLight	access:public
 pal	lib/stb/stb_image.h	/^   stbi_uc  pal[256][4];$/;"	m	struct:__anon74	access:public
 param_type	lib/glm/detail/type_gentype.hpp	/^		typedef TYPE<VALTYPE> const & param_type;$/;"	t	struct:glm::detail::genType	access:public
 parameters	lib/vulkan/vulkan.h	/^    VkDisplayModeParametersKHR     parameters;$/;"	m	struct:VkDisplayModeCreateInfoKHR	access:public
@@ -15817,6 +15815,8 @@ r	lib/glm/detail/type_vec4.hpp	/^			union { T x, r, s; };$/;"	m	union:glm::vec::
 r	lib/vulkan/vulkan.h	/^    VkComponentSwizzle    r;$/;"	m	struct:VkComponentMapping	access:public
 radius	inc/g_buffer.h	/^		float radius;$/;"	m	struct:GBuffer::PointLight	access:public
 randVec3	inc/utils.h	/^inline glm::vec3 randVec3(float from, float to) $/;"	f	namespace:Utils	signature:(float from, float to)
+randVec4	inc/utils.h	/^inline glm::vec4 randVec4(float from, float to) $/;"	f	namespace:Utils	signature:(float from, float to)
+randVec4	inc/utils.h	/^inline glm::vec4 randVec4(float from, float to, float w) $/;"	f	namespace:Utils	signature:(float from, float to, float w)
 range	lib/vulkan/vulkan.h	/^    VkDeviceSize               range;$/;"	m	struct:VkBufferViewCreateInfo	access:public
 range	lib/vulkan/vulkan.h	/^    VkDeviceSize    range;$/;"	m	struct:VkDescriptorBufferInfo	access:public
 rasterizationOrder	lib/vulkan/vulkan.h	/^    VkRasterizationOrderAMD    rasterizationOrder;$/;"	m	struct:VkPipelineRasterizationStateRasterizationOrderAMD	access:public

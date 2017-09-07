@@ -15,16 +15,25 @@ layout(location = 4) in vec2 inTexCoord;
 
 
 layout(location = 0) out vec2 outTexCoord;
-layout(location = 1) out vec3 outWorldPos;
-layout(location = 2) out vec2 outNormal;
+layout(location = 1) out vec3 outPosition;
+layout(location = 2) out vec3 outNormal;
+
+vec2 packNormal(vec3 n) 
+{
+	return normalize(n.xy) * sqrt(n.z * 0.5 + 0.5);
+}
 
 void main() { 
-	mat3 normalTransform = transpose(inverse(mat3(ubo.model)));
-    vec4 worldPos = ubo.model * vec4(inPosition, 1.0);
+	mat4 transform = ubo.view * ubo.model;
+	mat3 normalTransform = transpose(inverse(mat3(transform)));
+    vec4 position = transform * vec4(inPosition, 1.0);
 
     outTexCoord = inTexCoord;
-	outWorldPos = vec3(worldPos);
-	outNormal = vec2(normalTransform * inNormal);
+	outPosition = vec3(position);
+	
+	vec3 normal = normalTransform * inNormal;
+	
+	outNormal = normal;
 
-	gl_Position = ubo.proj * ubo.view * worldPos;
+	gl_Position = ubo.proj * position;
 }

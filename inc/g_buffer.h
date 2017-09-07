@@ -34,14 +34,15 @@ public:
 
 	static const constexpr uint32_t INDEX_TILING_OUT_IMAGE    = 0;
 	static const constexpr uint32_t INDEX_TILING_NORMAL_DEPTH = 1;
-	static const constexpr uint32_t INDEX_TILING_ALBEDO       = 2;
-	static const constexpr uint32_t INDEX_TILING_UBO          = 3;
-	static const constexpr uint32_t INDEX_TILING_POINT_LIGHTS = 4;
+	static const constexpr uint32_t INDEX_TILING_POSITION     = 2;
+	static const constexpr uint32_t INDEX_TILING_ALBEDO       = 3;
+	static const constexpr uint32_t INDEX_TILING_UBO          = 4;
+	static const constexpr uint32_t INDEX_TILING_POINT_LIGHTS = 5;
 
 	static const constexpr uint32_t DEPTH_ATTACHMENT_COUNT = 1;
 	static const constexpr uint32_t ATTACHMENT_COUNT = 4;
 	static const constexpr uint32_t COLOR_ATTACHMENT_COUNT = ATTACHMENT_COUNT - DEPTH_ATTACHMENT_COUNT;
-	static const constexpr uint32_t TILING_IMAGE_COUNT = 3;
+	static const constexpr uint32_t TILING_IMAGE_COUNT = 4;
 	static const constexpr uint32_t UNIFORM_BUFFER_COUNT = 2;
 	static const constexpr uint32_t STORAGE_BUFFER_COUNT = 1;
 
@@ -51,9 +52,6 @@ public:
 	struct TilingUBO {
 		glm::mat4 view;
 		glm::mat4 proj;
-		glm::mat4 invViewProj;
-		glm::vec3 eyePos;
-		float p1[1];
 		glm::vec2 textureDimens;
 		uint32_t lightCount;
 	};
@@ -62,7 +60,7 @@ public:
 		glm::vec3 position;
 		float radius;
 		glm::vec3 color;
-		float p1[1];
+		float pad;
 	};
 
 	inline FramebufferAttachment& position() { return attachments[INDEX_POSITION]; }
