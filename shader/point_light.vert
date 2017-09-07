@@ -12,7 +12,10 @@ layout(set = 1, binding = 0) uniform Model {
 
 
 layout(location = 0) in vec3 inPosition;
+layout(location = 0) out vec4 outPosition;
 
 void main() {
-    gl_Position = ubo.proj * ubo.view * uboModel.model * vec4(inPosition, 1.0);
+    vec4 position = ubo.proj * ubo.view * uboModel.model * vec4(inPosition, 1.0);
+	outPosition = position;
+	gl_Position = position;
 }

@@ -108,7 +108,7 @@ void Renderer::buildGBuffers(const Timer &timer, Camera &camera)
 {
 	std::array<VkClearValue, GBuffer::ATTACHMENT_COUNT> clearValues;
 	clearValues[GBuffer::INDEX_POSITION].color = { { 1.0f, 0.0f, 0.0f, 0.0f } };
-	clearValues[GBuffer::INDEX_NORMAL].color   = { { 0.0f, 0.0f, 0.0f, 0.0f } };
+	clearValues[GBuffer::INDEX_NORMAL].color   = { { 0.0f, 0.0f, 0.0f, 1.0f } };
 	clearValues[GBuffer::INDEX_ALBEDO].color   = { { 0.0f, 0.0f, 0.0f, 0.0f } };
 	clearValues[GBuffer::INDEX_DEPTH].depthStencil = { 1.0f, 0 };
 
@@ -397,7 +397,7 @@ void Renderer::buildCommandBuffers(const Timer &timer, Camera &camera)
 		//fullscreenQuad.draw(cmdBuffer);
 		
 		
-		//sceneLights.draw(cmdBuffer);
+		sceneLights.draw(cmdBuffer);
 		
 		
 		//dwarf.draw(cmdBuffer, mState.pipelines.skinned.pipeline, mState.pipelines.skinned.layout);

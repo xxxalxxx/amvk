@@ -544,11 +544,11 @@ void GBuffer::update(VkCommandBuffer& cmdBuffer, const Timer& timer, Camera& cam
 
 void GBuffer::createLights() 
 {
-	for (uint32_t i = 0; i < 1024 - 1; ++i) {
+	for (uint32_t i = 0; i < 64 - 1; ++i) {
 		PointLight light = {};
 		light.position = Utils::randVec3(-15.0f, 15.0f);
 		light.color = Utils::randVec3(0.0f, 1.0f);
-		light.radius = Utils::frand(1.0f, 5.0f);
+		light.radius = Utils::frand(1.0f, 10.0f);
 		
 		if (i == 0) {
 			light.color = glm::vec3(1.0f, 0.0f, 0.0f);

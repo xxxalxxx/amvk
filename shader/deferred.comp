@@ -102,8 +102,8 @@ void main() {
 	frustumPlanes[1] = c4 - c1; // right
 	frustumPlanes[2] = c2 + c4; // top
 	frustumPlanes[3] = c4 - c2; // bottom
-	frustumPlanes[5] = vec4(0.0, 0.0, 1.0, -linearMaxDepth);  // far
-	frustumPlanes[4] = vec4(0.0, 0.0, -1.0, -linearMinDepth); // near
+	frustumPlanes[4] = vec4(0.0, 0.0, 1.0, -linearMaxDepth);  // far
+	frustumPlanes[5] = vec4(0.0, 0.0, -1.0, -linearMinDepth); // near
 
 	frustumPlanes[0] /= length(frustumPlanes[0].xyz);
 	frustumPlanes[1] /= length(frustumPlanes[1].xyz);
@@ -142,7 +142,7 @@ void main() {
 	vec4 albedoColor = imageLoad(imageAlbedo, pixelPos);
 	vec3 color = albedoColor.rgb * 0.2;
 
-//    bool rightHalf = pixelPos.y > ubo.textureDimens.y / 2;
+    bool rightHalf = pixelPos.y > ubo.textureDimens.y / 2;
 	
 	for (uint lightIt = 0; lightIt < visiblePointLightCount; ++lightIt) {
 
@@ -171,6 +171,11 @@ void main() {
 	}
 	
 	vec4 result = vec4(color, 1.0); 
+
+	if (pixelPos.x > ubo.textureDimens.x / 2) {
+		result = result + vec4(float(visiblePointLightCount) / ubo.lightCount); 
+	}
+
 	imageStore(outImage, pixelPos, result);
 }
 
